@@ -23,5 +23,17 @@ namespace petratracker
 
 			// Insert code required on object creation below this point.
 		}
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            NewUser openUser = new NewUser();
+            openUser.ShowDialog();
+        }
+
+        private void MainView_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+
+        }
 	}
 }
