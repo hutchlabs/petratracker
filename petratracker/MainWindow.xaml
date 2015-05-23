@@ -8,7 +8,27 @@
 	Width="640" Height="480" WindowState="Maximized">
 
     <Grid x:Name="LayoutRoot" Background="White">
-        <Button Content="Add New User" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" Width="118" Height="36" Click="Button_Click"/>
+        <Button Content="Add New User" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Width="173" Height="29" Click="Button_Click"/>
         <DockPanel HorizontalAlignment="Left" LastChildFill="False" Margin="77,111,0,0" VerticalAlignment="Top" Grid.RowSpan="2"/>
+        <Button x:Name="btnConfigureConnection" Content="Configure Connection" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Width="173" Height="29" Click="btnConfigureConnection_Click"/>
+        <Button Content="Add New Department" Name="btnNewDepartment" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="172" Height="29" Click="btnNewDepartment_Click"/>
+        <Button x:Name="btnNewRole" Content="Add New Role" HorizontalAlignment="Left" Margin="10,177,0,0" VerticalAlignment="Top" Width="173" Height="29" Click="btnNewRole_Click"/>
+        <Menu Height="37" VerticalAlignment="Top" UseLayoutRounding="True" Foreground="#FFF7F4F4">
+            <Menu.Background>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#FFF6F6F6"/>
+                    <GradientStop Color="#FF697BAA"/>
+                    <GradientStop Color="#FF6E6E9B" Offset="0.8"/>
+                    <GradientStop Color="#FF342F59" Offset="1"/>
+                    <GradientStop Color="#FFF6F6F6" Offset="1"/>
+                </LinearGradientBrush>
+            </Menu.Background>
+            <MenuItem x:Name="btnSysAdmin" Header="Administrator" Height="27" Width="120" Padding="10,8,10,3" Grid.IsSharedSizeScope="True" FontWeight="Bold">
+                <MenuItem x:Name="btnAdminNew" Header="New" HorizontalAlignment="Left" Width="145">
+                    <TabItem Content="User"/>
+                </MenuItem>
+                <MenuItem x:Name="btnAdminView" Header="View" HorizontalAlignment="Left" Width="145"/>
+            </MenuItem>
+        </Menu>
     </Grid>
 </Window>

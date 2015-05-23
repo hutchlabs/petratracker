@@ -35,5 +35,24 @@ namespace petratracker
             
 
         }
+      
+        private void btnConfigureConnection_Click(object sender, RoutedEventArgs e)
+        {
+            Views.DatabaseConnSetup openConfig = new Views.DatabaseConnSetup();
+            openConfig.ShowDialog();
+            
+        }
+
+        private void btnNewDepartment_Click(object sender, RoutedEventArgs e)
+        {
+            Views.NewDepartment openDepartment = new Views.NewDepartment();
+            openDepartment.ShowDialog();
+         }
+
+        private void btnNewRole_Click(object sender, RoutedEventArgs e)
+        {
+            Views.NewRole openRole = new Views.NewRole();
+            openRole.ShowDialog();
+        }
 	}
 }
