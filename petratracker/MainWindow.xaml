@@ -5,14 +5,14 @@
 	x:Name="Window"
 	xmlns:local="clr-namespace:petratracker" 
 	Title="MainWindow"
-	Width="640" Height="480" WindowState="Maximized">
+	Width="920" Height="480" WindowState="Maximized" Activated="Window_Activated">
 
     <Grid x:Name="LayoutRoot" Background="White">
-        <Button Content="Add New User" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Width="173" Height="29" Click="Button_Click"/>
+        <Button Content="Add New User" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Width="243" Height="37" Click="Button_Click"/>
         <DockPanel HorizontalAlignment="Left" LastChildFill="False" Margin="77,111,0,0" VerticalAlignment="Top" Grid.RowSpan="2"/>
-        <Button x:Name="btnConfigureConnection" Content="Configure Connection" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Width="173" Height="29" Click="btnConfigureConnection_Click"/>
-        <Button Content="Add New Department" Name="btnNewDepartment" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="172" Height="29" Click="btnNewDepartment_Click"/>
-        <Button x:Name="btnNewRole" Content="Add New Role" HorizontalAlignment="Left" Margin="10,177,0,0" VerticalAlignment="Top" Width="173" Height="29" Click="btnNewRole_Click"/>
+        <Button x:Name="btnConfigureConnection" Content="Configure Connection" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Width="243" Height="36" Click="btnConfigureConnection_Click"/>
+        <Button Content="Add New Department" Name="btnNewDepartment" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="242" Height="36" Click="btnNewDepartment_Click"/>
+        <Button x:Name="btnNewRole" Content="Add New Role" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Width="243" Height="37" Click="btnNewRole_Click"/>
         <Menu Height="37" VerticalAlignment="Top" UseLayoutRounding="True" Foreground="#FFF7F4F4">
             <Menu.Background>
                 <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
@@ -23,12 +23,15 @@
                     <GradientStop Color="#FFF6F6F6" Offset="1"/>
                 </LinearGradientBrush>
             </Menu.Background>
-            <MenuItem x:Name="btnSysAdmin" Header="Administrator" Height="27" Width="120" Padding="10,8,10,3" Grid.IsSharedSizeScope="True" FontWeight="Bold">
+            <MenuItem x:Name="btnSysAdmin" Header="Petra Tracker Administrator" Height="27" Width="278" Padding="10,8,10,3" Grid.IsSharedSizeScope="True" FontWeight="Bold">
                 <MenuItem x:Name="btnAdminNew" Header="New" HorizontalAlignment="Left" Width="145">
                     <TabItem Content="User"/>
                 </MenuItem>
                 <MenuItem x:Name="btnAdminView" Header="View" HorizontalAlignment="Left" Width="145"/>
             </MenuItem>
         </Menu>
+        <Rectangle Fill="#FFF4F4F5" Height="402" Margin="258,44,0,0" Stroke="Black" Width="649" RadiusX="3" RadiusY="3"/>
+        <DataGrid x:Name="viewUsers" Margin="259,83,3,26" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*" MouseDoubleClick="viewUsers_MouseDoubleClick" />
+        <Label Content="Users" HorizontalAlignment="Left" Margin="262,48,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Height="33"/>
     </Grid>
 </Window>
