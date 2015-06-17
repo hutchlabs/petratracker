@@ -37,6 +37,7 @@
     <Reference Include="MySql.Data, Version=5.0.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\FingerPrintSourceCode-2014-May-14\FingerPrintSourceCode-2014-May-14\DigitalPersonaFingerPrint\DigitalPersonaFingerPrint\bin\Debug\MySql.Data.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -61,9 +62,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\LoggedInWidget.xaml.cs">
+      <DependentUpon>LoggedInWidget.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\LoggedInWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -76,6 +84,10 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Pages\dashboard.xaml.cs">
+      <DependentUpon>dashboard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DatabaseConnSetup.xaml.cs">
       <DependentUpon>DatabaseConnSetup.xaml</DependentUpon>
@@ -114,6 +126,10 @@
       <SubType>Designer</SubType>
     </DesignData>
     <None Include="Data\connection.config" />
+    <Page Include="Pages\dashboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DatabaseConnSetup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -136,8 +152,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Ui-design_ERP.jpg" />
     <Resource Include="Resources\images\login-bg.png" />
     <Resource Include="Resources\images\petrablk.png" />
+    <Resource Include="Resources\images\petraneg.png" />
+    <Resource Include="Resources\images\icons\a0.jpg" />
+    <Resource Include="Resources\images\icons\cross.png" />
+    <Resource Include="Resources\images\icons\maximize.png" />
+    <Resource Include="Resources\images\icons\minus.png" />
+    <Resource Include="Resources\images\icons\restore.png" />
     <Content Include="Resources\petra_tracker_db.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />

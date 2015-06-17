@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using petratracker.Models;
+
 namespace petratracker
 {
     /// <summary>
@@ -26,7 +28,17 @@ namespace petratracker
 
         private void doLogin()
         {
-            MessageBox.Show("Loggin in.");
+            if (User.exists(tbx_username.Text, tbx_password.Password))
+            {
+                User u = new User(tbx_username.Text, tbx_password.Password);
+                MainWindow mw = new MainWindow(u);
+                mw.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Username and/or password are incorrect. Please re-enter.", "Login Error", MessageBoxButton.OK,MessageBoxImage.Error);
+            }
         }
 
         private void closeApplication()
@@ -34,7 +46,7 @@ namespace petratracker
             this.Hide();
             var confirmResult = MessageBox.Show("Are you sure to exit?",
                                      "Exit Tracker Application",
-                                     System.Windows.MessageBoxButton.YesNo);
+                                     System.Windows.MessageBoxButton.YesNo,MessageBoxImage.Question);
             if (confirmResult == MessageBoxResult.Yes)
             {
                 this.Close();
@@ -63,15 +75,11 @@ namespace petratracker
             if (tbx_username.Text.Length > 0 && tbx_password.Password.Length > 0)
             {
                 this.doLogin();
-
             }
             else
             {
-                MessageBox.Show("Enter your email address and/or password", "Login Error");
+                MessageBox.Show("Enter your username and/or password", "Login Error",MessageBoxButton.OK,  MessageBoxImage.Error);
             }
         }
-
-   
-
     }
 }

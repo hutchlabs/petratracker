@@ -124,5 +124,28 @@ namespace petratracker.Data
             return res;
         }
 
+        public int executeCmdCount(String query)
+        {
+            int count = -1;
+
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connString))
+                {
+                    MySqlCommand cmd = new MySqlCommand(query, connection);
+                    connection.Open();
+                    count = int.Parse(cmd.ExecuteScalar() + "");
+                    connection.Close();
+                    return count;
+                }              
+            }
+            catch (Exception rt) 
+            {
+                MessageBox.Show(rt.Message); 
+            }
+
+            return count;
+        }
+
     }
 }
