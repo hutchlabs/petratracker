@@ -80,6 +80,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Code\SendEmail.cs" />
     <Compile Include="Data\connection.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -152,7 +153,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Ui-design_ERP.jpg" />
     <Resource Include="Resources\images\login-bg.png" />
     <Resource Include="Resources\images\petrablk.png" />
     <Resource Include="Resources\images\petraneg.png" />

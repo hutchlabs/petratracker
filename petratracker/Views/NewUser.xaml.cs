@@ -25,6 +25,7 @@ namespace petratracker
         }
 
         Data.connection db_ops = new Data.connection();
+        Code.SendEmail sendMail = new Code.SendEmail();
 
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -85,7 +86,10 @@ namespace petratracker
                     string cmd = "call create_user('" + txtFirstName.Text + "','" + txtLastName.Text + "','" + cmbDept.Text + "','" + txtEmail.Text + "','" + txtPassword.Text + "','" + cmbUserRole.Text + "')";
                     if (db_ops.executeCmd(cmd))
                     {
+                        if(sendMail.sendMail("arkaah@cdhgroup.co",txtEmail.Text,"Your us.coer credentails from PetraTracker"))
+                        {
                         cont = true;
+                        }
                     }
                 }
             }

@@ -1,19 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Threading.Tasks;
+using System.Net;
+using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.IO;
+using System.Threading;
+using System.Runtime.InteropServices;
 using System.Windows.Controls;
+using System.Diagnostics;
 
 namespace petratracker.Data
 {
     class connection
     {
         private string connString = null;
+        public DataTable mytable = new DataTable();
 
         public connection()
         {
@@ -26,7 +33,7 @@ namespace petratracker.Data
                 else
                 { 
                     //Config file not found
-                    MessageBox.Show("Config file not found.");
+                    System.Windows.MessageBox.Show("Config file not found.");
                 }
             
             }
@@ -59,7 +66,7 @@ namespace petratracker.Data
                 }
                 else 
                 {
-                    MessageBox.Show("Connection file was not found.","Config. Required",MessageBoxButton.OK,MessageBoxImage.Exclamation);
+                    System.Windows.MessageBox.Show("Connection file was not found.", "Config. Required", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
 
             }
@@ -71,7 +78,7 @@ namespace petratracker.Data
             return connState;
         }
 
-        public void executeCmdToCombo(string myCmd, ComboBox myCombo, String displayField)
+        public void executeCmdToCombo(string myCmd, System.Windows.Controls.ComboBox myCombo, String displayField)
         {
             try
             {
@@ -109,18 +116,18 @@ namespace petratracker.Data
 
                     if (myRes > 0)
                     {
-                        MessageBox.Show("Operation Completed Successfully.", "Operation Compete", MessageBoxButton.OK, MessageBoxImage.Information);
+                        System.Windows.MessageBox.Show("Operation Completed Successfully.", "Operation Compete", MessageBoxButton.OK, MessageBoxImage.Information);
                         res = true;
                     }
                     else
                     {
-                        MessageBox.Show("Operation Failed to Complete.", "Operation Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                        System.Windows.MessageBox.Show("Operation Failed to Complete.", "Operation Failed", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
 
                     connection.Close();
                 }
             }
-            catch (Exception rt) { MessageBox.Show(rt.Message); }
+            catch (Exception rt) { System.Windows.MessageBox.Show(rt.Message); }
             return res;
         }
 
@@ -141,11 +148,47 @@ namespace petratracker.Data
             }
             catch (Exception rt) 
             {
-                MessageBox.Show(rt.Message); 
+                System.Windows.MessageBox.Show(rt.Message); 
             }
 
             return count;
         }
+
+        public DataTable ExecuteCmdToDataGrid(String myCmd)
+        {
+            try
+            {
+                myCmd = myCmd.Replace("'", "\'");
+                mytable = new DataTable();
+
+
+                using (MySqlConnection connection = new MySqlConnection(connString))
+                {
+
+                    MySqlDataAdapter myadpt = new MySqlDataAdapter(myCmd, connection);
+                    myadpt.FillLoadOption = LoadOption.OverwriteChanges;
+                    MySqlCommandBuilder mycombuild = new MySqlCommandBuilder(myadpt);
+
+                    // Populate a new data table and bind it to the BindingSource.
+
+                    mytable.Clear();
+
+
+                    mytable.Locale = System.Globalization.CultureInfo.InvariantCulture;
+
+
+                    myadpt.Fill(mytable);
+
+                    
+
+                    connection.Close();
+
+                }
+            }
+            catch (Exception e) { }
+            return mytable;
+        }
+
 
     }
 }
