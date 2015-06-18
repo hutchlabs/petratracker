@@ -6,7 +6,7 @@
 	x:Class="petratracker.MainWindow" x:Name="Window" Title="Petra Trust Tracker" 
     WindowState="Normal" WindowStyle="None" WindowStartupLocation="CenterScreen"
     MinWidth="1024" MinHeight="768"  Width="1024" Height="768" 
-    ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="Black" Foreground="White" ResizeMode="NoResize" Activated="Window_Activated">
+    ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="Black" Foreground="White" ResizeMode="NoResize">
 
     <DockPanel LastChildFill="True" PreviewMouseMove="Window_PreviewMouseMove" PreviewMouseLeftButtonDown="Window_PreviewMouseLeftButtonDown">
         <Grid x:Name="Sidebar" HorizontalAlignment="Left" MaxWidth="241" MinWidth="241" Margin="0" Background="#FF2D2D30" MinHeight="768">
@@ -18,13 +18,9 @@
             <Image x:Name="Logo" Grid.Column="0" Grid.Row="0" Height="57" Source="Resources/images/petraneg.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="125" />
 
             <StackPanel x:Name="Navigation" Grid.Column="0" Grid.Row="1" Background="#FF2D2D30" Margin="10">
-                <Button Content="Add New User" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="173" Height="29" Click="Button_Click" RenderTransformOrigin="0.514,0.552"/>
-                <Button x:Name="btnConfigureConnection" Content="Configure Connection" HorizontalAlignment="Left" VerticalAlignment="Top" Width="173" Height="29" Click="btnConfigureConnection_Click"/>
-                <Button Content="Add New Department" x:Name="btnNewDepartment" HorizontalAlignment="Left" VerticalAlignment="Top" Width="172" Height="29" Click="btnNewDepartment_Click"/>
-                <Button x:Name="btnNewRole" Content="Add New Role" HorizontalAlignment="Left" VerticalAlignment="Top" Width="173" Height="29" Click="btnNewRole_Click"/>
+               
             </StackPanel>
-            <DataGrid x:Name="viewUsers" Margin="259,83,3,26" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*" MouseDoubleClick="viewUsers_MouseDoubleClick" />
-
+            
             <Grid Grid.Column="0" Grid.Row="2" x:Name="LoginPanel" MinWidth="241" MaxWidth="241" HorizontalAlignment="Left" Background="#FF111111">
                 <Image x:Name="userimage" Source="/petratracker;component/Resources/images/icons/a0.jpg" Margin="34,23,172,28" />
                 <Label x:Name="lbl_username" Content="Label" HorizontalAlignment="Left" Margin="74,61,0,0" VerticalAlignment="Top" Width="124" Foreground="White" FontSize="16"/>
@@ -42,39 +38,8 @@
         </StackPanel>
 
         <Grid x:Name="ContentArea" Background="Black" Margin="5">
-            <Frame Source="/petratracker;component/Pages/dashboard.xaml" />
+            <Frame Source="/petratracker;component/Pages/admin.xaml" />
         </Grid>
     </DockPanel>
-   
-<!--
-
-
-    <Grid x:Name="LayoutRoot" Background="White">
-        <Button Content="Add New User" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Width="243" Height="37" Click="Button_Click"/>
-        <DockPanel HorizontalAlignment="Left" LastChildFill="False" Margin="77,111,0,0" VerticalAlignment="Top" Grid.RowSpan="2"/>
-        <Button x:Name="btnConfigureConnection" Content="Configure Connection" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Width="243" Height="36" Click="btnConfigureConnection_Click"/>
-        <Button Content="Add New Department" Name="btnNewDepartment" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="242" Height="36" Click="btnNewDepartment_Click"/>
-        <Button x:Name="btnNewRole" Content="Add New Role" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Width="243" Height="37" Click="btnNewRole_Click"/>
-        <Menu Height="37" VerticalAlignment="Top" UseLayoutRounding="True" Foreground="#FFF7F4F4">
-            <Menu.Background>
-                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                    <GradientStop Color="#FFF6F6F6"/>
-                    <GradientStop Color="#FF697BAA"/>
-                    <GradientStop Color="#FF6E6E9B" Offset="0.8"/>
-                    <GradientStop Color="#FF342F59" Offset="1"/>
-                    <GradientStop Color="#FFF6F6F6" Offset="1"/>
-                </LinearGradientBrush>
-            </Menu.Background>
-            <MenuItem x:Name="btnSysAdmin" Header="Petra Tracker Administrator" Height="27" Width="278" Padding="10,8,10,3" Grid.IsSharedSizeScope="True" FontWeight="Bold">
-                <MenuItem x:Name="btnAdminNew" Header="New" HorizontalAlignment="Left" Width="145">
-                    <TabItem Content="User"/>
-                </MenuItem>
-                <MenuItem x:Name="btnAdminView" Header="View" HorizontalAlignment="Left" Width="145"/>
-            </MenuItem>
-        </Menu>
-        <Rectangle Fill="#FFF4F4F5" Height="402" Margin="258,44,0,0" Stroke="Black" Width="649" RadiusX="3" RadiusY="3"/>
-        <DataGrid x:Name="viewUsers" Margin="259,83,3,26" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*" MouseDoubleClick="viewUsers_MouseDoubleClick" />
-        <Label Content="Users" HorizontalAlignment="Left" Margin="262,48,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Height="33"/>
-    </Grid>
--->
+  
 </Window>

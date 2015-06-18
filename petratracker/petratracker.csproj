@@ -87,6 +87,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\User.cs" />
+    <Compile Include="Pages\admin.xaml.cs">
+      <DependentUpon>admin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\dashboard.xaml.cs">
       <DependentUpon>dashboard.xaml</DependentUpon>
     </Compile>
@@ -127,6 +130,10 @@
       <SubType>Designer</SubType>
     </DesignData>
     <None Include="Data\connection.config" />
+    <Page Include="Pages\admin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\dashboard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
