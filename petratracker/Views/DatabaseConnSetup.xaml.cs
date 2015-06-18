@@ -50,6 +50,28 @@ namespace petratracker.Views
             return valid;
         }
 
+        private bool validate_entries_1()
+        {
+            bool valid = false;
+
+            if (txtServer1.Text == string.Empty)
+            {
+                MessageBox.Show("Please specify the Server Name.");
+                txtServer1.Focus();
+            }
+            else if (txtUsername1.Text == string.Empty)
+            {
+                MessageBox.Show("Please specify the Username.");
+                txtUsername1.Focus();
+            }
+            else
+            {
+                valid = true;
+            }
+
+            return valid;
+        }
+
         private void btnTestConnection_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -84,6 +106,8 @@ namespace petratracker.Views
             {
                 if (File.Exists(Environment.CurrentDirectory + "/connection.config"))
                 {
+
+                    //PetraTracker Data String
                     String conStr = File.ReadAllText(Environment.CurrentDirectory + "/connection.config");
                     char[] charSeparators = new char[] { ';' };
                     string[] results = conStr.Split(charSeparators);
@@ -92,6 +116,16 @@ namespace petratracker.Views
                     txtPassword.Text = results[2].Substring(results[2].IndexOf('=') + 2);
                     txtDatabase.Text = results[3].Substring(results[3].IndexOf('=') + 2);
                     txtPortNumber.Text = results[4].Substring(results[4].IndexOf('=') + 2);
+
+                    //Microgen Data String
+                    String conStr_1 = File.ReadAllText(Environment.CurrentDirectory + "/connection1.config");
+                    
+                    string [] results_1 = conStr.Split(charSeparators);
+                    txtServer1.Text = results_1[0].Substring(results_1[0].IndexOf('=') + 2);
+                    txtUsername1.Text = results_1[1].Substring(results_1[1].IndexOf('=') + 2);
+                    txtPassword1.Text = results_1[2].Substring(results_1[2].IndexOf('=') + 2);
+                    txtDatabase1.Text = results_1[3].Substring(results_1[3].IndexOf('=') + 2);
+                  
 
 
                 }

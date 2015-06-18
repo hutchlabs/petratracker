@@ -1,8 +1,8 @@
 ﻿<Window x:Name="frmDatabaseConnection" x:Class="petratracker.Views.DatabaseConnSetup"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="DatabaseConnSetup" Height="340.278" Width="518.055" Loaded="frmDatabaseConnection_Loaded">
-    <Grid Height="333" VerticalAlignment="Top">
+        Title="DatabaseConnSetup" Height="612.478" Width="518.055" Loaded="frmDatabaseConnection_Loaded">
+    <Grid Height="582" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="71*"/>
             <RowDefinition Height="209*"/>
@@ -22,6 +22,20 @@
             <Label Content="Port Number :" HorizontalAlignment="Left" Margin="30,137,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.407,2.327"/>
             <Label x:Name="lblConnection" Content="Connection!" HorizontalAlignment="Left" Margin="133,209,0,0" VerticalAlignment="Top"/>
         </Grid>
+        <GroupBox Header=" Microgen Database" HorizontalAlignment="Left" Margin="39,137,0,0" Grid.Row="1" VerticalAlignment="Top" Height="279" Width="429">
+            <Grid HorizontalAlignment="Left" Height="240" Margin="-9,10,0,0" VerticalAlignment="Top" Width="419">
+                <TextBox x:Name="txtServer1" HorizontalAlignment="Left" Height="23" Margin="138,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"/>
+                <TextBox x:Name="txtUsername1" HorizontalAlignment="Left" Height="23" Margin="138,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"/>
+                <Label Content="Data Source :" HorizontalAlignment="Left" Margin="38,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.471,-1.024"/>
+                <Label Content="Username :" HorizontalAlignment="Left" Margin="46,56,0,0" VerticalAlignment="Top"/>
+                <Label Content="Password :" HorizontalAlignment="Left" Margin="49,82,0,60"/>
+                <TextBox x:Name="txtPassword1" HorizontalAlignment="Left" Height="23" Margin="138,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"/>
+                <TextBox x:Name="txtDatabase1" HorizontalAlignment="Left" Height="23" Margin="138,112,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"/>
+                <Label Content="Initial Catalog :" HorizontalAlignment="Left" Margin="26,109,0,0" VerticalAlignment="Top"/>
+                <Button x:Name="btnTestConnection1" Content="Test Connection" HorizontalAlignment="Left" Margin="138,153,0,0" VerticalAlignment="Top" Width="119" Click="btnTestConnection_Click"/>
+                <Label x:Name="lblConnection1" Content="Connection!" HorizontalAlignment="Left" Margin="138,185,0,0" VerticalAlignment="Top"/>
+            </Grid>
+        </GroupBox>
 
     </Grid>
 </Window>
