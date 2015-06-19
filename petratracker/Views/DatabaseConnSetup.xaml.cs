@@ -50,6 +50,28 @@ namespace petratracker.Views
             return valid;
         }
 
+        private bool validate_microgen_entries()
+        {
+            bool valid = false;
+
+            if (txtServer1.Text == string.Empty)
+            {
+                MessageBox.Show("Please specify the Server Name.");
+                txtServer1.Focus();
+            }
+            else if (txtUsername1.Text == string.Empty)
+            {
+                MessageBox.Show("Please specify the Username.");
+                txtUsername1.Focus();
+            }
+            else
+            {
+                valid = true;
+            }
+
+            return valid;
+        }
+
         private bool validate_entries_1()
         {
             bool valid = false;
@@ -96,7 +118,7 @@ namespace petratracker.Views
             }
             catch (Exception)
             {
-
+                //record error
             }
         }
 
@@ -137,6 +159,34 @@ namespace petratracker.Views
             catch(Exception)
             {
             
+            }
+        }
+
+        private void btnMicrogenTestConnection_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (validate_microgen_entries())
+                {
+                    String conStr = "Data Source = " + txtServer1.Text + ";User ID = " + txtUsername1.Text + " ;Password = " + txtPassword.Text + " ;Initial Catalog = " + txtDatabase.Text + "";
+                    File.WriteAllText(Environment.CurrentDirectory + "/microgen_connection.config", conStr);
+
+                    Data.connection openConn = new Data.connection();
+
+                    if (openConn.chkMicrogenConnection())
+                    {
+                        MessageBox.Show("Connection to Microgen was successfull, please restart application.", "Operation Successfull", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Connection could not be established with Microgen.", "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //record error
             }
         }
 

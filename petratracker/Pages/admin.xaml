@@ -35,5 +35,6 @@
         <Rectangle Fill="#FFF4F4F5" Height="402" Margin="258,44,0,0" Stroke="Black" Width="649" RadiusX="3" RadiusY="3"/>
         <DataGrid x:Name="viewUsers" Margin="259,83,3,26" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*" MouseDoubleClick="viewUsers_MouseDoubleClick" />
         <Label Content="Users" HorizontalAlignment="Left" Margin="262,48,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Height="33"/>
+        <Button x:Name="btnUploadPayment" Content="Upload Payment" HorizontalAlignment="Left" Margin="10,218,0,0" VerticalAlignment="Top" Width="242" Height="40" Click="btnUploadPayment_Click"/>
     </Grid>
 </Page>

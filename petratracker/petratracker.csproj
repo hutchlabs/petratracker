@@ -86,12 +86,16 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\payments.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Pages\admin.xaml.cs">
       <DependentUpon>admin.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\dashboard.xaml.cs">
       <DependentUpon>dashboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\uploadDeal.xaml.cs">
+      <DependentUpon>uploadDeal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DatabaseConnSetup.xaml.cs">
       <DependentUpon>DatabaseConnSetup.xaml</DependentUpon>
@@ -135,6 +139,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\dashboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\uploadDeal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
