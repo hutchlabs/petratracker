@@ -9,6 +9,7 @@ using System.Net;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Threading;
 using System.Runtime.InteropServices;
@@ -78,6 +79,9 @@ namespace petratracker.Data
 
             return connState;
         }
+
+
+        
 
         public void executeCmdToCombo(string myCmd, System.Windows.Controls.ComboBox myCombo, String displayField)
         {
@@ -190,5 +194,39 @@ namespace petratracker.Data
             return mytable;
         }
 
+public bool chkMicrogenConnection()
+        {
+            bool connState = false;
+
+            try
+            {
+
+                SqlConnection mycon = null;
+
+
+                if (File.Exists(Environment.CurrentDirectory + "/microgen_connection.config"))
+                {
+                    mycon = new SqlConnection(File.ReadAllText(Environment.CurrentDirectory + "/microgen_connection.config"));
+                    mycon.Open();
+                    if (mycon.State == ConnectionState.Open)
+                    {
+                        mycon.Close();
+                        connState = true;
+                    }
+
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Connection file was not found.", "Config. Required", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return connState;
+        }
     }
 }

@@ -81,6 +81,12 @@ namespace petratracker.Pages
 
         }
 
+        private void btnUploadPayment_Click(object sender, RoutedEventArgs e)
+        {
+            Pages.uploadDeal openUpload = new Pages.uploadDeal();
+            openUpload.ShowDialog();
+        }
+
 
     }
 }

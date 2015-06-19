@@ -1,0 +1,20 @@
+﻿<Window x:Class="petratracker.Pages.uploadDeal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="uploadDeal" Height="319.403" Width="445.447">
+    <Grid>
+        <Grid HorizontalAlignment="Left" Background="White" Height="280" Margin="10,10,0,-1" VerticalAlignment="Top" Width="417">
+            <Label Content="Deal Type" HorizontalAlignment="Left" Margin="44,35,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691"/>
+            <ComboBox HorizontalAlignment="Left" Margin="51,66,0,0" VerticalAlignment="Top" Width="291">
+                <ComboBoxItem Content="Issue"/>
+                <ComboBoxItem Content="Redemption"/>
+                <ComboBoxItem Content="Transfer"/>
+            </ComboBox>
+            <Label Content="File Location" HorizontalAlignment="Left" Margin="51,110,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691"/>
+            <Button x:Name="btnBrowse" Content="Browse " HorizontalAlignment="Left" Margin="231,112,0,0" VerticalAlignment="Top" Width="111" Click="btnBrowse_Click"/>
+            <TextBox x:Name="txtfileLocation" HorizontalAlignment="Left" Height="23" Margin="51,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="291"/>
+            <Button x:Name="btnUploadFile" Content="Upload File" HorizontalAlignment="Left" Margin="51,192,0,0" VerticalAlignment="Top" Width="145" Click="btnUploadFile_Click"/>
+        </Grid>
+
+    </Grid>
+</Window>
