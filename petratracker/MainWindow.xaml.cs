@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using petratracker.Models;
+using petratracker.Controls;
 
 namespace petratracker
 {
@@ -21,12 +22,14 @@ namespace petratracker
 	{
         private User currentUser;
 
+        Data.connection accessDB = new Data.connection();
+
 		public MainWindow()
 		{
 			this.InitializeComponent();
             this.currentUser = new User("dhutchful@gmail.com", "dogdog");
             this.lbl_username.Content = "David Hutchful";
-		}
+        }
 
         public MainWindow(User u) : this()
         {
@@ -35,13 +38,12 @@ namespace petratracker
 
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
-      
         }
            
-
-        Data.connection accessDB = new Data.connection();
-      
-
+        private void NavigationControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            this.PageHolder.Source = new Uri("/petratracker;component/Pages/" + (String)((NavigationControl)sender).ItemUri);
+        }
 
         // Top bar buttons
         private void plus_MouseUp(object sender, MouseButtonEventArgs e)
@@ -83,7 +85,6 @@ namespace petratracker
             startPoint = e.GetPosition(this);
         }
 
-
         private void Window_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             Point newPoint = e.GetPosition(this);
@@ -93,7 +94,6 @@ namespace petratracker
                 this.DragMove();
             }
         }
-
         
 	}
 }
