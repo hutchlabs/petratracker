@@ -28,7 +28,13 @@ namespace petratracker
 		{
 			this.InitializeComponent();
             this.currentUser = new User("dhutchful@gmail.com", "dogdog");
-            this.lbl_username.Content = "David Hutchful";
+            this.lbl_name.Content = this.currentUser.name;
+            this.lbl_role.Content = this.currentUser.role;
+
+            if (this.currentUser.role.Equals("Admin"))
+            {
+                this.ncAdmin.Visibility = System.Windows.Visibility.Visible;
+            }
         }
 
         public MainWindow(User u) : this()
@@ -42,7 +48,7 @@ namespace petratracker
            
         private void NavigationControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            this.PageHolder.Source = new Uri("/petratracker;component/Pages/" + (String)((NavigationControl)sender).ItemUri);
+            this.PageHolder.Source = new Uri("pages/"+((NavigationControl)sender).ItemUri, UriKind.Relative); 
         }
 
         // Top bar buttons
@@ -94,6 +100,8 @@ namespace petratracker
                 this.DragMove();
             }
         }
+
+        
         
 	}
 }

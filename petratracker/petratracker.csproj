@@ -93,6 +93,15 @@
     <Compile Include="Pages\dashboard.xaml.cs">
       <DependentUpon>dashboard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\payments.xaml.cs">
+      <DependentUpon>payments.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\reports.xaml.cs">
+      <DependentUpon>reports.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\schedules.xaml.cs">
+      <DependentUpon>schedules.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DatabaseConnSetup.xaml.cs">
       <DependentUpon>DatabaseConnSetup.xaml</DependentUpon>
     </Compile>
@@ -135,6 +144,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\dashboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\payments.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\reports.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\schedules.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

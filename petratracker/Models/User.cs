@@ -9,19 +9,17 @@ namespace petratracker.Models
 {
     public class User 
     {
-        private String role;
-        private String email;
-        private String name;
-
         public User(String username, String password)
         {
+            //  get user from db
+            this.email = username;
+            this.name = "David Hutchful";
             this.role = "Admin";
         }
 
-        public String getRole()
-        {
-            return this.role;
-        }
+        public string email { get; set; }
+        public string name { get; set; }
+        public string role { get; set; }
 
         public static Boolean exists(String username, String password)
         {
