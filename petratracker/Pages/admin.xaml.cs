@@ -43,7 +43,6 @@ namespace petratracker.Pages
             this.RolesContentbar.Visibility = (tab.Equals("TabRoles")) ? Visibility.Visible : Visibility.Collapsed;
             this.DeptsContentbar.Visibility = (tab.Equals("TabDepts")) ? Visibility.Visible : Visibility.Collapsed;
             this.SettsContentbar.Visibility = (tab.Equals("TabSetts")) ? Visibility.Visible : Visibility.Collapsed;
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
