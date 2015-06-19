@@ -18,6 +18,7 @@ using System.Diagnostics;
 
 namespace petratracker.Data
 {
+
     class connection
     {
         private string connString = null;
@@ -34,7 +35,7 @@ namespace petratracker.Data
                 else
                 { 
                     //Config file not found
-                    System.Windows.MessageBox.Show("Config file not found.");
+                    System.Windows.MessageBox.Show("Config file not found: " + Environment.CurrentDirectory + "/connection.config");
                 }
             
             }
@@ -193,6 +194,7 @@ namespace petratracker.Data
             return mytable;
         }
 
+<<<<<<< HEAD
 public bool chkMicrogenConnection()
         {
             bool connState = false;
@@ -227,5 +229,7 @@ public bool chkMicrogenConnection()
 
             return connState;
         }
+=======
+>>>>>>> FETCH_HEAD
     }
 }

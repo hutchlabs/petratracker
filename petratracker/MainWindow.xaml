@@ -2,8 +2,9 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="clr-namespace:petratracker" 
+    xmlns:localcontrols="clr-namespace:petratracker.Controls"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-	x:Class="petratracker.MainWindow" x:Name="Window" Title="Petra Trust Tracker" 
+    x:Class="petratracker.MainWindow" x:Name="Window" Title="Petra Trust Tracker" 
     WindowState="Normal" WindowStyle="None" WindowStartupLocation="CenterScreen"
     MinWidth="1024" MinHeight="768"  Width="1024" Height="768" 
     ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="Black" Foreground="White" ResizeMode="NoResize">
@@ -17,13 +18,18 @@
             </Grid.RowDefinitions>
             <Image x:Name="Logo" Grid.Column="0" Grid.Row="0" Height="57" Source="Resources/images/petraneg.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="125" />
 
-            <StackPanel x:Name="Navigation" Grid.Column="0" Grid.Row="1" Background="#FF2D2D30" Margin="10">
-               
+            <StackPanel x:Name="Navigation" Grid.Column="0" Grid.Row="1" Background="#FF2D2D30" Margin="65,30,10,10">
+                <localcontrols:NavigationControl x:Name="ncHome"      ItemLabel="Home"      ItemUri="dashboard.xaml" ItemToolTip="Dashboard" Margin="0,0,0,35" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
+                <localcontrols:NavigationControl x:Name="ncReports"   ItemLabel="Reports"   ItemUri="reports.xaml"   ItemToolTip="Reports" Margin="0,0,0,35"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
+                <localcontrols:NavigationControl x:Name="ncPayments"  ItemLabel="Payments"  ItemUri="payments.xaml"  ItemToolTip="Payments" Margin="0,0,0,35"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
+                <localcontrols:NavigationControl x:Name="ncSchedules" ItemLabel="Schedules" ItemUri="schedules.xaml" ItemToolTip="Schedules" Margin="0,0,0,35"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
+                <localcontrols:NavigationControl x:Name="ncAdmin"     ItemLabel="Settings"  ItemUri="admin.xaml"     ItemToolTip="Administration Area" Visibility="Hidden" Margin="0,0,0,30" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" />
             </StackPanel>
             
             <Grid Grid.Column="0" Grid.Row="2" x:Name="LoginPanel" MinWidth="241" MaxWidth="241" HorizontalAlignment="Left" Background="#FF111111">
                 <Image x:Name="userimage" Source="/petratracker;component/Resources/images/icons/a0.jpg" Margin="34,23,172,28" />
-                <Label x:Name="lbl_username" Content="Label" HorizontalAlignment="Left" Margin="74,61,0,0" VerticalAlignment="Top" Width="124" Foreground="White" FontSize="16"/>
+                <Label x:Name="lbl_name" Content="Label" HorizontalAlignment="Left" Margin="74,50,0,0" VerticalAlignment="Top" Width="124" Foreground="White" FontSize="16"/>
+                <Label x:Name="lbl_role" Content="Label" HorizontalAlignment="Left" Margin="74,72,0,0" VerticalAlignment="Top" Width="124" Foreground="White"/>
             </Grid>
         </Grid>
 
@@ -38,7 +44,7 @@
         </StackPanel>
 
         <Grid x:Name="ContentArea" Background="Black" Margin="5">
-            <Frame Source="/petratracker;component/Pages/admin.xaml" />
+            <Frame x:Name="PageHolder" Source="/petratracker;component/Pages/dashboard.xaml" NavigationUIVisibility="Hidden" />
         </Grid>
     </DockPanel>
   

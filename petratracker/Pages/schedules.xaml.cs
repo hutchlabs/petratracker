@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace petratracker.Controls
+namespace petratracker.Pages
 {
     /// <summary>
-    /// Interaction logic for LoggedInWidget.xaml
+    /// Interaction logic for schedules.xaml
     /// </summary>
-    public partial class LoggedInWidget : UserControl
+    public partial class schedules : Page
     {
-        public LoggedInWidget()
+        public schedules()
         {
             InitializeComponent();
         }

@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace petratracker.Controls
+{
+    /// <summary>
+    /// Interaction logic for NavigationControl.xaml
+    /// </summary>
+    public partial class NavigationControl : UserControl
+    {
+        public NavigationControl()
+        {
+            InitializeComponent();
+        }
+
+        public string ItemLabel
+        {
+            get { return itemName.Content.ToString(); }
+            set { itemName.Content = value; }
+        }
+
+        public string ItemUri
+        {
+            get { return itemName.Tag.ToString();  }
+            set { itemName.Tag = value; }
+        }
+
+        public string ItemToolTip
+        {
+            get { return itemName.ToolTip.ToString(); }
+            set { itemName.ToolTip = value; }
+        }
+    }
+}
