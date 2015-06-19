@@ -4,36 +4,40 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
-	  Title="admin">
+      
+	  Title="admin" Background="Black">
 
-    <Grid x:Name="LayoutRoot" Background="White">
-        <Button Content="Add New User" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Width="243" Height="37" Click="Button_Click"/>
-        <DockPanel HorizontalAlignment="Left" LastChildFill="False" Margin="77,111,0,0" VerticalAlignment="Top" Grid.RowSpan="2"/>
-        <Button x:Name="btnConfigureConnection" Content="Configure Connection" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Width="243" Height="36" Click="btnConfigureConnection_Click"/>
-        <Button Content="Add New Department" Name="btnNewDepartment" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="242" Height="36" Click="btnNewDepartment_Click"/>
-        <Button x:Name="btnNewRole" Content="Add New Role" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Width="243" Height="37" Click="btnNewRole_Click"/>
-        <Menu Height="37" VerticalAlignment="Top" UseLayoutRounding="True" Foreground="#FFF7F4F4">
-            <Menu.Background>
-                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                    <GradientStop Color="#FFF6F6F6"/>
-                    <GradientStop Color="#FF697BAA"/>
-                    <GradientStop Color="#FF6E6E9B" Offset="0.8"/>
-                    <GradientStop Color="#FF342F59" Offset="1"/>
-                    <GradientStop Color="#FFF6F6F6" Offset="1"/>
-                </LinearGradientBrush>
-            </Menu.Background>
-            <MenuItem x:Name="btnSysAdmin" Header="Petra Tracker Administrator" Height="27" Width="278" Padding="10,8,10,3" Grid.IsSharedSizeScope="True" FontWeight="Bold">
-                <MenuItem x:Name="btnAdminNew" Header="New" HorizontalAlignment="Left" Width="145">
-                    <TabItem Content="User"/>
-                </MenuItem>
-                <MenuItem x:Name="btnAdminView" Header="View" HorizontalAlignment="Left" Width="145"/>
-            </MenuItem>
-        </Menu>
+    <DockPanel LastChildFill="True">
+        <StackPanel x:Name="Topbar" DockPanel.Dock="Top" Height="60" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Black" Orientation="Horizontal" Margin="0,10,10,10">
+            <Label x:Name="PageTitle" Content="Admin" Foreground="WhiteSmoke" FontSize="36" Margin="20,0,0,0" />
+        </StackPanel>
 
+        <StackPanel x:Name="Pillbar" DockPanel.Dock="Top" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Black" Orientation="Horizontal" Margin="0,10,10,10">
+            <Label x:Name="TabUsers" Content="Users" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="#FF2D2D30" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp"/>
+            <Label x:Name="TabRoles" Content="Roles" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="Black" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
+            <Label x:Name="TabDepts" Content="Departments" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="Black" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
+            <Label x:Name="TabSetts" Content="Settings" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="Black" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
+        </StackPanel>
+        
+        <Grid x:Name="UsersContentbar" Visibility="Visible" Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*"  />
+                <RowDefinition Height="0.8*" />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Content="Add New User" HorizontalAlignment="Left"  VerticalAlignment="Top"  Height="37" Click="Button_Click" Style="{DynamicResource MetroButton}"/>
+            <DataGrid Grid.Row="1" Grid.Column="0" x:Name="viewUsers"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*" MouseDoubleClick="viewUsers_MouseDoubleClick" />
+        </Grid>
+        
+        <Grid x:Name="RolesContentbar" Visibility="Collapsed">
+            <Button x:Name="btnNewRole" Content="Add New Role" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Width="243" Height="37" Click="btnNewRole_Click"/>
+        </Grid>
 
-        <Rectangle Fill="#FFF4F4F5" Height="402" Margin="258,44,0,0" Stroke="Black" Width="649" RadiusX="3" RadiusY="3"/>
-        <DataGrid x:Name="viewUsers" Margin="259,83,3,26" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*" MouseDoubleClick="viewUsers_MouseDoubleClick" />
-        <Label Content="Users" HorizontalAlignment="Left" Margin="262,48,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Height="33"/>
-    </Grid>
+        <Grid x:Name="DeptsContentbar" Visibility="Collapsed">
+            <Button Content="Add New Department" Name="btnNewDepartment" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="242" Height="36" Click="btnNewDepartment_Click"/>
+        </Grid>
+
+        <Grid x:Name="SettsContentbar" Visibility="Collapsed">
+            <Button x:Name="btnConfigureConnection" Content="Configure Connection" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Width="243" Height="36" Click="btnConfigureConnection_Click"/>
+        </Grid>
+    </DockPanel>
 </Page>

@@ -21,6 +21,14 @@ namespace petratracker.Models
         public string name { get; set; }
         public string role { get; set; }
 
+
+        public static System.Data.DataView usersInGrid()
+        {
+            Data.connection openConn = new Data.connection();
+            string get_users = "select * from view_users";
+            return openConn.ExecuteCmdToDataGrid(get_users).DefaultView;
+        }
+
         public static Boolean exists(String username, String password)
         {
             Data.connection openConn = new Data.connection();

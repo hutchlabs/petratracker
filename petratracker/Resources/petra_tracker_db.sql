@@ -176,7 +176,7 @@ CREATE TABLE `tbl_users` (
 
 LOCK TABLES `tbl_users` WRITE;
 /*!40000 ALTER TABLE `tbl_users` DISABLE KEYS */;
-INSERT INTO `tbl_users` VALUES (1,'2','1','john@abc.com','ÊßI¥ä‰:%á7è¨R','john','doe','','Active',NULL,NULL,'Active'),(2,'1','1','jdoe@gmail.com','§¬lÌ‹\n0Šôä[ó¤±','David','Doe','','Active',NULL,NULL,'Active'),(3,'1','1','niicoark27@gmail.com','™›öè« KþÝYöÙ9}Ç','Nicholas','Arkaah','','Active',NULL,NULL,'Active'),(5,'2','1','niicoark@yahoo.com','GÍW«œÝñ…?—9ŸÚm','John','Nketai','','Active',NULL,NULL,'Active');
+INSERT INTO `tbl_users` VALUES (1,'2','1','john@abc.com','ÊßI¥ä‰:%á7è¨R','john','doe','','Active',NULL,NULL,'Active'),(2,'1','1','jdoe@gmail.com','§¬lÌ‹\n0Šôä[ó¤±','David','Doe','','Active',NULL,NULL,'Active'),(3,'1','1','niicoark27@gmail.com','™›öè« KþÝYöÙ9}Ç','Nicholas','Arkaah','','Active',NULL,NULL,'Active'),(5,'2','1','niicoark@yahoo.com','GÍW«œÝñ…?—9ŸÚm','John','Nketai','','Active',NULL,NULL,'Active'),(6, '2', '1', 'dhutchful@gmail.com', 'œô0¥q™2½ìU%©P', 'David', 'Hutchful', '', 'Active', NULL, NULL, 'Active');
 /*!40000 ALTER TABLE `tbl_users` ENABLE KEYS */;
 UNLOCK TABLES;
 

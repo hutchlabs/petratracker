@@ -4,11 +4,12 @@
 	x:Class="petratracker.App"
     StartupUri="MainWindow.xaml">
 	<Application.Resources>
-		<!-- Resources scoped at the Application level should be defined here. -->    
-            <Style
-        x:Key="ButtonFocusVisual">
-                <Setter
-            Property="Control.Template">
+
+        <SolidColorBrush x:Key="GreyBackground">#FF2D2D30</SolidColorBrush>
+        
+        <!-- Resources scoped at the Application level should be defined here. -->    
+            <Style x:Key="ButtonFocusVisual">
+                <Setter Property="Control.Template">
                     <Setter.Value>
                         <ControlTemplate>
                             <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2" />
@@ -60,6 +61,28 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-  
+
+        <Style x:Key="RoundedLabel" TargetType="{x:Type Label}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}" 
+                                SnapsToDevicePixels="true" 
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
     </Application.Resources>
 </Application>

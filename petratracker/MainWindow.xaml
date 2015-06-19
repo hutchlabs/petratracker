@@ -10,7 +10,7 @@
     ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="Black" Foreground="White" ResizeMode="NoResize">
 
     <DockPanel LastChildFill="True" PreviewMouseMove="Window_PreviewMouseMove" PreviewMouseLeftButtonDown="Window_PreviewMouseLeftButtonDown">
-        <Grid x:Name="Sidebar" HorizontalAlignment="Left" MaxWidth="241" MinWidth="241" Margin="0" Background="#FF2D2D30" MinHeight="768">
+        <Grid x:Name="Sidebar" HorizontalAlignment="Left" MaxWidth="241" MinWidth="241" Margin="0" Background="{DynamicResource GreyBackground}" MinHeight="768">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.2*"  />
                 <RowDefinition Height="0.6*" />
@@ -20,9 +20,9 @@
 
             <StackPanel x:Name="Navigation" Grid.Column="0" Grid.Row="1" Background="#FF2D2D30" Margin="65,30,10,10">
                 <localcontrols:NavigationControl x:Name="ncHome"      ItemLabel="Home"      ItemUri="dashboard.xaml" ItemToolTip="Dashboard" Margin="0,0,0,35" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
-                <localcontrols:NavigationControl x:Name="ncReports"   ItemLabel="Reports"   ItemUri="reports.xaml"   ItemToolTip="Reports" Margin="0,0,0,35"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
+                <localcontrols:NavigationControl Visibility="Collapsed" x:Name="ncReports"   ItemLabel="Reports"   ItemUri="reports.xaml"   ItemToolTip="Reports" Margin="0,0,0,35"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
                 <localcontrols:NavigationControl x:Name="ncPayments"  ItemLabel="Payments"  ItemUri="payments.xaml"  ItemToolTip="Payments" Margin="0,0,0,35"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
-                <localcontrols:NavigationControl x:Name="ncSchedules" ItemLabel="Schedules" ItemUri="schedules.xaml" ItemToolTip="Schedules" Margin="0,0,0,35"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
+                <localcontrols:NavigationControl Visibility="Collapsed" x:Name="ncSchedules" ItemLabel="Schedules" ItemUri="schedules.xaml" ItemToolTip="Schedules" Margin="0,0,0,35"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
                 <localcontrols:NavigationControl x:Name="ncAdmin"     ItemLabel="Settings"  ItemUri="admin.xaml"     ItemToolTip="Administration Area" Visibility="Hidden" Margin="0,0,0,30" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" />
             </StackPanel>
             

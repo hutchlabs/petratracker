@@ -191,6 +191,9 @@
     <Resource Include="Resources\images\icons\restore.png" />
     <Content Include="Resources\petra_tracker_db.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Styles\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.

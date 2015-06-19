@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using petratracker.Models;
 
 namespace petratracker.Pages
 {
@@ -26,8 +27,23 @@ namespace petratracker.Pages
         public admin()
         {
             InitializeComponent();   
-            string get_users = "select * from view_users";
-            viewUsers.ItemsSource = accessDB.ExecuteCmdToDataGrid(get_users).DefaultView;
+            viewUsers.ItemsSource = User.usersInGrid();
+        }
+
+        private void Pillbar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            string tab = ((Label)sender).Name.ToString();
+
+            this.TabUsers.Background = (tab.Equals("TabUsers")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
+            this.TabRoles.Background = (tab.Equals("TabRoles")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
+            this.TabDepts.Background = (tab.Equals("TabDepts")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
+            this.TabSetts.Background = (tab.Equals("TabSetts")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
+
+            this.UsersContentbar.Visibility = (tab.Equals("TabUsers")) ? Visibility.Visible : Visibility.Collapsed;
+            this.RolesContentbar.Visibility = (tab.Equals("TabRoles")) ? Visibility.Visible : Visibility.Collapsed;
+            this.DeptsContentbar.Visibility = (tab.Equals("TabDepts")) ? Visibility.Visible : Visibility.Collapsed;
+            this.SettsContentbar.Visibility = (tab.Equals("TabSetts")) ? Visibility.Visible : Visibility.Collapsed;
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -64,5 +80,7 @@ namespace petratracker.Pages
             editUser.ShowDialog();
 
         }
+
+
     }
 }
