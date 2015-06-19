@@ -8,7 +8,13 @@ namespace petratracker.Models
 {
     public class payments
     {
+        Data.connection accessDB = new Data.connection();
 
+
+        public static void do_upload_payments()
+        {
+            
+        }
 
     }
 }
