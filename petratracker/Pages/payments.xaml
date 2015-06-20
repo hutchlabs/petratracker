@@ -19,8 +19,8 @@
         </StackPanel>
 
         <Grid x:Name="SubsContentbar" Visibility="Visible" Margin="30">
-            <Label Grid.Row="0" Content="Coming Soon" FontSize="48" Foreground="White"/>
-
+            <Button Grid.Column="0" Grid.Row="0" Click="btnUploadPayment_Click" Content="Upload Payments" Margin="0,0,-163,55"/>
+        
         </Grid>
 
         <Grid x:Name="TranContentbar" Visibility="Collapsed">

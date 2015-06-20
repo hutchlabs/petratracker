@@ -21,13 +21,17 @@ namespace petratracker.Pages
     /// </summary>
     public partial class admin : Page
     {
-
         Data.connection accessDB = new Data.connection();
+        
+        private User currentUser;
+       
+        TrackerDataContext trackerDB = new TrackerDataContext();
 
         public admin()
         {
-            InitializeComponent();   
-            viewUsers.ItemsSource = User.usersInGrid();
+            InitializeComponent();
+            currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
+            //viewUsers.ItemsSource = User.usersInGrid();
         }
 
         private void Pillbar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -36,12 +40,10 @@ namespace petratracker.Pages
 
             this.TabUsers.Background = (tab.Equals("TabUsers")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
             this.TabRoles.Background = (tab.Equals("TabRoles")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
-            this.TabDepts.Background = (tab.Equals("TabDepts")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
             this.TabSetts.Background = (tab.Equals("TabSetts")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
 
             this.UsersContentbar.Visibility = (tab.Equals("TabUsers")) ? Visibility.Visible : Visibility.Collapsed;
             this.RolesContentbar.Visibility = (tab.Equals("TabRoles")) ? Visibility.Visible : Visibility.Collapsed;
-            this.DeptsContentbar.Visibility = (tab.Equals("TabDepts")) ? Visibility.Visible : Visibility.Collapsed;
             this.SettsContentbar.Visibility = (tab.Equals("TabSetts")) ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -55,7 +57,6 @@ namespace petratracker.Pages
         {
             Views.DatabaseConnSetup openConfig = new Views.DatabaseConnSetup();
             openConfig.ShowDialog();
-
         }
 
         private void btnNewDepartment_Click(object sender, RoutedEventArgs e)
@@ -77,15 +78,7 @@ namespace petratracker.Pages
             editUser.txtUserID.Text = row["ID"].ToString();
             editUser.btnSave.Content = "Update";
             editUser.ShowDialog();
-
         }
-
-        private void btnUploadPayment_Click(object sender, RoutedEventArgs e)
-        {
-            Pages.uploadDeal openUpload = new Pages.uploadDeal();
-            openUpload.ShowDialog();
-        }
-
 
     }
 }

@@ -37,5 +37,12 @@ namespace petratracker.Pages
             this.TranContentbar.Visibility = (tab.Equals("TabTran")) ? Visibility.Visible : Visibility.Collapsed;
             this.RedmContentbar.Visibility = (tab.Equals("TabRedm")) ? Visibility.Visible : Visibility.Collapsed;
         }
+
+
+        private void btnUploadPayment_Click(object sender, RoutedEventArgs e)
+        {
+            Pages.uploadDeal openUpload = new Pages.uploadDeal();
+            openUpload.ShowDialog();
+        }
     }
 }

@@ -23,6 +23,18 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/ `petra_tracker_db` /*!40100 DEFAULT CHA
 
 USE `petra_tracker_db`;
 
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int(11) NOT NULL,
+  `to` varchar(255) NOT NULL,
+  `notification_type` enum('savings_booster','subscription_approval') NOT NULL,
+  `job_type` enum('subscription','transfer','redemption','schedule') NOT NULL,
+  `job_id` int(11) NOT NULL,
+  `status` enum('active','expired') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
 --
 -- Table structure for table `payment_jobs`
 --

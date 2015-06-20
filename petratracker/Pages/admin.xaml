@@ -15,7 +15,6 @@
         <StackPanel x:Name="Pillbar" DockPanel.Dock="Top" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Black" Orientation="Horizontal" Margin="0,10,10,10">
             <Label x:Name="TabUsers" Content="Users" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="#FF2D2D30" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp"/>
             <Label x:Name="TabRoles" Content="Roles" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="Black" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
-            <Label x:Name="TabDepts" Content="Departments" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="Black" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
             <Label x:Name="TabSetts" Content="Settings" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="Black" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
         </StackPanel>
         
@@ -30,10 +29,6 @@
         
         <Grid x:Name="RolesContentbar" Visibility="Collapsed">
             <Button x:Name="btnNewRole" Content="Add New Role" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Width="243" Height="37" Click="btnNewRole_Click"/>
-        </Grid>
-
-        <Grid x:Name="DeptsContentbar" Visibility="Collapsed">
-            <Button Content="Add New Department" Name="btnNewDepartment" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="242" Height="36" Click="btnNewDepartment_Click"/>
         </Grid>
 
         <Grid x:Name="SettsContentbar" Visibility="Collapsed">
