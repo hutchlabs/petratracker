@@ -14,7 +14,7 @@
         <elementListCompartment Id="56d6268f-9361-4285-8ed6-3690a01083b7" absoluteBounds="4.14, 0.96, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(4.125 : 1.54409912109375); (2.5 : 1.54409912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(4.125 : 1.54409912109375); (2.5 : 1.54409912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/TrackerDataContext/Role/Role_User" />
       <nodes>
         <classShapeMoniker Id="7b1d35c8-860b-461d-92f9-dbb7c3b42966" />

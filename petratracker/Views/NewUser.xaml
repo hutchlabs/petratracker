@@ -18,14 +18,15 @@
         <Label Content="Email " HorizontalAlignment="Left" Margin="57,124,0,0" VerticalAlignment="Top" Height="26" Width="42"/>
         <TextBox x:Name="txtEmail" HorizontalAlignment="Left" Height="23" Margin="158,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
         <Label Content="Password" HorizontalAlignment="Left" Margin="57,152,0,0" VerticalAlignment="Top" Height="26" Width="60"/>
-        <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="23" Margin="158,148,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
+
+        <PasswordBox x:Name="txtPassword" HorizontalAlignment="Left" Height="23" Margin="158,148,0,0"  VerticalAlignment="Top" Width="176"/>
         <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="238,233,0,0" VerticalAlignment="Top" Width="96" Click="btnSave_Click" Height="22"/>
         
         <ComboBox x:Name="cmbUserRole" 
                   ItemsSource="{Binding}"
                   DisplayMemberPath="role1" 
                   SelectedValuePath="id" 
-                  Margin="158,176,0,0" Width="176" Height="22" VerticalAlignment="Top"  />
+                  Margin="158,176,23,0" Width="176" Height="22" VerticalAlignment="Top"  />
 
         <Label Content="User Role" HorizontalAlignment="Left" Margin="57,180,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.909,-0.709" Height="26" Width="78"/>
         <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="145,232,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnCancel_Click"/>

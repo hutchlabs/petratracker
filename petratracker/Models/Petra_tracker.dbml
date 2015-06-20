@@ -2,7 +2,7 @@
   <Connection Mode="AppSettings" ConnectionString="Data Source=ELMINA\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=True" SettingsObjectName="petratracker.Properties.Settings" SettingsPropertyName="Petra_trackerConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Users" Member="Users">
     <Type Name="User">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="id" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="role_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="username" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="password" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />

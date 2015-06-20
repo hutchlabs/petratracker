@@ -22,15 +22,16 @@ namespace petratracker
     /// </summary>
     public partial class NewUser : Window
     {
+        private User currentUser;
+
+        Code.SendEmail sendMail = new Code.SendEmail();
+        TrackerDataContext trackerDB = new TrackerDataContext();
+        
         public NewUser()
         {
             InitializeComponent();
+            currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
         }
-
-        Data.connection db_ops = new Data.connection();
-        Code.SendEmail sendMail = new Code.SendEmail();
-        
-        TrackerDataContext trackerDB = new TrackerDataContext();
 
         public IEnumerable<Role> GetRoles()
         {
@@ -43,17 +44,6 @@ namespace petratracker
           {
               this.Close();
           }
-        }
-
-        private string SetPassword(string userPassword)
-        {
-           string pwdToHash = userPassword + "^Y8~JJ"; // ^Y8~JJ is my hard-coded salt
-           return BCrypt.HashPassword(pwdToHash, BCrypt.GenerateSalt());         
-         }
-
-        private bool DoesPasswordMatch(string hashedPwdFromDatabase, string userEnteredPassword)
-        {
-            return BCrypt.CheckPassword(userEnteredPassword + "^Y8~JJ", hashedPwdFromDatabase);
         }
 
         private bool validate_entries()
@@ -74,7 +64,7 @@ namespace petratracker
                 MessageBox.Show("Please provide the email of the user.");
                 txtEmail.Focus();
             }
-            else if(txtPassword.Text == string.Empty)
+            else if(txtPassword.Password == string.Empty)
             {
                 MessageBox.Show("Please provide the password of the user.");
                 txtFirstName.Focus();
@@ -99,20 +89,30 @@ namespace petratracker
             {        
                 if (validate_entries())
                 {
-                    string cmd = "call create_user('" + txtFirstName.Text + "','" + txtLastName.Text + "','','" + txtEmail.Text + "','" + txtPassword.Text + "','" + cmbUserRole.Text + "')";
-                    if (db_ops.executeCmd(cmd))
-                    {
-                        if(sendMail.sendMail("arkaah@cdhgroup.co",txtEmail.Text,"Your us.coer credentails from PetraTracker"))
-                        {
-                        cont = true;
-                        }
-                    }
+                    User newUser = new User();
+                    newUser.username = txtEmail.Text;
+                    newUser.password = BCrypt.HashPassword(txtPassword.Password + "^Y8~JJ", BCrypt.GenerateSalt());
+                    newUser.first_name = txtFirstName.Text;
+                    newUser.last_name = txtLastName.Text;
+                    newUser.email1 = txtEmail.Text;
+                    newUser.role_id = (int) cmbUserRole.SelectedValue;
+                    newUser.modified_by = currentUser.id;
+
+                    trackerDB.Users.InsertOnSubmit(newUser);
+                    trackerDB.SubmitChanges();
+
+                    cont = true;
+                   // if(sendMail.sendMail("arkaah@cdhgroup.co",txtEmail.Text,"Your us.coer credentails from PetraTracker"))
+                   // {
+                   //     cont = true;
+                    //}
                 }
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                MessageBox.Show("Could not create user", "System Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Could not create user: "+e.GetBaseException().ToString(), "System Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
             return cont;
         }
 
