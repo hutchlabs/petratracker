@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using petratracker.Code;
+using petratracker.Models;
+
 namespace petratracker
 {
     /// <summary>
@@ -19,14 +22,21 @@ namespace petratracker
     /// </summary>
     public partial class NewUser : Window
     {
+        private User currentUser;
+
+        Code.SendEmail sendMail = new Code.SendEmail();
+        TrackerDataContext trackerDB = new TrackerDataContext();
+        
         public NewUser()
         {
             InitializeComponent();
+            currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
         }
 
-        Data.connection db_ops = new Data.connection();
-        Code.SendEmail sendMail = new Code.SendEmail();
-
+        public IEnumerable<Role> GetRoles()
+        {
+            return (from r in trackerDB.Roles select r);
+        }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
@@ -51,17 +61,13 @@ namespace petratracker
             }
             else if(txtEmail.Text == string.Empty)
             {
-                MessageBox.Show("Pleaseprovide the email of the user.");
+                MessageBox.Show("Please provide the email of the user.");
                 txtEmail.Focus();
             }
-            else if(txtPassword.Text == string.Empty)
+            else if(txtPassword.Password == string.Empty)
             {
                 MessageBox.Show("Please provide the password of the user.");
                 txtFirstName.Focus();
-            }
-            else if (cmbDept.Text == string.Empty)
-            {
-                MessageBox.Show("Please select the department.");
             }
             else if (cmbUserRole.Text == string.Empty)
             {
@@ -83,20 +89,30 @@ namespace petratracker
             {        
                 if (validate_entries())
                 {
-                    string cmd = "call create_user('" + txtFirstName.Text + "','" + txtLastName.Text + "','" + cmbDept.Text + "','" + txtEmail.Text + "','" + txtPassword.Text + "','" + cmbUserRole.Text + "')";
-                    if (db_ops.executeCmd(cmd))
-                    {
-                        if(sendMail.sendMail("arkaah@cdhgroup.co",txtEmail.Text,"Your us.coer credentails from PetraTracker"))
-                        {
-                        cont = true;
-                        }
-                    }
+                    User newUser = new User();
+                    newUser.username = txtEmail.Text;
+                    newUser.password = BCrypt.HashPassword(txtPassword.Password + "^Y8~JJ", BCrypt.GenerateSalt());
+                    newUser.first_name = txtFirstName.Text;
+                    newUser.last_name = txtLastName.Text;
+                    newUser.email1 = txtEmail.Text;
+                    newUser.role_id = (int) cmbUserRole.SelectedValue;
+                    newUser.modified_by = currentUser.id;
+
+                    trackerDB.Users.InsertOnSubmit(newUser);
+                    trackerDB.SubmitChanges();
+
+                    cont = true;
+                   // if(sendMail.sendMail("arkaah@cdhgroup.co",txtEmail.Text,"Your us.coer credentails from PetraTracker"))
+                   // {
+                   //     cont = true;
+                    //}
                 }
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                //Log Error
+                MessageBox.Show("Could not create user: "+e.GetBaseException().ToString(), "System Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
             return cont;
         }
 
@@ -105,27 +121,16 @@ namespace petratracker
             this.Close();
         }
 
-        
-        private void load_data()
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                string getDepartments = "select id,name from tbl_departments";
-                db_ops.executeCmdToCombo(getDepartments, cmbDept, "name");
-
-                string getUserRoles = "select name from tbl_roles";
-                db_ops.executeCmdToCombo(getUserRoles, cmbUserRole, "name");
-
+                cmbUserRole.ItemsSource = this.GetRoles();
             }
-            catch(Exception)
+            catch (Exception)
             {
-                //Log Error
+                MessageBox.Show("Could not load roles", "System Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            load_data();
         }
     }
 }

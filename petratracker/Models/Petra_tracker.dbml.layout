@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DataClasses1">
+  <DataContextMoniker Name="/TrackerDataContext" />
+  <nestedChildShapes>
+    <classShape Id="a83b6844-e0b8-4a26-bb24-00b61e7b4317" absoluteBounds="0.5, 0.625, 2, 4.2708154296875">
+      <DataClassMoniker Name="/TrackerDataContext/User" />
+      <nestedChildShapes>
+        <elementListCompartment Id="90e5fcdb-c5d5-4c10-b345-a73f799d3c27" absoluteBounds="0.51500000000000012, 1.085, 1.9700000000000002, 3.7108154296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7b1d35c8-860b-461d-92f9-dbb7c3b42966" absoluteBounds="4.125, 0.5, 2, 1.9631982421875">
+      <DataClassMoniker Name="/TrackerDataContext/Role" />
+      <nestedChildShapes>
+        <elementListCompartment Id="56d6268f-9361-4285-8ed6-3690a01083b7" absoluteBounds="4.14, 0.96, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(4.125 : 1.54409912109375); (2.5 : 1.54409912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/TrackerDataContext/Role/Role_User" />
+      <nodes>
+        <classShapeMoniker Id="7b1d35c8-860b-461d-92f9-dbb7c3b42966" />
+        <classShapeMoniker Id="a83b6844-e0b8-4a26-bb24-00b61e7b4317" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

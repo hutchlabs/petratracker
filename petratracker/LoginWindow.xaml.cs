@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using petratracker.Models;
+using petratracker.Code;
 
 namespace petratracker
 {
@@ -28,16 +29,26 @@ namespace petratracker
 
         private void doLogin()
         {
-            if (User.exists(tbx_username.Text, tbx_password.Password))
+            TrackerDataContext trackerDB = new TrackerDataContext();
+            try
             {
-                User u = new User(tbx_username.Text, tbx_password.Password);
-                MainWindow mw = new MainWindow(u);
-                mw.Show();
-                this.Close();
-            }
-            else
+                var user = trackerDB.Users.Single(u => u.username == tbx_username.Text);
+
+                if (BCrypt.CheckPassword(tbx_password.Password + "^Y8~JJ", user.password))
+                {
+                    Properties.Settings.Default.username = tbx_username.Text;
+                    MainWindow mw = new MainWindow();
+                    mw.Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Password are incorrect. Please re-enter.", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            } 
+            catch(Exception)
             {
-                MessageBox.Show("Username and/or password are incorrect. Please re-enter.", "Login Error", MessageBoxButton.OK,MessageBoxImage.Error);
+                MessageBox.Show("Username is incorrect. Please re-enter.", "Login Error", MessageBoxButton.OK,MessageBoxImage.Error);
             }
         }
 

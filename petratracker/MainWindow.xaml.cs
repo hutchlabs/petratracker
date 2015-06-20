@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,7 @@ using System.Windows.Shapes;
 using petratracker.Models;
 using petratracker.Controls;
 
+
 namespace petratracker
 {
 	/// <summary>
@@ -22,24 +24,27 @@ namespace petratracker
 	{
         private User currentUser;
 
+        private string[] adminRoles = { "Super User", "Administrator" };
+
         Data.connection accessDB = new Data.connection();
+
+        TrackerDataContext trackerDB = new TrackerDataContext();
 
 		public MainWindow()
 		{
 			this.InitializeComponent();
-            this.currentUser = new User("dhutchful@gmail.com", "dogdog");
-            this.lbl_name.Content = this.currentUser.name;
-            this.lbl_role.Content = this.currentUser.role;
+            
+            Properties.Settings.Default.username = "dhutchful@gmail.com";
+            
+            currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
+   
+            this.lbl_name.Content = this.currentUser.first_name + " " + this.currentUser.last_name;
+            this.lbl_role.Content = this.currentUser.Role.role1;
 
-            if (this.currentUser.role.Equals("Admin"))
+            if (adminRoles.Contains(this.currentUser.Role.role1))
             {
                 this.ncAdmin.Visibility = System.Windows.Visibility.Visible;
             }
-        }
-
-        public MainWindow(User u) : this()
-        {
-            this.currentUser = u;
         }
 
         private void MainView_Loaded(object sender, RoutedEventArgs e)
@@ -48,7 +53,7 @@ namespace petratracker
            
         private void NavigationControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            this.PageHolder.Source = new Uri("pages/"+((NavigationControl)sender).ItemUri, UriKind.Relative); 
+            this.PageHolder.NavigationService.Navigate(new Uri("pages/" + ((NavigationControl)sender).ItemUri, UriKind.Relative));
         }
 
         // Top bar buttons
@@ -101,7 +106,13 @@ namespace petratracker
             }
         }
 
-        
+        private void notifications_Click(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).ContextMenu.IsEnabled = true;
+            (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
+            (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            (sender as Button).ContextMenu.IsOpen = true;
+        } 
         
 	}
 }

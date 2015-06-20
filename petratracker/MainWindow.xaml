@@ -3,7 +3,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="clr-namespace:petratracker" 
     xmlns:localcontrols="clr-namespace:petratracker.Controls"
-	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Models="clr-namespace:petratracker.Models" mc:Ignorable="d"
     x:Class="petratracker.MainWindow" x:Name="Window" Title="Petra Trust Tracker" 
     WindowState="Normal" WindowStyle="None" WindowStartupLocation="CenterScreen"
     MinWidth="1024" MinHeight="768"  Width="1024" Height="768" 
@@ -25,7 +25,7 @@
                 <localcontrols:NavigationControl Visibility="Collapsed" x:Name="ncSchedules" ItemLabel="Schedules" ItemUri="schedules.xaml" ItemToolTip="Schedules" Margin="0,0,0,35"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp"/>
                 <localcontrols:NavigationControl x:Name="ncAdmin"     ItemLabel="Settings"  ItemUri="admin.xaml"     ItemToolTip="Administration Area" Visibility="Hidden" Margin="0,0,0,30" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" />
             </StackPanel>
-            
+
             <Grid Grid.Column="0" Grid.Row="2" x:Name="LoginPanel" MinWidth="241" MaxWidth="241" HorizontalAlignment="Left" Background="#FF111111">
                 <Image x:Name="userimage" Source="/petratracker;component/Resources/images/icons/a0.jpg" Margin="34,23,172,28" />
                 <Label x:Name="lbl_name" Content="Label" HorizontalAlignment="Left" Margin="74,50,0,0" VerticalAlignment="Top" Width="124" Foreground="White" FontSize="16"/>
@@ -34,18 +34,31 @@
         </Grid>
 
         <StackPanel x:Name="Topbar" DockPanel.Dock="Top" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#FF2D2D30" Orientation="Horizontal" Margin="0,10,10,10">
-            <Image x:Name="win_min" HorizontalAlignment="Right" VerticalAlignment="Top" Width="22" Height="24" Source="Resources/images/icons/minus.png" MouseUp="minus_MouseUp" Cursor="Hand"  Margin="4,8
-                   ,20,0" ToolTip="Minimize"/>
-            <Image x:Name="win_max" HorizontalAlignment="Right" VerticalAlignment="Top" Width="22" Height="24" Source="Resources/images/icons/maximize.png" MouseUp="plus_MouseUp" Cursor="Hand"  Margin="4,8
-                   ,20,0" ToolTip="Maximize"/>
-            <Image x:Name="win_restore" HorizontalAlignment="Right" VerticalAlignment="Top" Width="22" Height="24" Source="Resources/images/icons/restore.png" MouseUp="plus_MouseUp" Cursor="Hand"  Margin="4,8
-                   ,20,0" ToolTip="Restore Down" Visibility="Collapsed"/>
+            <Button Click="notifications_Click" ContextMenuService.IsEnabled="False" Margin="0,0,40,0" Background="#EEFFFFFF">
+                <Button.ContextMenu>
+                    <ContextMenu >
+                        <MenuItem Header="You need to approve a Subscription"/>
+                        <MenuItem Header="You need to identify a Savings booster..."/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Resources/images/icons/bell.png" OpacityMask="White" ToolTip="Notifications"/>
+                    <TextBlock Text="2" VerticalAlignment="Center" Foreground="Red" FontWeight="Bold" FontSize="20"/>
+                    <Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="6" Fill="#FF527DB5" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>
+                </StackPanel>
+            </Button>
+
+            <Image x:Name="win_min" HorizontalAlignment="Right" VerticalAlignment="Top" Width="22" Height="24" Source="Resources/images/icons/minus.png" MouseUp="minus_MouseUp" Cursor="Hand"  Margin="4,8                    ,20,0" ToolTip="Minimize"/>
+            <Image x:Name="win_max" HorizontalAlignment="Right" VerticalAlignment="Top" Width="22" Height="24" Source="Resources/images/icons/maximize.png" MouseUp="plus_MouseUp" Cursor="Hand"  Margin="4,8                    ,20,0" ToolTip="Maximize"/>
+            <Image x:Name="win_restore" HorizontalAlignment="Right" VerticalAlignment="Top" Width="22" Height="24" Source="Resources/images/icons/restore.png" MouseUp="plus_MouseUp" Cursor="Hand"  Margin="4,8                    ,20,0" ToolTip="Restore Down" Visibility="Collapsed"/>
             <Image x:Name="win_close" HorizontalAlignment="Right" VerticalAlignment="Top" Width="29" Height="24" Source="Resources/images/icons/cross.png" MouseUp="cross_MouseUp" Cursor="Hand"  Margin="4,6,10,0" ToolTip="Close"/>
+
+
         </StackPanel>
 
         <Grid x:Name="ContentArea" Background="Black" Margin="5">
             <Frame x:Name="PageHolder" Source="/petratracker;component/Pages/dashboard.xaml" NavigationUIVisibility="Hidden" />
         </Grid>
     </DockPanel>
-  
+
 </Window>
