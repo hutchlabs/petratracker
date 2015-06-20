@@ -65,8 +65,9 @@ namespace petratracker.Pages
 
         private void btnUploadFile_Click(object sender, RoutedEventArgs e)
         {
-            Models.payments newUpload = new Models.payments();
-            newUpload.read_microgen_data(txtfileLocation.Text);
+
+            Models.Payments openExcel = new Models.Payments();
+            openExcel.read_excel(txtfileLocation.Text);
         }
 
 

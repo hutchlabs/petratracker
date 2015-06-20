@@ -28,19 +28,19 @@ namespace petratracker.Views
 
 
 
-        private bool validate_entries()
+        private bool validate_tracker_entries()
         {
             bool valid = false;
 
-            if (txtServer.Text == string.Empty)
+            if (txtTrackerDataSource.Text == string.Empty)
             {
-                MessageBox.Show("Please specify the Server Name.");
-                txtServer.Focus();
+                MessageBox.Show("Please specify the Data Source.");
+                txtTrackerDataSource.Focus();
             }
-            else if (txtUsername.Text == string.Empty)
+            else if (txtTrackerUsername.Text == string.Empty)
             {
                 MessageBox.Show("Please specify the Username.");
-                txtUsername.Focus();
+                txtTrackerUsername.Focus();
             }
             else
             {
@@ -54,15 +54,15 @@ namespace petratracker.Views
         {
             bool valid = false;
 
-            if (txtServer1.Text == string.Empty)
+            if (txtMicrogenDataSource.Text == string.Empty)
             {
-                MessageBox.Show("Please specify the Server Name.");
-                txtServer1.Focus();
+                MessageBox.Show("Please specify the Data Source.");
+                txtMicrogenDataSource.Focus();
             }
-            else if (txtUsername1.Text == string.Empty)
+            else if (txtMicrogenUsername.Text == string.Empty)
             {
                 MessageBox.Show("Please specify the Username.");
-                txtUsername1.Focus();
+                txtMicrogenUsername.Focus();
             }
             else
             {
@@ -72,93 +72,49 @@ namespace petratracker.Views
             return valid;
         }
 
-        private bool validate_entries_1()
-        {
-            bool valid = false;
-
-            if (txtServer1.Text == string.Empty)
-            {
-                MessageBox.Show("Please specify the Server Name.");
-                txtServer1.Focus();
-            }
-            else if (txtUsername1.Text == string.Empty)
-            {
-                MessageBox.Show("Please specify the Username.");
-                txtUsername1.Focus();
-            }
-            else
-            {
-                valid = true;
-            }
-
-            return valid;
-        }
-
-        private void btnTestConnection_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (validate_entries())
-                {
-                    String conStr = "datasource = " + txtServer.Text + ";username = " + txtUsername.Text + " ;password = " + txtPassword.Text + " ;database = " + txtDatabase.Text + " ;port = " + txtPortNumber.Text + "";
-                    File.WriteAllText(Environment.CurrentDirectory + "/connection.config", conStr);
-
-                    Data.connection openConn = new Data.connection();
-
-                    if (openConn.chkConnection())
-                    {
-                        MessageBox.Show("Connection successfull, please restart application.", "Operation Successfull", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("Connection could not be established.", "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                //record error
-            }
-        }
+       
+     
 
         private void frmDatabaseConnection_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (File.Exists(Environment.CurrentDirectory + "/connection.config"))
+                
+                char[] charSeparators = new char[] { ';' };
+
+                if (File.Exists(Environment.CurrentDirectory + "/tracker_connection.config"))
                 {
 
                     //PetraTracker Data String
-                    String conStr = File.ReadAllText(Environment.CurrentDirectory + "/connection.config");
-                    char[] charSeparators = new char[] { ';' };
+                    String conStr = File.ReadAllText(Environment.CurrentDirectory + "/tracker_connection.config");                  
                     string[] results = conStr.Split(charSeparators);
-                    txtServer.Text = results[0].Substring(results[0].IndexOf('=') + 2);
-                    txtUsername.Text = results[1].Substring(results[1].IndexOf('=') + 2);
-                    txtPassword.Text = results[2].Substring(results[2].IndexOf('=') + 2);
-                    txtDatabase.Text = results[3].Substring(results[3].IndexOf('=') + 2);
-                    txtPortNumber.Text = results[4].Substring(results[4].IndexOf('=') + 2);
-
-                    //Microgen Data String
-                    String conStr_1 = File.ReadAllText(Environment.CurrentDirectory + "/connection1.config");
+                    txtTrackerDataSource.Text= results[0].Substring(results[0].IndexOf('=') + 2);
+                    txtTrackerUsername.Text = results[1].Substring(results[1].IndexOf('=') + 2);
+                    txtTrackerPassword.Text = results[2].Substring(results[2].IndexOf('=') + 2);
+                    txtTrackerDatabase.Text = results[3].Substring(results[3].IndexOf('=') + 2);
                     
-                    string [] results_1 = conStr.Split(charSeparators);
-                    txtServer1.Text = results_1[0].Substring(results_1[0].IndexOf('=') + 2);
-                    txtUsername1.Text = results_1[1].Substring(results_1[1].IndexOf('=') + 2);
-                    txtPassword1.Text = results_1[2].Substring(results_1[2].IndexOf('=') + 2);
-                    txtDatabase1.Text = results_1[3].Substring(results_1[3].IndexOf('=') + 2);
-                  
-
-
                 }
+
+                if(File.Exists(Environment.CurrentDirectory + "/microgen_connection.config"))
+                {
+                    //Microgen Data String
+                    String conStr = File.ReadAllText(Environment.CurrentDirectory + "/microgen_connection.config");
+                    
+                    string [] results = conStr.Split(charSeparators);
+                    txtMicrogenDataSource.Text = results[0].Substring(results[0].IndexOf('=') + 2);
+                    txtMicrogenUsername.Text = results[1].Substring(results[1].IndexOf('=') + 2);
+                    txtMicrogenPassword.Text = results[2].Substring(results[2].IndexOf('=') + 2);
+                    txtMicrogenDatabase.Text = results[3].Substring(results[3].IndexOf('=') + 2);
+                } 
                 else
                 {
-                    MessageBox.Show("Connection file not found.");
+                    MessageBox.Show("Microgen config file not found.");
                 }
             }
-            catch(Exception)
+            catch(Exception configFileError)
             {
-            
+                MessageBox.Show(configFileError.Message);
+                //Log error
             }
         }
 
@@ -168,7 +124,7 @@ namespace petratracker.Views
             {
                 if (validate_microgen_entries())
                 {
-                    String conStr = "Data Source = " + txtServer1.Text + ";User ID = " + txtUsername1.Text + " ;Password = " + txtPassword.Text + " ;Initial Catalog = " + txtDatabase.Text + "";
+                    String conStr = "Data Source =" + txtMicrogenDataSource.Text + ";User ID =" + txtMicrogenUsername.Text + " ;Password =" + txtMicrogenPassword.Text + ";Initial Catalog =" + txtMicrogenDatabase.Text + "";
                     File.WriteAllText(Environment.CurrentDirectory + "/microgen_connection.config", conStr);
 
                     Data.connection openConn = new Data.connection();
@@ -188,6 +144,40 @@ namespace petratracker.Views
             {
                 //record error
             }
+        }
+
+        private void btnTrackerTestConnection_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (validate_tracker_entries())
+                {
+                    String conStr = "Data Source=" + txtTrackerDataSource.Text + ";User ID=" + txtTrackerUsername.Text + ";Password=" + txtTrackerPassword.Text + ";Initial Catalog=" + txtTrackerDatabase.Text + "";
+                    File.WriteAllText(Environment.CurrentDirectory + "/tracker_connection.config", conStr);
+
+                    Data.connection openConn = new Data.connection();
+
+                    if (openConn.chkTrackerConnection())
+                    {
+                        MessageBox.Show("Connection to Tracker was successfull, please restart application.", "Operation Successfull", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Connection could not be established with Tracker.", "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //log error
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Pages.uploadDeal openUpload = new Pages.uploadDeal();
+            openUpload.ShowDialog();
         }
 
        

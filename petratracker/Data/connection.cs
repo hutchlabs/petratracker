@@ -28,9 +28,9 @@ namespace petratracker.Data
         {
             try
             {
-                if (File.Exists(Environment.CurrentDirectory + "/connection.config"))
+                if (File.Exists(Environment.CurrentDirectory + "/tracker_connection.config"))
                 {
-                    connString = File.ReadAllText(Environment.CurrentDirectory + "/connection.config");
+                    connString = File.ReadAllText(Environment.CurrentDirectory + "/tracker_connection.config");
                 }
                 else
                 { 
@@ -45,19 +45,19 @@ namespace petratracker.Data
             }
         }
 
-        public bool chkConnection()
+        public bool chkTrackerConnection()
         {
             bool connState = false;
 
             try
             {
 
-                MySqlConnection mycon = null;
+                SqlConnection mycon = null;
 
 
-                if (File.Exists(Environment.CurrentDirectory + "/connection.config"))
+                if (File.Exists(Environment.CurrentDirectory + "/tracker_connection.config"))
                 {
-                    mycon = new MySqlConnection(File.ReadAllText(Environment.CurrentDirectory + "/connection.config"));
+                    mycon = new SqlConnection(File.ReadAllText(Environment.CurrentDirectory + "/tracker_connection.config"));
                     mycon.Open();
                     if (mycon.State == ConnectionState.Open)
                     {
@@ -74,7 +74,7 @@ namespace petratracker.Data
             }
             catch (Exception)
             {
-              
+              //log error
             }
 
             return connState;

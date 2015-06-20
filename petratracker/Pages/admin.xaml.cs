@@ -72,11 +72,19 @@ namespace petratracker.Pages
 
         private void viewUsers_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            System.Data.DataRowView row = (System.Data.DataRowView)viewUsers.SelectedItems[0];
-            NewUser editUser = new NewUser();
-            editUser.txtUserID.Text = row["ID"].ToString();
-            editUser.btnSave.Content = "Update";
-            editUser.ShowDialog();
+            try
+            {
+                System.Data.DataRowView row = (System.Data.DataRowView)viewUsers.SelectedItems[0];
+                NewUser editUser = new NewUser();
+                editUser.txtUserID.Text = row["ID"].ToString();
+                editUser.btnSave.Content = "Update";
+                editUser.ShowDialog();
+            }
+            catch(Exception viewUserError)
+            {
+                MessageBox.Show("Action failed to complete.\n" + viewUserError.Message);
+                //Log error
+            }
 
         }
 
