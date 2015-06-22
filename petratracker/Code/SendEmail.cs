@@ -14,7 +14,7 @@ namespace petratracker.Code
         private string adminEmail;
         private System.Net.Mail.SmtpClient smtp;
         private System.Net.Mail.MailAddress from;
-        private TrackerDataContext trackerDB = new TrackerDataContext();
+        private TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
 
         public SendEmail()
         {

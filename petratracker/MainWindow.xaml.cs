@@ -23,7 +23,7 @@ namespace petratracker
 	public partial class MainWindow : Window
 	{
         private User currentUser;
-        private TrackerDataContext trackerDB = new TrackerDataContext();
+        private TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
 
         private string[] adminRoles = { "Super User", "Administrator" };
 

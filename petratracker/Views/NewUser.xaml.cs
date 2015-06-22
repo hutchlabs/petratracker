@@ -24,7 +24,7 @@ namespace petratracker
     {
         private User currentUser;
         private SendEmail sendMail = new SendEmail();
-        private TrackerDataContext trackerDB = new TrackerDataContext();
+        private TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
         
         public NewUser()
         {

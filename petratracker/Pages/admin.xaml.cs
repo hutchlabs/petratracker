@@ -22,7 +22,7 @@ namespace petratracker.Pages
     public partial class admin : Page
     {
         private User currentUser;
-        private TrackerDataContext trackerDB = new TrackerDataContext();
+        private TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
 
         public admin()
         {

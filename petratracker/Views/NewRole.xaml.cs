@@ -21,7 +21,7 @@ namespace petratracker.Views
     public partial class NewRole : Window
     {
         private User currentUser;
-        private TrackerDataContext trackerDB = new TrackerDataContext();
+        private TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
 
         public NewRole()
         {

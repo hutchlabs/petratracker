@@ -107,10 +107,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Payments.cs" />
-    <Compile Include="Models\TrackerDB.designer.cs">
+    <Compile Include="Models\trackerDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TrackerDB.dbml</DependentUpon>
+      <DependentUpon>trackerDB.dbml</DependentUpon>
     </Compile>
     <Compile Include="Pages\admin.xaml.cs">
       <DependentUpon>admin.xaml</DependentUpon>
@@ -162,9 +162,9 @@
       <Visible>false</Visible>
     </None>
     <None Include="Data\connection.config" />
-    <None Include="Models\TrackerDB.dbml">
+    <None Include="Models\trackerDB.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>TrackerDB.designer.cs</LastGenOutput>
+      <LastGenOutput>trackerDB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">
@@ -223,7 +223,11 @@
     <Resource Include="Resources\images\icons\restore.png" />
     <Content Include="Resources\petra_tracker_db.sql" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Models\trackerDB.dbml.layout">
+      <DependentUpon>trackerDB.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
       <Visible>False</Visible>
@@ -243,11 +247,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\TrackerDB.dbml.layout">
-      <DependentUpon>TrackerDB.dbml</DependentUpon>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

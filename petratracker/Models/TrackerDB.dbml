@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Petra_tracker" Class="TrackerDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=ELMINA\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=True" SettingsObjectName="petratracker.Properties.Settings" SettingsPropertyName="Petra_trackerConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="ConnectionString" ConnectionString="Data Source=ELMINA\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=True" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Users" Member="Users">
     <Type Name="User">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -20,8 +20,8 @@
       <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Association Name="User_Payment" Member="Payments" ThisKey="id" OtherKey="owner" Type="Payment" />
       <Association Name="User_Setting" Member="Settings" ThisKey="id" OtherKey="modified_by" Type="Setting" />
+      <Association Name="User_Payment" Member="Payments" ThisKey="id" OtherKey="owner" Type="Payment" />
       <Association Name="Role_User" Member="Role" ThisKey="role_id" OtherKey="id" Type="Role" IsForeignKey="true" />
     </Type>
   </Table>
@@ -34,6 +34,17 @@
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Association Name="Role_User" Member="Users" ThisKey="id" OtherKey="role_id" Type="User" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Settings" Member="Settings">
+    <Type Name="Setting">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="setting" Member="setting1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="value" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Association Name="User_Setting" Member="User" ThisKey="modified_by" OtherKey="id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Jobs" Member="Jobs">
@@ -63,17 +74,6 @@
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Association Name="Job_Payment" Member="Job" ThisKey="job_id" OtherKey="id" Type="Job" IsForeignKey="true" />
       <Association Name="User_Payment" Member="User" ThisKey="owner" OtherKey="id" Type="User" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Settings" Member="Settings">
-    <Type Name="Setting">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="setting" Member="setting1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="value" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Association Name="User_Setting" Member="User" ThisKey="modified_by" OtherKey="id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

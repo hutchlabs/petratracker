@@ -1,8 +1,7 @@
 ﻿<Application
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	x:Class="petratracker.App"
-    StartupUri="LoginWindow.xaml">
+	x:Class="petratracker.App">
 	<Application.Resources>
 
         <SolidColorBrush x:Key="GreyBackground">#FF2D2D30</SolidColorBrush>

@@ -54,7 +54,7 @@ namespace petratracker.Models
 
 
                 //Insert payment into jobs
-               TrackerDataContext newPaymentObj = new TrackerDataContext();
+                TrackerDataContext newPaymentObj = (App.Current as App).TrackerDBo;
 
 
                 //Create new job

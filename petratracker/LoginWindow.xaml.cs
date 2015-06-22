@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 
 using petratracker.Models;
 using petratracker.Code;
+using petratracker.Views;
 
 namespace petratracker
 {
@@ -23,7 +24,7 @@ namespace petratracker
     public partial class LoginWindow : Window
     {
 
-        TrackerDataContext trackerDB = new TrackerDataContext();
+        TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
 
         public LoginWindow()
         {

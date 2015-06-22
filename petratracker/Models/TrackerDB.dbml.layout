@@ -1,63 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="TrackerDB">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="trackerDB">
   <DataContextMoniker Name="/TrackerDataContext" />
   <nestedChildShapes>
-    <classShape Id="ca3434a4-ec10-45eb-a6dc-8d6ecb8a3989" absoluteBounds="3, 0.5, 2, 4.2708154296875">
+    <classShape Id="95439153-3cdb-4c51-be93-a3c502aeb670" absoluteBounds="3.25, 1.125, 2, 4.2708154296875">
       <DataClassMoniker Name="/TrackerDataContext/User" />
       <nestedChildShapes>
-        <elementListCompartment Id="82ff3a8c-8c53-4699-801f-27bc2c7b40f3" absoluteBounds="3.015, 0.96, 1.9700000000000002, 3.7108154296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="569ad954-da01-4a6d-bcf1-09ff8dc5cb1e" absoluteBounds="3.2649999999999997, 1.585, 1.9700000000000002, 3.7108154296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="c0e55dfa-212b-4429-a95b-e7607ea7e6c2" absoluteBounds="0.5, 2.625, 2, 1.9631982421875">
+    <classShape Id="e661cd88-c002-4094-aa0d-fe0fe97883ed" absoluteBounds="6.125, 0.5, 2, 1.9631982421875">
       <DataClassMoniker Name="/TrackerDataContext/Role" />
       <nestedChildShapes>
-        <elementListCompartment Id="ad14fbdc-c50a-42cf-8ec3-feb15389c208" absoluteBounds="0.51499999999999968, 3.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="113b3d46-1cea-4e17-a5ce-685bdb3935bd" absoluteBounds="6.14, 0.96, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(2.5 : 3.60659912109375); (3 : 3.60659912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(6.125 : 1.79409912109375); (5.25 : 1.79409912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/TrackerDataContext/Role/Role_User" />
       <nodes>
-        <classShapeMoniker Id="c0e55dfa-212b-4429-a95b-e7607ea7e6c2" />
-        <classShapeMoniker Id="ca3434a4-ec10-45eb-a6dc-8d6ecb8a3989" />
+        <classShapeMoniker Id="e661cd88-c002-4094-aa0d-fe0fe97883ed" />
+        <classShapeMoniker Id="95439153-3cdb-4c51-be93-a3c502aeb670" />
       </nodes>
     </associationConnector>
-    <classShape Id="7f37cea8-1929-4f45-8a2f-9fe3d1a36994" absoluteBounds="5.625, 0.5, 2, 1.3862939453125">
-      <DataClassMoniker Name="/TrackerDataContext/Job" />
-      <nestedChildShapes>
-        <elementListCompartment Id="cc80bdae-68d8-4f1b-804e-f8c5470657a4" absoluteBounds="5.64, 0.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <classShape Id="532a2b2c-38d3-4313-8fcf-aa346f1c4457" absoluteBounds="5.875, 2.25, 2, 3.6939111328124996">
-      <DataClassMoniker Name="/TrackerDataContext/Payment" />
-      <nestedChildShapes>
-        <elementListCompartment Id="51a48616-5d5f-46b2-ae77-f86160a25444" absoluteBounds="5.89, 2.71, 1.9700000000000002, 3.1339111328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <associationConnector edgePoints="[(6.75 : 1.8862939453125); (6.75 : 2.25)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/TrackerDataContext/Job/Job_Payment" />
-      <nodes>
-        <classShapeMoniker Id="7f37cea8-1929-4f45-8a2f-9fe3d1a36994" />
-        <classShapeMoniker Id="532a2b2c-38d3-4313-8fcf-aa346f1c4457" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(5 : 3.51040771484375); (5.875 : 3.51040771484375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/TrackerDataContext/User/User_Payment" />
-      <nodes>
-        <classShapeMoniker Id="ca3434a4-ec10-45eb-a6dc-8d6ecb8a3989" />
-        <classShapeMoniker Id="532a2b2c-38d3-4313-8fcf-aa346f1c4457" />
-      </nodes>
-    </associationConnector>
-    <classShape Id="43d13e53-6431-4da4-85ed-3151b94a477b" absoluteBounds="0.5, 0.5, 2, 1.9631982421875">
+    <classShape Id="3cfeeff3-3724-4a36-a8a3-6e5adada7378" absoluteBounds="6.125, 2.875, 2, 1.9631982421875">
       <DataClassMoniker Name="/TrackerDataContext/Setting" />
       <nestedChildShapes>
-        <elementListCompartment Id="1dc0633a-f117-410f-beac-67809aac0443" absoluteBounds="0.51499999999999968, 0.96, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="57b90ef0-c77f-4cdb-b2be-ed4f3a5796ac" absoluteBounds="6.14, 3.335, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(3 : 1.48159912109375); (2.5 : 1.48159912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.25 : 3.85659912109375); (6.125 : 3.85659912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/TrackerDataContext/User/User_Setting" />
       <nodes>
-        <classShapeMoniker Id="ca3434a4-ec10-45eb-a6dc-8d6ecb8a3989" />
-        <classShapeMoniker Id="43d13e53-6431-4da4-85ed-3151b94a477b" />
+        <classShapeMoniker Id="95439153-3cdb-4c51-be93-a3c502aeb670" />
+        <classShapeMoniker Id="3cfeeff3-3724-4a36-a8a3-6e5adada7378" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="41411059-149d-4e88-b6c8-abfdeb0fa1a6" absoluteBounds="0.5, 0.5, 2, 1.3862939453125">
+      <DataClassMoniker Name="/TrackerDataContext/Job" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3ebd6b98-821b-4fa3-8839-c429e4dd38c1" absoluteBounds="0.515, 0.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ac4357bc-f041-4257-88ee-68dcd7df48e6" absoluteBounds="0.5, 2.25, 2, 3.6939111328124996">
+      <DataClassMoniker Name="/TrackerDataContext/Payment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="250f6ed3-14ad-4705-8540-ac2537345c60" absoluteBounds="0.51500000000000012, 2.71, 1.9700000000000002, 3.1339111328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(1.5 : 1.8862939453125); (1.5 : 2.25)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TrackerDataContext/Job/Job_Payment" />
+      <nodes>
+        <classShapeMoniker Id="41411059-149d-4e88-b6c8-abfdeb0fa1a6" />
+        <classShapeMoniker Id="ac4357bc-f041-4257-88ee-68dcd7df48e6" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(3.25 : 3.82290771484375); (2.5 : 3.82290771484375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TrackerDataContext/User/User_Payment" />
+      <nodes>
+        <classShapeMoniker Id="95439153-3cdb-4c51-be93-a3c502aeb670" />
+        <classShapeMoniker Id="ac4357bc-f041-4257-88ee-68dcd7df48e6" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>
