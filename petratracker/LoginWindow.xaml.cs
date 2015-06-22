@@ -22,6 +22,9 @@ namespace petratracker
     /// </summary>
     public partial class LoginWindow : Window
     {
+
+        TrackerDataContext trackerDB = new TrackerDataContext();
+
         public LoginWindow()
         {
             InitializeComponent();
@@ -29,27 +32,33 @@ namespace petratracker
 
         private void doLogin()
         {
-            TrackerDataContext trackerDB = new TrackerDataContext();
-            try
+            if (tbx_username.Text.Length > 0 && tbx_password.Password.Length > 0)
             {
-                var user = trackerDB.Users.Single(u => u.username == tbx_username.Text);
+                try
+                {
+                    var user = trackerDB.Users.Single(u => u.username == tbx_username.Text);
 
-                if (BCrypt.CheckPassword(tbx_password.Password + "^Y8~JJ", user.password))
-                {
-                    Properties.Settings.Default.username = tbx_username.Text;
-                    MainWindow mw = new MainWindow();
-                    mw.Show();
-                    this.Close();
+                    if (BCrypt.CheckPassword(tbx_password.Password + "^Y8~JJ", user.password))
+                    {
+                        Properties.Settings.Default.username = tbx_username.Text;
+                        MainWindow mw = new MainWindow();
+                        mw.Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Password are incorrect. Please re-enter.", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    MessageBox.Show("Password are incorrect. Please re-enter.", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Username is incorrect. Please re-enter.", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            } 
-            catch(Exception)
-            {
-                MessageBox.Show("Username is incorrect. Please re-enter.", "Login Error", MessageBoxButton.OK,MessageBoxImage.Error);
             }
+            else
+            {
+                MessageBox.Show("Enter your username and/or password", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }       
         }
 
         private void closeApplication()
@@ -76,6 +85,14 @@ namespace petratracker
             }
         }
 
+        private void password_onKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                doLogin();
+            }
+        }
+
         private void lbl_close_MousePress(object sender, MouseButtonEventArgs e)
         {
                 this.closeApplication();
@@ -83,14 +100,40 @@ namespace petratracker
 
         private void lbl_login_Click(object sender, RoutedEventArgs e)
         {
-            if (tbx_username.Text.Length > 0 && tbx_password.Password.Length > 0)
+            doLogin();
+        }
+
+        private void autoLogin(object sender, RoutedEventArgs e)
+        {
+            tbx_password.Password = "dogdog";
+            tbx_username.Text = "dhutchful@gmail.com";
+            doLogin();
+        }
+
+        private void resetPassword(object sender, MouseButtonEventArgs e)
+        {
+            if (tbx_username.Text.Length > 0)
             {
-                this.doLogin();
+                TrackerDataContext trackerDB = new TrackerDataContext();
+                try
+                {
+                    var user = trackerDB.Users.Single(u => u.username == tbx_username.Text);
+
+                    SendEmail sendMail = new SendEmail();
+                    //sendMail.sendMail("arkaah@cdhgroup.co",txtEmail.Text,"Your us.coer credentails from PetraTracker")
+
+                    MessageBox.Show("Reset message sent to Administrator. Please follow up with them.", "Reset Password", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.Close();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Username is incorrect. Please re-enter.", "Reset Password Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             else
             {
-                MessageBox.Show("Enter your username and/or password", "Login Error",MessageBoxButton.OK,  MessageBoxImage.Error);
-            }
+                MessageBox.Show("Enter your username and re-click the \"Reset\" link", "Reset Password Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            } 
         }
     }
 }

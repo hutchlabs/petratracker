@@ -34,9 +34,9 @@ namespace petratracker.Pages
 
             // Set filter for file extension and default file extension 
 
-            dlg.DefaultExt = ".xlsx";
+            dlg.DefaultExt = ".xls";
 
-            dlg.Filter = "Text documents (.xlsx)|*.xlsx";
+            dlg.Filter = "Text documents (.xls)|*.xls";
 
 
 
@@ -56,7 +56,7 @@ namespace petratracker.Pages
                 string filename = dlg.FileName;
 
                 txtfileLocation.Text = filename;
-               
+
 
             }
 
@@ -65,9 +65,8 @@ namespace petratracker.Pages
 
         private void btnUploadFile_Click(object sender, RoutedEventArgs e)
         {
-
-            Models.Payments openExcel = new Models.Payments();
-            openExcel.read_excel(txtfileLocation.Text);
+            Models.payments newUpload = new Models.payments();
+            newUpload.read_microgen_data(txtfileLocation.Text, cmbDealType.Text);
         }
 
 

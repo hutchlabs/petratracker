@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="uploadDeal" Height="319.403" Width="445.447">
     <Grid>
-        <Grid HorizontalAlignment="Left" Background="White" Height="269" Margin="10,10,0,0" VerticalAlignment="Top" Width="417">
+        <Grid HorizontalAlignment="Left" Background="White" Height="280" Margin="10,10,0,-1" VerticalAlignment="Top" Width="417">
             <Label Content="Deal Type" HorizontalAlignment="Left" Margin="44,35,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691"/>
-            <ComboBox HorizontalAlignment="Left" Margin="51,66,0,0" VerticalAlignment="Top" Width="291">
+            <ComboBox x:Name="cmbDealType" HorizontalAlignment="Left" Margin="51,66,0,0" VerticalAlignment="Top" Width="291">
                 <ComboBoxItem Content="Issue"/>
                 <ComboBoxItem Content="Redemption"/>
                 <ComboBoxItem Content="Transfer"/>
