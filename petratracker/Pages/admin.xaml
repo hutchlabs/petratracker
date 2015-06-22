@@ -24,7 +24,7 @@
                 <RowDefinition Height="0.8*" />
             </Grid.RowDefinitions>
             <Button Grid.Row="0" Grid.Column="0" Content="Add New User" HorizontalAlignment="Left"  VerticalAlignment="Top"  Height="37" Click="Button_Click" Style="{DynamicResource MetroButton}"/>
-            <DataGrid Grid.Row="1" Grid.Column="0" x:Name="viewUsers"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*" MouseDoubleClick="viewUsers_MouseDoubleClick" />
+            <DataGrid Grid.Row="1" Grid.Column="0" x:Name="viewUsers"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*" MouseDoubleClick="viewUsers_MouseDoubleClick" AutoGeneratingColumn="viewUsers_AutoGeneratingColumn" />
         </Grid>
         
         <Grid x:Name="RolesContentbar" Visibility="Collapsed">

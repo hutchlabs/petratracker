@@ -138,9 +138,6 @@
     <Compile Include="Views\DatabaseConnSetup.xaml.cs">
       <DependentUpon>DatabaseConnSetup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewDepartment.xaml.cs">
-      <DependentUpon>NewDepartment.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\NewRole.xaml.cs">
       <DependentUpon>NewRole.xaml</DependentUpon>
     </Compile>
@@ -199,10 +196,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DatabaseConnSetup.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\NewDepartment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

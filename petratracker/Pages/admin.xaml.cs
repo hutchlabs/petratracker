@@ -21,20 +21,25 @@ namespace petratracker.Pages
     /// </summary>
     public partial class admin : Page
     {
-
-        Data.connection accessDB = new Data.connection();
-        TrackerDataContext trackerDB = new TrackerDataContext();
+        private User currentUser;
+        private TrackerDataContext trackerDB = new TrackerDataContext();
 
         public admin()
         {
             InitializeComponent();
-            var currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
+            currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
 
-            if (!currentUser.Role.role1.Equals("Super Admin"))
+            if (!currentUser.Role.role1.Equals("Super User"))
             {
                 this.TabSetts.Visibility = Visibility.Collapsed;
             }
-            //viewUsers.ItemsSource = User.usersInGrid();
+            viewUsers.ItemsSource = this.GetUsers();
+        }
+
+
+        public IEnumerable<User> GetUsers()
+        {
+            return (from u in trackerDB.Users select u);
         }
 
         private void Pillbar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -60,13 +65,6 @@ namespace petratracker.Pages
         {
             Views.DatabaseConnSetup openConfig = new Views.DatabaseConnSetup();
             openConfig.ShowDialog();
-
-        }
-
-        private void btnNewDepartment_Click(object sender, RoutedEventArgs e)
-        {
-            Views.NewDepartment openDepartment = new Views.NewDepartment();
-            openDepartment.ShowDialog();
         }
 
         private void btnNewRole_Click(object sender, RoutedEventArgs e)
@@ -77,18 +75,17 @@ namespace petratracker.Pages
 
         private void viewUsers_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
             try
             {
 
-                System.Data.DataRowView row = (System.Data.DataRowView)viewUsers.SelectedItems[0];
+               /* System.Data.DataRowView row = (System.Data.DataRowView)viewUsers.SelectedItems[0];
 
                 NewUser editUser = new NewUser();
 
                 editUser.btnSave.Content = "Update";
 
                 editUser.ShowDialog();
-
+                */
             }
             catch (Exception viewUserError)
             {
@@ -105,6 +102,14 @@ namespace petratracker.Pages
             openUpload.ShowDialog();
         }
 
+        private void viewUsers_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            string[] hiddenHeaders = { "password", "id", "role_id", "first_login", "Payments", "Settings", "Role", "email2", "email3", "signature", "logged_in", "middle_name" };
 
+            if (hiddenHeaders.Contains(e.Column.Header.ToString()))
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }

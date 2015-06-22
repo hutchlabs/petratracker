@@ -26,7 +26,7 @@
                   ItemsSource="{Binding}"
                   DisplayMemberPath="role1" 
                   SelectedValuePath="id" 
-                  Margin="158,152,23,0" Width="176" Height="22" VerticalAlignment="Top"  />
+                  Margin="158,152,41,0" Height="22" VerticalAlignment="Top"  />
 
         <Label Content="User Role" HorizontalAlignment="Left" Margin="57,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.909,-0.709" Height="26" Width="78"/>
         <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="145,208,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnCancel_Click"/>
