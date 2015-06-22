@@ -13,8 +13,7 @@ namespace petratracker.Models
     public class payments
     {
 
-
-        Models.Payment newPayment = new Payment();
+        Payment newPayment = new Payment();
 
         private DataTable GetDataTable(string sql, string connectionString)
         {
@@ -54,16 +53,16 @@ namespace petratracker.Models
 
 
                 //Insert payment into jobs
-                TrackerDataContext newPaymentObj = (App.Current as App).TrackerDBo;
-
+                TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
+                MicrogenDataContext microgenDB = (App.Current as App).MicrogenDBo;
 
                 //Create new job
                 Job objJob = new Job();
 
                 objJob.job_type = job_type;
                 objJob.status = "In Progress";
-                newPaymentObj.Jobs.InsertOnSubmit(objJob);
-                newPaymentObj.SubmitChanges();
+                trackerDB.Jobs.InsertOnSubmit(objJob);
+                trackerDB.SubmitChanges();
 
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -91,13 +90,10 @@ namespace petratracker.Models
 
                         objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
                         objPayment.status = "Pending";
-                        newPaymentObj.Payments.InsertOnSubmit(objPayment);
+                        trackerDB.Payments.InsertOnSubmit(objPayment);
                         //Submit changes to db
-                        newPaymentObj.SubmitChanges();
+                        trackerDB.SubmitChanges();
                     }
-
-
-
                 }
             }
             catch (Exception uploadError)

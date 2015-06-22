@@ -36,7 +36,6 @@ namespace petratracker.Pages
             viewUsers.ItemsSource = this.GetUsers();
         }
 
-
         public IEnumerable<User> GetUsers()
         {
             return (from u in trackerDB.Users select u);

@@ -101,10 +101,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Code\SendEmail.cs" />
-    <Compile Include="Data\connection.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\microgenDB.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>microgenDB.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\Payments.cs" />
     <Compile Include="Models\trackerDB.designer.cs">
@@ -161,7 +165,11 @@
     <None Include="Application.ico">
       <Visible>false</Visible>
     </None>
-    <None Include="Data\connection.config" />
+    <None Include="Models\microgenDB.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>microgenDB.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Models\trackerDB.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>trackerDB.designer.cs</LastGenOutput>
@@ -247,6 +255,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\microgenDB.dbml.layout">
+      <DependentUpon>microgenDB.dbml</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

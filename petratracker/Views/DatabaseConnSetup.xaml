@@ -1,22 +1,19 @@
 ﻿<Window x:Name="frmDatabaseConnection" x:Class="petratracker.Views.DatabaseConnSetup"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Set Up Database" Height="339.702" Width="470" Loaded="frmDatabaseConnection_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
-    <Grid Height="296" VerticalAlignment="Top" Margin="0,0,0,0">
+        Title="Set Up Database" Height="212.836" Width="470" Loaded="frmDatabaseConnection_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid Height="184" VerticalAlignment="Top" Margin="0,0,0,0">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="71*"/>
             <RowDefinition Height="209*"/>
         </Grid.RowDefinitions>
-        <GroupBox x:Name="groupTraker" Header="Tracker Database" HorizontalAlignment="Left" Height="252" Margin="17,24,0,0" VerticalAlignment="Top" Width="429" Grid.RowSpan="2"/>
-        <Grid HorizontalAlignment="Left" Height="213" Margin="29,47,0,0" VerticalAlignment="Top" Width="387" Grid.RowSpan="2">
-            <Label Content="ServerName" HorizontalAlignment="Left" Margin="38,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.471,-1.024"/>
+        <GroupBox x:Name="groupTraker" Header="Database Setup" HorizontalAlignment="Left" Margin="17,24,0,0" VerticalAlignment="Top" Width="429" Grid.RowSpan="2" Height="129"/>
+        <Grid HorizontalAlignment="Left" Height="106" Margin="29,47,0,0" VerticalAlignment="Top" Width="387" Grid.RowSpan="2">
+            <Label Content="Server Name" HorizontalAlignment="Left" Margin="38,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.471,-1.024"/>
             <TextBox x:Name="txtTrackerDataSource" HorizontalAlignment="Left" Height="23" Margin="138,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"/>
 
-            <Label Content="Database Name" HorizontalAlignment="Left" Margin="29,54,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtTrackerDatabase" HorizontalAlignment="Left" Height="23" Margin="138,59,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"/>
-
-            <Button x:Name="btnTrackerTestConnection" Content="Connect" HorizontalAlignment="Left" Margin="138,155,0,0" VerticalAlignment="Top" Width="119" Click="btnTrackerTestConnection_Click"/>
+            <Button x:Name="btnTrackerTestConnection" Content="Connect" HorizontalAlignment="Left" Margin="138,70,0,0" VerticalAlignment="Top" Width="119" Click="btnTrackerTestConnection_Click"/>
         </Grid>
 
     </Grid>

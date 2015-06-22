@@ -63,13 +63,12 @@ namespace petratracker.Views
                 
                 char[] charSeparators = new char[] { ';' };
 
-                if (Properties.Settings.Default.database != string.Empty)
+                if (Properties.Settings.Default.database_tracker != string.Empty)
                 {
                     //PetraTracker Data String
-                    String conStr = Properties.Settings.Default.database;           
+                    String conStr = Properties.Settings.Default.database_tracker;           
                     string[] results = conStr.Split(charSeparators);
                     txtTrackerDataSource.Text= results[0].Substring(results[0].IndexOf('=') + 1);
-                    txtTrackerDatabase.Text = results[1].Substring(results[1].IndexOf('=') + 1);                
                 }
                
             }
@@ -85,22 +84,43 @@ namespace petratracker.Views
             {
                 if (validate_tracker_entries())
                 {
-                    String conStr = "Data Source=" + txtTrackerDataSource.Text + ";Initial Catalog=" + txtTrackerDatabase.Text + ";Integrated Security=True";
-           
-                    TrackerDataContext tdc = new TrackerDataContext(conStr);
+                    String tconStr = "Data Source=" + txtTrackerDataSource.Text + ";Initial Catalog=Petra_tracker;Integrated Security=True";
+                    String pconStr = "Data Source=" + txtTrackerDataSource.Text + ";Initial Catalog=Petra5;Integrated Security=True";
 
-                    if (tdc.DatabaseExists())
+                    TrackerDataContext tdc = new TrackerDataContext(tconStr);
+                    MicrogenDataContext mdc = new MicrogenDataContext(pconStr);
+
+                    bool t=false;
+                    bool m=false;
+
+                    t = tdc.DatabaseExists();
+                    m = mdc.DatabaseExists();
+                    
+                    if (m && t)
                     {
-                        MessageBox.Show("Connection to Tracker was successful.", "Connection Successfull", MessageBoxButton.OK, MessageBoxImage.Information);
-                        Properties.Settings.Default.database = conStr;
+                        MessageBox.Show("Connection to databases were successful.", "Connection Successfull", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Properties.Settings.Default.database_tracker = tconStr;
+                        Properties.Settings.Default.database_microgen = pconStr;
+
                         Properties.Settings.Default.Save();
+
                         (App.Current as App).TrackerDBo = tdc;
+                        (App.Current as App).MicrogenDBo = mdc;
+
 
                         if (this.exitToLoginWindow)
                         {
                             (new LoginWindow()).Show();
                         }
                         this.Close();
+                    }
+                    else if (m)
+                    {
+                        MessageBox.Show("Connection to Microgen was successful, but connection to Tracker DB failed.", "Connection Status", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else if (t)
+                    {
+                        MessageBox.Show("Connection to Tracker DB was successful, but connection to Microgen failed.", "Connection Status", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     else
                     {
@@ -110,7 +130,7 @@ namespace petratracker.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Connection could not be established with Tracker. "+ex.GetBaseException().ToString(), "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Connection could not be established with databases. "+ex.GetBaseException().ToString(), "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
         }

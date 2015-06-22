@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="microgenDB">
+  <DataContextMoniker Name="/MicrogenDataContext" />
+  <nestedChildShapes>
+    <classShape Id="715cd40f-f680-437d-b300-d9eed1104a4a" absoluteBounds="1, 0.625, 2, 4.2708154296875">
+      <DataClassMoniker Name="/MicrogenDataContext/cclv_AllEntity" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8e6b1d23-2ea9-4af3-8010-77ff7ed245c4" absoluteBounds="1.0150000000000001, 1.085, 1.9700000000000002, 3.7108154296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

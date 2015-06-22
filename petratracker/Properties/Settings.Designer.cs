@@ -49,12 +49,34 @@ namespace petratracker.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string database {
+        public string database_tracker {
             get {
-                return ((string)(this["database"]));
+                return ((string)(this["database_tracker"]));
             }
             set {
-                this["database"] = value;
+                this["database_tracker"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string database_microgen {
+            get {
+                return ((string)(this["database_microgen"]));
+            }
+            set {
+                this["database_microgen"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=Petra5;Integrated Security=True")]
+        public string Petra5ConnectionString {
+            get {
+                return ((string)(this["Petra5ConnectionString"]));
             }
         }
     }
