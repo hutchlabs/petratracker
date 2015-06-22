@@ -23,19 +23,15 @@ namespace petratracker
 	public partial class MainWindow : Window
 	{
         private User currentUser;
+        private TrackerDataContext trackerDB = new TrackerDataContext();
 
         private string[] adminRoles = { "Super User", "Administrator" };
 
-        Data.connection accessDB = new Data.connection();
-
-        TrackerDataContext trackerDB = new TrackerDataContext();
 
 		public MainWindow()
 		{
 			this.InitializeComponent();
-            
-            Properties.Settings.Default.username = "dhutchful@gmail.com";
-            
+                        
             currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
    
             this.lbl_name.Content = this.currentUser.first_name + " " + this.currentUser.last_name;

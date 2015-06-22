@@ -23,9 +23,8 @@ namespace petratracker
     public partial class NewUser : Window
     {
         private User currentUser;
-
-        Code.SendEmail sendMail = new Code.SendEmail();
-        TrackerDataContext trackerDB = new TrackerDataContext();
+        private SendEmail sendMail = new SendEmail();
+        private TrackerDataContext trackerDB = new TrackerDataContext();
         
         public NewUser()
         {

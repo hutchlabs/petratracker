@@ -1,4 +1,5 @@
-﻿using System;
+﻿using petratracker.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,13 +20,14 @@ namespace petratracker.Views
     /// </summary>
     public partial class NewRole : Window
     {
+        private User currentUser;
+        private TrackerDataContext trackerDB = new TrackerDataContext();
+
         public NewRole()
         {
             InitializeComponent();
+            currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
         }
-
-        Data.connection openConn = new Data.connection();
-
 
         private bool verify_entires()
         { 
@@ -36,7 +38,7 @@ namespace petratracker.Views
             }
             else
             {
-                MessageBox.Show("Please specify the name of the role.");
+                MessageBox.Show("Please specify the name of the role", "New Role Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 txtName.Focus();
             }
 
@@ -47,9 +49,20 @@ namespace petratracker.Views
         {
             if (verify_entires())
             {
-                string cmd = "insert into tbl_roles (Name,Description) values('"+txtName.Text+"','"+txtDescription.Text+"')";
-                openConn.executeCmd(cmd);
-                this.Close();
+                try
+                {
+                    Role newRole = new Role();
+                    newRole.role1 = txtName.Text;
+                    newRole.description = txtDescription.Text;
+                    newRole.modified_by = currentUser.id;
+                    trackerDB.Roles.InsertOnSubmit(newRole);
+                    trackerDB.SubmitChanges();
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Could not save role" + ex.GetBaseException().ToString(), "New Role Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }
