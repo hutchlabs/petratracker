@@ -120,9 +120,10 @@ namespace petratracker
                     var user = trackerDB.Users.Single(u => u.username == tbx_username.Text);
 
                     SendEmail sendMail = new SendEmail();
-                    //sendMail.sendMail("arkaah@cdhgroup.co",txtEmail.Text,"Your us.coer credentails from PetraTracker")
+                    sendMail.sendResetPasswordMail(tbx_username.Text);
 
                     MessageBox.Show("Reset message sent to Administrator. Please follow up with them.", "Reset Password", MessageBoxButton.OK, MessageBoxImage.Information);
+                    
                     this.Close();
                 }
                 catch (Exception)

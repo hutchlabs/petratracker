@@ -102,10 +102,10 @@ namespace petratracker
                     trackerDB.SubmitChanges();
 
                     cont = true;
-                   // if(sendMail.sendMail("arkaah@cdhgroup.co",txtEmail.Text,"Your us.coer credentails from PetraTracker"))
-                   // {
-                   //     cont = true;
-                    //}
+                    if(sendMail.sendNewUserMail(txtFirstName.Text+ " "+txtLastName.Text, txtEmail.Text, txtPassword.Password))
+                    {
+                        cont = true;
+                    }
                 }
             }
             catch(Exception e)
