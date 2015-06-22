@@ -38,16 +38,25 @@ namespace petratracker
                 {
                     var user = trackerDB.Users.Single(u => u.username == tbx_username.Text);
 
-                    if (BCrypt.CheckPassword(tbx_password.Password + "^Y8~JJ", user.password))
+                    if (BCrypt.CheckPassword(tbx_password.Password, user.password))
                     {
                         Properties.Settings.Default.username = tbx_username.Text;
-                        MainWindow mw = new MainWindow();
-                        mw.Show();
+
+                        if (user.first_login)
+                        {
+                            ResetPassword rpw = new ResetPassword();
+                            rpw.Show();
+                        }
+                        else
+                        {
+                            MainWindow mw = new MainWindow();
+                            mw.Show();
+                        }
                         this.Close();
                     }
                     else
                     {
-                        MessageBox.Show("Password are incorrect. Please re-enter.", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Password is incorrect. Please re-enter.", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 catch (Exception)

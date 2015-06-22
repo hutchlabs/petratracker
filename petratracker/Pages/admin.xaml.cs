@@ -85,8 +85,6 @@ namespace petratracker.Pages
 
                 NewUser editUser = new NewUser();
 
-                editUser.txtUserID.Text = row["ID"].ToString();
-
                 editUser.btnSave.Content = "Update";
 
                 editUser.ShowDialog();

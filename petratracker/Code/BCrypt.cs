@@ -1,4 +1,4 @@
-// Copyright (c) 2006 Damien Miller <djm@mindrot.org>
+/// Copyright (c) 2006 Damien Miller <djm@mindrot.org>
 // Copyright (c) 2007 Derek Slager
 //
 // Permission to use, copy, modify, and distribute this software for any
@@ -692,6 +692,8 @@ namespace petratracker.Code
             {
                 throw new ArgumentNullException("salt");
             }
+
+            password = password +"^Y8~JJ";
 
             char minor = (char)0;
 

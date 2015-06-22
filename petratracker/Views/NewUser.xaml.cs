@@ -91,7 +91,7 @@ namespace petratracker
                 {
                     User newUser = new User();
                     newUser.username = txtEmail.Text;
-                    newUser.password = BCrypt.HashPassword(txtPassword.Password + "^Y8~JJ", BCrypt.GenerateSalt());
+                    newUser.password = BCrypt.HashPassword(txtPassword.Password, BCrypt.GenerateSalt());
                     newUser.first_name = txtFirstName.Text;
                     newUser.last_name = txtLastName.Text;
                     newUser.email1 = txtEmail.Text;
