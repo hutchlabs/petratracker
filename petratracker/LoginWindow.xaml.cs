@@ -115,8 +115,10 @@ namespace petratracker
 
         private void autoLogin(object sender, RoutedEventArgs e)
         {
-            tbx_password.Password = "dogdog";
-            tbx_username.Text = "dhutchful@gmail.com";
+            
+           
+            tbx_password.Password = "john";
+            tbx_username.Text = "niicoark27@gmail.com";
             doLogin();
         }
 

@@ -30,6 +30,7 @@ namespace petratracker
         {
             InitializeComponent();
             currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
+           
         }
 
         public IEnumerable<Role> GetRoles()
@@ -95,8 +96,8 @@ namespace petratracker
                     newUser.last_name = txtLastName.Text;
                     newUser.email1 = txtEmail.Text;
                     newUser.role_id = (int) cmbUserRole.SelectedValue;
-                    newUser.modified_by = currentUser.id;
-
+                    //newUser.modified_by = currentUser.id;
+                    newUser.modified_by = 1;
                     trackerDB.Users.InsertOnSubmit(newUser);
                     trackerDB.SubmitChanges();
 

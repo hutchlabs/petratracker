@@ -54,7 +54,7 @@ namespace petratracker.Views
                     Role newRole = new Role();
                     newRole.role1 = txtName.Text;
                     newRole.description = txtDescription.Text;
-                    newRole.modified_by = currentUser.id;
+                    newRole.modified_by = currentUser.id;                  
                     trackerDB.Roles.InsertOnSubmit(newRole);
                     trackerDB.SubmitChanges();
                     this.Close();

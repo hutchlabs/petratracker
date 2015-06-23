@@ -1,9 +1,9 @@
 ﻿<Window x:Class="petratracker.NewUser"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Add New User" Height="426.175" Width="412.175" Loaded="Window_Loaded"  WindowStartupLocation="CenterOwner" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
+        Title="Add New User" Height="293.339" Width="412.175" Loaded="Window_Loaded"  WindowStartupLocation="CenterOwner" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
 
-    <Grid Margin="0,6,2,18">
+    <Grid Margin="10,6,2,9">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="119*"/>
             <ColumnDefinition Width="15*"/>
@@ -19,17 +19,17 @@
         <TextBox x:Name="txtEmail" HorizontalAlignment="Left" Height="23" Margin="158,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
         <Label Content="Password" HorizontalAlignment="Left" Margin="57,128,0,0" VerticalAlignment="Top" Height="26" Width="60"/>
 
-        <PasswordBox x:Name="txtPassword" HorizontalAlignment="Left" Height="23" Margin="158,124,0,0"  VerticalAlignment="Top" Width="176"/>
+        <PasswordBox x:Name="txtPassword" HorizontalAlignment="Left" Height="23" Margin="158,128,0,0"  VerticalAlignment="Top" Width="176"/>
         <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="238,209,0,0" VerticalAlignment="Top" Width="96" Click="btnSave_Click" Height="22"/>
 
         <ComboBox x:Name="cmbUserRole" 
                   ItemsSource="{Binding}"
                   DisplayMemberPath="role1" 
                   SelectedValuePath="id" 
-                  Margin="158,152,41,0" Height="22" VerticalAlignment="Top"  />
+                  Margin="158,156,23,0" Height="22" VerticalAlignment="Top"  />
 
         <Label Content="User Role" HorizontalAlignment="Left" Margin="57,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.909,-0.709" Height="26" Width="78"/>
-        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="145,208,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnCancel_Click"/>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="158,208,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnCancel_Click"/>
 
     </Grid>
 </Window>

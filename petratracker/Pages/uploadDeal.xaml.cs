@@ -67,6 +67,8 @@ namespace petratracker.Pages
         {
             Models.payments newUpload = new Models.payments();
             newUpload.read_microgen_data(txtfileLocation.Text, cmbDealType.Text);
+            this.Close();
+            MessageBox.Show("File upload Successfully");
         }
 
 
