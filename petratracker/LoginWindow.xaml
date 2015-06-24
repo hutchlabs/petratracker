@@ -22,7 +22,9 @@
         <Label x:Name="lbl_forgotpassword" Content="Reset my password" HorizontalAlignment="Left" Margin="259,361,0,0" VerticalAlignment="Top" Focusable="True" Background="{x:Null}" Foreground="#FF000064" Cursor="Hand" MouseLeftButtonUp="resetPassword"/>
         <Label Content="Username" HorizontalAlignment="Left" Margin="264,123,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Foreground="#FF918F8F"/>
         <Label Content="Password" HorizontalAlignment="Left" Margin="264,203,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Foreground="#FF918F8F"/>
-        <Button Content="Super Admin Login" HorizontalAlignment="Left" Margin="417,388,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin"/>
+        <Button Content="Super Admin Login" HorizontalAlignment="Left" Margin="89,406,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin"/>
+        <Button Content="Super Ops User Login" HorizontalAlignment="Left" Margin="259,406,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin"/>
+        <Button Content="Ops User Login" HorizontalAlignment="Left" Margin="415,406,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin"/>
 
 
     </Grid>

@@ -101,6 +101,7 @@ namespace petratracker
                     newUser.last_name = txtLastName.Text;
                     newUser.email1 = txtEmail.Text;
                     newUser.role_id = (int) cmbUserRole.SelectedValue;
+                    newUser.first_login = 1;
                     newUser.modified_by = currentUser.id;
                     trackerDB.Users.InsertOnSubmit(newUser);
                     trackerDB.SubmitChanges();
