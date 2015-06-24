@@ -10,7 +10,7 @@
             <Grid HorizontalAlignment="Left" Height="248" Margin="14,56,0,0" VerticalAlignment="Top" Width="405">
                 <Label Content="Deal Type" HorizontalAlignment="Left" Margin="51,16,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
                 <ComboBox x:Name="cmbDealType" HorizontalAlignment="Left" Margin="44,47,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="14">
-                    <ComboBoxItem Content="Issue"/>
+                    <ComboBoxItem Content="Subscription"/>
                     <ComboBoxItem Content="Redemption"/>
                     <ComboBoxItem Content="Transfer"/>
                 </ComboBox>

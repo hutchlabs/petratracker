@@ -78,6 +78,7 @@ namespace petratracker.Pages
                 Payment selVal = (Payment)viewSubscriptions.SelectedItem;
                 openVerification.subID = selVal.id;
                 openVerification.ShowDialog();
+               
             }
             catch(Exception subError)
             {
