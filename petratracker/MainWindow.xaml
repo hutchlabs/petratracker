@@ -13,7 +13,7 @@
     ScrollViewer.VerticalScrollBarVisibility="Disabled" 
     Style="{DynamicResource VSWindowStyleKey}"
     EnableDWMDropShadow="True" RightWindowCommandsOverlayBehavior="Flyouts" SaveWindowPosition="True" 
-    TitleCaps="False" Title="Petra Trust Tracker" Closing="Window_Closing">
+    TitleCaps="False" Title="Petra Trust Tracker" Closing="MetroWindow_Closing">
 
     <Window.Resources>
         <ResourceDictionary>

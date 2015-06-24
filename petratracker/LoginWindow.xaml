@@ -9,7 +9,6 @@
         Height="480" Width="600"   
         Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" 
         WindowStyle="None" 
-        WindowState="Maximized"
         Loaded="MetroWindow_Loaded">
     
     <Grid MinWidth="600" MinHeight="480" ScrollViewer.VerticalScrollBarVisibility="Disabled" IsManipulationEnabled="True" MaxWidth="600" MaxHeight="480" Margin="0" Background="#FFEAEAEA" >
