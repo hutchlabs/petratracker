@@ -10,17 +10,17 @@
     <DockPanel LastChildFill="True" Margin="0,0,0,0">
         <StackPanel x:Name="Pillbar" DockPanel.Dock="Top" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{DynamicResource LighterGreyBackground}" Orientation="Horizontal" Margin="0,0,10,10" d:IsLocked="True">
             <Rectangle Fill="#FF980000" Height="44" Stroke="#FF980000" VerticalAlignment="Top" Width="25" Margin="0,-9,0,0"/>
-            <Label x:Name="TabUsers" Content="USERS" Foreground="{DynamicResource SelectedTitle}" FontSize="24" Margin="20,0,0,0" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" Background="{x:Null}"/>
-            <Label x:Name="TabRoles" Content="ROLES" Foreground="{DynamicResource UnSelectedTitle}" FontSize="24" Margin="20,0,0,0" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
-            <Label x:Name="TabSetts" Content="SETTINGS" Foreground="{DynamicResource UnSelectedTitle}" FontSize="24" Margin="20,0,0,0"  Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
+            <Label x:Name="TabUsers" Content="USERS" Foreground="{DynamicResource SelectedTitle}" FontSize="24" Margin="20,0,0,0" Cursor="Hand" UseLayoutRounding="False"  MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" Background="{x:Null}"/>
+            <Label x:Name="TabRoles" Content="ROLES" Foreground="{DynamicResource UnSelectedTitle}" FontSize="24" Margin="20,0,0,0" Cursor="Hand" UseLayoutRounding="False"  MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
+            <Label x:Name="TabSetts" Content="SETTINGS" Foreground="{DynamicResource UnSelectedTitle}" FontSize="24" Margin="20,0,0,0"  Cursor="Hand" UseLayoutRounding="False"  MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
         </StackPanel>
 
         <DockPanel x:Name="UsersContentbar" Visibility="Visible" Margin="50,20,20,20" LastChildFill="True">
             <StackPanel x:Name="usersMenu" DockPanel.Dock="Left" Orientation="Vertical" Margin="0,0,20,0">
-                <Label x:Name="btnViewUsers" Content="View Users" Foreground="{DynamicResource SelectedTitle}" FontSize="16" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="UsersContentbarMenu_MouseLeftButtonUp" Background="{x:Null}"/>
-                <Label x:Name="btnAddUser" Content="Add New User" Foreground="{DynamicResource UnSelectedMenu}" FontSize="16" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="UsersContentbarMenu_MouseLeftButtonUp" Background="{x:Null}"/>
+                <Label x:Name="btnViewUsers" Content="View Users" Foreground="{DynamicResource SelectedTitle}" FontSize="16" Cursor="Hand" UseLayoutRounding="False"  MouseLeftButtonUp="UsersContentbarMenu_MouseLeftButtonUp" Background="{x:Null}"/>
+                <Label x:Name="btnAddUser" Content="Add New User" Foreground="{DynamicResource UnSelectedMenu}" FontSize="16" Cursor="Hand" UseLayoutRounding="False"  MouseLeftButtonUp="UsersContentbarMenu_MouseLeftButtonUp" Background="{x:Null}"/>
             </StackPanel>
-            <DataGrid x:Name="viewUsers" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*" MouseDoubleClick="viewUsers_MouseDoubleClick" AutoGeneratingColumn="viewUsers_AutoGeneratingColumn"  />
+            <Frame x:Name="UsersPageHolder" Source="/petratracker;component/Pages/admin_users.xaml" NavigationUIVisibility="Hidden" />
         </DockPanel>
 
 

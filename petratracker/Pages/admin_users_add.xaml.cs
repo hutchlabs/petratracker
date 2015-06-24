@@ -15,12 +15,13 @@ using System.Windows.Shapes;
 using petratracker.Code;
 using petratracker.Models;
 
+
 namespace petratracker
 {
     /// <summary>
     /// Interaction logic for NewUser.xaml
     /// </summary>
-    public partial class NewUser : Window
+    public partial class NewUser : Page
     {
         private User currentUser;
         private SendEmail sendMail = new SendEmail();
@@ -30,7 +31,15 @@ namespace petratracker
         {
             InitializeComponent();
             currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
-           
+
+            try
+            {
+                cmbUserRole.ItemsSource = this.GetRoles();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Could not load roles", "System Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public IEnumerable<Role> GetRoles()
@@ -40,10 +49,7 @@ namespace petratracker
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-          if(createUser())
-          {
-              this.Close();
-          }
+            createUser();
         }
 
         private bool validate_entries()
@@ -81,10 +87,8 @@ namespace petratracker
             return cont;
         }
 
-        private bool createUser()
+        private void createUser()
         {
-            bool cont = false;
-
             try
             {        
                 if (validate_entries())
@@ -97,40 +101,18 @@ namespace petratracker
                     newUser.last_name = txtLastName.Text;
                     newUser.email1 = txtEmail.Text;
                     newUser.role_id = (int) cmbUserRole.SelectedValue;
-                    //newUser.modified_by = currentUser.id;
-                    newUser.modified_by = 1;
+                    newUser.modified_by = currentUser.id;
                     trackerDB.Users.InsertOnSubmit(newUser);
                     trackerDB.SubmitChanges();
 
-                    cont = true;
-                    if(sendMail.sendNewUserMail(txtFirstName.Text+ " "+txtLastName.Text, txtEmail.Text, txtPassword.Password))
-                    {
-                        cont = true;
-                    }
+                    sendMail.sendNewUserMail(txtFirstName.Text + " " + txtLastName.Text, txtEmail.Text, txtPassword.Password);
+
+                    this.NavigationService.Navigate(new petratracker.Pages.AdminUsers());
                 }
             }
             catch(Exception e)
             {
                 MessageBox.Show("Could not create user: "+e.GetBaseException().ToString(), "System Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            return cont;
-        }
-
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                cmbUserRole.ItemsSource = this.GetRoles();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Could not load roles", "System Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

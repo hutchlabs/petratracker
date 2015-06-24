@@ -51,6 +51,8 @@ namespace petratracker.Code
 
         private bool sendMail(string to, string subject, string msg)
         {
+            return true;
+
             try
             {
                 System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();

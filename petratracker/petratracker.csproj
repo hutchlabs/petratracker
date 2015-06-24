@@ -128,6 +128,9 @@
     <Compile Include="Pages\schedules.xaml.cs">
       <DependentUpon>schedules.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\admin_users.xaml.cs">
+      <DependentUpon>admin_users.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\subscriptions.xaml.cs">
       <DependentUpon>subscriptions.xaml</DependentUpon>
     </Compile>
@@ -148,8 +151,8 @@
     <Compile Include="Views\NewRole.xaml.cs">
       <DependentUpon>NewRole.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewUser.xaml.cs">
-      <DependentUpon>NewUser.xaml</DependentUpon>
+    <Compile Include="Pages\admin_users_add.xaml.cs">
+      <DependentUpon>admin_users_add.xaml</DependentUpon>
     </Compile>
     <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
@@ -201,6 +204,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\admin_users.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\subscriptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -229,7 +236,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NewUser.xaml">
+    <Page Include="Pages\admin_users_add.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

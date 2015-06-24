@@ -33,12 +33,6 @@ namespace petratracker.Pages
             {
                 this.TabSetts.Visibility = Visibility.Collapsed;
             }
-            viewUsers.ItemsSource = this.GetUsers();
-        }
-
-        public IEnumerable<User> GetUsers()
-        {
-            return (from u in trackerDB.Users select u);
         }
 
         private void Pillbar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -62,10 +56,11 @@ namespace petratracker.Pages
 
             if (menuitem.Equals("btnAddUser"))
             {
-                NewUser openUser = new NewUser();
-                openUser.ShowDialog();
-                this.btnAddUser.Foreground = (Brush)Application.Current.FindResource("UnSelectedMenu");
-                this.btnViewUsers.Foreground = (Brush)Application.Current.FindResource("SelectedTitle");
+                this.UsersPageHolder.NavigationService.Navigate(new Uri("pages/admin_users_add.xaml", UriKind.Relative));
+            }
+            else
+            {
+                this.UsersPageHolder.NavigationService.Navigate(new Uri("pages/admin_users.xaml", UriKind.Relative));
             }
         }
 
@@ -105,37 +100,6 @@ namespace petratracker.Pages
 
         }
 
-      /*  private void btnUploadPayment_Click(object sender, RoutedEventArgs e)
-        {
-            //Pages.uploadDeal openUpload = new Pages.uploadDeal();
-            //openUpload.ShowDialog();
-        }*/
-
-        private void viewUsers_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            string[] hiddenHeaders = { "password", "id", "role_id", "first_login", "Payments", "Settings", 
-                                       "Role", "email2", "email3", "signature", "logged_in", "middle_name" ,
-                                       "updated_at","modified_by","created_at", "email1"};
-
-            if (hiddenHeaders.Contains(e.Column.Header.ToString()))
-            {
-                e.Cancel = true;
-            }
-
-            if (e.Column.Header.ToString().Equals("first_name"))
-            {
-                e.Column.Header = "First Name";
-            }
-
-            if (e.Column.Header.ToString().Equals("last_name"))
-            {
-                e.Column.Header = "Last Name";
-            }
-
-            if (e.Column.Header.ToString().Equals("last_login"))
-            {
-                e.Column.Header = "Last Login";
-            }
-        }
+        
     }
 }

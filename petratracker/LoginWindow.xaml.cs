@@ -18,6 +18,7 @@ using petratracker.Views;
 
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using MahApps.Metro;
 
 namespace petratracker
 {

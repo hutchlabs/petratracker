@@ -38,13 +38,12 @@ namespace petratracker
                         
             currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
    
-            this.lbl_name.Text = this.currentUser.first_name + " " + this.currentUser.last_name;
+            this.lbl_name.Text = String.Format("{0} {1} ({2})", this.currentUser.first_name, this.currentUser.last_name, this.currentUser.Role.role1);
 
             if (adminRoles.Contains(this.currentUser.Role.role1))
             {
                 this.ncAdmin.Visibility = System.Windows.Visibility.Visible;
             }
-
         }
      
         private void NavigationControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -62,10 +61,10 @@ namespace petratracker
 
         private void notifications_Click(object sender, RoutedEventArgs e)
         {
-            (sender as Button).ContextMenu.IsEnabled = true;
-            (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
-            (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-            (sender as Button).ContextMenu.IsOpen = true;
+            var flyout = this.notificationsFlyout as Flyout;
+            if (flyout == null)
+                return;
+            flyout.IsOpen = !flyout.IsOpen;
         }
 
         
