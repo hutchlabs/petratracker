@@ -148,9 +148,6 @@
     <Compile Include="Views\NewRole.xaml.cs">
       <DependentUpon>NewRole.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ResetPassword.xaml.cs">
-      <DependentUpon>ResetPassword.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\NewUser.xaml.cs">
       <DependentUpon>NewUser.xaml</DependentUpon>
     </Compile>
@@ -219,7 +216,7 @@
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-  </Page>
+    </Page>
     <Page Include="Pages\verifySubscription.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -231,10 +228,6 @@
     <Page Include="Views\NewRole.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ResetPassword.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\NewUser.xaml">
       <SubType>Designer</SubType>

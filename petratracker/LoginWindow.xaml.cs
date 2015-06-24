@@ -34,6 +34,18 @@ namespace petratracker
             InitializeComponent();
         }
 
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+        
+        }
+
+        private void autoLogin(object sender, RoutedEventArgs e)
+        {
+            tbx_password.Password = "john";
+            tbx_username.Text = "niicoark27@gmail.com";
+            doLogin();
+        }
+
         private void doLogin()
         {
             if (tbx_username.Text.Length > 0 && tbx_password.Password.Length > 0)
@@ -48,15 +60,14 @@ namespace petratracker
 
                         if (user.first_login)
                         {
-                            ResetPassword rpw = new ResetPassword();
-                            rpw.Show();
+                            changePassword(user);
                         }
                         else
                         {
                             MainWindow mw = new MainWindow();
                             mw.Show();
+                            this.Close();
                         }
-                        this.Close();
                     }
                     else
                     {
@@ -71,7 +82,7 @@ namespace petratracker
             else
             {
                 MessageBox.Show("Enter your username and/or password", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }       
+            }   
         }
 
         private void password_onKeyUp(object sender, KeyEventArgs e)
@@ -87,65 +98,95 @@ namespace petratracker
             doLogin();
         }
 
-        private void autoLogin(object sender, RoutedEventArgs e)
-        {    
-            tbx_password.Password = "john";
-            tbx_username.Text = "niicoark27@gmail.com";
-            doLogin();
-        }
-
- 
-
-       private async void resetPassword(object sender, MouseButtonEventArgs e)
+        private async void changePassword(User currentUser)
         {
-            bool _shutdown = false;
-
-            try
+            LoginDialogData result = await this.ShowLoginAsync("Change Password"
+                                                             , "This is your first login. Please change your password"
+                                                             , new LoginDialogSettings { 
+                                                                 ColorScheme = this.MetroDialogOptions.ColorScheme, 
+                                                                 InitialUsername = currentUser.username,
+                                                                 AffirmativeButtonText ="Change Password"
+                                                                 //, EnablePasswordPreview = true 
+                                                             });
+            if (result == null)
             {
-                var mySettings = new MetroDialogSettings()
-                {
-                    AffirmativeButtonText = "Quit",
-                    NegativeButtonText = "Cancel",
-                    AnimateShow = true,
-                    AnimateHide = false
-                };
-
-                var result = await this.ShowMessageAsync("Quit application?",
-                    "Sure you want to quit application?",
-                    MessageDialogStyle.AffirmativeAndNegative, mySettings);
-
-                _shutdown = result == MessageDialogResult.Affirmative;
-
-                if (_shutdown)
-                    Application.Current.Shutdown();
-            } catch (Exception ex){
-                MessageBox.Show(ex.GetBaseException().ToString(), "Reset Password Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-            }
-            
-          /*  if (tbx_username.Text.Length > 0)
-            {
-                TrackerDataContext trackerDB = new TrackerDataContext();
-                try
-                {
-                    var user = trackerDB.Users.Single(u => u.username == tbx_username.Text);
-
-                    SendEmail sendMail = new SendEmail();
-                    sendMail.sendResetPasswordMail(tbx_username.Text);
-
-                    MessageBox.Show("Reset message sent to Administrator. Please follow up with them.", "Reset Password", MessageBoxButton.OK, MessageBoxImage.Information);
-                    
-                    this.Close();
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Username is incorrect. Please re-enter.", "Reset Password Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", "You need to change  your password");
+                changePassword(currentUser);
             }
             else
             {
-                MessageBox.Show("Enter your username and re-click the \"Reset\" link", "Reset Password Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            } */
+                if (result.Password.Length > 3)
+                {
+                    bool success = false;
+                    string err = "";
+                    try
+                    {
+                        var newpassword = BCrypt.HashPassword(result.Password, BCrypt.GenerateSalt());
+
+                        currentUser.password = newpassword;
+                        currentUser.first_login = false;
+                        currentUser.modified_by = currentUser.id;
+                        currentUser.updated_at = new DateTime();
+                        trackerDB.SubmitChanges();
+                        success = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        err = ex.GetBaseException().ToString();
+                    }
+
+                    if (success)
+                    {
+                        MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", "Password Updated!");
+                        MainWindow mw = new MainWindow();
+                        mw.Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", err);
+                        this.changePassword(currentUser);
+                    }
+                }
+                else
+                {
+                    MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", "Password is too short!");
+                    this.changePassword(currentUser);
+                }
+            }
+        }
+
+        private async void resetPassword(object sender, RoutedEventArgs e)
+        {
+            var result = await this.ShowInputAsync("Reset Password", "What is your username?");
+
+            if (result == null) //user pressed cancel
+                return;
+
+            if (result.Length > 0)
+            {
+                TrackerDataContext trackerDB = new TrackerDataContext();
+                bool success = false;
+                try
+                {
+                    var user = trackerDB.Users.Single(u => u.username == result);
+                    SendEmail sendMail = new SendEmail();
+                    //sendMail.sendResetPasswordMail(result);
+                    success = true;
+                }
+                catch (Exception) { }
+
+                if (success)
+                {
+                    await this.ShowMessageAsync("Reset Password", "Reset message sent to Administrator. Please follow up with them.");
+                    this.Close();
+                }
+                else
+                {
+                    await this.ShowMessageAsync("Reset Password Error", "Username is incorrect. Please re-enter.");
+                    resetPassword(sender, e);
+                }
+            }
         }
     }
 }
