@@ -16,12 +16,15 @@ using petratracker.Models;
 using petratracker.Code;
 using petratracker.Views;
 
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+
 namespace petratracker
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class LoginWindow : MetroWindow
     {
 
         TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
@@ -71,41 +74,12 @@ namespace petratracker
             }       
         }
 
-        private void closeApplication()
-        {
-            this.Hide();
-            var confirmResult = MessageBox.Show("Are you sure to exit?",
-                                     "Exit Tracker Application",
-                                     System.Windows.MessageBoxButton.YesNo,MessageBoxImage.Question);
-            if (confirmResult == MessageBoxResult.Yes)
-            {
-                this.Close();
-            }
-            else
-            {
-                this.Show();
-            }
-        }
-
-        private void onKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                closeApplication();
-            }
-        }
-
         private void password_onKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 doLogin();
             }
-        }
-
-        private void lbl_close_MousePress(object sender, MouseButtonEventArgs e)
-        {
-                this.closeApplication();
         }
 
         private void lbl_login_Click(object sender, RoutedEventArgs e)
@@ -120,9 +94,36 @@ namespace petratracker
             doLogin();
         }
 
-        private void resetPassword(object sender, MouseButtonEventArgs e)
+ 
+
+       private async void resetPassword(object sender, MouseButtonEventArgs e)
         {
-            if (tbx_username.Text.Length > 0)
+            bool _shutdown = false;
+
+            try
+            {
+                var mySettings = new MetroDialogSettings()
+                {
+                    AffirmativeButtonText = "Quit",
+                    NegativeButtonText = "Cancel",
+                    AnimateShow = true,
+                    AnimateHide = false
+                };
+
+                var result = await this.ShowMessageAsync("Quit application?",
+                    "Sure you want to quit application?",
+                    MessageDialogStyle.AffirmativeAndNegative, mySettings);
+
+                _shutdown = result == MessageDialogResult.Affirmative;
+
+                if (_shutdown)
+                    Application.Current.Shutdown();
+            } catch (Exception ex){
+                MessageBox.Show(ex.GetBaseException().ToString(), "Reset Password Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            }
+            
+          /*  if (tbx_username.Text.Length > 0)
             {
                 TrackerDataContext trackerDB = new TrackerDataContext();
                 try
@@ -144,7 +145,7 @@ namespace petratracker
             else
             {
                 MessageBox.Show("Enter your username and re-click the \"Reset\" link", "Reset Password Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            } 
+            } */
         }
     }
 }

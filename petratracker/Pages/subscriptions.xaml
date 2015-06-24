@@ -8,13 +8,14 @@
     <DockPanel LastChildFill="True" Margin="0,0,0,0" HorizontalAlignment="Left">
  
         <StackPanel x:Name="SubsHeader" DockPanel.Dock="Top"  Orientation="Horizontal">
-            <Label  x:Name="lblSubStatus" Content="SUBSCRIPTIONS" HorizontalAlignment="Left"  Margin="20,0,0,0" VerticalAlignment="Top" FontSize="20" FontWeight="Bold"  />
-            <ComboBox x:Name="cmbSubType" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Width="320" Height="30" FontSize="14" SelectionChanged="cmbSubType_SelectionChanged" >
+            <ComboBox x:Name="cmbSubType" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Height="30" FontSize="14" SelectionChanged="cmbSubType_SelectionChanged" >
                 <ComboBoxItem Content="All" IsSelected="True"/>
+                <ComboBoxItem Content="Pending"/>
                 <ComboBoxItem Content="Identified"/>
                 <ComboBoxItem Content="Un-Identified"/>
                 <ComboBoxItem Content="Returned"/>
             </ComboBox>
+            <Label  x:Name="lblSubStatus" Content="SUBSCRIPTIONS" HorizontalAlignment="Left"  Margin="5,0,0,0" VerticalAlignment="Top" FontSize="20" FontWeight="Bold"  />
         </StackPanel>
 
         <DataGrid Name="viewSubscriptions" MouseDoubleClick="viewSubscriptions_MouseDoubleClick" Margin="20,20,20,20"   AlternatingRowBackground="Gainsboro" MinWidth="600"/>

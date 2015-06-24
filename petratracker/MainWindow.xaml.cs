@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using petratracker.Models;
+using MahApps.Metro;
 
 using MahApps.Metro.Controls;
 
@@ -30,12 +31,13 @@ namespace petratracker
 
 		public MainWindow()
 		{
+            ThemeManager.ChangeAppTheme(Application.Current, "BaseDark");
+
 			this.InitializeComponent();
                         
             currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
    
-            this.lbl_name.Content = this.currentUser.first_name + " " + this.currentUser.last_name;
-            this.lbl_role.Content = this.currentUser.Role.role1;
+            this.lbl_name.Text = this.currentUser.first_name + " " + this.currentUser.last_name;
 
             if (adminRoles.Contains(this.currentUser.Role.role1))
             {

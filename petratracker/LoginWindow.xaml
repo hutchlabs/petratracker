@@ -1,11 +1,13 @@
-﻿<Window x:Class="petratracker.LoginWindow"
+﻿<Controls:MetroWindow x:Class="petratracker.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         Title="Petra Trust Tracker"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
-        Height="480" Width="600" WindowStyle="None" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
-    <Grid MinWidth="600" MinHeight="480" ScrollViewer.VerticalScrollBarVisibility="Disabled" IsManipulationEnabled="True" KeyUp="onKeyUp" MaxWidth="600" MaxHeight="480" Margin="0" Background="#FFEAEAEA" >
+        ResizeMode="CanResizeWithGrip"
+        Height="480" Width="600" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" WindowStyle="None" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+    
+    <Grid MinWidth="600" MinHeight="480" ScrollViewer.VerticalScrollBarVisibility="Disabled" IsManipulationEnabled="True" MaxWidth="600" MaxHeight="480" Margin="0" Background="#FFEAEAEA" >
         <Grid.Effect>
             <DropShadowEffect ShadowDepth="10"/>
         </Grid.Effect>
@@ -14,11 +16,10 @@
         <PasswordBox x:Name="tbx_password" HorizontalAlignment="Left" Margin="144,234,0,0" VerticalAlignment="Top" Width="332" Height="44" Foreground="#FF575555" ToolTip="Enter your password" FontSize="18" Padding="5,8,0,0" HorizontalContentAlignment="Center" KeyUp="password_onKeyUp"/>
         <Button x:Name="btn_login" Content="Login" HorizontalAlignment="Left" Margin="215,305,0,0" VerticalAlignment="Top" Width="194" RenderTransformOrigin="0.04,-0.3" Height="43" FontSize="22" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}" Click="lbl_login_Click"/>
         <Label x:Name="lbl_forgotpassword" Content="Reset my password" HorizontalAlignment="Left" Margin="259,361,0,0" VerticalAlignment="Top" Focusable="True" Background="{x:Null}" Foreground="#FF000064" Cursor="Hand" MouseLeftButtonUp="resetPassword"/>
-        <Label x:Name="lbl_close" Content="Close" HorizontalAlignment="Left" Margin="295,444,0,0" VerticalAlignment="Top" Focusable="True" Background="{x:Null}" Foreground="#FF000064" RenderTransformOrigin="1.718,0.538" MouseLeftButtonUp="lbl_close_MousePress" Cursor="Hand"/>
         <Label Content="Username" HorizontalAlignment="Left" Margin="264,123,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Foreground="#FF918F8F"/>
         <Label Content="Password" HorizontalAlignment="Left" Margin="264,203,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Foreground="#FF918F8F"/>
-        <Button Content="Auto Login" HorizontalAlignment="Left" Margin="244,402,0,0" VerticalAlignment="Top" Width="151" Height="37" Click="autoLogin"/>
+        <Button Content="Super Admin Login" HorizontalAlignment="Left" Margin="417,388,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin"/>
 
 
     </Grid>
-</Window>
+</Controls:MetroWindow>

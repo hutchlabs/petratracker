@@ -57,10 +57,8 @@ namespace petratracker.Pages
                 viewSubscriptions.Columns[14].Visibility = System.Windows.Visibility.Hidden;
                 viewSubscriptions.Columns[15].Visibility = System.Windows.Visibility.Hidden;
                 viewSubscriptions.Columns[16].Visibility = System.Windows.Visibility.Hidden;
-               
-                lblSubStatus.Content = sub_status + " Subscriptions";
             }
-            catch(Exception subsError)
+            catch(Exception)
             {
                 //MessageBox.Show(subsError.Message);
             }
@@ -98,6 +96,7 @@ namespace petratracker.Pages
                     case "Identified": load_subscriptions("Identified"); break;
                     case "Un-Identified": load_subscriptions("Unidentified"); break;
                     case "Returned": load_subscriptions("Returned"); break;
+                    case "Pending": load_subscriptions("Pending"); break;
                     default:
                         load_subscriptions("Pending");
                         break;

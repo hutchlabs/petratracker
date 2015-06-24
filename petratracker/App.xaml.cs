@@ -17,6 +17,7 @@ namespace petratracker
 
         public App()
         {
+
             if (petratracker.Properties.Settings.Default.database_tracker == string.Empty)
             {
                 Views.DatabaseConnSetup dbsetupwin = new Views.DatabaseConnSetup(true);
