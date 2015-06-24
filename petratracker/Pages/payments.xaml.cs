@@ -31,9 +31,9 @@ namespace petratracker.Pages
             {
                 string tab = ((Label)sender).Name.ToString();
 
-                this.TabSubs.Background = (tab.Equals("TabSubs")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
-                this.TabTran.Background = (tab.Equals("TabTran")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
-                this.TabRedm.Background = (tab.Equals("TabRedm")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
+                this.TabSubs.Foreground = (tab.Equals("TabSubs")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
+                this.TabTran.Foreground = (tab.Equals("TabTran")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
+                this.TabRedm.Foreground = (tab.Equals("TabRedm")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
 
                 this.SubsContentbar.Visibility = (tab.Equals("TabSubs")) ? Visibility.Visible : Visibility.Collapsed;
                 this.TranContentbar.Visibility = (tab.Equals("TabTran")) ? Visibility.Visible : Visibility.Collapsed;
@@ -45,17 +45,20 @@ namespace petratracker.Pages
             }
         }
 
-
-        private void btnUploadPayment_Click(object sender, RoutedEventArgs e)
+        private void SubsContentbarMenu_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Pages.uploadDeal openUpload = new Pages.uploadDeal();
-            openUpload.ShowDialog();
-        }
+            string menuitem = ((Label)sender).Name.ToString();
+            this.btnViewSubs.Foreground = (menuitem.Equals("btnViewSubs")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
+            this.btnAddSubs.Foreground = (menuitem.Equals("btnAddSubs")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
 
-        private void btnViewSubscriptions_Click(object sender, RoutedEventArgs e)
-        {
-            subscriptions openSubcriptions = new subscriptions();
-            openSubcriptions.ShowDialog();
+            if (menuitem.Equals("btnAddSubs"))
+            {
+                this.SubsPageHolder.NavigationService.Navigate(new Uri("pages/uploadDeal.xaml", UriKind.Relative));
+            }
+            else
+            {
+                this.SubsPageHolder.NavigationService.Navigate(new Uri("pages/subscriptions.xaml", UriKind.Relative));
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ namespace petratracker.Pages
     /// <summary>
     /// Interaction logic for subscriptions.xaml
     /// </summary>
-    public partial class subscriptions : Window
+    public partial class subscriptions : Page
     {
         public subscriptions()
         {

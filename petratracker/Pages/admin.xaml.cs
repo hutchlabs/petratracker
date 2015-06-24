@@ -57,17 +57,18 @@ namespace petratracker.Pages
         private void UsersContentbarMenu_MouseLeftButtonUp(object sender,  MouseButtonEventArgs e)
         {
             string menuitem = ((Label)sender).Name.ToString();
-
             this.btnAddUser.Foreground = (menuitem.Equals("btnAddUser")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
             this.btnViewUsers.Foreground = (menuitem.Equals("btnViewUsers")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
+
+            if (menuitem.Equals("btnAddUser"))
+            {
+                NewUser openUser = new NewUser();
+                openUser.ShowDialog();
+                this.btnAddUser.Foreground = (Brush)Application.Current.FindResource("UnSelectedMenu");
+                this.btnViewUsers.Foreground = (Brush)Application.Current.FindResource("SelectedTitle");
+            }
         }
 
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            NewUser openUser = new NewUser();
-            openUser.ShowDialog();
-        }
 
         private void btnConfigureConnection_Click(object sender, RoutedEventArgs e)
         {
@@ -104,11 +105,11 @@ namespace petratracker.Pages
 
         }
 
-        private void btnUploadPayment_Click(object sender, RoutedEventArgs e)
+      /*  private void btnUploadPayment_Click(object sender, RoutedEventArgs e)
         {
-            Pages.uploadDeal openUpload = new Pages.uploadDeal();
-            openUpload.ShowDialog();
-        }
+            //Pages.uploadDeal openUpload = new Pages.uploadDeal();
+            //openUpload.ShowDialog();
+        }*/
 
         private void viewUsers_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {

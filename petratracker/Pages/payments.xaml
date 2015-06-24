@@ -8,32 +8,27 @@
 	  Title="payments">
 
     <DockPanel LastChildFill="True" Margin="0,0,-482,0">
-        <StackPanel x:Name="Topbar" DockPanel.Dock="Top" Height="60" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Black" Orientation="Horizontal" Margin="0,10,10,10">
-            <Label x:Name="PageTitle" Content="Payments" Foreground="WhiteSmoke" FontSize="36" Margin="20,0,0,0" />
+        <StackPanel x:Name="Pillbar" DockPanel.Dock="Top" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{DynamicResource LighterGreyBackground}" Orientation="Horizontal" Margin="0,0,10,10" d:IsLocked="True">
+            <Rectangle Fill="#FF980000" Height="44" Stroke="#FF980000" VerticalAlignment="Top" Width="25" Margin="0,-9,0,0"/>
+            <Label x:Name="TabSubs" Content="SUBSCRIPTIONS" Foreground="{DynamicResource SelectedTitle}" FontSize="24" Margin="20,0,0,0" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" Background="{x:Null}"/>
+            <Label x:Name="TabTran" Content="TRANSFERS" Foreground="{DynamicResource UnSelectedTitle}" FontSize="24" Margin="20,0,0,0" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
+            <Label x:Name="TabRedm" Content="REDEMPTIONS" Foreground="{DynamicResource UnSelectedTitle}" FontSize="24" Margin="20,0,0,0"  Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" />
         </StackPanel>
 
-        <StackPanel x:Name="Pillbar" DockPanel.Dock="Top" Height="44" VerticalAlignment="Top" Background="Black" Orientation="Horizontal" Margin="0,10" Width="782">
-            <Label x:Name="TabSubs" Content="Subscriptions" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="#FF2D2D30" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <Label x:Name="TabTran" Content="Transfers" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="Black" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" HorizontalAlignment="Left" VerticalAlignment="Top" />
-            <Label x:Name="TabRedm" Content="Redemptions" Foreground="WhiteSmoke" FontSize="24" Margin="20,0,0,0" Background="Black" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="Pillbar_MouseLeftButtonUp" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        </StackPanel>
-
-        <Grid x:Name="SubsContentbar" Visibility="Visible" Margin="30,0,30,10" Width="721">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="3*"/>
-            </Grid.RowDefinitions>
-            <Button Grid.Column="0" Grid.Row="1" Click="btnUploadPayment_Click" Content="Upload Payments" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="34" Width="130"/>
-            <Button x:Name="btnViewSubscriptions" Content="View Subscriptions" HorizontalAlignment="Left" Margin="10,49,0,0" Grid.Row="1" VerticalAlignment="Top" Width="130" Height="31" Click="btnViewSubscriptions_Click"/>
-
-        </Grid>
+        <DockPanel x:Name="SubsContentbar" Visibility="Visible" Margin="50,20,20,20" LastChildFill="True">
+            <StackPanel x:Name="usersMenu" DockPanel.Dock="Left" Orientation="Vertical" Margin="0,0,20,0">
+                <Label x:Name="btnViewSubs" Content="View Subscriptions" Foreground="{DynamicResource SelectedTitle}" FontSize="16" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="SubsContentbarMenu_MouseLeftButtonUp" Background="{x:Null}"/>
+                <Label x:Name="btnAddSubs" Content="Add Subscriptions" Foreground="{DynamicResource UnSelectedMenu}" FontSize="16" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="SubsContentbarMenu_MouseLeftButtonUp" Background="{x:Null}"/>
+            </StackPanel>
+            <Frame x:Name="SubsPageHolder" Source="/petratracker;component/Pages/subscriptions.xaml" NavigationUIVisibility="Hidden" />
+        </DockPanel>
 
         <Grid x:Name="TranContentbar" Visibility="Collapsed">
-            <Label Grid.Row="0" Content="Coming Soon" FontSize="48" Foreground="White"/>
+            <Label Grid.Row="0" Content="Coming Soon" FontSize="48" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
 
         <Grid x:Name="RedmContentbar" Visibility="Collapsed">
-            <Label Grid.Row="0" Content="Coming Soon" FontSize="48" Foreground="White"/>
+            <Label Grid.Row="0" Content="Coming Soon" FontSize="48" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
     </DockPanel>
 </Page>
