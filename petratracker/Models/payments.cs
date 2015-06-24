@@ -13,7 +13,12 @@ namespace petratracker.Models
     public class payments
     {
 
+
+
         Payment newPayment = new Payment();
+        User ini_user;
+
+
 
         private DataTable GetDataTable(string sql, string connectionString)
         {
@@ -22,14 +27,12 @@ namespace petratracker.Models
             {
                 using (OleDbConnection conn = new OleDbConnection(connectionString))
                 {
-
                     conn.Open();
                     using (OleDbCommand cmd = new OleDbCommand(sql, conn))
                     {
                         using (OleDbDataReader rdr = cmd.ExecuteReader())
                         {
                             dt.Load(rdr);
-
                         }
                     }
                 }
@@ -52,7 +55,7 @@ namespace petratracker.Models
                 DataTable dt = GetDataTable("SELECT * from [Report$]", connString);
 
 
-                //Insert payment into jobs
+                //Create db contexts
                 TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
                 MicrogenDataContext microgenDB = (App.Current as App).MicrogenDBo;
 
@@ -61,39 +64,45 @@ namespace petratracker.Models
 
                 objJob.job_type = job_type;
                 objJob.status = "In Progress";
+                objJob.owner = ini_user.id;
+                objJob.created_at = DateTime.Now;
                 trackerDB.Jobs.InsertOnSubmit(objJob);
                 trackerDB.SubmitChanges();
 
                 foreach (DataRow dr in dt.Rows)
-                {
-
-                    if (true)
-                    {
-
+                {                 
                         string trans_date_str = dr["Transaction Date"].ToString();
                         string value_date_str = dr["Value Date"].ToString();
-                        char[] charSeparators = new char[] { '/' };
+                        char [] charSeparators = new char[] { '/' };
+                        string [] value_date_res = value_date_str.Split(charSeparators);
+                        string [] trans_date_res = trans_date_str.Split(charSeparators);
 
-                        string[] value_date_res = value_date_str.Split(charSeparators);
-                        string[] trans_date_res = trans_date_str.Split(charSeparators);
-
-                        //Create new payment
+                        //Insert new payment
                         Payment objPayment = new Payment();
                         objPayment.transaction_ref_no = get_trans_ref_code(dr["Value Date"].ToString(), dr["Transaction Date"].ToString());
-                        //objPayment.job_id = objJob.id;
+                        objPayment.job_id = objJob.id;
                         objPayment.transaction_details = dr["Transaction Details"].ToString();
-
                         DateTime trans_date = new DateTime(int.Parse(trans_date_res[2]), int.Parse(trans_date_res[1]), int.Parse(trans_date_res[0]));
                         DateTime value_date = new DateTime(int.Parse(value_date_res[2]), int.Parse(value_date_res[1]), int.Parse(value_date_res[0]));
                         objPayment.transaction_date = trans_date;
                         objPayment.value_date = value_date;
-
                         objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
-                        objPayment.status = "Pending";
+
+                            if (dr["Dr / Cr Indicator"].ToString() == "Credit") 
+                            {
+                                objPayment.status = "Pending"; 
+                            }
+                            else if (dr["Dr / Cr Indicator"].ToString() == "Debit")
+                            { 
+                                objPayment.status = "Returned";
+                            }
+
+                        objPayment.owner = ini_user.id;
+                        objPayment.created_at = DateTime.Now;
                         trackerDB.Payments.InsertOnSubmit(objPayment);
+
                         //Submit changes to db
-                        trackerDB.SubmitChanges();
-                    }
+                        trackerDB.SubmitChanges();                  
                 }
             }
             catch (Exception uploadError)
