@@ -12,15 +12,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using petratracker.Models;
-using petratracker.Controls;
 
+using MahApps.Metro.Controls;
 
 namespace petratracker
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : MetroWindow
 	{
         private User currentUser;
         private TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
@@ -41,65 +41,20 @@ namespace petratracker
             {
                 this.ncAdmin.Visibility = System.Windows.Visibility.Visible;
             }
-        }
 
-        private void MainView_Loaded(object sender, RoutedEventArgs e)
-        {
         }
-           
+     
         private void NavigationControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            this.PageHolder.NavigationService.Navigate(new Uri("pages/" + ((NavigationControl)sender).ItemUri, UriKind.Relative));
-        }
+            var tab = ((Label)sender).Name.ToString(); ;
+            
+            this.ncAdmin.Foreground = (tab.Equals("ncAdmin")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
+            this.ncHome.Foreground = (tab.Equals("ncHome")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
+            this.ncPayments.Foreground = (tab.Equals("ncPayments")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
+            this.ncReports.Foreground = (tab.Equals("ncReports")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
+            this.ncSchedules.Foreground = (tab.Equals("ncSchedules")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
 
-        // Top bar buttons
-        private void plus_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            ((Image)sender).Visibility = System.Windows.Visibility.Collapsed;
-
-            if (this.WindowState.Equals(System.Windows.WindowState.Maximized))
-            {
-                win_max.Visibility = System.Windows.Visibility.Visible;             
-              this.WindowState = System.Windows.WindowState.Normal;
-            }
-            else
-            {
-                win_restore.Visibility = System.Windows.Visibility.Visible;             
-                this.WindowState = System.Windows.WindowState.Maximized;
-            }
-        }
-
-        private void minus_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            this.WindowState = System.Windows.WindowState.Minimized;
-        }
-
-        private void cross_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            var confirmResult = MessageBox.Show("Are you sure to exit?",
-                                     "Exit Tracker Application",
-                                     System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (confirmResult == MessageBoxResult.Yes)
-            {
-                this.Close();
-            }
-        }
-
-        // Allow window to drag
-        private Point startPoint;
-        private void Window_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            startPoint = e.GetPosition(this);
-        }
-
-        private void Window_PreviewMouseMove(object sender, MouseEventArgs e)
-        {
-            Point newPoint = e.GetPosition(this);
-            if (e.LeftButton == MouseButtonState.Pressed && (Math.Abs(newPoint.X - startPoint.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                Math.Abs(newPoint.Y - startPoint.Y) > SystemParameters.MinimumVerticalDragDistance))
-            {
-                this.DragMove();
-            }
+            this.PageHolder.NavigationService.Navigate(new Uri("pages/" + ((Label)sender).Tag.ToString(), UriKind.Relative));
         }
 
         private void notifications_Click(object sender, RoutedEventArgs e)
@@ -108,6 +63,15 @@ namespace petratracker
             (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
             (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
             (sender as Button).ContextMenu.IsOpen = true;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var confirmResult = MessageBox.Show("Are you sure to exit?", "Exit Tracker Application",System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (confirmResult != MessageBoxResult.Yes)
+            {
+                e.Cancel = true;
+            }
         } 
         
 	}

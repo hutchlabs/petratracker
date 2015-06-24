@@ -45,14 +45,23 @@ namespace petratracker.Pages
         {
             string tab = ((Label)sender).Name.ToString();
 
-            this.TabUsers.Background = (tab.Equals("TabUsers")) ? (Brush)Application.Current.FindResource("GreyBackground") : Brushes.Black;
-            this.TabRoles.Background = (tab.Equals("TabRoles")) ? (Brush)Application.Current.FindResource("GreyBackground") : Brushes.Black;
-            this.TabSetts.Background = (tab.Equals("TabSetts")) ? (Brush)Application.Current.FindResource("GreyBackground") : Brushes.Black;
+            this.TabUsers.Foreground = (tab.Equals("TabUsers")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
+            this.TabRoles.Foreground = (tab.Equals("TabRoles")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
+            this.TabSetts.Foreground = (tab.Equals("TabSetts")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedTitle");
 
             this.UsersContentbar.Visibility = (tab.Equals("TabUsers")) ? Visibility.Visible : Visibility.Collapsed;
             this.RolesContentbar.Visibility = (tab.Equals("TabRoles")) ? Visibility.Visible : Visibility.Collapsed;
             this.SettsContentbar.Visibility = (tab.Equals("TabSetts")) ? Visibility.Visible : Visibility.Collapsed;
         }
+
+        private void UsersContentbarMenu_MouseLeftButtonUp(object sender,  MouseButtonEventArgs e)
+        {
+            string menuitem = ((Label)sender).Name.ToString();
+
+            this.btnAddUser.Foreground = (menuitem.Equals("btnAddUser")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
+            this.btnViewUsers.Foreground = (menuitem.Equals("btnViewUsers")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
+        }
+
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -103,11 +112,28 @@ namespace petratracker.Pages
 
         private void viewUsers_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            string[] hiddenHeaders = { "password", "id", "role_id", "first_login", "Payments", "Settings", "Role", "email2", "email3", "signature", "logged_in", "middle_name" };
+            string[] hiddenHeaders = { "password", "id", "role_id", "first_login", "Payments", "Settings", 
+                                       "Role", "email2", "email3", "signature", "logged_in", "middle_name" ,
+                                       "updated_at","modified_by","created_at", "email1"};
 
             if (hiddenHeaders.Contains(e.Column.Header.ToString()))
             {
                 e.Cancel = true;
+            }
+
+            if (e.Column.Header.ToString().Equals("first_name"))
+            {
+                e.Column.Header = "First Name";
+            }
+
+            if (e.Column.Header.ToString().Equals("last_name"))
+            {
+                e.Column.Header = "Last Name";
+            }
+
+            if (e.Column.Header.ToString().Equals("last_login"))
+            {
+                e.Column.Header = "Last Login";
             }
         }
     }
