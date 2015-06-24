@@ -6,13 +6,16 @@
       mc:Ignorable="d"  Title="subscriptions" Loaded="Window_Loaded">
 
     <DockPanel LastChildFill="True" Margin="0,0,0,0" HorizontalAlignment="Left">
-        <StackPanel x:Name="SubsSubMenu" DockPanel.Dock="Left" Margin="0,90,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{DynamicResource LighterGreyBackground}" Orientation="Vertical">
-            <Button x:Name="btnIdentified" Content="Identified" Margin="0,0,0,20" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="34" Click="btnIdentified_Click"  FontSize="12" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}" />
-            <Button x:Name="btnUnidentified" Content="Unidentified" Margin="0,0,0,20" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="34" Click="btnUnidentified_Click"  FontSize="12" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}"/>
-            <Button x:Name="btnReturned" Content="Returned" Margin="0,0,0,20" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="34" Click="btnReturned_Click"  FontSize="12" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}"/>
+ 
+        <StackPanel x:Name="SubsHeader" DockPanel.Dock="Top"  Orientation="Horizontal">
+            <Label  x:Name="lblSubStatus" Content="SUBSCRIPTIONS" HorizontalAlignment="Left"  Margin="20,0,0,0" VerticalAlignment="Top" FontSize="20" FontWeight="Bold"  />
+            <ComboBox x:Name="cmbSubType" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Width="320" Height="30" FontSize="14" SelectionChanged="cmbSubType_SelectionChanged" >
+                <ComboBoxItem Content="All" IsSelected="True"/>
+                <ComboBoxItem Content="Identified"/>
+                <ComboBoxItem Content="Un-Identified"/>
+                <ComboBoxItem Content="Returned"/>
+            </ComboBox>
         </StackPanel>
-
-        <Label DockPanel.Dock="Top"  Name="lblSubStatus" Content="SUBSCRIPTIONS" HorizontalAlignment="Left"  VerticalAlignment="Top" FontSize="20" FontWeight="Bold"  Height="44"  Margin="10,0,0,0"/>
 
         <DataGrid Name="viewSubscriptions" MouseDoubleClick="viewSubscriptions_MouseDoubleClick" Margin="20,20,20,20"   AlternatingRowBackground="Gainsboro" MinWidth="600"/>
         

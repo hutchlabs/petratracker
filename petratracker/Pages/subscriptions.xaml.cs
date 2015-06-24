@@ -29,7 +29,6 @@ namespace petratracker.Pages
 
         TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
 
-
         private void load_subscriptions(string sub_status)
         { 
             try
@@ -59,13 +58,11 @@ namespace petratracker.Pages
                 viewSubscriptions.Columns[15].Visibility = System.Windows.Visibility.Hidden;
                 viewSubscriptions.Columns[16].Visibility = System.Windows.Visibility.Hidden;
                
-
-
                 lblSubStatus.Content = sub_status + " Subscriptions";
             }
             catch(Exception subsError)
             {
-                MessageBox.Show(subsError.Message);
+                //MessageBox.Show(subsError.Message);
             }
         }
 
@@ -73,21 +70,6 @@ namespace petratracker.Pages
         {
 
             load_subscriptions("Pending");
-        }
-
-        private void btnIdentified_Click(object sender, RoutedEventArgs e)
-        {
-            load_subscriptions("Identified");
-        }
-
-        private void btnUnidentified_Click(object sender, RoutedEventArgs e)
-        {
-            load_subscriptions("Unidentified");
-        }
-
-        private void btnReturned_Click(object sender, RoutedEventArgs e)
-        {
-            load_subscriptions("Returned");
         }
 
         private void viewSubscriptions_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -103,6 +85,25 @@ namespace petratracker.Pages
             {
                 MessageBox.Show(subError.Message+subError.Source+subError.StackTrace);
             }
+        }
+
+        private void cmbSubType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                var option = ((ComboBoxItem)((ComboBox)sender).SelectedItem).Content.ToString();
+
+                switch (option)
+                {
+                    case "Identified": load_subscriptions("Identified"); break;
+                    case "Un-Identified": load_subscriptions("Unidentified"); break;
+                    case "Returned": load_subscriptions("Returned"); break;
+                    default:
+                        load_subscriptions("Pending");
+                        break;
+                }
+            }
+            catch (Exception) { }
         }
     }
 }
