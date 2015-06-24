@@ -27,15 +27,22 @@ namespace petratracker.Pages
 
         private void Pillbar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            string tab = ((Label)sender).Name.ToString();
+            try
+            {
+                string tab = ((Label)sender).Name.ToString();
 
-            this.TabSubs.Background = (tab.Equals("TabSubs")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
-            this.TabTran.Background = (tab.Equals("TabTran")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
-            this.TabRedm.Background = (tab.Equals("TabRedm")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
+                this.TabSubs.Background = (tab.Equals("TabSubs")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
+                this.TabTran.Background = (tab.Equals("TabTran")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
+                this.TabRedm.Background = (tab.Equals("TabRedm")) ? (Brush)Application.Current.MainWindow.FindResource("GreyBackground") : Brushes.Black;
 
-            this.SubsContentbar.Visibility = (tab.Equals("TabSubs")) ? Visibility.Visible : Visibility.Collapsed;
-            this.TranContentbar.Visibility = (tab.Equals("TabTran")) ? Visibility.Visible : Visibility.Collapsed;
-            this.RedmContentbar.Visibility = (tab.Equals("TabRedm")) ? Visibility.Visible : Visibility.Collapsed;
+                this.SubsContentbar.Visibility = (tab.Equals("TabSubs")) ? Visibility.Visible : Visibility.Collapsed;
+                this.TranContentbar.Visibility = (tab.Equals("TabTran")) ? Visibility.Visible : Visibility.Collapsed;
+                this.RedmContentbar.Visibility = (tab.Equals("TabRedm")) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            catch(Exception tabErr)
+            {
+                MessageBox.Show(tabErr.Message);
+            }
         }
 
 
@@ -43,6 +50,12 @@ namespace petratracker.Pages
         {
             Pages.uploadDeal openUpload = new Pages.uploadDeal();
             openUpload.ShowDialog();
+        }
+
+        private void btnViewSubscriptions_Click(object sender, RoutedEventArgs e)
+        {
+            subscriptions openSubcriptions = new subscriptions();
+            openSubcriptions.ShowDialog();
         }
     }
 }

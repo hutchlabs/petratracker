@@ -128,8 +128,14 @@
     <Compile Include="Pages\schedules.xaml.cs">
       <DependentUpon>schedules.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\subscriptions.xaml.cs">
+      <DependentUpon>subscriptions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\uploadDeal.xaml.cs">
       <DependentUpon>uploadDeal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\verifySubscription.xaml.cs">
+      <DependentUpon>verifySubscription.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -198,6 +204,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\subscriptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\uploadDeal.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -209,6 +219,9 @@
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    <Page Include="Pages\verifySubscription.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DatabaseConnSetup.xaml">
       <SubType>Designer</SubType>
@@ -238,6 +251,7 @@
     <Resource Include="Resources\images\icons\minus.png" />
     <Resource Include="Resources\images\icons\restore.png" />
     <Resource Include="Resources\Entypo-license.txt" />
+    <Resource Include="Resources\images\icons\Upload.png" />
     <Content Include="Resources\petra_tracker_db.sql" />
   </ItemGroup>
   <ItemGroup>
