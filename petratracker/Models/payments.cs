@@ -12,13 +12,17 @@ namespace petratracker.Models
 {
     public class payments
     {
-
-
-
         Payment newPayment = new Payment();
+        TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
+        MicrogenDataContext microgenDB = (App.Current as App).MicrogenDBo;
+
+
         User ini_user;
 
-
+        public payments()
+        {
+            ini_user = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
+        }
 
         private DataTable GetDataTable(string sql, string connectionString)
         {
@@ -56,8 +60,6 @@ namespace petratracker.Models
 
 
                 //Create db contexts
-                TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
-                MicrogenDataContext microgenDB = (App.Current as App).MicrogenDBo;
 
                 //Create new job
                 Job objJob = new Job();
