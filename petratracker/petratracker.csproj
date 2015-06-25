@@ -108,9 +108,6 @@
       <DependentUpon>microgenDB.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\Payments.cs" />
-    <Compile Include="Models\trackerDB.cs">
-      <DependentUpon>trackerDB.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Models\trackerDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -259,11 +256,6 @@
     <Content Include="Resources\petra_tracker_db.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\trackerDB.dbml.layout">
-      <DependentUpon>trackerDB.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5.1 %28x86 and x64%29</ProductName>
@@ -288,7 +280,11 @@
       <DependentUpon>microgenDB.dbml</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Models\trackerDB.dbml.layout">
+      <DependentUpon>trackerDB.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.

@@ -117,7 +117,7 @@
                 <Label Visibility="Collapsed"    x:Name="ncReports"   Content="Reports"   Tag="reports.xaml"   FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Reports" Margin="20,0,0,0"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
                 <Label Visibility="Visible"      x:Name="ncPayments"  Content="Payments"  Tag="payments.xaml"  FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Payments" Margin="20,0,0,0"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
                 <Label Visibility="Collapsed"    x:Name="ncSchedules" Content="Schedules" Tag="schedules.xaml" FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Schedules" Margin="20,0,0,0"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
-                <Label Visibility="Visible"      x:Name="ncAdmin"     Content="Admin"     Tag="admin.xaml"     FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Administration Area" Margin="20,0,0,0" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand" />
+                <Label Visibility="Collapsed"      x:Name="ncAdmin"     Content="Admin"     Tag="admin.xaml"     FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Administration Area" Margin="20,0,0,0" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand" />
             </StackPanel>
      
             <Grid x:Name="ContentArea"  Margin="0,5,5,5">

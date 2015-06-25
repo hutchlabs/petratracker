@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Petra_tracker" Class="TrackerDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="ConnectionString" ConnectionString="Data Source=ELMINA\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=True" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Users" Member="Users">
@@ -22,9 +21,20 @@
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Association Name="User_Setting" Member="Settings" ThisKey="id" OtherKey="modified_by" Type="Setting" />
-      <Association Name="User_Payment" Member="Payments" ThisKey="id" OtherKey="owner" Type="Payment" />
       <Association Name="User_Notification" Member="Notifications" ThisKey="id" OtherKey="from_user_id" Type="Notification" />
+      <Association Name="User_Payment" Member="Payments" ThisKey="id" OtherKey="owner" Type="Payment" />
       <Association Name="Role_User" Member="Role" ThisKey="role_id" OtherKey="id" Type="Role" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Settings" Member="Settings">
+    <Type Name="Setting">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="setting" Member="setting1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="value" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Association Name="User_Setting" Member="User" ThisKey="modified_by" OtherKey="id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Roles" Member="Roles">
@@ -39,47 +49,6 @@
       <Association Name="Role_Notification" Member="Notifications" ThisKey="id" OtherKey="to_role_id" Type="Notification" />
     </Type>
   </Table>
-  <Table Name="dbo.Settings" Member="Settings">
-    <Type Name="Setting">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="setting" Member="setting1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="value" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Association Name="User_Setting" Member="User" ThisKey="modified_by" OtherKey="id" Type="User" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Jobs" Member="Jobs">
-    <Type Name="Job">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="job_type" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="status" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
-      <Association Name="Job_Payment" Member="Payments" ThisKey="id" OtherKey="job_id" Type="Payment" />
-      <Association Name="Job_Notification" Member="Notifications" ThisKey="id" OtherKey="job_id" Type="Notification" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Payments" Member="Payments">
-    <Type Name="Payment">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="job_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="transaction_ref_no" Type="System.String" DbType="NChar(20) NOT NULL" CanBeNull="false" />
-      <Column Name="transaction_details" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="transaction_date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Column Name="value_date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Column Name="transaction_amount" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
-      <Column Name="company_code" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
-      <Column Name="savings_booster" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
-      <Column Name="status" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="comments" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="owner" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Association Name="Job_Payment" Member="Job" ThisKey="job_id" OtherKey="id" Type="Job" IsForeignKey="true" />
-      <Association Name="User_Payment" Member="User" ThisKey="owner" OtherKey="id" Type="User" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Notifications" Member="Notifications">
     <Type Name="Notification">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -92,60 +61,9 @@
       <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Association Name="Job_Notification" Member="Job" ThisKey="job_id" OtherKey="id" Type="Job" IsForeignKey="true" />
       <Association Name="Role_Notification" Member="Role" ThisKey="to_role_id" OtherKey="id" Type="Role" IsForeignKey="true" />
       <Association Name="User_Notification" Member="User" ThisKey="from_user_id" OtherKey="id" Type="User" IsForeignKey="true" />
-    </Type>
-  </Table>
-</Database>
-=======
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Petra_tracker" Class="TrackerDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="ConnectionString" ConnectionString="Data Source=NICHOLASARK5676\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=True" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Users" Member="Users">
-    <Type Name="User">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="role_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="username" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="password" Type="System.String" DbType="Char(60) NOT NULL" CanBeNull="false" />
-      <Column Name="first_name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="middle_name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="last_name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="email1" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="email2" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="email3" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="signature" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-      <Column Name="status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="first_login" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="last_login" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Column Name="logged_in" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Association Name="User_Setting" Member="Settings" ThisKey="id" OtherKey="modified_by" Type="Setting" />
-      <Association Name="User_Payment" Member="Payments" ThisKey="id" OtherKey="owner" Type="Payment" />
-      <Association Name="Role_User" Member="Role" ThisKey="role_id" OtherKey="id" Type="Role" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Roles" Member="Roles">
-    <Type Name="Role">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="role" Member="role1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="description" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Association Name="Role_User" Member="Users" ThisKey="id" OtherKey="role_id" Type="User" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Settings" Member="Settings">
-    <Type Name="Setting">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="setting" Member="setting1" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="value" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Association Name="User_Setting" Member="User" ThisKey="modified_by" OtherKey="id" Type="User" IsForeignKey="true" />
+      <Association Name="Job_Notification" Member="Job" ThisKey="job_id" OtherKey="id" Type="Job" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Jobs" Member="Jobs">
@@ -157,6 +75,7 @@
       <Column Name="modified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Association Name="Job_Notification" Member="Notifications" ThisKey="id" OtherKey="job_id" Type="Notification" />
       <Association Name="Job_Payment" Member="Payments" ThisKey="id" OtherKey="job_id" Type="Payment" />
     </Type>
   </Table>
@@ -187,22 +106,4 @@
       <Association Name="User_Payment" Member="User" ThisKey="owner" OtherKey="id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Notifications" Member="Notifications">
-    <Type Name="Notification">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="to_role_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="from_user_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="notification_type" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="job_type" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="job_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="status" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Association Name="Job_Notification" Member="Job" ThisKey="job_id" OtherKey="id" Type="Job" IsForeignKey="true" />
-      <Association Name="Role_Notification" Member="Role" ThisKey="to_role_id" OtherKey="id" Type="Role" IsForeignKey="true" />
-      <Association Name="User_Notification" Member="User" ThisKey="from_user_id" OtherKey="id" Type="User" IsForeignKey="true" />
-    </Type>
-  </Table>
 </Database>
->>>>>>> Stashed changes

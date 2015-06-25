@@ -54,7 +54,7 @@ namespace petratracker.Code
         {
             return true;
 
-            try
+            /*try
             {
                 System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
                 message.To.Add(to);
@@ -70,6 +70,7 @@ namespace petratracker.Code
             }
 
             return isSent;
+             * */
         }
 
     }
