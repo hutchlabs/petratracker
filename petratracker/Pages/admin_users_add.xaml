@@ -10,32 +10,32 @@
         </Grid.ColumnDefinitions>
         
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         
         <Label Grid.Row="0" Grid.Column="0" Content="First Name" HorizontalAlignment="Right" VerticalAlignment="Top" Height="26" Width="78"/>
         <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtFirstName" HorizontalAlignment="Left" Height="23"  TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
 
-        <Label Grid.Row="1" Grid.Column="0" Content="Middle Name" HorizontalAlignment="Right"  VerticalAlignment="Top" RenderTransformOrigin="-0.909,-0.709" Height="26" Width="96"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="Middle Name" HorizontalAlignment="Right"  VerticalAlignment="Top" Height="26" Width="93"/>
         <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtMiddleName" HorizontalAlignment="Left" Height="23"  TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
 
 
-        <Label Grid.Row="2" Grid.Column="0" Content="Last Name" HorizontalAlignment="Right"  VerticalAlignment="Top" RenderTransformOrigin="-0.909,-0.709" Height="26" Width="78"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="Last Name" HorizontalAlignment="Right"  VerticalAlignment="Top" Height="26" Width="78"/>
         <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtLastName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
 
-        <Label Grid.Row="3" Grid.Column="0" Content="Email " HorizontalAlignment="Right"  VerticalAlignment="Top" Height="26" Width="42"/>
+        <Label Grid.Row="3" Grid.Column="0" Content="Email " HorizontalAlignment="Right"  VerticalAlignment="Top" Height="26" Width="50"/>
         <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtEmail" HorizontalAlignment="Left" Height="23"  TextWrapping="Wrap" VerticalAlignment="Top" Width="176"/>
         
-        <Label Grid.Row="4" Grid.Column="0" Content="Password" HorizontalAlignment="Right"  VerticalAlignment="Top" Height="26" Width="60"/>
+        <Label Grid.Row="4" Grid.Column="0" Content="Password" HorizontalAlignment="Right"  VerticalAlignment="Top" Height="26" Width="72"/>
         <PasswordBox Grid.Row="4" Grid.Column="1" x:Name="txtPassword" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="176"/>
         
-        <Label Grid.Row="5" Grid.Column="0" Content="User Role" HorizontalAlignment="Right" VerticalAlignment="Top" RenderTransformOrigin="-0.909,-0.709" Height="26" Width="78"/>
+        <Label Grid.Row="5" Grid.Column="0" Content="User Role" HorizontalAlignment="Right" VerticalAlignment="Top" Height="26" Width="72"/>
         <ComboBox Grid.Row="5" Grid.Column="1" x:Name="cmbUserRole" 
                   ItemsSource="{Binding}"
                   DisplayMemberPath="role1" 

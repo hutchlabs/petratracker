@@ -86,6 +86,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Code\BCrypt.cs" />
+    <Compile Include="Code\ObservableCollection.cs" />
+    <Compile Include="Code\Utils.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
@@ -113,6 +115,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>trackerDB.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\TrackerNotification.cs" />
+    <Compile Include="Models\TrackerSchedule.cs" />
     <Compile Include="Pages\admin.xaml.cs">
       <DependentUpon>admin.xaml</DependentUpon>
     </Compile>
@@ -136,6 +140,9 @@
     </Compile>
     <Compile Include="Pages\uploadDeal.xaml.cs">
       <DependentUpon>uploadDeal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\schedules_view.xaml.cs">
+      <DependentUpon>schedules_view.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\verifySubscription.xaml.cs">
       <DependentUpon>verifySubscription.xaml</DependentUpon>
@@ -213,6 +220,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\uploadDeal.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\schedules_view.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -27,16 +27,17 @@
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
 
-            <Button Click="notifications_Click">
+            <Button Click="Notifications_Click" >
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" Height="10" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill"  Visual="{StaticResource appbar_alert}" />
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_tower}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Notifications" />
+                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" ToolTip="Notifications" x:Name="lbl_notifications" Text="Notifications" />
                 </StackPanel>
             </Button>
+            <!--
             <Button>
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" Height="10" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
@@ -47,6 +48,7 @@
                     <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Settings" />
                 </StackPanel>
             </Button>
+            -->
             <Button>
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" Height="10" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
@@ -66,44 +68,22 @@
                              Header="Notifications"
                              AnimateOnPositionChange="{Binding AnimateOnPositionChange}"
                              Position="Right">
-                <Grid Margin="10"
-                      Width="270">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0"
-                           Grid.Column="0"
-                           Margin="5"
-                           VerticalAlignment="Center"
-                           Content="Download language:" />
-                    <ComboBox x:Name="flyoutSettingsComboboxDownloadlanguage"
-                              Grid.Row="0"
-                              Grid.Column="1"
-                              Margin="0,5,5,5"
-                              VerticalAlignment="Center" />
-                    <Button x:Name="flyoutSettingsButtonSave"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Width="75"
-                            Margin="5"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Content="Save" />
-                    <UniformGrid Columns="3"
-                                 Grid.Column="0"
-                                 Grid.ColumnSpan="2"
-                                 Grid.Row="2"
-                                 Margin="10">
-                        <CheckBox IsChecked="{Binding AnimateOnPositionChange}">Animate</CheckBox>
-             
-                    </UniformGrid>
-                </Grid>
+                <UniformGrid Rows="1" Width="450">
+                    <ListView Margin="10"
+                          BorderThickness="0"
+                          x:Name="lv_notifications"
+                          ItemsSource="{Binding}"
+                          SelectedIndex="0" Cursor="Hand" PreviewMouseDoubleClick="lv_notifications_PreviewMouseDoubleClick">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Width="80" DisplayMemberBinding="{Binding status}" Header="Status" />
+                                <GridViewColumn Width="200" DisplayMemberBinding="{Binding notification_type}" Header="Type" />
+                                <GridViewColumn Width="170" DisplayMemberBinding="{Binding Path=created_at, StringFormat='{}{0:dd-MM-yyyy HH:mm tt}'}" Header="Date" />
+
+                            </GridView>
+                        </ListView.View>
+                    </ListView>               
+                </UniformGrid>
             </Controls:Flyout>
         </Controls:FlyoutsControl>
         </Controls:MetroWindow.Flyouts>
@@ -115,9 +95,9 @@
                 <Rectangle Fill="#FF980000" Height="50" Stroke="#FF980000" VerticalAlignment="Top" Width="25" Margin="0,10,0,0"/>
                 <Label Visibility="Visible"      x:Name="ncHome"      Content="Home"      Tag="dashboard.xaml" FontSize="36" Foreground="{DynamicResource SelectedTitle}"   ToolTip="Dashboard" Margin="20,0,0,0" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
                 <Label Visibility="Collapsed"    x:Name="ncReports"   Content="Reports"   Tag="reports.xaml"   FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Reports" Margin="20,0,0,0"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
+                <Label Visibility="Visible"      x:Name="ncSchedules" Content="Schedules" Tag="schedules.xaml" FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Schedules" Margin="20,0,0,0"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
                 <Label Visibility="Visible"      x:Name="ncPayments"  Content="Payments"  Tag="payments.xaml"  FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Payments" Margin="20,0,0,0"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
-                <Label Visibility="Collapsed"    x:Name="ncSchedules" Content="Schedules" Tag="schedules.xaml" FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Schedules" Margin="20,0,0,0"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
-                <Label Visibility="Collapsed"      x:Name="ncAdmin"     Content="Admin"     Tag="admin.xaml"     FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Administration Area" Margin="20,0,0,0" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand" />
+                <Label Visibility="Collapsed"    x:Name="ncAdmin"     Content="Admin"     Tag="admin.xaml"     FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Administration Area" Margin="20,0,0,0" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand" />
             </StackPanel>
      
             <Grid x:Name="ContentArea"  Margin="0,5,5,5">

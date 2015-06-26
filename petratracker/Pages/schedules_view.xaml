@@ -1,0 +1,65 @@
+﻿<Page x:Class="petratracker.Pages.ScheduleView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        Title="View Schedule" Loaded="Window_Loaded">
+    
+    <Page.Resources>
+        <ResourceDictionary>
+            <Thickness x:Key="ControlMargin">0 5 0 0</Thickness>
+        </ResourceDictionary>
+    </Page.Resources>
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />  
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+            <Label x:Name="lbl_company" Content="Company Name" FontSize="24" Foreground="{DynamicResource SelectedTitle}"/>
+            <Label x:Name="lbl_tier" Content="Tier" FontSize="24" Foreground="{DynamicResource SelectedTitle}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <Label Content="Uploaded By: " FontSize="16" Foreground="{DynamicResource UnSelectedTitle}"/>
+            <Label x:Name="lbl_owner" Content="First Surname" FontSize="16" Foreground="{DynamicResource SelectedTitle}"/>
+
+            <Label Content="For: " FontSize="16" Foreground="{DynamicResource UnSelectedTitle}"/>
+            <Label x:Name="lbl_month" Content="June, 2015" FontSize="16" Foreground="{DynamicResource SelectedTitle}"/>
+        </StackPanel>
+        
+        <GroupBox Grid.Row="3" Header="Validation">
+            <UniformGrid Rows="2">
+                <Controls:ToggleSwitch x:Name="ts_validated"
+                                       IsChecked="False"
+                                       OnLabel="Schedule is Validated"
+                                       OffLabel="Schedule is not Validated"
+                                       Margin="{StaticResource ControlMargin}" />
+                <ComboBox x:Name="cbx_validationStatus" Width="200"
+                              Controls:TextBoxHelper.ClearTextButton="True"
+                              Controls:TextBoxHelper.Watermark="Please select validation status"
+                              Margin="0, 10, 0, 0"
+                              SelectedIndex="0">
+                    <!--
+                    <ComboBoxItem Content="Passed" />
+                    <ComboBoxItem Content="SSNIT number error" />
+                    <ComboBoxItem Content="Name Error" />
+                    <ComboBoxItem Content="New Employee" />-->
+                </ComboBox>
+            </UniformGrid>
+            <!--<Controls:ToggleSwitch IsEnabled="{Binding ElementName=validateSwitch, Path=IsChecked}"
+                                   Visibility="{Binding ElementName=visibleSwitch, 
+            Path=IsChecked, Converter={StaticResource btv}}" />-->
+        </GroupBox>
+        
+        <GroupBox Grid.Row="7" Grid.Column="0" Header="Schedule Items">
+            <DataGrid Name="viewScheduleItems" MouseDoubleClick="viewScheduleItems_MouseDoubleClick" Margin="20,20,20,20" />
+        </GroupBox>
+    </Grid>
+</Page>

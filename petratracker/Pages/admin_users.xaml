@@ -7,7 +7,6 @@
 
     <DockPanel LastChildFill="True" Margin="0,0,0,0" HorizontalAlignment="Left"> 
         <DataGrid x:Name="viewUsers" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*"  AutoGeneratingColumn="viewUsers_AutoGeneratingColumn" MinWidth="600" />
-        
     </DockPanel>
     
 

@@ -23,6 +23,9 @@
       <Association Name="User_Setting" Member="Settings" ThisKey="id" OtherKey="modified_by" Type="Setting" />
       <Association Name="User_Notification" Member="Notifications" ThisKey="id" OtherKey="from_user_id" Type="Notification" />
       <Association Name="User_Payment" Member="Payments" ThisKey="id" OtherKey="owner" Type="Payment" />
+      <Association Name="User_Job" Member="Jobs" ThisKey="id" OtherKey="owner" Type="Job" />
+      <Association Name="User_Schedule" Member="Schedules" ThisKey="id" OtherKey="modified_by" Type="Schedule" />
+      <Association Name="User_SchedulesItem" Member="SchedulesItems" ThisKey="id" OtherKey="modified_by" Type="SchedulesItem" />
       <Association Name="Role_User" Member="Role" ThisKey="role_id" OtherKey="id" Type="Role" IsForeignKey="true" />
     </Type>
   </Table>
@@ -63,20 +66,6 @@
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Association Name="Role_Notification" Member="Role" ThisKey="to_role_id" OtherKey="id" Type="Role" IsForeignKey="true" />
       <Association Name="User_Notification" Member="User" ThisKey="from_user_id" OtherKey="id" Type="User" IsForeignKey="true" />
-      <Association Name="Job_Notification" Member="Job" ThisKey="job_id" OtherKey="id" Type="Job" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Jobs" Member="Jobs">
-    <Type Name="Job">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="job_type" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="status" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="owner" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Association Name="Job_Notification" Member="Notifications" ThisKey="id" OtherKey="job_id" Type="Notification" />
-      <Association Name="Job_Payment" Member="Payments" ThisKey="id" OtherKey="job_id" Type="Payment" />
     </Type>
   </Table>
   <Table Name="dbo.Payments" Member="Payments">
@@ -102,8 +91,54 @@
       <Column Name="modified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Association Name="Job_Payment" Member="Job" ThisKey="job_id" OtherKey="id" Type="Job" IsForeignKey="true" />
       <Association Name="User_Payment" Member="User" ThisKey="owner" OtherKey="id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Jobs" Member="Jobs">
+    <Type Name="Job">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="job_type" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="status" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="owner" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="modified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Association Name="User_Job" Member="User" ThisKey="owner" OtherKey="id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Schedules" Member="Schedules">
+    <Type Name="Schedule">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="company" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="tier" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="month" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="validated" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="validation_status" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="payment_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="receipt_sent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="receipt_sent_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="file_downloaded" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="file_downloaded_date" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="file_uploaded" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="file_uploaded_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Association Name="Schedule_SchedulesItem" Member="SchedulesItems" ThisKey="id" OtherKey="schedule_id" Type="SchedulesItem" />
+      <Association Name="User_Schedule" Member="User" ThisKey="modified_by" OtherKey="id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SchedulesItem" Member="SchedulesItems">
+    <Type Name="SchedulesItem">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="schedule_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="update_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Association Name="User_SchedulesItem" Member="User" ThisKey="modified_by" OtherKey="id" Type="User" IsForeignKey="true" />
+      <Association Name="Schedule_SchedulesItem" Member="Schedule" ThisKey="schedule_id" OtherKey="id" Type="Schedule" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

@@ -42,12 +42,18 @@ namespace petratracker.Models
     partial void InsertNotification(Notification instance);
     partial void UpdateNotification(Notification instance);
     partial void DeleteNotification(Notification instance);
-    partial void InsertJob(Job instance);
-    partial void UpdateJob(Job instance);
-    partial void DeleteJob(Job instance);
     partial void InsertPayment(Payment instance);
     partial void UpdatePayment(Payment instance);
     partial void DeletePayment(Payment instance);
+    partial void InsertJob(Job instance);
+    partial void UpdateJob(Job instance);
+    partial void DeleteJob(Job instance);
+    partial void InsertSchedule(Schedule instance);
+    partial void UpdateSchedule(Schedule instance);
+    partial void DeleteSchedule(Schedule instance);
+    partial void InsertSchedulesItem(SchedulesItem instance);
+    partial void UpdateSchedulesItem(SchedulesItem instance);
+    partial void DeleteSchedulesItem(SchedulesItem instance);
     #endregion
 		
 		public TrackerDataContext() : 
@@ -113,6 +119,14 @@ namespace petratracker.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<Payment> Payments
+		{
+			get
+			{
+				return this.GetTable<Payment>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Job> Jobs
 		{
 			get
@@ -121,11 +135,19 @@ namespace petratracker.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<Payment> Payments
+		public System.Data.Linq.Table<Schedule> Schedules
 		{
 			get
 			{
-				return this.GetTable<Payment>();
+				return this.GetTable<Schedule>();
+			}
+		}
+		
+		public System.Data.Linq.Table<SchedulesItem> SchedulesItems
+		{
+			get
+			{
+				return this.GetTable<SchedulesItem>();
 			}
 		}
 	}
@@ -178,6 +200,12 @@ namespace petratracker.Models
 		
 		private EntitySet<Payment> _Payments;
 		
+		private EntitySet<Job> _Jobs;
+		
+		private EntitySet<Schedule> _Schedules;
+		
+		private EntitySet<SchedulesItem> _SchedulesItems;
+		
 		private EntityRef<Role> _Role;
 		
     #region Extensibility Method Definitions
@@ -227,6 +255,9 @@ namespace petratracker.Models
 			this._Settings = new EntitySet<Setting>(new Action<Setting>(this.attach_Settings), new Action<Setting>(this.detach_Settings));
 			this._Notifications = new EntitySet<Notification>(new Action<Notification>(this.attach_Notifications), new Action<Notification>(this.detach_Notifications));
 			this._Payments = new EntitySet<Payment>(new Action<Payment>(this.attach_Payments), new Action<Payment>(this.detach_Payments));
+			this._Jobs = new EntitySet<Job>(new Action<Job>(this.attach_Jobs), new Action<Job>(this.detach_Jobs));
+			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
+			this._SchedulesItems = new EntitySet<SchedulesItem>(new Action<SchedulesItem>(this.attach_SchedulesItems), new Action<SchedulesItem>(this.detach_SchedulesItems));
 			this._Role = default(EntityRef<Role>);
 			OnCreated();
 		}
@@ -634,6 +665,45 @@ namespace petratracker.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Job", Storage="_Jobs", ThisKey="id", OtherKey="owner")]
+		public EntitySet<Job> Jobs
+		{
+			get
+			{
+				return this._Jobs;
+			}
+			set
+			{
+				this._Jobs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_Schedules", ThisKey="id", OtherKey="modified_by")]
+		public EntitySet<Schedule> Schedules
+		{
+			get
+			{
+				return this._Schedules;
+			}
+			set
+			{
+				this._Schedules.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_SchedulesItem", Storage="_SchedulesItems", ThisKey="id", OtherKey="modified_by")]
+		public EntitySet<SchedulesItem> SchedulesItems
+		{
+			get
+			{
+				return this._SchedulesItems;
+			}
+			set
+			{
+				this._SchedulesItems.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_User", Storage="_Role", ThisKey="role_id", OtherKey="id", IsForeignKey=true)]
 		public Role Role
 		{
@@ -719,6 +789,42 @@ namespace petratracker.Models
 		}
 		
 		private void detach_Payments(Payment entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
+		private void attach_Jobs(Job entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Jobs(Job entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
+		private void attach_Schedules(Schedule entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Schedules(Schedule entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
+		private void attach_SchedulesItems(SchedulesItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_SchedulesItems(SchedulesItem entity)
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
@@ -1216,8 +1322,6 @@ namespace petratracker.Models
 		
 		private EntityRef<User> _User;
 		
-		private EntityRef<Job> _Job;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1248,7 +1352,6 @@ namespace petratracker.Models
 		{
 			this._Role = default(EntityRef<Role>);
 			this._User = default(EntityRef<User>);
-			this._Job = default(EntityRef<Job>);
 			OnCreated();
 		}
 		
@@ -1371,10 +1474,6 @@ namespace petratracker.Models
 			{
 				if ((this._job_id != value))
 				{
-					if (this._Job.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.Onjob_idChanging(value);
 					this.SendPropertyChanging();
 					this._job_id = value;
@@ -1532,40 +1631,6 @@ namespace petratracker.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Job_Notification", Storage="_Job", ThisKey="job_id", OtherKey="id", IsForeignKey=true)]
-		public Job Job
-		{
-			get
-			{
-				return this._Job.Entity;
-			}
-			set
-			{
-				Job previousValue = this._Job.Entity;
-				if (((previousValue != value) 
-							|| (this._Job.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Job.Entity = null;
-						previousValue.Notifications.Remove(this);
-					}
-					this._Job.Entity = value;
-					if ((value != null))
-					{
-						value.Notifications.Add(this);
-						this._job_id = value.id;
-					}
-					else
-					{
-						this._job_id = default(int);
-					}
-					this.SendPropertyChanged("Job");
-				}
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -1584,268 +1649,6 @@ namespace petratracker.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Jobs")]
-	public partial class Job : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id;
-		
-		private string _job_type;
-		
-		private string _status;
-		
-		private System.Nullable<int> _owner;
-		
-		private System.Nullable<int> _modified_by;
-		
-		private System.Nullable<System.DateTime> _created_at;
-		
-		private System.Nullable<System.DateTime> _updated_at;
-		
-		private EntitySet<Notification> _Notifications;
-		
-		private EntitySet<Payment> _Payments;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void Onjob_typeChanging(string value);
-    partial void Onjob_typeChanged();
-    partial void OnstatusChanging(string value);
-    partial void OnstatusChanged();
-    partial void OnownerChanging(System.Nullable<int> value);
-    partial void OnownerChanged();
-    partial void Onmodified_byChanging(System.Nullable<int> value);
-    partial void Onmodified_byChanged();
-    partial void Oncreated_atChanging(System.Nullable<System.DateTime> value);
-    partial void Oncreated_atChanged();
-    partial void Onupdated_atChanging(System.Nullable<System.DateTime> value);
-    partial void Onupdated_atChanged();
-    #endregion
-		
-		public Job()
-		{
-			this._Notifications = new EntitySet<Notification>(new Action<Notification>(this.attach_Notifications), new Action<Notification>(this.detach_Notifications));
-			this._Payments = new EntitySet<Payment>(new Action<Payment>(this.attach_Payments), new Action<Payment>(this.detach_Payments));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id
-		{
-			get
-			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this.OnidChanging(value);
-					this.SendPropertyChanging();
-					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_job_type", DbType="NChar(30) NOT NULL", CanBeNull=false)]
-		public string job_type
-		{
-			get
-			{
-				return this._job_type;
-			}
-			set
-			{
-				if ((this._job_type != value))
-				{
-					this.Onjob_typeChanging(value);
-					this.SendPropertyChanging();
-					this._job_type = value;
-					this.SendPropertyChanged("job_type");
-					this.Onjob_typeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="NChar(30) NOT NULL", CanBeNull=false)]
-		public string status
-		{
-			get
-			{
-				return this._status;
-			}
-			set
-			{
-				if ((this._status != value))
-				{
-					this.OnstatusChanging(value);
-					this.SendPropertyChanging();
-					this._status = value;
-					this.SendPropertyChanged("status");
-					this.OnstatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_owner", DbType="Int")]
-		public System.Nullable<int> owner
-		{
-			get
-			{
-				return this._owner;
-			}
-			set
-			{
-				if ((this._owner != value))
-				{
-					this.OnownerChanging(value);
-					this.SendPropertyChanging();
-					this._owner = value;
-					this.SendPropertyChanged("owner");
-					this.OnownerChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_modified_by", DbType="Int")]
-		public System.Nullable<int> modified_by
-		{
-			get
-			{
-				return this._modified_by;
-			}
-			set
-			{
-				if ((this._modified_by != value))
-				{
-					this.Onmodified_byChanging(value);
-					this.SendPropertyChanging();
-					this._modified_by = value;
-					this.SendPropertyChanged("modified_by");
-					this.Onmodified_byChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_at", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> created_at
-		{
-			get
-			{
-				return this._created_at;
-			}
-			set
-			{
-				if ((this._created_at != value))
-				{
-					this.Oncreated_atChanging(value);
-					this.SendPropertyChanging();
-					this._created_at = value;
-					this.SendPropertyChanged("created_at");
-					this.Oncreated_atChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_at", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> updated_at
-		{
-			get
-			{
-				return this._updated_at;
-			}
-			set
-			{
-				if ((this._updated_at != value))
-				{
-					this.Onupdated_atChanging(value);
-					this.SendPropertyChanging();
-					this._updated_at = value;
-					this.SendPropertyChanged("updated_at");
-					this.Onupdated_atChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Job_Notification", Storage="_Notifications", ThisKey="id", OtherKey="job_id")]
-		public EntitySet<Notification> Notifications
-		{
-			get
-			{
-				return this._Notifications;
-			}
-			set
-			{
-				this._Notifications.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Job_Payment", Storage="_Payments", ThisKey="id", OtherKey="job_id")]
-		public EntitySet<Payment> Payments
-		{
-			get
-			{
-				return this._Payments;
-			}
-			set
-			{
-				this._Payments.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Notifications(Notification entity)
-		{
-			this.SendPropertyChanging();
-			entity.Job = this;
-		}
-		
-		private void detach_Notifications(Notification entity)
-		{
-			this.SendPropertyChanging();
-			entity.Job = null;
-		}
-		
-		private void attach_Payments(Payment entity)
-		{
-			this.SendPropertyChanging();
-			entity.Job = this;
-		}
-		
-		private void detach_Payments(Payment entity)
-		{
-			this.SendPropertyChanging();
-			entity.Job = null;
 		}
 	}
 	
@@ -1896,8 +1699,6 @@ namespace petratracker.Models
 		private System.Nullable<System.DateTime> _created_at;
 		
 		private System.Nullable<System.DateTime> _updated_at;
-		
-		private EntityRef<Job> _Job;
 		
 		private EntityRef<User> _User;
 		
@@ -1951,7 +1752,6 @@ namespace petratracker.Models
 		
 		public Payment()
 		{
-			this._Job = default(EntityRef<Job>);
 			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
@@ -1987,10 +1787,6 @@ namespace petratracker.Models
 			{
 				if ((this._job_id != value))
 				{
-					if (this._Job.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.Onjob_idChanging(value);
 					this.SendPropertyChanging();
 					this._job_id = value;
@@ -2384,40 +2180,6 @@ namespace petratracker.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Job_Payment", Storage="_Job", ThisKey="job_id", OtherKey="id", IsForeignKey=true)]
-		public Job Job
-		{
-			get
-			{
-				return this._Job.Entity;
-			}
-			set
-			{
-				Job previousValue = this._Job.Entity;
-				if (((previousValue != value) 
-							|| (this._Job.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Job.Entity = null;
-						previousValue.Payments.Remove(this);
-					}
-					this._Job.Entity = value;
-					if ((value != null))
-					{
-						value.Payments.Add(this);
-						this._job_id = value.id;
-					}
-					else
-					{
-						this._job_id = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Job");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Payment", Storage="_User", ThisKey="owner", OtherKey="id", IsForeignKey=true)]
 		public User User
 		{
@@ -2448,6 +2210,1032 @@ namespace petratracker.Models
 						this._owner = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Jobs")]
+	public partial class Job : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id;
+		
+		private string _job_type;
+		
+		private string _description;
+		
+		private string _status;
+		
+		private System.Nullable<int> _owner;
+		
+		private System.Nullable<int> _modified_by;
+		
+		private System.Nullable<System.DateTime> _created_at;
+		
+		private System.Nullable<System.DateTime> _updated_at;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void Onjob_typeChanging(string value);
+    partial void Onjob_typeChanged();
+    partial void OndescriptionChanging(string value);
+    partial void OndescriptionChanged();
+    partial void OnstatusChanging(string value);
+    partial void OnstatusChanged();
+    partial void OnownerChanging(System.Nullable<int> value);
+    partial void OnownerChanged();
+    partial void Onmodified_byChanging(System.Nullable<int> value);
+    partial void Onmodified_byChanged();
+    partial void Oncreated_atChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_atChanged();
+    partial void Onupdated_atChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_atChanged();
+    #endregion
+		
+		public Job()
+		{
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_job_type", DbType="NChar(30) NOT NULL", CanBeNull=false)]
+		public string job_type
+		{
+			get
+			{
+				return this._job_type;
+			}
+			set
+			{
+				if ((this._job_type != value))
+				{
+					this.Onjob_typeChanging(value);
+					this.SendPropertyChanging();
+					this._job_type = value;
+					this.SendPropertyChanged("job_type");
+					this.Onjob_typeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_description", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string description
+		{
+			get
+			{
+				return this._description;
+			}
+			set
+			{
+				if ((this._description != value))
+				{
+					this.OndescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._description = value;
+					this.SendPropertyChanged("description");
+					this.OndescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="NChar(30) NOT NULL", CanBeNull=false)]
+		public string status
+		{
+			get
+			{
+				return this._status;
+			}
+			set
+			{
+				if ((this._status != value))
+				{
+					this.OnstatusChanging(value);
+					this.SendPropertyChanging();
+					this._status = value;
+					this.SendPropertyChanged("status");
+					this.OnstatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_owner", DbType="Int")]
+		public System.Nullable<int> owner
+		{
+			get
+			{
+				return this._owner;
+			}
+			set
+			{
+				if ((this._owner != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnownerChanging(value);
+					this.SendPropertyChanging();
+					this._owner = value;
+					this.SendPropertyChanged("owner");
+					this.OnownerChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_modified_by", DbType="Int")]
+		public System.Nullable<int> modified_by
+		{
+			get
+			{
+				return this._modified_by;
+			}
+			set
+			{
+				if ((this._modified_by != value))
+				{
+					this.Onmodified_byChanging(value);
+					this.SendPropertyChanging();
+					this._modified_by = value;
+					this.SendPropertyChanged("modified_by");
+					this.Onmodified_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_at", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> created_at
+		{
+			get
+			{
+				return this._created_at;
+			}
+			set
+			{
+				if ((this._created_at != value))
+				{
+					this.Oncreated_atChanging(value);
+					this.SendPropertyChanging();
+					this._created_at = value;
+					this.SendPropertyChanged("created_at");
+					this.Oncreated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_at", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> updated_at
+		{
+			get
+			{
+				return this._updated_at;
+			}
+			set
+			{
+				if ((this._updated_at != value))
+				{
+					this.Onupdated_atChanging(value);
+					this.SendPropertyChanging();
+					this._updated_at = value;
+					this.SendPropertyChanged("updated_at");
+					this.Onupdated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Job", Storage="_User", ThisKey="owner", OtherKey="id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Jobs.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Jobs.Add(this);
+						this._owner = value.id;
+					}
+					else
+					{
+						this._owner = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Schedules")]
+	public partial class Schedule : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id;
+		
+		private string _company;
+		
+		private string _tier;
+		
+		private System.DateTime _month;
+		
+		private bool _validated;
+		
+		private string _validation_status;
+		
+		private int _payment_id;
+		
+		private bool _receipt_sent;
+		
+		private System.Nullable<System.DateTime> _receipt_sent_date;
+		
+		private bool _file_downloaded;
+		
+		private System.DateTime _file_downloaded_date;
+		
+		private bool _file_uploaded;
+		
+		private System.Nullable<System.DateTime> _file_uploaded_date;
+		
+		private int _modified_by;
+		
+		private System.DateTime _created_at;
+		
+		private System.DateTime _updated_at;
+		
+		private EntitySet<SchedulesItem> _SchedulesItems;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void OncompanyChanging(string value);
+    partial void OncompanyChanged();
+    partial void OntierChanging(string value);
+    partial void OntierChanged();
+    partial void OnmonthChanging(System.DateTime value);
+    partial void OnmonthChanged();
+    partial void OnvalidatedChanging(bool value);
+    partial void OnvalidatedChanged();
+    partial void Onvalidation_statusChanging(string value);
+    partial void Onvalidation_statusChanged();
+    partial void Onpayment_idChanging(int value);
+    partial void Onpayment_idChanged();
+    partial void Onreceipt_sentChanging(bool value);
+    partial void Onreceipt_sentChanged();
+    partial void Onreceipt_sent_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onreceipt_sent_dateChanged();
+    partial void Onfile_downloadedChanging(bool value);
+    partial void Onfile_downloadedChanged();
+    partial void Onfile_downloaded_dateChanging(System.DateTime value);
+    partial void Onfile_downloaded_dateChanged();
+    partial void Onfile_uploadedChanging(bool value);
+    partial void Onfile_uploadedChanged();
+    partial void Onfile_uploaded_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onfile_uploaded_dateChanged();
+    partial void Onmodified_byChanging(int value);
+    partial void Onmodified_byChanged();
+    partial void Oncreated_atChanging(System.DateTime value);
+    partial void Oncreated_atChanged();
+    partial void Onupdated_atChanging(System.DateTime value);
+    partial void Onupdated_atChanged();
+    #endregion
+		
+		public Schedule()
+		{
+			this._SchedulesItems = new EntitySet<SchedulesItem>(new Action<SchedulesItem>(this.attach_SchedulesItems), new Action<SchedulesItem>(this.detach_SchedulesItems));
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string company
+		{
+			get
+			{
+				return this._company;
+			}
+			set
+			{
+				if ((this._company != value))
+				{
+					this.OncompanyChanging(value);
+					this.SendPropertyChanging();
+					this._company = value;
+					this.SendPropertyChanged("company");
+					this.OncompanyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_tier", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string tier
+		{
+			get
+			{
+				return this._tier;
+			}
+			set
+			{
+				if ((this._tier != value))
+				{
+					this.OntierChanging(value);
+					this.SendPropertyChanging();
+					this._tier = value;
+					this.SendPropertyChanged("tier");
+					this.OntierChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_month", DbType="DateTime2 NOT NULL")]
+		public System.DateTime month
+		{
+			get
+			{
+				return this._month;
+			}
+			set
+			{
+				if ((this._month != value))
+				{
+					this.OnmonthChanging(value);
+					this.SendPropertyChanging();
+					this._month = value;
+					this.SendPropertyChanged("month");
+					this.OnmonthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validated", DbType="Bit NOT NULL")]
+		public bool validated
+		{
+			get
+			{
+				return this._validated;
+			}
+			set
+			{
+				if ((this._validated != value))
+				{
+					this.OnvalidatedChanging(value);
+					this.SendPropertyChanging();
+					this._validated = value;
+					this.SendPropertyChanged("validated");
+					this.OnvalidatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validation_status", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string validation_status
+		{
+			get
+			{
+				return this._validation_status;
+			}
+			set
+			{
+				if ((this._validation_status != value))
+				{
+					this.Onvalidation_statusChanging(value);
+					this.SendPropertyChanging();
+					this._validation_status = value;
+					this.SendPropertyChanged("validation_status");
+					this.Onvalidation_statusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_payment_id", DbType="Int NOT NULL")]
+		public int payment_id
+		{
+			get
+			{
+				return this._payment_id;
+			}
+			set
+			{
+				if ((this._payment_id != value))
+				{
+					this.Onpayment_idChanging(value);
+					this.SendPropertyChanging();
+					this._payment_id = value;
+					this.SendPropertyChanged("payment_id");
+					this.Onpayment_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_receipt_sent", DbType="Bit NOT NULL")]
+		public bool receipt_sent
+		{
+			get
+			{
+				return this._receipt_sent;
+			}
+			set
+			{
+				if ((this._receipt_sent != value))
+				{
+					this.Onreceipt_sentChanging(value);
+					this.SendPropertyChanging();
+					this._receipt_sent = value;
+					this.SendPropertyChanged("receipt_sent");
+					this.Onreceipt_sentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_receipt_sent_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> receipt_sent_date
+		{
+			get
+			{
+				return this._receipt_sent_date;
+			}
+			set
+			{
+				if ((this._receipt_sent_date != value))
+				{
+					this.Onreceipt_sent_dateChanging(value);
+					this.SendPropertyChanging();
+					this._receipt_sent_date = value;
+					this.SendPropertyChanged("receipt_sent_date");
+					this.Onreceipt_sent_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_downloaded", DbType="Bit NOT NULL")]
+		public bool file_downloaded
+		{
+			get
+			{
+				return this._file_downloaded;
+			}
+			set
+			{
+				if ((this._file_downloaded != value))
+				{
+					this.Onfile_downloadedChanging(value);
+					this.SendPropertyChanging();
+					this._file_downloaded = value;
+					this.SendPropertyChanged("file_downloaded");
+					this.Onfile_downloadedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_downloaded_date", DbType="DateTime2 NOT NULL")]
+		public System.DateTime file_downloaded_date
+		{
+			get
+			{
+				return this._file_downloaded_date;
+			}
+			set
+			{
+				if ((this._file_downloaded_date != value))
+				{
+					this.Onfile_downloaded_dateChanging(value);
+					this.SendPropertyChanging();
+					this._file_downloaded_date = value;
+					this.SendPropertyChanged("file_downloaded_date");
+					this.Onfile_downloaded_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_uploaded", DbType="Bit NOT NULL")]
+		public bool file_uploaded
+		{
+			get
+			{
+				return this._file_uploaded;
+			}
+			set
+			{
+				if ((this._file_uploaded != value))
+				{
+					this.Onfile_uploadedChanging(value);
+					this.SendPropertyChanging();
+					this._file_uploaded = value;
+					this.SendPropertyChanged("file_uploaded");
+					this.Onfile_uploadedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_uploaded_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> file_uploaded_date
+		{
+			get
+			{
+				return this._file_uploaded_date;
+			}
+			set
+			{
+				if ((this._file_uploaded_date != value))
+				{
+					this.Onfile_uploaded_dateChanging(value);
+					this.SendPropertyChanging();
+					this._file_uploaded_date = value;
+					this.SendPropertyChanged("file_uploaded_date");
+					this.Onfile_uploaded_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_modified_by", DbType="Int NOT NULL")]
+		public int modified_by
+		{
+			get
+			{
+				return this._modified_by;
+			}
+			set
+			{
+				if ((this._modified_by != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onmodified_byChanging(value);
+					this.SendPropertyChanging();
+					this._modified_by = value;
+					this.SendPropertyChanged("modified_by");
+					this.Onmodified_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_at", DbType="DateTime2 NOT NULL")]
+		public System.DateTime created_at
+		{
+			get
+			{
+				return this._created_at;
+			}
+			set
+			{
+				if ((this._created_at != value))
+				{
+					this.Oncreated_atChanging(value);
+					this.SendPropertyChanging();
+					this._created_at = value;
+					this.SendPropertyChanged("created_at");
+					this.Oncreated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_at", DbType="DateTime2 NOT NULL")]
+		public System.DateTime updated_at
+		{
+			get
+			{
+				return this._updated_at;
+			}
+			set
+			{
+				if ((this._updated_at != value))
+				{
+					this.Onupdated_atChanging(value);
+					this.SendPropertyChanging();
+					this._updated_at = value;
+					this.SendPropertyChanged("updated_at");
+					this.Onupdated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_SchedulesItem", Storage="_SchedulesItems", ThisKey="id", OtherKey="schedule_id")]
+		public EntitySet<SchedulesItem> SchedulesItems
+		{
+			get
+			{
+				return this._SchedulesItems;
+			}
+			set
+			{
+				this._SchedulesItems.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_User", ThisKey="modified_by", OtherKey="id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Schedules.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Schedules.Add(this);
+						this._modified_by = value.id;
+					}
+					else
+					{
+						this._modified_by = default(int);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_SchedulesItems(SchedulesItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = this;
+		}
+		
+		private void detach_SchedulesItems(SchedulesItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.SchedulesItem")]
+	public partial class SchedulesItem : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id;
+		
+		private int _schedule_id;
+		
+		private string _description;
+		
+		private int _modified_by;
+		
+		private System.DateTime _created_at;
+		
+		private System.DateTime _update_at;
+		
+		private EntityRef<User> _User;
+		
+		private EntityRef<Schedule> _Schedule;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void Onschedule_idChanging(int value);
+    partial void Onschedule_idChanged();
+    partial void OndescriptionChanging(string value);
+    partial void OndescriptionChanged();
+    partial void Onmodified_byChanging(int value);
+    partial void Onmodified_byChanged();
+    partial void Oncreated_atChanging(System.DateTime value);
+    partial void Oncreated_atChanged();
+    partial void Onupdate_atChanging(System.DateTime value);
+    partial void Onupdate_atChanged();
+    #endregion
+		
+		public SchedulesItem()
+		{
+			this._User = default(EntityRef<User>);
+			this._Schedule = default(EntityRef<Schedule>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_schedule_id", DbType="Int NOT NULL")]
+		public int schedule_id
+		{
+			get
+			{
+				return this._schedule_id;
+			}
+			set
+			{
+				if ((this._schedule_id != value))
+				{
+					if (this._Schedule.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onschedule_idChanging(value);
+					this.SendPropertyChanging();
+					this._schedule_id = value;
+					this.SendPropertyChanged("schedule_id");
+					this.Onschedule_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_description", DbType="NChar(10)")]
+		public string description
+		{
+			get
+			{
+				return this._description;
+			}
+			set
+			{
+				if ((this._description != value))
+				{
+					this.OndescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._description = value;
+					this.SendPropertyChanged("description");
+					this.OndescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_modified_by", DbType="Int NOT NULL")]
+		public int modified_by
+		{
+			get
+			{
+				return this._modified_by;
+			}
+			set
+			{
+				if ((this._modified_by != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onmodified_byChanging(value);
+					this.SendPropertyChanging();
+					this._modified_by = value;
+					this.SendPropertyChanged("modified_by");
+					this.Onmodified_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_at", DbType="DateTime2 NOT NULL")]
+		public System.DateTime created_at
+		{
+			get
+			{
+				return this._created_at;
+			}
+			set
+			{
+				if ((this._created_at != value))
+				{
+					this.Oncreated_atChanging(value);
+					this.SendPropertyChanging();
+					this._created_at = value;
+					this.SendPropertyChanged("created_at");
+					this.Oncreated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_update_at", DbType="DateTime2 NOT NULL")]
+		public System.DateTime update_at
+		{
+			get
+			{
+				return this._update_at;
+			}
+			set
+			{
+				if ((this._update_at != value))
+				{
+					this.Onupdate_atChanging(value);
+					this.SendPropertyChanging();
+					this._update_at = value;
+					this.SendPropertyChanged("update_at");
+					this.Onupdate_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_SchedulesItem", Storage="_User", ThisKey="modified_by", OtherKey="id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.SchedulesItems.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.SchedulesItems.Add(this);
+						this._modified_by = value.id;
+					}
+					else
+					{
+						this._modified_by = default(int);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_SchedulesItem", Storage="_Schedule", ThisKey="schedule_id", OtherKey="id", IsForeignKey=true)]
+		public Schedule Schedule
+		{
+			get
+			{
+				return this._Schedule.Entity;
+			}
+			set
+			{
+				Schedule previousValue = this._Schedule.Entity;
+				if (((previousValue != value) 
+							|| (this._Schedule.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Schedule.Entity = null;
+						previousValue.SchedulesItems.Remove(this);
+					}
+					this._Schedule.Entity = value;
+					if ((value != null))
+					{
+						value.SchedulesItems.Add(this);
+						this._schedule_id = value.id;
+					}
+					else
+					{
+						this._schedule_id = default(int);
+					}
+					this.SendPropertyChanged("Schedule");
 				}
 			}
 		}
