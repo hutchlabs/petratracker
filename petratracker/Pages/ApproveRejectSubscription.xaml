@@ -1,7 +1,7 @@
 ﻿<Window x:Class="petratracker.Pages.ApproveRejectSubscription"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ApproveRejectSubscription" Height="512.039" Width="562.369" Loaded="Window_Loaded">
+        Title="ApproveRejectSubscription" Height="512.039" Width="562.369" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
         <Grid Margin="4,7,6,10">
 

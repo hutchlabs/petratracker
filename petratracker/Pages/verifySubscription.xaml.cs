@@ -108,6 +108,10 @@ namespace petratracker.Pages
             load_subscription();
             cmbCompanies.DisplayMemberPath = "Key";
             cmbCompanies.SelectedValuePath = "Value";
+
+            //btnIdentified.Content = (ini_user.Role.role1.ToLower().Equals("ops user"))
+              //                    ? "Send for Approval"
+                //                  : "Send for Approval";
         }
 
         private bool update_payment(string verifyType)
@@ -159,6 +163,7 @@ namespace petratracker.Pages
                     if (update_payment("Identified"))
                     {
                         MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information);
+                        TrackerNotification.Add(3, "Subscription Approval","Payments", Code.ActiveScript.subscription_id);
                         this.Close();
                     }
                 }

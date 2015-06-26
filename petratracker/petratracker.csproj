@@ -87,7 +87,6 @@
     </ApplicationDefinition>
     <Compile Include="Code\ActiveScript.cs" />
     <Compile Include="Code\BCrypt.cs" />
-    <Compile Include="Code\ObservableCollection.cs" />
     <Compile Include="Code\Utils.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
@@ -110,7 +109,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>microgenDB.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Models\Payments.cs" />
+    <Compile Include="Models\TrackerPayments.cs" />
     <Compile Include="Models\trackerDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

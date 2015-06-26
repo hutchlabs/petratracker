@@ -73,11 +73,11 @@ namespace petratracker.Pages
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             load_subscriptions("Unidentified");
-            if (ini_user.Role.role1.Equals("ops user"))
+            if (ini_user.Role.role1.ToLower().Equals("ops user"))
             {
                 cmbSubType.ItemsSource = ops_user.ToList();
             }
-            else if (ini_user.Role.role1.Equals("super ops user"))
+            else if (ini_user.Role.role1.ToLower().Equals("super ops user"))
             {
                 cmbSubType.ItemsSource = super_ops_user.ToList();
             }
@@ -93,7 +93,7 @@ namespace petratracker.Pages
         {
             try
             {
-                if(cmbSubType.SelectedValue == "Unidentified")
+                if(cmbSubType.SelectedValue== "Unidentified")
                 {
                     verifySubscription openVerification = new verifySubscription();
                     Payment selVal = (Payment)viewSubscriptions.SelectedItem;

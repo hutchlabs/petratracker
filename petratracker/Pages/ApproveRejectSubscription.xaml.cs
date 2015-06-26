@@ -20,16 +20,18 @@ namespace petratracker.Pages
     /// </summary>
     public partial class ApproveRejectSubscription : Window
     {
-        public ApproveRejectSubscription()
-        {
-            InitializeComponent();
-        }
-
-
 
         TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
         MicrogenDataContext microgenDB = (App.Current as App).MicrogenDBo;
         private User ini_user = new User();
+        private int payment_id;
+
+
+        public ApproveRejectSubscription(int id)
+        {
+            InitializeComponent();
+            payment_id = id;
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -38,18 +40,25 @@ namespace petratracker.Pages
 
         private void load_subscription()
         {
-            var subscription = (from p in trackerDB.Payments
-                                where p.id == Code.ActiveScript.subscription_id && p.status == "Identified"
-                                select p).Single();
+            try
+            {
+                var subscription = (from p in trackerDB.Payments
+                                    where p.id == this.payment_id 
+                                    select p).Single();
 
-            txtTransRef.Text = subscription.transaction_ref_no.ToString();
-            txtTransDate.Text = subscription.transaction_date.ToString("dd-MMM-yyyy");
-            txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
-            txtTranAmount.Text = subscription.transaction_amount.ToString();
-            txtTransDetails.Text = subscription.transaction_details.ToString();
-            txtSubscriptionAmount.Text = subscription.subscription_amount.ToString();
-            dtSubscriptionDate.SelectedDate = subscription.subscription_value_date;
-            txtCompanyCode.Text = subscription.company_code;
+                txtTransRef.Text = subscription.transaction_ref_no.ToString();
+                txtTransDate.Text = subscription.transaction_date.ToString("dd-MMM-yyyy");
+                txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
+                txtTranAmount.Text = subscription.transaction_amount.ToString();
+                txtTransDetails.Text = subscription.transaction_details.ToString();
+                txtSubscriptionAmount.Text = subscription.subscription_amount.ToString();
+                dtSubscriptionDate.SelectedDate = subscription.subscription_value_date;
+                txtCompanyCode.Text = subscription.company_code;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
 

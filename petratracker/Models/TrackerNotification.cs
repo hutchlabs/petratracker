@@ -51,8 +51,11 @@ namespace petratracker.Models
             return  status;
         }
 
-        public void Add(int role_id, string notification_type, string job_type, int jobid)
+        public static void Add(int role_id, string notification_type, string job_type, int jobid)
         {
+            TrackerDataContext tDB = (App.Current as App).TrackerDBo;
+            User  currentUser = tDB.Users.Single(p => p.username == Properties.Settings.Default.username);
+
             try 
             {
                 Notification n = new Notification();
@@ -65,8 +68,8 @@ namespace petratracker.Models
                 n.modified_by = currentUser.id;
                 n.created_at = new DateTime();
                 n.updated_at = new DateTime();
-                trackerDB.Notifications.InsertOnSubmit(n);
-                trackerDB.SubmitChanges();
+                tDB.Notifications.InsertOnSubmit(n);
+                tDB.SubmitChanges();
             }
             catch (Exception ex)
             {

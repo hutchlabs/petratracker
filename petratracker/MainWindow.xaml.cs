@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using petratracker.Pages;
 
 namespace petratracker
 {
@@ -130,7 +131,9 @@ namespace petratracker
 
             if(item !=null)
             {
-                MessageBox.Show("Approve this noticifcation " + item.id);
+                ApproveRejectSubscription frm = new ApproveRejectSubscription(item.id);
+                frm.ShowDialog();         
+                //MessageBox.Show("Approve this noticifcation " + item.id);
             }
         }
 
