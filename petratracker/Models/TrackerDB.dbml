@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Petra_tracker" Class="TrackerDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="ConnectionString" ConnectionString="Data Source=ELMINA\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=True" Provider="System.Data.SqlClient" />
+  <Connection Mode="ConnectionString" ConnectionString="Data Source=NICHOLASARK5676\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=True" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Users" Member="Users">
     <Type Name="User">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -63,20 +63,6 @@
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Association Name="Role_Notification" Member="Role" ThisKey="to_role_id" OtherKey="id" Type="Role" IsForeignKey="true" />
       <Association Name="User_Notification" Member="User" ThisKey="from_user_id" OtherKey="id" Type="User" IsForeignKey="true" />
-      <Association Name="Job_Notification" Member="Job" ThisKey="job_id" OtherKey="id" Type="Job" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Jobs" Member="Jobs">
-    <Type Name="Job">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="job_type" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="status" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="owner" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Association Name="Job_Notification" Member="Notifications" ThisKey="id" OtherKey="job_id" Type="Notification" />
-      <Association Name="Job_Payment" Member="Payments" ThisKey="id" OtherKey="job_id" Type="Payment" />
     </Type>
   </Table>
   <Table Name="dbo.Payments" Member="Payments">
@@ -102,8 +88,23 @@
       <Column Name="modified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Association Name="Job_Payment" Member="Job" ThisKey="job_id" OtherKey="id" Type="Job" IsForeignKey="true" />
       <Association Name="User_Payment" Member="User" ThisKey="owner" OtherKey="id" Type="User" IsForeignKey="true" />
+      <Association Name="Job_Payment" Member="Job" ThisKey="job_id" OtherKey="id" Type="Job" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Jobs" Member="Jobs">
+    <Type Name="Job">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="job_type" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="job_description" Type="System.String" DbType="NChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="status" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="owner" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="approved_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="date_approved" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="modified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Association Name="Job_Payment" Member="Payments" ThisKey="id" OtherKey="job_id" Type="Payment" />
     </Type>
   </Table>
 </Database>

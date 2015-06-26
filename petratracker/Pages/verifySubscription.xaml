@@ -14,21 +14,21 @@
         <TextBox HorizontalAlignment="Left" Name="txtTransRef" Height="23" Margin="193,50,0,0" TextWrapping="Wrap" IsReadOnly="True" VerticalAlignment="Top" Width="321"/>
         <Label Content="Transaction Details :" HorizontalAlignment="Left" Margin="31,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.314,-0.535"/>
         <TextBox HorizontalAlignment="Left" x:Name="txtTransDetails" Height="96" Margin="193,174,0,0" TextWrapping="Wrap" IsReadOnly="True" VerticalAlignment="Top" Width="321"/>
-        <Button x:Name="btnIdentified" Content="Identified" HorizontalAlignment="Left" Margin="100,514,0,0" VerticalAlignment="Top" Width="109" Height="37" Click="btnIdentified_Click" RenderTransformOrigin="0.04,-0.3"  FontSize="12" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}"/>
-        <Button x:Name="btnUnidentified" Content="Unidentified" HorizontalAlignment="Left" Margin="225,514,0,0" VerticalAlignment="Top" Width="109" Height="37" RenderTransformOrigin="0.04,-0.3"  FontSize="12" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}" Click="btnUnidentified_Click"/>
-        <Button x:Name="btnReturned" Content="Returned" HorizontalAlignment="Left" Margin="355,514,0,0" VerticalAlignment="Top" Width="109" Height="37" RenderTransformOrigin="0.04,-0.3"  FontSize="12" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}" Click="btnReturned_Click"/>
+        <Button x:Name="btnIdentified" Content="Save" HorizontalAlignment="Left" Margin="193,528,0,0" VerticalAlignment="Top" Width="109" Height="37" Click="btnIdentified_Click" RenderTransformOrigin="0.04,-0.3"  FontSize="12" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}"/>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="334,528,0,0" VerticalAlignment="Top" Width="109" Height="37" RenderTransformOrigin="0.04,-0.3"  FontSize="12" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}" Click="btnUnidentified_Click"/>
         <ComboBox x:Name="cmbCompanies" HorizontalAlignment="Left" Margin="193,342,0,0" VerticalAlignment="Top" Width="321" SelectionChanged="cmbCompanies_SelectionChanged"/>
         <Label Content="Suggested Companies :" HorizontalAlignment="Left" Margin="31,342,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnGetSuggestions" Content="Get Suggestions" HorizontalAlignment="Left" Margin="409,275,0,0" VerticalAlignment="Top" Width="105" Click="btnGetSuggestions_Click" Height="26"/>
         <Label Content="Company Code :" HorizontalAlignment="Left" Margin="31,373,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtCompanyCode" HorizontalAlignment="Left" Height="23" Margin="193,373,0,0" TextWrapping="Wrap" IsReadOnly="True" VerticalAlignment="Top" Width="205"/>
         <Label x:Name="cmbTransArraylbl" Content="Transaction Split :" HorizontalAlignment="Left" Margin="31,275,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbTransArray" HorizontalAlignment="Left" Margin="193,275,0,0" VerticalAlignment="Top" Width="205"/>
+        <ComboBox x:Name="cmbTransArray" HorizontalAlignment="Left" Margin="193,275,0,0" VerticalAlignment="Top" Width="321" SelectionChanged="cmbTransArray_SelectionChanged"/>
         <DatePicker x:Name="dtSubscriptionDate" HorizontalAlignment="Left" Margin="193,404,0,0" VerticalAlignment="Top" Width="205"/>
         <Label Content="Subcription Value Date :" HorizontalAlignment="Left" Margin="31,404,0,0" VerticalAlignment="Top"/>
         <Label Content="Subscription Amount :" HorizontalAlignment="Left" Margin="31,435,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.314,-0.535"/>
         <TextBox HorizontalAlignment="Left" x:Name="txtSubscriptionAmount" Height="23" Margin="193,435,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="321"/>
-        <Label x:Name="lblCompsFound" Content="0 suggestions found" HorizontalAlignment="Left" Margin="193,315,0,0" VerticalAlignment="Top" FontSize="11"/>
+        <Label x:Name="lblCompsFound" Content="0 suggestions found" HorizontalAlignment="Left" Margin="193,311,0,0" VerticalAlignment="Top" FontSize="11"/>
+        <Button x:Name="btnGetAllComapnies" Content="Get All Clients" HorizontalAlignment="Left" Margin="368,311,0,0" VerticalAlignment="Top" Width="146" Click="btnGetAllComapnies_Click"/>
+        <CheckBox x:Name="chkReturned" Content="Payment is returned" HorizontalAlignment="Left" Margin="193,478,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

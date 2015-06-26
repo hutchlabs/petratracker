@@ -18,6 +18,7 @@ namespace petratracker.Models
 
 
         User ini_user;
+        public bool isUploaded = false;
 
         public payments()
         {
@@ -49,8 +50,7 @@ namespace petratracker.Models
             return dt;
         }
 
-
-        public void read_microgen_data(string doc_source, string job_type)
+        public void read_microgen_data(string doc_source, string job_type, string deal_description)
         {
             try
             {
@@ -58,16 +58,13 @@ namespace petratracker.Models
                 string connString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 12.0;HDR=yes'", fullPathToExcel);
                 DataTable dt = GetDataTable("SELECT * from [Report$]", connString);
 
-
-                //Create db contexts
-
                 //Create new job
                 Job objJob = new Job();
-
                 objJob.job_type = job_type;
+                objJob.job_description = deal_description;
                 objJob.status = "In Progress";
                 objJob.owner = ini_user.id;
-                objJob.created_at = DateTime.Now;
+                objJob.created_at = DateTime.Today;
                 trackerDB.Jobs.InsertOnSubmit(objJob);
                 trackerDB.SubmitChanges();
 
@@ -92,7 +89,7 @@ namespace petratracker.Models
 
                             if (dr["Dr / Cr Indicator"].ToString() == "Credit") 
                             {
-                                objPayment.status = "Pending"; 
+                                objPayment.status = "Unidentified"; 
                             }
                             else if (dr["Dr / Cr Indicator"].ToString() == "Debit")
                             { 
@@ -104,17 +101,19 @@ namespace petratracker.Models
                         trackerDB.Payments.InsertOnSubmit(objPayment);
 
                         //Submit changes to db
-                        trackerDB.SubmitChanges();                  
+                        trackerDB.SubmitChanges();
+
+                        isUploaded = true;
                 }
             }
             catch (Exception uploadError)
             {
+                isUploaded = false;
                 MessageBox.Show("An error occured while uploading the file.\n" + uploadError.Message, "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //log error
             }
 
         }
-
 
         private string get_trans_ref_code(string val_date, string trans_date)
         {
@@ -130,5 +129,6 @@ namespace petratracker.Models
         {
             return true;
         }
+
     }
 }

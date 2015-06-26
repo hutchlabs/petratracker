@@ -17,10 +17,10 @@
 
         <DockPanel x:Name="SubsContentbar" Visibility="Visible" Margin="50,20,20,20" LastChildFill="True">
             <StackPanel x:Name="usersMenu" DockPanel.Dock="Left" Orientation="Vertical" Margin="0,0,20,0">
-                <Label x:Name="btnViewSubs" Content="View Subscriptions" Foreground="{DynamicResource SelectedTitle}" FontSize="16" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="SubsContentbarMenu_MouseLeftButtonUp" Background="{x:Null}"/>
+                <Label x:Name="btnViewJobs" Content="View Jobs" Foreground="{DynamicResource SelectedTitle}" FontSize="16" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="SubsContentbarMenu_MouseLeftButtonUp" Background="{x:Null}"/>
                 <Label x:Name="btnAddSubs" Content="Add Subscriptions" Foreground="{DynamicResource UnSelectedMenu}" FontSize="16" Cursor="Hand" UseLayoutRounding="False" Style="{DynamicResource RoundedLabel}" MouseLeftButtonUp="SubsContentbarMenu_MouseLeftButtonUp" Background="{x:Null}"/>
             </StackPanel>
-            <Frame x:Name="SubsPageHolder" Source="/petratracker;component/Pages/subscriptions.xaml" NavigationUIVisibility="Hidden" />
+            <Frame x:Name="SubsPageHolder" Source="/petratracker;component/Pages/jobs.xaml" NavigationUIVisibility="Hidden" />
         </DockPanel>
 
         <Grid x:Name="TranContentbar" Visibility="Collapsed">

@@ -48,16 +48,16 @@ namespace petratracker.Pages
         private void SubsContentbarMenu_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             string menuitem = ((Label)sender).Name.ToString();
-            this.btnViewSubs.Foreground = (menuitem.Equals("btnViewSubs")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
+            this.btnViewJobs.Foreground = (menuitem.Equals("btnViewJobs")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
             this.btnAddSubs.Foreground = (menuitem.Equals("btnAddSubs")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
 
             if (menuitem.Equals("btnAddSubs"))
             {
                 this.SubsPageHolder.NavigationService.Navigate(new Uri("pages/uploadDeal.xaml", UriKind.Relative));
             }
-            else
+            else if (menuitem.Equals("btnViewJobs"))
             {
-                this.SubsPageHolder.NavigationService.Navigate(new Uri("pages/subscriptions.xaml", UriKind.Relative));
+                this.SubsPageHolder.NavigationService.Navigate(new Uri("pages/jobs.xaml", UriKind.Relative));
             }
         }
     }

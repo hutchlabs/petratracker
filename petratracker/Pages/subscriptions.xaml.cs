@@ -22,25 +22,31 @@ namespace petratracker.Pages
     /// </summary>
     public partial class subscriptions : Page
     {
+
+
+        TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
+        User ini_user;
+        string [] ops_user = { "Unidentified", "Identified and Approved", "Returned" };
+        string [] super_ops_user = { "Identified", "Un-Identified", "Identified and Approved", "Returned" };
+
+
         public subscriptions()
         {
             InitializeComponent();
+            ini_user = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
         }
 
-        TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
-
+        
         private void load_subscriptions(string sub_status)
         { 
             try
             {
-
                 var subscriptions = (from p in trackerDB.Payments
-                                     where p.status == sub_status 
+                                     where p.job_id == Code.ActiveScript.job_id && p.status == sub_status
                                      select p
                                     );
 
                 viewSubscriptions.ItemsSource = subscriptions;
-
 
                 viewSubscriptions.Columns[0].Visibility = System.Windows.Visibility.Hidden;
                 viewSubscriptions.Columns[1].Visibility = System.Windows.Visibility.Hidden;
@@ -66,19 +72,38 @@ namespace petratracker.Pages
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            load_subscriptions("Unidentified");
+            if (ini_user.Role.role1.Equals("ops user"))
+            {
+                cmbSubType.ItemsSource = ops_user.ToList();
+            }
+            else if (ini_user.Role.role1.Equals("super ops user"))
+            {
+                cmbSubType.ItemsSource = super_ops_user.ToList();
+            }
+            else
+            {
+                MessageBox.Show("Your user role does not have previleges to handle subscriptions.", "Unauthorized User", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
 
-            load_subscriptions("Pending");
+
         }
 
         private void viewSubscriptions_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             try
             {
-                verifySubscription openVerification = new verifySubscription();
-                Payment selVal = (Payment)viewSubscriptions.SelectedItem;
-                openVerification.subID = selVal.id;
-                openVerification.ShowDialog();
-               
+                if(cmbSubType.SelectedValue == "Unidentified")
+                {
+                    verifySubscription openVerification = new verifySubscription();
+                    Payment selVal = (Payment)viewSubscriptions.SelectedItem;
+                    openVerification.subID = selVal.id;
+                    openVerification.ShowDialog();           
+                }
+                else if(cmbSubType.SelectedValue == "identified")
+                {
+                
+                }
             }
             catch(Exception subError)
             {
@@ -90,20 +115,23 @@ namespace petratracker.Pages
         {
             try
             {
-                var option = ((ComboBoxItem)((ComboBox)sender).SelectedItem).Content.ToString();
+                var option = cmbSubType.SelectedValue.ToString();
 
-                switch (option)
+                switch (option.ToString())
                 {
                     case "Identified": load_subscriptions("Identified"); break;
-                    case "Un-Identified": load_subscriptions("Unidentified"); break;
+                    case "Unidentified": load_subscriptions("Unidentified"); break;
                     case "Returned": load_subscriptions("Returned"); break;
-                    case "Pending": load_subscriptions("Pending"); break;
+                    case "Identified and Approved": load_subscriptions("Identified and Approved"); break;
                     default:
-                        load_subscriptions("Pending");
+                        load_subscriptions("Unidentified");
                         break;
                 }
             }
-            catch (Exception) { }
+            catch (Exception loadErr) 
+            {
+                MessageBox.Show(loadErr.Message);
+            }
         }
     }
 }
