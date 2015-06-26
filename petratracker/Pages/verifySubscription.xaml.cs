@@ -65,7 +65,9 @@ namespace petratracker.Pages
                 cmbCompanies.Items.Clear();       
      
                 var companies = (from c in microgenDB.cclv_AllEntities
+                                 
                                  where c.FullName.Contains(cmbTransArray.SelectedValue.ToString())
+                                 
                                  select new { c.EntityID, c.FullName });
 
                 foreach(var comp in companies)
@@ -80,16 +82,32 @@ namespace petratracker.Pages
             }
         }
 
+        private void load_all_clients()
+        {
+            try
+            {
+                cmbCompanies.Items.Clear();
+
+                var companies = (from c in microgenDB.cclv_AllEntities
+                                 select new { c.EntityID, c.FullName });
+
+                foreach (var comp in companies)
+                {
+                    cmbCompanies.Items.Add(new KeyValuePair<string, int>(comp.FullName, comp.EntityID));
+                }
+                lblCompsFound.Content = cmbCompanies.Items.Count.ToString() + " suggestions found.";
+            }
+            catch (Exception sugError)
+            {
+                MessageBox.Show(sugError.Message);
+            }
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             load_subscription();
             cmbCompanies.DisplayMemberPath = "Key";
             cmbCompanies.SelectedValuePath = "Value";
-        }
-
-        private void btnGetSuggestions_Click(object sender, RoutedEventArgs e)
-        {
-            load_suggestions();
         }
 
         private bool update_payment(string verifyType)
@@ -134,20 +152,38 @@ namespace petratracker.Pages
 
         private void btnIdentified_Click(object sender, RoutedEventArgs e)
         {
-            if (update_payment("Identified"))
+            if (txtCompanyCode.Text != string.Empty)
             {
-                MessageBox.Show("Payment has been flagged as identified.","Identified",MessageBoxButton.OK,MessageBoxImage.Information);
-                this.Close();
-            }          
+                if ((chkReturned.IsChecked == false))
+                {
+                    if (update_payment("Identified"))
+                    {
+                        MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information);
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    if (MessageBox.Show("This subscription would be flagged as returned, please click Yes to proceed.", "Returened Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        if (update_payment("Returned"))
+                        {
+                            MessageBox.Show("Payment has been flagged as returned.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information);
+                            //create notification and send email
+                            this.Close();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please specify a company.");
+            }
         }
 
         private void btnUnidentified_Click(object sender, RoutedEventArgs e)
         {
-            if (update_payment("Unidentified"))
-            {
-                MessageBox.Show("Payment has been flagged as unidentified.", "Unidentified", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                this.Close();
-            }  
+            this.Close();
         }
 
         private void btnReturned_Click(object sender, RoutedEventArgs e)
@@ -169,6 +205,17 @@ namespace petratracker.Pages
             {
                 MessageBox.Show(compError.Message);
             }
+        }
+
+        private void cmbTransArray_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            load_suggestions();
+        }
+
+        private void btnGetAllComapnies_Click(object sender, RoutedEventArgs e)
+        {
+            
+            load_all_clients();
         }
 
        

@@ -4,23 +4,25 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-	  Title="upload subs">
-    
-        <Grid>
-            <Grid HorizontalAlignment="Left" Height="248" Margin="14,56,0,0" VerticalAlignment="Top" Width="405">
-                <Label Content="Deal Type" HorizontalAlignment="Left" Margin="51,16,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
-                <ComboBox x:Name="cmbDealType" HorizontalAlignment="Left" Margin="44,47,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="14">
-                    <ComboBoxItem Content="Subscription"/>
-                    <ComboBoxItem Content="Redemption"/>
-                    <ComboBoxItem Content="Transfer"/>
-                </ComboBox>
-                <Label Content="File Location" HorizontalAlignment="Left" Margin="51,98,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
-                <Button x:Name="btnBrowse" Content="Browse " HorizontalAlignment="Left" Margin="279,132,0,0" VerticalAlignment="Top" Width="85" Click="btnBrowse_Click" Height="33" FontWeight="Normal" FontFamily="Segoe UI"/>
-                <TextBox x:Name="txtfileLocation" HorizontalAlignment="Left"  Height="33" Margin="44,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="230"  UseLayoutRounding="true" FontSize="14"/>
-                <Button x:Name="btnUploadFile" Content="Upload File" HorizontalAlignment="Left" Margin="44,196,0,0" VerticalAlignment="Top" Width="152" Click="btnUploadFile_Click" RenderTransformOrigin="0.04,-0.3"  FontSize="12" FontFamily="Segoe UI" Height="32" FontWeight="Normal"/>
-            </Grid>
-            
-        <Label Content="UPLOAD NEW DEAL" HorizontalAlignment="Left" Margin="57,10,0,0" VerticalAlignment="Top" FontSize="20"/>
+	  Title="upload subs" Height="389.523">
 
+    <Grid Margin="0,3,0,0">
+        <Grid HorizontalAlignment="Left" Height="340" Margin="0,47,0,-132" VerticalAlignment="Top" Width="405">
+            <Label Content="Deal Type" HorizontalAlignment="Left" Margin="44,26,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
+            <ComboBox x:Name="cmbDealType" HorizontalAlignment="Left" Margin="44,60,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="14">
+                <ComboBoxItem Content="Subscription"/>
+                <ComboBoxItem Content="Redemption"/>
+                <ComboBoxItem Content="Transfer"/>
+            </ComboBox>
+            <Label Content="File Location" HorizontalAlignment="Left" Margin="44,167,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
+            <Button x:Name="btnBrowse" Content="Browse " HorizontalAlignment="Left" Margin="279,201,0,0" VerticalAlignment="Top" Width="85" Click="btnBrowse_Click" Height="33" FontWeight="Normal" FontFamily="Segoe UI"/>
+            <TextBox x:Name="txtfileLocation" HorizontalAlignment="Left"  Height="33" Margin="44,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="230"  UseLayoutRounding="true" FontSize="14"/>
+            <Button x:Name="btnUploadFile" Content="Upload File" HorizontalAlignment="Left" Margin="44,256,0,0" VerticalAlignment="Top" Width="152" Click="btnUploadFile_Click" RenderTransformOrigin="0.04,-0.3"  FontSize="12" FontFamily="Segoe UI" Height="32" FontWeight="Normal"/>
+            <TextBox x:Name="txtDealDescription" HorizontalAlignment="Left"  Height="33" Margin="44,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="320"  UseLayoutRounding="true" FontSize="14"/>
+            <Label Content="Deal Description" HorizontalAlignment="Left" Margin="44,95,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
         </Grid>
-    </Page>
+
+        <Label Content="UPLOAD NEW DEAL" HorizontalAlignment="Left" Margin="51,5,0,0" VerticalAlignment="Top" FontSize="20"/>
+
+    </Grid>
+</Page>

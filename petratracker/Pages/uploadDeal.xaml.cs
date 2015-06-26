@@ -24,40 +24,26 @@ namespace petratracker.Pages
             InitializeComponent();
         }
 
+        Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog 
-
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-
+            
 
             // Set filter for file extension and default file extension 
 
             dlg.DefaultExt = ".xls";
-
             dlg.Filter = "Text documents (.xls)|*.xls";
 
-
-
             // Display OpenFileDialog by calling ShowDialog method 
-
             Nullable<bool> result = dlg.ShowDialog();
 
-
-
             // Get the selected file name and display in a TextBox 
-
             if (result == true)
             {
-
                 // Open document 
-
-                string filename = dlg.FileName;
-
-                txtfileLocation.Text = filename;
-
-
+                txtfileLocation.Text = dlg.SafeFileName;
             }
 
 
@@ -65,9 +51,16 @@ namespace petratracker.Pages
 
         private void btnUploadFile_Click(object sender, RoutedEventArgs e)
         {
-            Models.payments newUpload = new Models.payments();
-            newUpload.read_microgen_data(txtfileLocation.Text, cmbDealType.Text);
-            MessageBox.Show("File upload Successfully");
+            Models.TrackerPayment newUpload = new Models.TrackerPayment();
+            newUpload.read_microgen_data(dlg.FileName, cmbDealType.Text, txtDealDescription.Text);
+            if (newUpload.isUploaded)
+            {
+                MessageBox.Show("File upload Successfully", "Upload Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("File upload was not successful, please use a valid file format.", "Upload Failure", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
         }
 
 
