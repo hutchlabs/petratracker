@@ -109,11 +109,13 @@
             <TabControl x:Name="scheduleMenu" TabStripPlacement="Left" Margin="10">
                 <TabItem Header="View Schedules" Style="{DynamicResource TabItemStyle1}">
                     <UniformGrid Rows="1">
+                        <Frame x:Name="vSPageHolder" NavigationUIVisibility="Hidden" Visibility="Collapsed"/>
                         <DataGrid x:Name="viewSchedules" IsReadOnly="True" HorizontalContentAlignment="Left" VerticalContentAlignment="Stretch" ColumnWidth="*"  PreviewMouseDoubleClick="viewSchedules_MouseDoubleClick" AutoGenerateColumns="False">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Company" Binding="{Binding company}" />
-                                <DataGridTextColumn Header="Tier" Binding="{Binding tier}" />
-                                <DataGridTextColumn Header="Month" Binding="{Binding Path=month, StringFormat='{}{m, yyyy}'}" />
+                                <DataGridTextColumn Header="Company" Width="200" Binding="{Binding company}" />
+                                <DataGridTextColumn Header="Tier" Width="60" Binding="{Binding tier}" />
+                               <!-- <DataGridTextColumn Header="Month" Binding="{Binding Path=month, StringFormat='{}{m, yyyy}'}" />-->
+                                <DataGridTextColumn Header="Month" Binding="{Binding month}" />
                                 <DataGridCheckBoxColumn Header="Validated Status" Binding="{Binding validated_status}" />
                                 <DataGridCheckBoxColumn Header="Receipt Sent" Binding="{Binding receipt_sent}" />
                                 <DataGridCheckBoxColumn Header="File Downloaded" Binding="{Binding file_downloaded}" />
@@ -134,7 +136,6 @@
                                 </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Frame x:Name="vSPageHolder" NavigationUIVisibility="Hidden" />
                     </UniformGrid>
                 </TabItem>
                 <TabItem Header="Add Schedules" Style="{DynamicResource TabItemStyle1}">

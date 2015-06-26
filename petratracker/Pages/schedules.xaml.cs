@@ -46,7 +46,7 @@ namespace petratracker.Pages
         {
             try
             {
-                Schedule j = sender as Schedule; 
+                Schedule j = viewSchedules.SelectedItem as Schedule;
                 viewSchedules.Visibility = Visibility.Collapsed;
                 vSPageHolder.NavigationService.Navigate(new ScheduleView(j.id));
                 vSPageHolder.Visibility = Visibility.Visible;

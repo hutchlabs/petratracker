@@ -28,7 +28,6 @@ namespace petratracker.Pages
         public ScheduleView()
         {
             InitializeComponent();
-
         }
 
         public ScheduleView(int id) : this()
@@ -46,7 +45,7 @@ namespace petratracker.Pages
             lbl_tier.Content = s.tier;
             
             lbl_owner.Content = string.Format("{0} {1}", s.User.first_name, s.User.last_name);
-            lbl_month.Content = string.Format("MMMM, yyyy",s.month);
+            lbl_month.Content = s.month.ToString(); //string.Format("{}MMMM, yyyy",s.month);
 
             ts_validated.IsChecked = s.validated;
             cbx_validationStatus.ItemsSource = validationStatus;

@@ -10,15 +10,13 @@
         </ResourceDictionary>
     </Page.Resources>
     
-    <Grid Margin="20">
+    <Grid Width="600">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />  
+            <RowDefinition Height="10" />
+            <RowDefinition Height="150" />
+            <RowDefinition Height="300" />  
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
@@ -34,31 +32,26 @@
             <Label x:Name="lbl_month" Content="June, 2015" FontSize="16" Foreground="{DynamicResource SelectedTitle}"/>
         </StackPanel>
         
-        <GroupBox Grid.Row="3" Header="Validation">
-            <UniformGrid Rows="2">
+        <GroupBox Grid.Row="3" Header="Validation" Width="250" HorizontalAlignment="Left">
+            <UniformGrid Rows="3">
                 <Controls:ToggleSwitch x:Name="ts_validated"
                                        IsChecked="False"
                                        OnLabel="Schedule is Validated"
                                        OffLabel="Schedule is not Validated"
                                        Margin="{StaticResource ControlMargin}" />
-                <ComboBox x:Name="cbx_validationStatus" Width="200"
-                              Controls:TextBoxHelper.ClearTextButton="True"
-                              Controls:TextBoxHelper.Watermark="Please select validation status"
-                              Margin="0, 10, 0, 0"
-                              SelectedIndex="0">
-                    <!--
-                    <ComboBoxItem Content="Passed" />
-                    <ComboBoxItem Content="SSNIT number error" />
-                    <ComboBoxItem Content="Name Error" />
-                    <ComboBoxItem Content="New Employee" />-->
-                </ComboBox>
+                <Label Content="Validation Status" />
+                <ComboBox x:Name="cbx_validationStatus" Width="200"  IsEnabled="{Binding ElementName=ts_validated, Path=IsChecked}" />
+
             </UniformGrid>
-            <!--<Controls:ToggleSwitch IsEnabled="{Binding ElementName=validateSwitch, Path=IsChecked}"
-                                   Visibility="{Binding ElementName=visibleSwitch, 
-            Path=IsChecked, Converter={StaticResource btv}}" />-->
         </GroupBox>
         
-        <GroupBox Grid.Row="7" Grid.Column="0" Header="Schedule Items">
+        <GroupBox Grid.Row="3" Header="Files" Width="300" HorizontalAlignment="Right">
+            <UniformGrid Rows="3">
+               
+            </UniformGrid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="7" Grid.Column="0" Width="600" Header="Schedule Items">
             <DataGrid Name="viewScheduleItems" MouseDoubleClick="viewScheduleItems_MouseDoubleClick" Margin="20,20,20,20" />
         </GroupBox>
     </Grid>
