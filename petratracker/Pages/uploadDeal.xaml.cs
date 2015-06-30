@@ -63,6 +63,11 @@ namespace petratracker.Pages
             }
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            cmbDealType.SelectedIndex = 0;
+        }
+
 
 
 

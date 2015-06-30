@@ -50,7 +50,7 @@ namespace petratracker.Pages
             string menuitem = ((Label)sender).Name.ToString();
             this.btnViewJobs.Foreground = (menuitem.Equals("btnViewJobs")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
             this.btnAddSubs.Foreground = (menuitem.Equals("btnAddSubs")) ? (Brush)Application.Current.FindResource("SelectedTitle") : (Brush)Application.Current.FindResource("UnSelectedMenu");
-
+            
             if (menuitem.Equals("btnAddSubs"))
             {
                 this.SubsPageHolder.NavigationService.Navigate(new Uri("pages/uploadDeal.xaml", UriKind.Relative));
