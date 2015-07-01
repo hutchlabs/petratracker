@@ -14,6 +14,8 @@ namespace petratracker
 	{
         private Models.TrackerDataContext trackerDBo;
         private Models.MicrogenDataContext microgenDBo;
+        private Models.PTASDataContext ptasDBo;
+
 
         public App()
         {
@@ -28,6 +30,7 @@ namespace petratracker
                 try {
                     trackerDBo = new Models.TrackerDataContext(petratracker.Properties.Settings.Default.database_tracker);
                     microgenDBo = new Models.MicrogenDataContext(petratracker.Properties.Settings.Default.database_microgen);
+                    ptasDBo = new Models.PTASDataContext(petratracker.Properties.Settings.Default.database_ptas);
 
                     (new LoginWindow()).Show();
 
@@ -50,5 +53,11 @@ namespace petratracker
             set { this.microgenDBo = value; }
         }
 
+
+        public Models.PTASDataContext PTASDBo
+        {
+            get { return this.ptasDBo; }
+            set { this.ptasDBo = value; }
+        }
 	}
 }

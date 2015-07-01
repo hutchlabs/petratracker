@@ -86,26 +86,33 @@ namespace petratracker.Views
                 {
                     String tconStr = "Data Source=" + txtTrackerDataSource.Text + ";Initial Catalog=Petra_tracker;Integrated Security=True";
                     String pconStr = "Data Source=" + txtTrackerDataSource.Text + ";Initial Catalog=Petra5;Integrated Security=True";
+                    String ptasStr = "Data Source=" + txtTrackerDataSource.Text + ";Initial Catalog=PTASDB;Integrated Security=True";
 
                     TrackerDataContext tdc = new TrackerDataContext(tconStr);
                     MicrogenDataContext mdc = new MicrogenDataContext(pconStr);
+                    PTASDataContext pdc = new PTASDataContext(ptasStr);
 
                     bool t=false;
                     bool m=false;
+                    bool p=false;
 
                     t = tdc.DatabaseExists();
                     m = mdc.DatabaseExists();
-                    
-                    if (m && t)
+                    p = pdc.DatabaseExists();
+
+                    if (m && t && p)
                     {
                         MessageBox.Show("Connection to databases were successful.", "Connection Successfull", MessageBoxButton.OK, MessageBoxImage.Information);
                         Properties.Settings.Default.database_tracker = tconStr;
                         Properties.Settings.Default.database_microgen = pconStr;
+                        Properties.Settings.Default.database_ptas = ptasStr;
+
 
                         Properties.Settings.Default.Save();
 
                         (App.Current as App).TrackerDBo = tdc;
                         (App.Current as App).MicrogenDBo = mdc;
+                        (App.Current as App).PTASDBo = pdc;
 
 
                         if (this.exitToLoginWindow)
@@ -116,11 +123,15 @@ namespace petratracker.Views
                     }
                     else if (m)
                     {
-                        MessageBox.Show("Connection to Microgen was successful, but connection to Tracker DB failed.", "Connection Status", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Connection to Tracker DB failed.", "Connection Status", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     else if (t)
                     {
-                        MessageBox.Show("Connection to Tracker DB was successful, but connection to Microgen failed.", "Connection Status", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Connection to Microgen failed.", "Connection Status", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else if (p)
+                    {
+                        MessageBox.Show("Connection to PTAS DB failed.", "Connection Status", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     else
                     {

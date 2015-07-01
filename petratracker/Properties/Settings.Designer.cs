@@ -79,5 +79,27 @@ namespace petratracker.Properties {
                 return ((string)(this["Petra5ConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=PTASDB;Integrated Security=True")]
+        public string PTASDBConnectionString {
+            get {
+                return ((string)(this["PTASDBConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=PTASDB;Integrated Security=True")]
+        public string database_ptas {
+            get {
+                return ((string)(this["database_ptas"]));
+            }
+            set {
+                this["database_ptas"] = value;
+            }
+        }
     }
 }

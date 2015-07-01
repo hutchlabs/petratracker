@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="PTASDB" Class="PTASDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="ConnectionString" ConnectionString="Data Source=ELMINA\SQLEXPRESS;Initial Catalog=PTASDB;Integrated Security=True" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.ContributionTypes" Member="ContributionTypes">
+    <Type Name="ContributionType">
+      <Column Name="ContribTypeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FundDeal" Member="FundDeals">
+    <Type Name="FundDeal">
+      <Column Name="FundDealID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CompanyEntityId" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CompanyEntityKey" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="FirstInserteddate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TotalContribution" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="DealDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="ScheduleStatusID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ActionUserID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ContribType_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Tier" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Association Name="FundDeal_FundDealLine" Member="FundDealLines" ThisKey="FundDealID" OtherKey="FundDealID" Type="FundDealLine" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FundDealLines" Member="FundDealLines">
+    <Type Name="FundDealLine">
+      <Column Name="FundDealLineID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DateStamp" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SSNIT" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="StaffID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="HICode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="MiddleName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Surname" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PreEmployee" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="PreEmployer" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="PostEmployee" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="PostEmployer" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="EmployerContribution" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="EmployeeContribution" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="Tier2Contribution" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="Salary" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="LineStatus" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="FundDealID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FundKey1" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="FundKey2" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="FundKey3" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="FundKey4" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="MicrogenHiCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LineForFile" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="FileToWriteTo" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="FundDeal_FundDealLine" Member="FundDeal" ThisKey="FundDealID" OtherKey="FundDealID" Type="FundDeal" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

@@ -21,6 +21,7 @@ namespace petratracker.Models
     {
         private User currentUser;
         private TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
+        private PTASDataContext ptasDB = (App.Current as App).PTASDBo;
 
         public TrackerSchedule()
         {
@@ -48,75 +49,63 @@ namespace petratracker.Models
                     select new SchedulesItemData { id = j.id, item = j, name = string.Format("{0} {1}", u.first_name, u.last_name) });       
         }
 
-        internal void AddScheduleFromFileUpload(string filename)
+        public IEnumerable<ComboBoxPairs> GetYears()
         {
-            try
-            {
-                string connString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 12.0;HDR=yes'", filename);
-                DataTable dt = Utils.GetDataTable("SELECT * from [Report$]", connString);
+            int year = DateTime.Now.Year;
+            List<ComboBoxPairs> cbp = new List<ComboBoxPairs>();
+            cbp.Add(new ComboBoxPairs((year - 1).ToString(), (year - 1).ToString()));
+            cbp.Add(new ComboBoxPairs(year.ToString(), year.ToString()));
+            cbp.Add(new ComboBoxPairs((year + 1).ToString(), (year + 1).ToString()));
 
-                Schedule s = new Schedule();
-                s.company = "";
-                s.tier = "";
-
-                s.modified_by = currentUser.id;
-                s.created_at = DateTime.Now;
-                s.updated_at = DateTime.Now;
-                trackerDB.Schedules.InsertOnSubmit(s);
-                trackerDB.SubmitChanges();
-
-                foreach (DataRow dr in dt.Rows)
-                {
-                    /*string trans_date_str = dr["Transaction Date"].ToString();
-                    string value_date_str = dr["Value Date"].ToString();
-                    char[] charSeparators = new char[] { '/' };
-                    string[] value_date_res = value_date_str.Split(charSeparators);
-                    string[] trans_date_res = trans_date_str.Split(charSeparators);
-
-                    //Insert new payment
-                    Payment objPayment = new Payment();
-                    objPayment.transaction_ref_no = get_trans_ref_code(dr["Value Date"].ToString(), dr["Transaction Date"].ToString());
-                    objPayment.job_id = objJob.id;
-                    objPayment.transaction_details = dr["Transaction Details"].ToString();
-                    DateTime trans_date = new DateTime(int.Parse(trans_date_res[2]), int.Parse(trans_date_res[1]), int.Parse(trans_date_res[0]));
-                    DateTime value_date = new DateTime(int.Parse(value_date_res[2]), int.Parse(value_date_res[1]), int.Parse(value_date_res[0]));
-                    objPayment.transaction_date = trans_date;
-                    objPayment.value_date = value_date;
-                    objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
-
-                    if (dr["Dr / Cr Indicator"].ToString() == "Credit")
-                    {
-                        objPayment.status = "Pending";
-                    }
-                    else if (dr["Dr / Cr Indicator"].ToString() == "Debit")
-                    {
-                        objPayment.status = "Returned";
-                    }
-
-                    objPayment.owner = ini_user.id;
-                    objPayment.created_at = DateTime.Now;
-                    trackerDB.Payments.InsertOnSubmit(objPayment);
-
-                    //Submit changes to db
-                    trackerDB.SubmitChanges();
-                     */
-                }
-            }
-            catch (Exception uploadError)
-            {
-                throw (uploadError);
-            }
+            return cbp.AsEnumerable();
         }
 
-        internal void AddSchedule(string company, string tier, DateTime month)
+        public IEnumerable<ComboBoxPairs> GetCompanies()
+        {
+            var companies = Utils.GetCompanies();
+            List<ComboBoxPairs> cbpc = new List<ComboBoxPairs>();
+
+            foreach (var c in companies)
+            {
+                cbpc.Add(new ComboBoxPairs(c.EntityID.ToString(), c.FullName));
+            }
+
+            return cbpc.AsEnumerable();
+        }
+
+        public IEnumerable<ComboBoxPairs> GetContributionTypes(string company)
+        {
+            List<ComboBoxPairs> cbp = new List<ComboBoxPairs>();
+            IQueryable<ContributionType> cts = null;
+
+            if (company==string.Empty)
+            {
+                cts = (from j in ptasDB.ContributionTypes select j);
+            } else {
+                cts = (from j in ptasDB.ContributionTypes
+                       join f in ptasDB.FundDeals on j.ContribTypeID equals f.ContribType_ID 
+                      where f.CompanyEntityId == company
+                     select j);
+            }
+
+            foreach (var ct in cts)
+            {
+                cbp.Add(new ComboBoxPairs(ct.ContribTypeID.ToString(), ct.Description));
+            }
+
+            return cbp.AsEnumerable();
+        }
+       
+        internal void AddSchedule(string company, string companyid, string tier, string month, string year)
         {
             try
             {
-
                 Schedule s = new Schedule();
                 s.company = company;
+                s.company_id = companyid;
                 s.tier = tier;
                 s.month = month;
+                s.year = int.Parse(year);
                 s.modified_by = currentUser.id;
                 s.validation_status = "Not Validated";
                 s.created_at = DateTime.Now;

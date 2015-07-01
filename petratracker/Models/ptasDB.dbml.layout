@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="ptasDB">
+  <DataContextMoniker Name="/PTASDataContext" />
+  <nestedChildShapes>
+    <classShape Id="a74f474f-b910-4dce-b080-f313473f153e" absoluteBounds="0.5, 0.5, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/PTASDataContext/ContributionType" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b2645f62-0676-4509-bdf3-40b1198e0124" absoluteBounds="0.51500000000000012, 0.96, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="551ac2ce-3acc-4724-b625-ec0e9cdbf2e0" absoluteBounds="0.5, 2.25, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/PTASDataContext/FundDeal" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7a6045e0-35f6-4e92-9982-cbf1358199bc" absoluteBounds="0.51500000000000012, 2.71, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="5c19c89d-4455-4d51-a5f6-50559c1ff5c0" absoluteBounds="3.375, 1.125, 2, 5.6169254557291657">
+      <DataClassMoniker Name="/PTASDataContext/FundDealLine" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1567be88-fa7e-439a-9380-8e5bba93324d" absoluteBounds="3.39, 1.585, 1.9700000000000002, 5.0569254557291661" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.5 : 3.61620198567708); (3.375 : 3.61620198567708)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/PTASDataContext/FundDeal/FundDeal_FundDealLine" />
+      <nodes>
+        <classShapeMoniker Id="551ac2ce-3acc-4724-b625-ec0e9cdbf2e0" />
+        <classShapeMoniker Id="5c19c89d-4455-4d51-a5f6-50559c1ff5c0" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

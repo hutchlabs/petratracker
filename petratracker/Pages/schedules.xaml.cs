@@ -26,7 +26,7 @@ namespace petratracker.Pages
     public partial class schedules : Page
     {
         TrackerSchedule trackerSH = new TrackerSchedule();
-        string[] tiers = { "Tier 1", "Tier 2", "Tier 3", "Tier 4" };
+        string[] tiers = { "Tier 2", "Tier 3", "Tier 4" };
 
         public schedules()
         {
@@ -34,12 +34,20 @@ namespace petratracker.Pages
             viewSchedules.ItemsSource = trackerSH.GetSchedules();
             cbx_tiers.ItemsSource = tiers;
 
-            var companies = Utils.GetCompanies();
-           
-            foreach (var c in companies)
-            {
-                cbx_companies.Items.Add(c.FullName);
-            }
+            // Set companies
+            cbx_companies.DisplayMemberPath = "_Value";
+            cbx_companies.SelectedValuePath = "_Key";
+            cbx_companies.ItemsSource = trackerSH.GetCompanies();
+
+            // Set contribution types
+            cbx_contributiontype.DisplayMemberPath = "_Value";
+            cbx_contributiontype.SelectedValuePath = "_Key";
+            cbx_contributiontype.ItemsSource = trackerSH.GetContributionTypes("");
+
+            // Set year combo
+            cbx_year.DisplayMemberPath = "_Value";
+            cbx_year.SelectedValuePath = "_Key";
+            cbx_year.ItemsSource = trackerSH.GetYears();
         }
 
         private void viewSchedules_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -59,41 +67,16 @@ namespace petratracker.Pages
             }
         }
 
-        private void btnBrowseSchedules_Click(object sender, RoutedEventArgs e)
-        {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-            dlg.DefaultExt = ".xls";
-            dlg.Filter = "Text documents (.xls)|*.xls";
-
-            Nullable<bool> result = dlg.ShowDialog();
-
-            if (result == true)
-            {
-                //txtfileLocation.Tag = dlg.FileName;
-               // txtfileLocation.Text = dlg.SafeFileName;
-            }
-        }
-
-        private void btnUploadSchedule_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-               // trackerSH.AddScheduleFromFileUpload(txtfileLocation.Tag.ToString());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message,"Upload Error",MessageBoxButton.OK,MessageBoxImage.Error);
-            }
-        }
-
+      
         private void btnAddSchedule_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                trackerSH.AddSchedule(cbx_companies.SelectedValue.ToString(),
+                trackerSH.AddSchedule(((ComboBoxPairs)cbx_companies.SelectedItem)._Value,
+                                      ((ComboBoxPairs)cbx_companies.SelectedItem)._Key,
                                       cbx_tiers.SelectedValue.ToString(), 
-                                      dp_month.SelectedDate.Value);
+                                      cbx_month.SelectedValue.ToString(),
+                                      ((ComboBoxPairs)cbx_year.SelectedItem)._Value);
 
                 viewSchedules.ItemsSource = trackerSH.GetSchedules();
                 scheduleMenu.SelectedIndex = 0;
