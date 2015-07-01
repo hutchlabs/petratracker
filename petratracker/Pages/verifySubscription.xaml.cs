@@ -25,7 +25,6 @@ namespace petratracker.Pages
         public verifySubscription()
         {
             InitializeComponent();
-
         }
 
 
@@ -35,7 +34,19 @@ namespace petratracker.Pages
         public int subID = -1;
         DateTime nowDate = new DateTime();
 
-
+        private void get_deal_desc_period()
+        { 
+            if(chkSavingsBooster.IsChecked == true)
+            {
+                txtDealDescDate.Text = dtSubscriptionDate.SelectedDate.Value.ToString("MMM yyyy");
+                btnGetAllClients.IsEnabled = true;
+            }
+            else if (chkSavingsBooster.IsChecked != true)
+            {               
+                txtDealDescDate.Text = dtSubscriptionDate.SelectedDate.Value.AddMonths(-1).ToString("MMM yyyy");
+                btnGetAllClients.IsEnabled = false;
+            }
+        }
 
         private void load_subscription()
         {
@@ -48,31 +59,35 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
-            txtSubscriptionAmount.Text = subscription.transaction_amount.ToString();
-            dtSubscriptionDate.SelectedDate = DateTime.Today;
+            //
+            dtSubscriptionDate.SelectedDate = subscription.value_date;
+            dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
+            //
+            get_deal_desc_period(); 
+            
+            
                      
             //Slip Transaction Details into String Array
-
-            List<string> slipVals = txtTransDetails.Text.Split(' ').ToList<string>();
-            slipVals.RemoveAll(x => x == "");
-            cmbTransArray.ItemsSource = slipVals;          
+            //List<string> slipVals = txtTransDetails.Text.Split(' ').ToList<string>();
+            //slipVals.RemoveAll(x => x == "");
+            //cmbTransArray.ItemsSource = slipVals;          
         }
 
-        private void load_suggestions()
+        private void load_company_suggestions()
         {
             try
             {  
                 cmbCompanies.Items.Clear();       
      
                 var companies = (from c in microgenDB.cclv_AllEntities
+
+                                 where c.FullName.Contains(txtSearchCompany.Text) && c.EntityTypeDesc == "Company"
                                  
-                                 where c.FullName.Contains(cmbTransArray.SelectedValue.ToString())
-                                 
-                                 select new { c.EntityID, c.FullName });
+                                 select new { c.EntityKey, c.FullName });
 
                 foreach(var comp in companies)
                 {
-                    cmbCompanies.Items.Add(new KeyValuePair<string,int>(comp.FullName,comp.EntityID));                       
+                    cmbCompanies.Items.Add(new KeyValuePair<string,string>(comp.FullName,comp.EntityKey));                       
                 }
                 lblCompsFound.Content = cmbCompanies.Items.Count.ToString() + " suggestions found.";
             }
@@ -82,20 +97,23 @@ namespace petratracker.Pages
             }
         }
 
-        private void load_all_clients()
+        private void load_client_suggestions()
         {
             try
             {
-                cmbCompanies.Items.Clear();
+                cmbClient.Items.Clear();
 
-                var companies = (from c in microgenDB.cclv_AllEntities
-                                 select new { c.EntityID, c.FullName });
+                var clients = (from c in microgenDB.cclv_AllEntities
 
-                foreach (var comp in companies)
+                               where c.FullName.Contains(txtSearchClients.Text) && c.EntityKey.Contains("HI")
+
+                               select new { c.EntityKey, c.FullName });
+
+                foreach (var client in clients)
                 {
-                    cmbCompanies.Items.Add(new KeyValuePair<string, int>(comp.FullName, comp.EntityID));
+                    cmbClient.Items.Add(new KeyValuePair<string, string>(client.FullName, client.EntityKey));
                 }
-                lblCompsFound.Content = cmbCompanies.Items.Count.ToString() + " suggestions found.";
+                lblClientsFound.Content = cmbClient.Items.Count.ToString() + " suggestions found.";
             }
             catch (Exception sugError)
             {
@@ -108,6 +126,9 @@ namespace petratracker.Pages
             load_subscription();
             cmbCompanies.DisplayMemberPath = "Key";
             cmbCompanies.SelectedValuePath = "Value";
+
+            cmbClient.DisplayMemberPath = "Key";
+            cmbClient.SelectedValuePath = "Value";
 
             //btnIdentified.Content = (ini_user.Role.role1.ToLower().Equals("ops user"))
               //                    ? "Send for Approval"
@@ -127,12 +148,14 @@ namespace petratracker.Pages
                     if (verifyType == "Identified")
                     {
                         p.company_code = txtCompanyCode.Text;
-                        p.subscription_value_date = dtSubscriptionDate.SelectedDate;
+                        p.savings_booster = chkSavingsBooster.IsChecked;
+                        p.savings_booster_client_code = txtClientCode.Text;
+                        p.deal_description_period = txtDealDescDate.Text;
+                        p.deal_description = txtDealDescription.Text;
                         p.identified_by = ini_user.id;
                         p.modified_by = ini_user.id;
                         p.date_identified = DateTime.Today;
-                        p.updated_at = DateTime.Today;
-                        p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
+                        p.updated_at = DateTime.Today;                      
                         p.status = verifyType;
                     }
                     else
@@ -154,17 +177,51 @@ namespace petratracker.Pages
             return true;
         }
 
+        private bool verify_update()
+        {
+            bool cont = false;
+            if (chkSavingsBooster.IsChecked == true)
+            {
+                if (txtClientCode.Text != string.Empty)
+                {
+                    cont = true;
+                }
+            }
+            else
+            {
+                cont = true;
+            }
+            return cont;
+        }
+
         private void btnIdentified_Click(object sender, RoutedEventArgs e)
         {
             if (txtCompanyCode.Text != string.Empty)
             {
                 if ((chkReturned.IsChecked == false))
                 {
-                    if (update_payment("Identified"))
+                    String conf_str = "Transaction Details \n\n";
+                    conf_str += "Transaction Ref No. : "+txtTransRef.Text+"\n";
+                    conf_str += "Transaction Date : "+txtTransDate.Text+"\n";
+                    conf_str += "Subscription/Value Date : "+txtValueDate.Text+"\n";
+                    conf_str += "Amount : " + txtTranAmount.Text + "\n";
+                    conf_str += "Deal Period : "+ txtDealDescDate.Text +"\n";
+                    conf_str += "Deal Description : "+ txtDealDescription.Text +"\n";
+                    conf_str += "Identified Company : " + cmbCompanies.Text + "\n";
+                    conf_str += "Savings Booster Client : "+ cmbClient.Text +"\n\n";
+                    conf_str += "Please click Yes to commit changes to this transaction.";
+                    if (MessageBox.Show(conf_str, "Confirm Identification", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information);
-                        TrackerNotification.Add(3, "Subscription Approval","Payments", Code.ActiveScript.subscription_id);
-                        this.Close();
+                        if (update_payment("Identified"))
+                        {
+                            MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information);
+                            TrackerNotification.Add(3, "Subscription Approval", "Payments", Code.ActiveScript.subscription_id);
+                            this.Close();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("No changes have been committed to this transaction.");
                     }
                 }
                 else
@@ -212,15 +269,52 @@ namespace petratracker.Pages
             }
         }
 
-        private void cmbTransArray_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            load_suggestions();
-        }
-
         private void btnGetAllComapnies_Click(object sender, RoutedEventArgs e)
         {
-            
-            load_all_clients();
+            if (txtSearchCompany.Text != string.Empty)
+            {
+                load_company_suggestions();
+            }
+            else
+            {
+                MessageBox.Show("Please enter a search text.");
+                txtSearchCompany.Focus();
+            }
+        }
+
+        private void btnGetAllClients_Click(object sender, RoutedEventArgs e)
+        {
+            if(txtSearchClients.Text != string.Empty)
+            {
+                load_client_suggestions();
+            }
+            else
+            {
+                MessageBox.Show("Please enter a search text.");
+                txtSearchClients.Focus();
+            }
+        }
+
+        private void cmbClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                txtClientCode.Text = cmbClient.SelectedValue.ToString();
+            }
+            catch (Exception compError)
+            {
+                MessageBox.Show(compError.Message);
+            }
+        }
+
+        private void chkSavingsBooster_Checked(object sender, RoutedEventArgs e)
+        {
+            get_deal_desc_period();
+        }
+
+        private void chkSavingsBooster_Unchecked(object sender, RoutedEventArgs e)
+        {
+            get_deal_desc_period();
         }
 
        

@@ -66,5 +66,10 @@ namespace petratracker.Pages
         {
 
         }
+
+        private void btnApprove_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

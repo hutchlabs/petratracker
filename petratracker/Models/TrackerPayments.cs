@@ -85,7 +85,9 @@ namespace petratracker.Models
                         DateTime value_date = new DateTime(int.Parse(value_date_res[2]), int.Parse(value_date_res[1]), int.Parse(value_date_res[0]));
                         objPayment.transaction_date = trans_date;
                         objPayment.value_date = value_date;
+                        objPayment.subscription_value_date = value_date;
                         objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
+                        objPayment.subscription_amount = decimal.Parse(dr["Transaction Amount"].ToString());
 
                             if (dr["Dr / Cr Indicator"].ToString() == "Credit") 
                             {

@@ -114,12 +114,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ptasDB.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Models\TrackerPayments.cs" />
     <Compile Include="Models\trackerDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>trackerDB.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\TrackerPayments.cs" />
     <Compile Include="Models\TrackerNotification.cs" />
     <Compile Include="Models\TrackerSchedule.cs" />
     <Compile Include="Pages\admin.xaml.cs">
@@ -316,13 +316,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\trackerDB.dbml.layout">
-      <DependentUpon>trackerDB.dbml</DependentUpon>
+    <None Include="Models\ptasDB.dbml.layout">
+      <DependentUpon>ptasDB.dbml</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\ptasDB.dbml.layout">
-      <DependentUpon>ptasDB.dbml</DependentUpon>
+    <None Include="Models\trackerDB.dbml.layout">
+      <DependentUpon>trackerDB.dbml</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />

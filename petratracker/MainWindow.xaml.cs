@@ -33,7 +33,7 @@ namespace petratracker
         private TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
         private TrackerNotification trackerNF = new TrackerNotification();
 
-        private string[] adminRoles = { "Super User", "Administrator" };
+        private string [] adminRoles = { "Super User", "Administrator" };
 
 		public MainWindow()
 		{
