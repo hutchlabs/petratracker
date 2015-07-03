@@ -35,9 +35,40 @@ namespace petratracker.Models
            return (from j in _trackerDB.Schedules where j.id == id select j).Single();
         }
 
-        public static IEnumerable<Schedule> GetSchedules(string status="", bool is_checking=false)
+        public static IEnumerable<Schedule> GetSchedules()
         {
-            return (from j in _trackerDB.Schedules  orderby j.created_at descending select j);
+            return (from j in _trackerDB.Schedules orderby j.created_at descending select j);
+        }
+
+        public static IEnumerable<ComboBoxPairs> GetCBSchedules(string company_id="")
+        {
+            try
+            {
+                List<ComboBoxPairs> cbpc = new List<ComboBoxPairs>();
+                IEnumerable<Schedule> sc;
+
+                if (company_id == string.Empty)
+                {
+                   sc = (from j in _trackerDB.Schedules orderby j.created_at descending select j);
+                }
+                else
+                {
+                    sc = (from j in _trackerDB.Schedules where (j.company_id==company_id) orderby j.created_at descending select j);
+                }
+                
+                foreach (var s in sc)
+                {
+                    string desc = string.Format("{0} - {1} for {2}-{3}",s.company,s.contributiontype,s.year,s.month);
+                    cbpc.Add(new ComboBoxPairs(s.id.ToString(), desc));
+                }
+
+                return cbpc.AsEnumerable();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
         }
 
         public static IEnumerable<Schedule> GetSchedulesForProcessing()
@@ -55,7 +86,7 @@ namespace petratracker.Models
             _trackerDB.SubmitChanges();
         }
 
-        public static void AddSchedule(string company, string companyid, string tier, string ct, string month, string year)
+        public static void AddSchedule(string company, string companyid, string tier, string ct, string month, string year, int parent_id)
         {
             try
             {
@@ -72,13 +103,14 @@ namespace petratracker.Models
                 s.file_uploaded = false;
                 s.payment_id = 0;
                 s.receipt_sent = false;
-                s.workflow_status = "Processing of this schedule has not begun.s";
+                s.workflow_status = "Processing of this schedule has not begun";
+                s.parent_id = parent_id;
                 s.modified_by = TrackerUser.GetCurrentUser().id;
                 s.created_at = DateTime.Now;
                 s.updated_at = DateTime.Now;
                 _trackerDB.Schedules.InsertOnSubmit(s);
                 _trackerDB.SubmitChanges();
-                InitiateScheduleWorkFlow(s.id);
+                InitiateScheduleWorkFlow(s);
             }
             catch (Exception e)
             {
@@ -164,29 +196,28 @@ namespace petratracker.Models
 
             foreach (var s in schedules)
             {
-                EvaluateScheduleWorkFlow(s.id);
+                EvaluateScheduleWorkFlow(s);
             }
 
             return true;
         }
+
         #endregion
 
         #region Private Helper Methods
 
         #region Workflow Methods
 
-        private static async void InitiateScheduleWorkFlow(int schedule_id)
+        private static async void InitiateScheduleWorkFlow(Schedule schedule)
         {
-            EvaluateScheduleWorkFlow(schedule_id);
-            //var dueTime = TimeSpan.FromSeconds(60);
-            //var interval = TimeSpan.FromSeconds(30); // TODO: Use settings
-            //await Utils.DoPeriodicWorkAsync(new Func<bool>(UpdateScheduleWorkFlowStatus), dueTime, interval, CancellationToken.None);
+            EvaluateScheduleWorkFlow(schedule);
+            var dueTime = TimeSpan.FromSeconds(60);
+            var interval = TimeSpan.FromSeconds(300); // TODO: Use settings
+            await Utils.DoPeriodicWorkAsync(new Func<bool>(UpdateScheduleWorkFlowStatus), dueTime, interval, CancellationToken.None);
         }
 
-        private static void EvaluateScheduleWorkFlow(int schedule_id)
+        private static void EvaluateScheduleWorkFlow(Schedule s)
         {
-            var s = GetSchedule(schedule_id);
-
             // Lock this schedule for now
             s.processing = true;
             Save(s);
@@ -360,6 +391,11 @@ namespace petratracker.Models
                     {
                         EvaluateFileUploadNotificationStatus(s);
                     }
+                    else
+                    {
+                        s.processing = false;
+                        Save(s);
+                    }
                 }
             }
         }
@@ -518,7 +554,7 @@ namespace petratracker.Models
                 throw ex;
             }
         }
-        
+    
         #endregion
 
         #endregion

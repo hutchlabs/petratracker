@@ -23,7 +23,8 @@ namespace petratracker.UserControls
         #region Private Members
         
         private readonly string[] _tiers = { "Tier 2", "Tier 3", "Tier 4" };
-        
+        private IEnumerable<ComboBoxPairs> _parentSchedules;
+
         #endregion
 
         #region Public Properties
@@ -38,6 +39,12 @@ namespace petratracker.UserControls
         {
             private set { ; }
             get { return TrackerSchedule.GetSchedules(); }
+        }
+
+        public IEnumerable<ComboBoxPairs> ParentSchedules
+        {
+            set { _parentSchedules = value;  }
+            get { return _parentSchedules;  }
         }
 
         public IEnumerable<ComboBoxPairs> Companies
@@ -68,6 +75,7 @@ namespace petratracker.UserControls
             {
                 InitializeComponent();
                 this.DataContext = this;
+                _parentSchedules = TrackerSchedule.GetCBSchedules();
             }
             catch (Exception e)
             {
@@ -78,6 +86,18 @@ namespace petratracker.UserControls
         #endregion
 
         #region Event Handlers
+
+        private void chx_reval_Checked(object sender, RoutedEventArgs e)
+        {
+            cbx_schedules.IsEnabled = (chx_reval.IsChecked == true) ? true : false;
+            cbx_schedules.SelectedIndex = 0;
+        }
+
+        private void cbx_companies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string company_id = ((ComboBoxPairs)cbx_companies.SelectedItem)._Key;
+            cbx_schedules.ItemsSource = TrackerSchedule.GetCBSchedules(company_id);
+        }
 
         private void viewSchedules_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -127,5 +147,9 @@ namespace petratracker.UserControls
         }
 
         #endregion
+
+    
+
+
     }
 }

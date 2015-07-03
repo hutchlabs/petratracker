@@ -25,14 +25,14 @@
                         <DataGrid x:Name="viewSchedules" IsReadOnly="True" ItemsSource="{Binding MySchedules}" HorizontalContentAlignment="Left" VerticalContentAlignment="Stretch" ColumnWidth="*"  PreviewMouseDoubleClick="viewSchedules_MouseDoubleClick" AutoGenerateColumns="False">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Company" Width="200" Binding="{Binding company}" />
-                                <DataGridTextColumn Header="Tier" Width="60" Binding="{Binding tier}" />
+                                <DataGridTextColumn Header="Tier" Width="55" Binding="{Binding tier}" />
                                 <DataGridTextColumn Header="Contribution Type" Width="150" Binding="{Binding contributiontype}" />
-                                <DataGridTemplateColumn Header="Period">
+                                <DataGridTemplateColumn Header="Period" Width="80">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock>
                                                 <TextBlock.Text>
-                                                    <MultiBinding StringFormat=" {0}, {1}">
+                                                    <MultiBinding StringFormat=" {0}-{1}">
                                                         <Binding Path="month" />
                                                         <Binding Path="year"/>
                                                     </MultiBinding>
@@ -41,10 +41,11 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Validation Status" Width="150" Binding="{Binding validation_status}" />
-                                <DataGridCheckBoxColumn Header="Receipt Sent" Binding="{Binding receipt_sent}" />
-                                <DataGridCheckBoxColumn Header="File Downloaded" Binding="{Binding file_downloaded}" />
-                                <DataGridCheckBoxColumn Header="File Uploaded" Binding="{Binding file_uploaded}" />
+                                <DataGridTextColumn Header="Status" Width="100" Binding="{Binding validation_status}" />
+                                <DataGridTextColumn Header="State" Width="150" Binding="{Binding workflow_status}" />
+                                <DataGridCheckBoxColumn Header="Receipt?" Binding="{Binding receipt_sent}" />
+                                <DataGridCheckBoxColumn Header="Download?" Binding="{Binding file_downloaded}" />
+                                <DataGridCheckBoxColumn Header="Upload?" Binding="{Binding file_uploaded}" />
                                 <DataGridTemplateColumn Header="Owner">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -75,6 +76,7 @@
                             <RowDefinition Height="40" />
                             <RowDefinition Height="40" />
                             <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.3*" />
@@ -82,7 +84,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Row="0" Grid.Column="0" Content="Company" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="cbx_companies" ItemsSource="{Binding Companies}" DisplayMemberPath="_Value" SelectedValuePath="_Key" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" />
+                        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="cbx_companies" ItemsSource="{Binding Companies}" DisplayMemberPath="_Value" SelectedValuePath="_Key" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" SelectionChanged="cbx_companies_SelectionChanged" />
 
                         <Label Grid.Row="1" Grid.Column="0" Content="Tier" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                         <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cbx_tiers" ItemsSource="{Binding Tiers}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" />
@@ -110,7 +112,12 @@
                         </ComboBox>
                         <ComboBox Grid.Row="3" Grid.Column="1" x:Name="cbx_year"  ItemsSource="{Binding Years}" DisplayMemberPath="_Value" SelectedValuePath="_Key" HorizontalAlignment="Right" VerticalAlignment="Center" Width="140" />
 
-                        <Button Grid.Row="4" Grid.Column="1" x:Name="btnAddSchedule" Content="Add Schedule" HorizontalAlignment="Right"  VerticalAlignment="Center" Click="btnAddSchedule_Click" />
+                        <CheckBox Grid.Row="4" Grid.Column="0" x:Name="chx_reval" HorizontalAlignment="Right" VerticalAlignment="Center"  Content="Revalidation? Pick Original Schedule" Checked="chx_reval_Checked" />
+
+                        <ComboBox Grid.Row="4" Grid.Column="1" x:Name="cbx_schedules" HorizontalAlignment="Left" VerticalAlignment="Center" Width="160" IsEnabled="False" ItemsSource="{Binding Path=ParentSchedules}" DisplayMemberPath="_Value" SelectedValuePath="_Key" IsSynchronizedWithCurrentItem="True" />
+
+
+                        <Button Grid.Row="5" Grid.Column="1" x:Name="btnAddSchedule" Content="Add Schedule" HorizontalAlignment="Right"  VerticalAlignment="Center" Click="btnAddSchedule_Click" />
                     </Grid>
                 </DockPanel>
             </TabItem>

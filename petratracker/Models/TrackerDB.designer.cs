@@ -2924,6 +2924,8 @@ namespace petratracker.Models
 		
 		private string _workflow_status;
 		
+		private int _parent_id;
+		
 		private int _modified_by;
 		
 		private System.DateTime _created_at;
@@ -2978,6 +2980,8 @@ namespace petratracker.Models
     partial void OnprocessingChanged();
     partial void Onworkflow_statusChanging(string value);
     partial void Onworkflow_statusChanged();
+    partial void Onparent_idChanging(int value);
+    partial void Onparent_idChanged();
     partial void Onmodified_byChanging(int value);
     partial void Onmodified_byChanged();
     partial void Oncreated_atChanging(System.DateTime value);
@@ -3408,6 +3412,26 @@ namespace petratracker.Models
 					this._workflow_status = value;
 					this.SendPropertyChanged("workflow_status");
 					this.Onworkflow_statusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_parent_id", DbType="Int NOT NULL")]
+		public int parent_id
+		{
+			get
+			{
+				return this._parent_id;
+			}
+			set
+			{
+				if ((this._parent_id != value))
+				{
+					this.Onparent_idChanging(value);
+					this.SendPropertyChanging();
+					this._parent_id = value;
+					this.SendPropertyChanged("parent_id");
+					this.Onparent_idChanged();
 				}
 			}
 		}

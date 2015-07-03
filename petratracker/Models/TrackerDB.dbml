@@ -148,6 +148,7 @@
       <Column Name="emails_sent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="processing" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="workflow_status" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="parent_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
