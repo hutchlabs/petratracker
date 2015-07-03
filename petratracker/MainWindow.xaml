@@ -4,26 +4,55 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-    xmlns:local="clr-namespace:petratracker" 
-    mc:Ignorable="d"
+    xmlns:PetraControls="clr-namespace:petratracker.UserControls"
     xmlns:Models="clr-namespace:petratracker.Models" 
-    x:Class="petratracker.MainWindow" x:Name="Window"
+    xmlns:Code="clr-namespace:petratracker.Code"
+    xmlns:Pages="clr-namespace:petratracker.Pages"
+    mc:Ignorable="d"
+    x:Class="petratracker.MainWindow" 
+    x:Name="Window"
     WindowState="Normal" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" 
     MinWidth="1024" MinHeight="768"
     ScrollViewer.VerticalScrollBarVisibility="Disabled" 
-    Style="{DynamicResource VSWindowStyleKey}"
+    GlowBrush="{DynamicResource AccentColorBrush}"
+    NonActiveGlowBrush="Red"
     EnableDWMDropShadow="True" RightWindowCommandsOverlayBehavior="Flyouts" SaveWindowPosition="True" 
     TitleCaps="False" Title="Petra Trust Tracker" Closing="MetroWindow_Closing">
 
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <ResourceDictionary>         
+            <Code:StringToColorConverter x:Key="stringToColorConv"/>
+            <Style TargetType="ComboBoxItem" x:Key="ThemeColorComboItemStyle">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBoxItem">
+                            <StackPanel Orientation="Horizontal" Background="Transparent">
+                                <Ellipse Height="14" Width="14" Stroke="{DynamicResource BlackBrush}"
+                                             Fill="{Binding Converter={StaticResource stringToColorConv},ConverterParameter='ConvertToBaseColor'}" Margin="2"/>
+                                <TextBlock Text="{Binding}" FontSize="14" Margin="2"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="ComboBoxItem" x:Key="AccentColorComboItemStyle">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBoxItem">
+                            <StackPanel Orientation="Horizontal" Background="Transparent">
+                                <Ellipse Height="14" Width="14" Fill="{Binding Converter={StaticResource stringToColorConv},ConverterParameter='ConvertToAccentColor'}" Margin="2"/>
+                                <TextBlock Text="{Binding}" FontSize="14" Margin="2"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary> 
     </Window.Resources>
 
+    <!-- Window commands -->
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
 
@@ -37,19 +66,7 @@
                     <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" ToolTip="Notifications" x:Name="lbl_notifications" Text="Notifications" />
                 </StackPanel>
             </Button>
-            <!--
-            <Button>
-                <StackPanel Orientation="Horizontal" >
-                    <Rectangle Width="10" Height="10" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill"  Visual="{StaticResource appbar_cog}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Settings" />
-                </StackPanel>
-            </Button>
-            -->
-            <Button>
+            <Button  Click="Usersettings_Click" >
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" Height="10" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
@@ -60,12 +77,14 @@
                 </StackPanel>
             </Button>
         </Controls:WindowCommands>
-        </Controls:MetroWindow.RightWindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
 
-        <Controls:MetroWindow.Flyouts>
-            <Controls:FlyoutsControl x:Name="flyoutsControl">
+    <!-- Flyouts -->
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl x:Name="flyoutsControl">
             <Controls:Flyout x:Name="notificationsFlyout" 
                              Header="Notifications"
+                             Theme="Accent"
                              AnimateOnPositionChange="{Binding AnimateOnPositionChange}"
                              Position="Right">
                 <UniformGrid Rows="1" Width="450">
@@ -85,24 +104,115 @@
                     </ListView>               
                 </UniformGrid>
             </Controls:Flyout>
-        </Controls:FlyoutsControl>
-        </Controls:MetroWindow.Flyouts>
-        
-        <!-- Content area -->
-       <DockPanel LastChildFill="True" Background="{DynamicResource LighterGreyBackground}" Margin="0,0,0,0">
-        
-        <StackPanel x:Name="Navigation" DockPanel.Dock="Top"  Orientation="Horizontal" Background="{DynamicResource LighterGreyBackground}" Margin="0,10,10,0" >
-                <Rectangle Fill="#FF980000" Height="50" Stroke="#FF980000" VerticalAlignment="Top" Width="25" Margin="0,10,0,0"/>
-                <Label Visibility="Visible"      x:Name="ncHome"      Content="Home"      Tag="dashboard.xaml" FontSize="36" Foreground="{DynamicResource SelectedTitle}"   ToolTip="Dashboard" Margin="20,0,0,0" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
-                <Label Visibility="Collapsed"    x:Name="ncReports"   Content="Reports"   Tag="reports.xaml"   FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Reports" Margin="20,0,0,0"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
-                <Label Visibility="Visible"      x:Name="ncSchedules" Content="Schedules" Tag="schedules.xaml" FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Schedules" Margin="20,0,0,0"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
-                <Label Visibility="Visible"      x:Name="ncPayments"  Content="Payments"  Tag="payments.xaml"  FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Payments" Margin="20,0,0,0"  MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand"/>
-                <Label Visibility="Collapsed"    x:Name="ncAdmin"     Content="Admin"     Tag="admin.xaml"     FontSize="36" Foreground="{DynamicResource UnSelectedTitle}" ToolTip="Administration Area" Margin="20,0,0,0" MouseLeftButtonUp="NavigationControl_MouseLeftButtonUp" Cursor="Hand" />
-            </StackPanel>
-     
-            <Grid x:Name="ContentArea"  Margin="0,5,5,5">
-                <Frame x:Name="PageHolder" Source="/petratracker;component/Pages/dashboard.xaml" NavigationUIVisibility="Hidden" />
-            </Grid>
-    </DockPanel>
 
+            <Controls:Flyout x:Name="settingsFlyout" 
+                             Header="Settings"
+                             Theme="Accent"
+                             AnimateOnPositionChange="{Binding AnimateOnPositionChange}"
+                             Position="Right">
+                <Grid Margin="10" Width="370">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Theme Settings" FontSize="16" />
+                    <Label Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" Content="Theme:" />
+                    <ComboBox Grid.Row="1" Grid.Column="1" x:Name="AppThemes" Margin="0,5,5,5"  VerticalAlignment="Center" SelectedItem="{Binding SelectedTheme}" ItemsSource="{Binding ThemeColorlist}" ItemContainerStyle="{DynamicResource ThemeColorComboItemStyle}"  />
+                    
+                    <Label Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" Content="Accent:" />
+                    <ComboBox Grid.Row="2" Grid.Column="1" x:Name="AccentColors" Margin="0,5,5,5"  VerticalAlignment="Center" SelectedItem="{Binding SelectedAccent}" ItemsSource="{Binding AccentColorlist}" ItemContainerStyle="{DynamicResource AccentColorComboItemStyle}"/>
+                </Grid>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+        
+    <!-- Content area -->
+    <Controls:MetroContentControl Margin="0,20,0,0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Rectangle Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="{DynamicResource AccentColorBrush}" Stroke="{DynamicResource AccentColorBrush}" Width="25" Height="85" VerticalAlignment="Top" Margin="0,10,5,0" StrokeThickness="0"/>
+
+            <Controls:MetroAnimatedSingleRowTabControl Grid.Row="0" Grid.Column="1" Margin="0,10,10,0" x:Name="MainTabControl">
+                
+                <!-- Dashboard Tab -->
+                <TabItem Header="Home" ToolTip="Dashboard" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}">
+                    <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
+                        <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                            <PetraControls:Dashboard />
+                        </TabItem>
+                    </Controls:MetroAnimatedSingleRowTabControl>
+                </TabItem>
+                
+                <!-- Reports Tab -->
+                <TabItem Header="Reports" ToolTip="Reports" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Margin="5,0,0,0">
+                    <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
+                        <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                            <PetraControls:Reports />
+                        </TabItem>
+                    </Controls:MetroAnimatedSingleRowTabControl>
+                </TabItem>
+                
+                <!-- Schedules Tab -->
+                <TabItem Header="Schedules" ToolTip="Schedules" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Margin="5,0,0,0">
+                    <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
+                        <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                            <PetraControls:Schedules />
+                        </TabItem>
+                    </Controls:MetroAnimatedSingleRowTabControl>
+                </TabItem>
+
+                <!-- Payments Tab -->
+                <TabItem Header="Payments" ToolTip="Payments" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Margin="5,0,0,0">
+                    <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
+                        <TabItem Header="SUBSCRIPTIONS" ToolTip="Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                            <PetraControls:PaymentsSubscriptions />
+                        </TabItem>
+                        <TabItem IsEnabled="False" Header="TRANSFERS" ToolTip="Transfer" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                            <PetraControls:PaymentsTransfers />
+                        </TabItem>
+                        <TabItem IsEnabled="False" Header="REDEMPTIONS" ToolTip="Redemptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                            <PetraControls:PaymentsRedemptions />
+                        </TabItem>
+                    </Controls:MetroAnimatedSingleRowTabControl>
+                </TabItem>
+                
+               <!-- Admin Tab -->
+                <TabItem Header="Admin" ToolTip="Admin" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Margin="5,0,0,0" Visibility="{Binding ShowAdminTab}">
+                    <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
+                        <TabItem Header="USERS" ToolTip="Users" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                            <PetraControls:AdminUsers />
+                        </TabItem>
+                        <TabItem Header="ROLES" ToolTip="Roles" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                            <PetraControls:AdminRoles />
+                        </TabItem>
+                        <TabItem Header="SETTINGS" ToolTip="Settings" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}" Visibility="{Binding ShowSettingsTab}">
+                            <PetraControls:AdminSettings />
+                        </TabItem>
+                    </Controls:MetroAnimatedSingleRowTabControl>
+                </TabItem>
+                
+            </Controls:MetroAnimatedSingleRowTabControl>
+
+            <StatusBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <StatusBarItem>Petra Trust Tracker</StatusBarItem>
+                <Separator Style="{StaticResource MetroStatusBarSeparator}" />
+                <StatusBarItem Content="{Binding ElementName=MainTabControl, Path=SelectedItem.Header, Mode=OneWay}" />
+            </StatusBar>
+        </Grid>
+    </Controls:MetroContentControl>
 </Controls:MetroWindow>

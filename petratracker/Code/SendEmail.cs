@@ -9,48 +9,51 @@ namespace petratracker.Code
 {
     class SendEmail
     {
-        private bool isSent = false;
+        private static readonly string _adminEmail;
+        private static readonly System.Net.Mail.SmtpClient _smtp;
+        private static readonly System.Net.Mail.MailAddress _from;
+        private static readonly TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
 
-        private string adminEmail;
-        private System.Net.Mail.SmtpClient smtp;
-        private System.Net.Mail.MailAddress from;
-        private TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
+        private bool _isSent = false;
+
+        static SendEmail()
+        {
+            Setting smpthost = _trackerDB.Settings.Single(s => s.setting1 == "smtp_host");
+            Setting fromemail = _trackerDB.Settings.Single(s => s.setting1 == "email_from");
+            Setting adminemail = _trackerDB.Settings.Single(s => s.setting1 == "email_admin");
+
+            _smtp = new System.Net.Mail.SmtpClient(smpthost.value);
+            _from = new System.Net.Mail.MailAddress(fromemail.value);
+            _adminEmail = adminemail.value;
+        }
 
         public SendEmail()
         {
-            Setting smpthost = trackerDB.Settings.Single(s => s.setting1 == "smtp_host");
-            Setting fromemail = trackerDB.Settings.Single(s => s.setting1 == "email_from");
-            Setting adminemail = trackerDB.Settings.Single(s => s.setting1 == "email_admin");
-
-            smtp = new System.Net.Mail.SmtpClient(smpthost.value);
-            from = new System.Net.Mail.MailAddress(fromemail.value);
-
-            adminEmail = adminemail.value;
         }
 
-        public bool sendNewUserMail(string name, string email, string password)
+        public static bool sendNewUserMail(string name, string email, string password)
         {
-            Setting tmpl = trackerDB.Settings.Single(s => s.setting1 == "tmpl_newuser_email");
+            Setting tmpl = _trackerDB.Settings.Single(s => s.setting1 == "tmpl_newuser_email");
 
             string msg = tmpl.value;
             msg.Replace("<username>", email);
             msg.Replace("<password>", password);
             msg.Replace("<name>", name);
 
-            return this.sendMail(email, "[Tracker] Welcome to Petra Tracker", msg);
+            return sendMail(email, "[Tracker] Welcome to Petra Tracker", msg);
         }
         
-        public bool sendResetPasswordMail(string email)
+        public static bool sendResetPasswordMail(string email)
         {
-            Setting tmpl = trackerDB.Settings.Single(s => s.setting1 == "tmpl_resetpass_email");
+            Setting tmpl = _trackerDB.Settings.Single(s => s.setting1 == "tmpl_resetpass_email");
 
             string msg = tmpl.value;
             msg.Replace("<username>", email);
 
-            return this.sendMail(adminEmail, "[Tracker] Reset Password for "+email, msg);
+            return sendMail(_adminEmail, "[Tracker] Reset Password for "+email, msg);
         }
 
-        private bool sendMail(string to, string subject, string msg)
+        private static bool sendMail(string to, string subject, string msg)
         {
             return true;
 
@@ -58,18 +61,18 @@ namespace petratracker.Code
             {
                 System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
                 message.To.Add(to);
-                message.From = this.from;
+                message.From = _from;
                 message.Subject = subject;
                 message.Body = msg;
-                smtp.Send(message);
-                isSent = true;
+                _smtp.Send(message);
+                _isSent = true;
             }
             catch (Exception mailError)
             {
                 System.Windows.MessageBox.Show(mailError.Message);
             }
 
-            return isSent;
+            return _isSent;
              * */
         }
 

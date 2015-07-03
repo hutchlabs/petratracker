@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="petratracker.UserControls.Schedules"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
+
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+        </Grid.Resources>
+
+        <TabControl Margin="0,10,10,0" x:Name="InnerSubTabControl" TabStripPlacement="Left">
+            <TabItem Header="View Schedules" ToolTip="View Schedules" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" Width="120">
+                <DockPanel LastChildFill="True" Margin="20" HorizontalAlignment="Left">
+                    <UniformGrid Rows="1">
+                        <Frame x:Name="vSPageHolder" NavigationUIVisibility="Hidden" Visibility="Collapsed"/>
+                        <DataGrid x:Name="viewSchedules" IsReadOnly="True" HorizontalContentAlignment="Left" VerticalContentAlignment="Stretch" ColumnWidth="*"  PreviewMouseDoubleClick="viewSchedules_MouseDoubleClick" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Company" Width="200" Binding="{Binding company}" />
+                                <DataGridTextColumn Header="Tier" Width="60" Binding="{Binding tier}" />
+                                <!-- <DataGridTextColumn Header="Month" Binding="{Binding Path=month, StringFormat='{}{m, yyyy}'}" />-->
+                                <DataGridTextColumn Header="Month" Binding="{Binding month}" />
+                                <DataGridCheckBoxColumn Header="Validated Status" Binding="{Binding validated_status}" />
+                                <DataGridCheckBoxColumn Header="Receipt Sent" Binding="{Binding receipt_sent}" />
+                                <DataGridCheckBoxColumn Header="File Downloaded" Binding="{Binding file_downloaded}" />
+                                <DataGridCheckBoxColumn Header="File Uploaded" Binding="{Binding file_uploaded}" />
+                                <DataGridTemplateColumn Header="Owner">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat=" {0} {1}">
+                                                        <Binding Path="User.first_name"/>
+                                                        <Binding Path="User.last_name"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </UniformGrid>
+                </DockPanel>
+            </TabItem>
+            
+            <TabItem Header="Add Schedule" ToolTip="Add Schedule" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" Width="120" >
+                <DockPanel LastChildFill="True" Margin="20">
+                    <Label DockPanel.Dock="Top" Content="Create New Schedule" HorizontalAlignment="Left"  VerticalAlignment="Top" FontSize="20"/>
+                    <Grid HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*" />
+                            <ColumnDefinition Width="0.7*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="Company" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="cbx_companies" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Content="Tier" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cbx_tiers" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Content="Contribution Type" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" x:Name="cbx_contributiontype" Style="{DynamicResource VirtualisedMetroComboBox}"
+                                      Controls:TextBoxHelper.Watermark="Type or select contribution type"
+                                      IsEditable="True"
+                                      MaxDropDownHeight="125" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Content="Month" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="cbx_month" HorizontalAlignment="Left" VerticalAlignment="Center" Width="140" SelectedValuePath="Tag">
+                            <ComboBoxItem Content="January" Tag="1" />
+                            <ComboBoxItem Content="February" Tag="2" />
+                            <ComboBoxItem Content="March" Tag="3" />
+                            <ComboBoxItem Content="April" Tag="4" />
+                            <ComboBoxItem Content="May" Tag="5" />
+                            <ComboBoxItem Content="June" Tag="6" />
+                            <ComboBoxItem Content="July" Tag="7" />
+                            <ComboBoxItem Content="August" Tag="8" />
+                            <ComboBoxItem Content="September" Tag="9" />
+                            <ComboBoxItem Content="October" Tag="10" />
+                            <ComboBoxItem Content="November" Tag="11" />
+                            <ComboBoxItem Content="December" Tag="12" />
+                        </ComboBox>
+                        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="cbx_year"  HorizontalAlignment="Right" VerticalAlignment="Center" Width="140" />
+
+                        <Button Grid.Row="4" Grid.Column="1" x:Name="btnAddSchedule" Content="Add Schedule" HorizontalAlignment="Right"  VerticalAlignment="Center" Click="btnAddSchedule_Click" />
+                    </Grid>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

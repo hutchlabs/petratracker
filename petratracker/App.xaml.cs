@@ -1,63 +1,96 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Windows;
-using System.Threading;
 
 namespace petratracker
 {
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
 	public partial class App : Application
-	{
-        private Models.TrackerDataContext trackerDBo;
-        private Models.MicrogenDataContext microgenDBo;
-        private Models.PTASDataContext ptasDBo;
+    {
+        #region Private Members
 
+        private Models.TrackerDataContext _trackerDBo;
+        private Models.MicrogenDataContext _microgenDBo;
+        private Models.PTASDataContext _ptasDBo;
+        private Models.User _user;
+
+        #endregion
+
+        #region Public Properties
+
+        public Models.User CurrentUser
+        {
+            get
+            {
+                if (_user == null)
+                    throw new Exception("Current user is not set");
+                return _user;
+            }
+            set { _user = value; }
+        }
+
+        public Models.TrackerDataContext TrackerDBo
+        {
+            get { return this._trackerDBo; }
+            set { this._trackerDBo = value; }
+        }
+
+        public Models.MicrogenDataContext MicrogenDBo
+        {
+            get { return this._microgenDBo; }
+            set { this._microgenDBo = value; }
+        }
+
+        public Models.PTASDataContext PTASDBo
+        {
+            get { return this._ptasDBo; }
+            set { this._ptasDBo = value; }
+        }
+
+        #endregion
+
+        #region Constructor
 
         public App()
-        {
-
+        {            
             if (petratracker.Properties.Settings.Default.database_tracker == string.Empty)
             {
-                Views.DatabaseConnSetup dbsetupwin = new Views.DatabaseConnSetup(true);
+                ConfigWindow dbsetupwin = new ConfigWindow(true);
                 dbsetupwin.Show();
             }
             else
             {
                 try {
-                    trackerDBo = new Models.TrackerDataContext(petratracker.Properties.Settings.Default.database_tracker);
-                    microgenDBo = new Models.MicrogenDataContext(petratracker.Properties.Settings.Default.database_microgen);
-                    ptasDBo = new Models.PTASDataContext(petratracker.Properties.Settings.Default.database_ptas);
+                    _trackerDBo = new Models.TrackerDataContext(petratracker.Properties.Settings.Default.database_tracker);
+                    _microgenDBo = new Models.MicrogenDataContext(petratracker.Properties.Settings.Default.database_microgen);
+                    _ptasDBo = new Models.PTASDataContext(petratracker.Properties.Settings.Default.database_ptas);
 
                     (new LoginWindow()).Show();
 
                 } catch(Exception) {
-                    Views.DatabaseConnSetup dbsetupwin = new Views.DatabaseConnSetup(true);
+                    ConfigWindow dbsetupwin = new ConfigWindow(true);
                     dbsetupwin.Show();
                 }
             }
         }
 
-        public Models.TrackerDataContext TrackerDBo
+        #endregion
+
+        #region Override Methods
+
+        protected override void OnExit(ExitEventArgs e)
         {
-            get { return this.trackerDBo; }
-            set { this.trackerDBo = value; }
+            try
+            {
+                CurrentUser.logged_in = false;
+                CurrentUser.last_login = DateTime.Now;
+                CurrentUser.updated_at = DateTime.Now;
+                TrackerDBo.SubmitChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Logout Error");
+            }
         }
 
-        public Models.MicrogenDataContext MicrogenDBo
-        {
-            get { return this.microgenDBo; }
-            set { this.microgenDBo = value; }
-        }
-
-
-        public Models.PTASDataContext PTASDBo
-        {
-            get { return this.ptasDBo; }
-            set { this.ptasDBo = value; }
-        }
-	}
+        #endregion
+    }
 }

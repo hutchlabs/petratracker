@@ -2729,15 +2729,11 @@ namespace petratracker.Models
 		
 		private string _last_name;
 		
-		private string _email1;
-		
-		private string _email2;
-		
-		private string _email3;
-		
-		private string _signature;
-		
 		private bool _status;
+		
+		private string _theme;
+		
+		private string _accent;
 		
 		private bool _first_login;
 		
@@ -2781,16 +2777,12 @@ namespace petratracker.Models
     partial void Onmiddle_nameChanged();
     partial void Onlast_nameChanging(string value);
     partial void Onlast_nameChanged();
-    partial void Onemail1Changing(string value);
-    partial void Onemail1Changed();
-    partial void Onemail2Changing(string value);
-    partial void Onemail2Changed();
-    partial void Onemail3Changing(string value);
-    partial void Onemail3Changed();
-    partial void OnsignatureChanging(string value);
-    partial void OnsignatureChanged();
     partial void OnstatusChanging(bool value);
     partial void OnstatusChanged();
+    partial void OnthemeChanging(string value);
+    partial void OnthemeChanged();
+    partial void OnaccentChanging(string value);
+    partial void OnaccentChanged();
     partial void Onfirst_loginChanging(bool value);
     partial void Onfirst_loginChanged();
     partial void Onlast_loginChanging(System.DateTime value);
@@ -2960,86 +2952,6 @@ namespace petratracker.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email1", DbType="NVarChar(50)")]
-		public string email1
-		{
-			get
-			{
-				return this._email1;
-			}
-			set
-			{
-				if ((this._email1 != value))
-				{
-					this.Onemail1Changing(value);
-					this.SendPropertyChanging();
-					this._email1 = value;
-					this.SendPropertyChanged("email1");
-					this.Onemail1Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email2", DbType="NVarChar(50)")]
-		public string email2
-		{
-			get
-			{
-				return this._email2;
-			}
-			set
-			{
-				if ((this._email2 != value))
-				{
-					this.Onemail2Changing(value);
-					this.SendPropertyChanging();
-					this._email2 = value;
-					this.SendPropertyChanged("email2");
-					this.Onemail2Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email3", DbType="NVarChar(50)")]
-		public string email3
-		{
-			get
-			{
-				return this._email3;
-			}
-			set
-			{
-				if ((this._email3 != value))
-				{
-					this.Onemail3Changing(value);
-					this.SendPropertyChanging();
-					this._email3 = value;
-					this.SendPropertyChanged("email3");
-					this.Onemail3Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_signature", DbType="VarChar(MAX)")]
-		public string signature
-		{
-			get
-			{
-				return this._signature;
-			}
-			set
-			{
-				if ((this._signature != value))
-				{
-					this.OnsignatureChanging(value);
-					this.SendPropertyChanging();
-					this._signature = value;
-					this.SendPropertyChanged("signature");
-					this.OnsignatureChanged();
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="Bit NOT NULL")]
 		public bool status
 		{
@@ -3056,6 +2968,46 @@ namespace petratracker.Models
 					this._status = value;
 					this.SendPropertyChanged("status");
 					this.OnstatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_theme", DbType="NChar(10) NOT NULL", CanBeNull=false)]
+		public string theme
+		{
+			get
+			{
+				return this._theme;
+			}
+			set
+			{
+				if ((this._theme != value))
+				{
+					this.OnthemeChanging(value);
+					this.SendPropertyChanging();
+					this._theme = value;
+					this.SendPropertyChanged("theme");
+					this.OnthemeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_accent", DbType="NChar(10) NOT NULL", CanBeNull=false)]
+		public string accent
+		{
+			get
+			{
+				return this._accent;
+			}
+			set
+			{
+				if ((this._accent != value))
+				{
+					this.OnaccentChanging(value);
+					this.SendPropertyChanging();
+					this._accent = value;
+					this.SendPropertyChanged("accent");
+					this.OnaccentChanged();
 				}
 			}
 		}

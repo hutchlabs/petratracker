@@ -11,29 +11,27 @@ namespace petratracker.Models
 {
     public class TrackerNotification
     {
-        private User currentUser;
-        private TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
+        private static readonly TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
 
         public TrackerNotification()
         {
-            currentUser = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
         }
 
-        public IEnumerable<Notification> GetNotifications()
+        public static IEnumerable<Notification> GetNotifications()
         {
-            return (from n in trackerDB.Notifications
-                    where (n.status != "Expired") && (n.to_role_id == this.currentUser.role_id)
+            return (from n in _trackerDB.Notifications
+                    where (n.status != "Expired") && (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                     orderby n.status descending 
                     select n);
         }
 
-        public string GetNotificationStatus()
+        public static string GetNotificationStatus()
         {
-            var total_notifications = (from n in trackerDB.Notifications
-                                       where (n.status != "Expired") && (n.to_role_id == this.currentUser.role_id)
+            var total_notifications = (from n in _trackerDB.Notifications
+                                       where (n.status != "Expired") && (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                                        select n).Count();
-            var new_notifications = (from n in trackerDB.Notifications
-                                     where (n.to_role_id == this.currentUser.role_id) && (n.status == "New")
+            var new_notifications = (from n in _trackerDB.Notifications
+                                     where (n.to_role_id == TrackerUser.GetCurrentUser().role_id) && (n.status == "New")
                                      select n
                                     ).Count();
 
@@ -51,40 +49,13 @@ namespace petratracker.Models
             return  status;
         }
 
-        public static void Add(int role_id, string notification_type, string job_type, int jobid)
+        internal static object GetNotificationToolTip()
         {
-            TrackerDataContext tDB = (App.Current as App).TrackerDBo;
-            User  currentUser = tDB.Users.Single(p => p.username == Properties.Settings.Default.username);
-
-            try 
-            {
-                Notification n = new Notification();
-                n.to_role_id = role_id;
-                n.from_user_id = currentUser.id;
-                n.notification_type = notification_type;
-                n.job_type = job_type;
-                n.job_id = jobid;
-                n.status = "New";
-                n.modified_by = currentUser.id;
-                n.created_at = new DateTime();
-                n.updated_at = new DateTime();
-                tDB.Notifications.InsertOnSubmit(n);
-                tDB.SubmitChanges();
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
-
-
-        internal object GetNotificationToolTip()
-        {
-            var total_notifications = (from n in trackerDB.Notifications
-                                       where (n.status != "Expired") && (n.to_role_id == this.currentUser.role_id)
+            var total_notifications = (from n in _trackerDB.Notifications
+                                       where (n.status != "Expired") && (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                                        select n).Count();
-            var new_notifications = (from n in trackerDB.Notifications
-                                     where (n.to_role_id == this.currentUser.role_id) && (n.status == "New")
+            var new_notifications = (from n in _trackerDB.Notifications
+                                     where (n.to_role_id == TrackerUser.GetCurrentUser().role_id) && (n.status == "New")
                                      select n
                                     ).Count();
 
@@ -95,9 +66,32 @@ namespace petratracker.Models
             }
             else
             {
-               tip = String.Format("{0} New Notifications\n{1} Total Notifications", new_notifications.ToString(), total_notifications.ToString());
+                tip = String.Format("{0} New Notifications\n{1} Total Notifications", new_notifications.ToString(), total_notifications.ToString());
             }
             return tip;
+        }
+
+        public static void Add(int role_id, string notification_type, string job_type, int jobid)
+        {
+            try 
+            {
+                Notification n = new Notification();
+                n.to_role_id = role_id;
+                n.from_user_id = TrackerUser.GetCurrentUser().id;
+                n.notification_type = notification_type;
+                n.job_type = job_type;
+                n.job_id = jobid;
+                n.status = "New";
+                n.modified_by = TrackerUser.GetCurrentUser().id;
+                n.created_at = DateTime.Now;
+                n.updated_at = DateTime.Now;
+                _trackerDB.Notifications.InsertOnSubmit(n);
+                _trackerDB.SubmitChanges();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
     }
 }

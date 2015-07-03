@@ -93,7 +93,7 @@ namespace petratracker.Pages
         {
             try
             {
-                if(cmbSubType.SelectedValue== "Unidentified")
+                if((cmbSubType.SelectedValue as string).Equals("Unidentified"))
                 {
                     verifySubscription openVerification = new verifySubscription();
                     Payment selVal = (Payment)viewSubscriptions.SelectedItem;

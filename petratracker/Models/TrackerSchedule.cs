@@ -73,7 +73,7 @@ namespace petratracker.Models
             return cbpc.AsEnumerable();
         }
 
-        public IEnumerable<ComboBoxPairs> GetContributionTypes(string company)
+        public IEnumerable<ComboBoxPairs> GetContributionTypes(string company="")
         {
             List<ComboBoxPairs> cbp = new List<ComboBoxPairs>();
             IQueryable<ContributionType> cts = null;

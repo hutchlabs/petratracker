@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="petratracker.UserControls.PaymentsSubscriptions"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d">
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+        </Grid.Resources>
+
+        <TabControl Margin="0,10,10,0" x:Name="InnerSubTabControl" TabStripPlacement="Left">
+            <TabItem Header="View Subscriptions" ToolTip="View Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" >
+                <DockPanel LastChildFill="True" Margin="20" HorizontalAlignment="Left">
+                    <Label DockPanel.Dock="Top" Content="Subscriptions" Style="{StaticResource DescriptionHeaderStyle}" />
+                    <DataGrid x:Name="viewSubscriptionsJobs" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*"  Margin="0,10" AutoGeneratingColumn="viewJobs_AutoGeneratingColumn" MinWidth="600"  MouseDoubleClick="viewJobs_MouseDoubleClick" />
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Add Subscriptions" ToolTip="Add Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" >
+                <GroupBox Header="Load New Subscriptions" Style="{StaticResource GroupBoxHeaderStyle}">
+                    <Grid HorizontalAlignment="Left" Height="340" Margin="0,0,0,0" VerticalAlignment="Top" Width="405">
+                        <Label Content="Deal Type" HorizontalAlignment="Left" Margin="44,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
+                        <ComboBox x:Name="cmbDealType" SelectedIndex="0" HorizontalAlignment="Left" Margin="44,43,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="14">
+                            <ComboBoxItem Content="Subscription"/>
+                        </ComboBox>
+                        <Label Content="File Location" HorizontalAlignment="Left" Margin="44,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
+                        <Button x:Name="btnBrowse" Content="Browse " HorizontalAlignment="Left" Margin="279,211,0,0" VerticalAlignment="Top" Width="85" Click="btnBrowse_Click" Height="33" FontWeight="Normal" FontFamily="Segoe UI"/>
+                        <TextBox x:Name="txtfileLocation" HorizontalAlignment="Left"  Height="33" Margin="44,211,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="230"  UseLayoutRounding="true" FontSize="14"/>
+                        <Button x:Name="btnUploadFile" Content="Upload File" HorizontalAlignment="Left" Margin="44,276,0,0" VerticalAlignment="Top" Width="152" Click="btnUploadFile_Click" RenderTransformOrigin="0.04,-0.3"  FontSize="12" FontFamily="Segoe UI" Height="32" FontWeight="Normal"/>
+                        <TextBox x:Name="txtDealDescription" HorizontalAlignment="Left"  Height="33" Margin="44,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="320"  UseLayoutRounding="true" FontSize="14"/>
+                        <Label Content="Upload Description" HorizontalAlignment="Left" Margin="44,91,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
+                    </Grid>
+                </GroupBox>
+
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

@@ -87,9 +87,36 @@
     </ApplicationDefinition>
     <Compile Include="Code\ActiveScript.cs" />
     <Compile Include="Code\BCrypt.cs" />
+    <Compile Include="Code\StringToColorConverter.cs" />
     <Compile Include="Code\Utils.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TrackerJobs.cs" />
+    <Compile Include="Models\TrackerSettings.cs" />
+    <Compile Include="UserControls\Dashboard.xaml.cs">
+      <DependentUpon>Dashboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PaymentsRedemptions.xaml.cs">
+      <DependentUpon>PaymentsRedemptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PaymentsTransfers.xaml.cs">
+      <DependentUpon>PaymentsTransfers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PaymentsSubscriptions.xaml.cs">
+      <DependentUpon>PaymentsSubscriptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Reports.xaml.cs">
+      <DependentUpon>Reports.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Schedules.xaml.cs">
+      <DependentUpon>Schedules.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\AdminSettings.xaml.cs">
+      <DependentUpon>AdminSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\AdminUsers.xaml.cs">
+      <DependentUpon>AdminUsers.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -122,29 +149,15 @@
     <Compile Include="Models\TrackerPayments.cs" />
     <Compile Include="Models\TrackerNotification.cs" />
     <Compile Include="Models\TrackerSchedule.cs" />
-    <Compile Include="Pages\admin.xaml.cs">
-      <DependentUpon>admin.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Models\TrackerUser.cs" />
     <Compile Include="Pages\ApproveRejectSubscription.xaml.cs">
       <DependentUpon>ApproveRejectSubscription.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\dashboard.xaml.cs">
-      <DependentUpon>dashboard.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\jobs.xaml.cs">
-      <DependentUpon>jobs.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\payments.xaml.cs">
       <DependentUpon>payments.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\reports.xaml.cs">
-      <DependentUpon>reports.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\schedules.xaml.cs">
       <DependentUpon>schedules.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\admin_users.xaml.cs">
-      <DependentUpon>admin_users.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\subscriptions.xaml.cs">
       <DependentUpon>subscriptions.xaml</DependentUpon>
@@ -163,16 +176,45 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Views\DatabaseConnSetup.xaml.cs">
-      <DependentUpon>DatabaseConnSetup.xaml</DependentUpon>
+    <Compile Include="ConfigWindow.xaml.cs">
+      <DependentUpon>ConfigWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewRole.xaml.cs">
-      <DependentUpon>NewRole.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\admin_users_add.xaml.cs">
-      <DependentUpon>admin_users_add.xaml</DependentUpon>
+    <Compile Include="UserControls\AdminRoles.xaml.cs">
+      <DependentUpon>AdminRoles.xaml</DependentUpon>
     </Compile>
     <Page Include="LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Dashboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PaymentsRedemptions.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\PaymentsTransfers.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\PaymentsSubscriptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Reports.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Schedules.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\AdminSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\AdminUsers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -207,19 +249,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Resource Include="Resources\Entypo.ttf" />
-    <Page Include="Pages\admin.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\ApproveRejectSubscription.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\dashboard.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\jobs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -227,17 +257,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\reports.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\schedules.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\admin_users.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\subscriptions.xaml">
       <SubType>Designer</SubType>
@@ -263,30 +285,20 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DatabaseConnSetup.xaml">
+    <Page Include="ConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NewRole.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\admin_users_add.xaml">
+    <Page Include="UserControls\AdminRoles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\WindowsIcons-license.txt" />
     <Resource Include="Resources\images\login-bg.png" />
     <Resource Include="Resources\images\petrablk.png" />
     <Resource Include="Resources\images\petraneg.png" />
     <Resource Include="Resources\images\icons\a0.jpg" />
-    <Resource Include="Resources\images\icons\cross.png" />
-    <Resource Include="Resources\images\icons\maximize.png" />
-    <Resource Include="Resources\images\icons\minus.png" />
-    <Resource Include="Resources\images\icons\restore.png" />
-    <Resource Include="Resources\Entypo-license.txt" />
     <Resource Include="Resources\images\icons\Upload.png" />
     <Content Include="Resources\petra_tracker_db.sql" />
   </ItemGroup>
