@@ -28,7 +28,7 @@ namespace petratracker.Models
 
         #endregion
 
-        #region Public Schedule Methods
+        #region Public Helper Methods
 
         public static Schedule GetSchedule(int id)
         {
@@ -125,10 +125,6 @@ namespace petratracker.Models
             return (s.workflow_status==string.Empty) ? "Processing of this schedule has not begun." : s.workflow_status;
         }
 
-        #endregion
-
-        #region Public Helper Methods
-
         public static IEnumerable<string> GetValidationStatus()
         {
             return _validationStatus.AsEnumerable();
@@ -191,6 +187,17 @@ namespace petratracker.Models
             return cbp.AsEnumerable();
         }
 
+        public static async void InitiateScheduleWorkFlow(Schedule schedule = null)
+        {
+            if (schedule != null)
+            {
+                EvaluateScheduleWorkFlow(schedule);
+            }
+            var dueTime = TimeSpan.FromSeconds(60);
+            var interval = TimeSpan.FromSeconds(300); // TODO: Use settings
+            await Utils.DoPeriodicWorkAsync(new Func<bool>(UpdateScheduleWorkFlowStatus), dueTime, interval, CancellationToken.None);
+        }
+
         public static bool UpdateScheduleWorkFlowStatus()
         {
             var schedules = GetSchedulesForProcessing();
@@ -209,13 +216,7 @@ namespace petratracker.Models
 
         #region Workflow Methods
 
-        private static async void InitiateScheduleWorkFlow(Schedule schedule)
-        {
-            EvaluateScheduleWorkFlow(schedule);
-            var dueTime = TimeSpan.FromSeconds(60);
-            var interval = TimeSpan.FromSeconds(300); // TODO: Use settings
-            await Utils.DoPeriodicWorkAsync(new Func<bool>(UpdateScheduleWorkFlowStatus), dueTime, interval, CancellationToken.None);
-        }
+
 
         private static void EvaluateScheduleWorkFlow(Schedule s)
         {

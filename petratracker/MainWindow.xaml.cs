@@ -117,6 +117,8 @@ namespace petratracker
 
             StartNotificationService();
 
+            StartScheduleWorkflowService();
+
             this.lbl_name.Text = TrackerUser.GetCurrentUserTitle();
         }
 
@@ -204,7 +206,12 @@ namespace petratracker
         #endregion
 
         #region Private Helper Methods
-        
+
+        private void StartScheduleWorkflowService()
+        {
+            TrackerSchedule.InitiateScheduleWorkFlow();
+        }
+
         private async void StartNotificationService()
         {
             var dueTime = TimeSpan.FromSeconds(0);
