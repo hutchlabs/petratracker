@@ -112,9 +112,9 @@
                         </ComboBox>
                         <ComboBox Grid.Row="3" Grid.Column="1" x:Name="cbx_year"  ItemsSource="{Binding Years}" DisplayMemberPath="_Value" SelectedValuePath="_Key" HorizontalAlignment="Right" VerticalAlignment="Center" Width="140" />
 
-                        <CheckBox Grid.Row="4" Grid.Column="0" x:Name="chx_reval" HorizontalAlignment="Right" VerticalAlignment="Center"  Content="Revalidation? Pick Original Schedule" Checked="chx_reval_Checked" />
+                        <CheckBox Grid.Row="4" Grid.Column="0" x:Name="chx_reval" HorizontalAlignment="Right" VerticalAlignment="Center"  Content="Revalidation? Pick Original Schedule" Checked="chx_reval_Checked" Unchecked="chx_reval_Checked"/>
 
-                        <ComboBox Grid.Row="4" Grid.Column="1" x:Name="cbx_schedules" HorizontalAlignment="Left" VerticalAlignment="Center" Width="160" IsEnabled="False" ItemsSource="{Binding Path=ParentSchedules}" DisplayMemberPath="_Value" SelectedValuePath="_Key" IsSynchronizedWithCurrentItem="True" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" x:Name="cbx_schedules" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" ItemsSource="{Binding Path=ParentSchedules}" DisplayMemberPath="_Value" SelectedValuePath="_Key" IsSynchronizedWithCurrentItem="True" />
 
 
                         <Button Grid.Row="5" Grid.Column="1" x:Name="btnAddSchedule" Content="Add Schedule" HorizontalAlignment="Right"  VerticalAlignment="Center" Click="btnAddSchedule_Click" />

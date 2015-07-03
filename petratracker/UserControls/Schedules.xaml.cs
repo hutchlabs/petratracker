@@ -89,14 +89,18 @@ namespace petratracker.UserControls
 
         private void chx_reval_Checked(object sender, RoutedEventArgs e)
         {
-            cbx_schedules.IsEnabled = (chx_reval.IsChecked == true) ? true : false;
-            cbx_schedules.SelectedIndex = 0;
+            cbx_schedules.IsEnabled = chx_reval.IsChecked.Value;
+            
+            if (cbx_schedules.IsEnabled)
+            {
+                cbx_schedules.SelectedIndex = 0;
+            }
         }
 
         private void cbx_companies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string company_id = ((ComboBoxPairs)cbx_companies.SelectedItem)._Key;
-            cbx_schedules.ItemsSource = TrackerSchedule.GetCBSchedules(company_id);
+            //string company_id = ((ComboBoxPairs)cbx_companies.SelectedItem)._Key;
+            //cbx_schedules.ItemsSource = TrackerSchedule.GetCBSchedules(company_id);
         }
 
         private void viewSchedules_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -120,12 +124,14 @@ namespace petratracker.UserControls
         {
             try
             {
+                int parent_id = (chx_reval.IsChecked == true) ? int.Parse(((ComboBoxPairs)cbx_schedules.SelectedItem)._Key) : 0;
                 TrackerSchedule.AddSchedule(((ComboBoxPairs)cbx_companies.SelectedItem)._Value,
                                             ((ComboBoxPairs)cbx_companies.SelectedItem)._Key,
                                             cbx_tiers.SelectedValue.ToString(),
-                                            cbx_contributiontype.SelectedValue.ToString(),
+                                            ((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Value,
                                             cbx_month.SelectedValue.ToString(),
-                                            ((ComboBoxPairs)cbx_year.SelectedItem)._Value);
+                                            ((ComboBoxPairs)cbx_year.SelectedItem)._Value,
+                                            parent_id);
 
                 viewSchedules.ItemsSource = TrackerSchedule.GetSchedules();
                 InnerSubTabControl.SelectedIndex = 0;

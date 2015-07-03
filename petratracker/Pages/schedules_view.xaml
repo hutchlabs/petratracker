@@ -27,9 +27,9 @@
 
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
             <Label Content="Uploaded by " FontSize="14" />
-            <Label x:Name="lbl_owner" Content="First Surname" FontSize="16" FontWeight="Bold"/>
+            <Label x:Name="lbl_owner" Content="First Surname" FontSize="14" FontWeight="Bold"/>
             <Label Content="for " FontSize="14" />
-            <Label x:Name="lbl_month" Content="June, 2015" FontSize="16" />
+            <Label x:Name="lbl_month" Content="June, 2015" FontSize="14" />
         </StackPanel>
 
         <GroupBox Grid.Row="2" Header="Status Summary" Width="600" HorizontalAlignment="Left">

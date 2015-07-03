@@ -95,6 +95,7 @@ namespace petratracker.Models
                 s.company_id = companyid;
                 s.company_email = Utils.GetCompanyEmail(companyid) ;
                 s.tier = tier;
+                s.contributiontype = ct;
                 s.month = int.Parse(month);
                 s.year = int.Parse(year);
                 s.validated = false;
@@ -473,8 +474,9 @@ namespace petratracker.Models
                 return (pm != null) ? pm.id : 0;
 
             } catch(Exception e) {
-                throw(e);
                 return 0;
+
+                throw(e);
             }
         }
 
