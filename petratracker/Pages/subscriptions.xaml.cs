@@ -19,21 +19,20 @@ namespace petratracker.Pages
 {
     public partial class subscriptions : Page
     {
-        #region Private Members 
-        
-        TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
-        User ini_user;
-        private string[] _ops_user = { "Unidentified", "Identified and Approved", "Returned" };
-        private string[] _super_ops_user = { "Identified", "Un-Identified", "Identified and Approved", "Returned" };
-        
+        #region Private Members
+
+        private int _jobId;
+        private readonly string[] _ops_user = { "Unidentified", "Identified and Approved", "Returned" };
+        private readonly string[] _super_ops_user = { "Identified", "Un-Identified", "Identified and Approved", "Returned" };
+                
         #endregion
 
         #region Constructor
 
-        public subscriptions()
+        public subscriptions(int id)
         {
             InitializeComponent();
-            ini_user = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
+            _jobId = id;
         }
 
         #endregion
@@ -43,11 +42,12 @@ namespace petratracker.Pages
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             load_subscriptions("Unidentified");
-            if (ini_user.Role.role1.ToLower().Equals("ops user"))
+
+            if (TrackerUser.IsCurrentUserOps())
             {
                 cmbSubType.ItemsSource = _ops_user.ToList();
             }
-            else if (ini_user.Role.role1.ToLower().Equals("super ops user"))
+            else if (TrackerUser.IsCurrentUserSuperOps() || TrackerUser.IsCurrentUserAdmin())
             {
                 cmbSubType.ItemsSource = _super_ops_user.ToList();
             }
@@ -55,8 +55,6 @@ namespace petratracker.Pages
             {
                 MessageBox.Show("Your user role does not have previleges to handle subscriptions.", "Unauthorized User", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
-
-
         }
 
         private void viewSubscriptions_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -65,12 +63,12 @@ namespace petratracker.Pages
             {
                 if((cmbSubType.SelectedValue as string).Equals("Unidentified"))
                 {
-                    verifySubscription openVerification = new verifySubscription();
+                    SubscriptionsVerify openVerification = new SubscriptionsVerify();
                     Payment selVal = (Payment)viewSubscriptions.SelectedItem;
                     openVerification.subID = selVal.id;
                     openVerification.ShowDialog();           
                 }
-                else if(cmbSubType.SelectedValue == "identified")
+                else if((cmbSubType.SelectedValue as string).Equals("Identified"))
                 {
                 
                 }
@@ -112,13 +110,7 @@ namespace petratracker.Pages
         {
             try
             {
-                var subscriptions = (from p in trackerDB.Payments
-                                     where p.job_id == Code.ActiveScript.job_id && p.status == sub_status
-                                     select p
-                                    );
-
-                viewSubscriptions.ItemsSource = subscriptions;
-
+                viewSubscriptions.ItemsSource = TrackerPayment.GetSubscriptions(_jobId, sub_status);
                 viewSubscriptions.Columns[0].Visibility = System.Windows.Visibility.Hidden;
                 viewSubscriptions.Columns[1].Visibility = System.Windows.Visibility.Hidden;
                 viewSubscriptions.Columns[4].Visibility = System.Windows.Visibility.Hidden;
@@ -135,9 +127,9 @@ namespace petratracker.Pages
                 viewSubscriptions.Columns[15].Visibility = System.Windows.Visibility.Hidden;
                 viewSubscriptions.Columns[16].Visibility = System.Windows.Visibility.Hidden;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //MessageBox.Show(subsError.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 

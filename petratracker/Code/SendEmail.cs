@@ -9,12 +9,16 @@ namespace petratracker.Code
 {
     class SendEmail
     {
+        #region Private Members
+        
         private static readonly string _adminEmail;
         private static readonly System.Net.Mail.SmtpClient _smtp;
         private static readonly System.Net.Mail.MailAddress _from;
         private static readonly TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
 
-        private bool _isSent = false;
+        #endregion
+
+        #region Constructors
 
         static SendEmail()
         {
@@ -31,6 +35,10 @@ namespace petratracker.Code
         {
         }
 
+        #endregion
+
+        #region Public Methods
+
         public static bool sendNewUserMail(string name, string email, string password)
         {
             Setting tmpl = _trackerDB.Settings.Single(s => s.setting1 == "tmpl_newuser_email");
@@ -42,6 +50,14 @@ namespace petratracker.Code
 
             return sendMail(email, "[Tracker] Welcome to Petra Tracker", msg);
         }
+
+        public static bool sendFixErrorMail(string to, string msg)
+        {
+            //Setting tmpl = _trackerDB.Settings.Single(s => s.setting1 == "tmpl_newuser_email");
+
+            // TODO: full form template
+            return sendMail(to, "[Petra Trust] Reminder to fix Errors", msg);
+        }
         
         public static bool sendResetPasswordMail(string email)
         {
@@ -52,6 +68,10 @@ namespace petratracker.Code
 
             return sendMail(_adminEmail, "[Tracker] Reset Password for "+email, msg);
         }
+
+        #endregion
+
+        #region Private Methods
 
         private static bool sendMail(string to, string subject, string msg)
         {
@@ -76,6 +96,7 @@ namespace petratracker.Code
              * */
         }
 
+        #endregion
     }
 }
 

@@ -8,129 +8,117 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
 
+using petratracker.Code;
+
 namespace petratracker.Models
 {
     public class TrackerPayment
     {
-        Payment newPayment = new Payment();
-        TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
-        MicrogenDataContext microgenDB = (App.Current as App).MicrogenDBo;
+        #region Private Members
 
+        private static readonly TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
+        private bool _isUploaded = false;
 
-        User ini_user;
-        public bool isUploaded = false;
+        #endregion
+     
+        #region Public Properties
+        
+        public bool IsUploaded
+        {
+            set { _isUploaded = value; }
+            get { return _isUploaded; }
+        }
+        
+        #endregion
+
+        #region Constructor
 
         public TrackerPayment()
         {
-            ini_user = trackerDB.Users.Single(p => p.username == Properties.Settings.Default.username);
         }
 
-        private DataTable GetDataTable(string sql, string connectionString)
+        #endregion     
+
+        #region Public Helper Methods
+
+        public static Payment GetSubscription(string company_code, decimal? amount, DateTime dealDate)
         {
-            DataTable dt = new DataTable();
             try
             {
-                using (OleDbConnection conn = new OleDbConnection(connectionString))
-                {
-                    conn.Open();
-                    using (OleDbCommand cmd = new OleDbCommand(sql, conn))
-                    {
-                        using (OleDbDataReader rdr = cmd.ExecuteReader())
-                        {
-                            dt.Load(rdr);
-                        }
-                    }
-                }
-            }
-            catch (Exception errMsg)
+                return (from p in _trackerDB.Payments
+                        where p.company_code == company_code &&
+                              p.transaction_date == dealDate &&
+                              p.transaction_amount == amount
+                        select p).Single();
+            } 
+            catch(Exception e)
             {
-                MessageBox.Show(errMsg.Message);
-                //log error
+                throw e;
             }
-            return dt;
         }
 
-        public void read_microgen_data(string doc_source, string job_type, string deal_description)
+        public static IEnumerable<Payment> GetSubscriptions(int job_id, string sub_status)
+        {
+            return (from p in _trackerDB.Payments where p.job_id == job_id && p.status == sub_status select p);
+        }
+
+        public static bool read_microgen_data(string doc_source, string job_type, string deal_description)
         {
             try
             {
                 string fullPathToExcel = doc_source;
                 string connString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 12.0;HDR=yes'", fullPathToExcel);
-                DataTable dt = GetDataTable("SELECT * from [Report$]", connString);
+                DataTable dt = Utils.GetDataTable("SELECT * from [Report$]", connString);
 
-                //Create new job
-                Job objJob = new Job();
-                objJob.job_type = job_type;
-                objJob.job_description = deal_description;
-                objJob.status = "In Progress";
-                objJob.owner = ini_user.id;
-                objJob.created_at = DateTime.Today;
-                trackerDB.Jobs.InsertOnSubmit(objJob);
-                trackerDB.SubmitChanges();
+                int jobId = TrackerJobs.Add(job_type, deal_description);
 
                 foreach (DataRow dr in dt.Rows)
-                {                 
-                        string trans_date_str = dr["Transaction Date"].ToString();
-                        string value_date_str = dr["Value Date"].ToString();
-                        char [] charSeparators = new char[] { '/' };
-                        string [] value_date_res = value_date_str.Split(charSeparators);
-                        string [] trans_date_res = trans_date_str.Split(charSeparators);
+                {
+                    string trans_date_str = dr["Transaction Date"].ToString();
+                    string value_date_str = dr["Value Date"].ToString();
+                    char[] charSeparators = new char[] { '/' };
+                    string[] value_date_res = value_date_str.Split(charSeparators);
+                    string[] trans_date_res = trans_date_str.Split(charSeparators);
 
-                        //Insert new payment
-                        Payment objPayment = new Payment();
-                        objPayment.transaction_ref_no = get_trans_ref_code(dr["Value Date"].ToString(), dr["Transaction Date"].ToString());
-                        objPayment.job_id = objJob.id;
-                        objPayment.transaction_details = dr["Transaction Details"].ToString();
-                        DateTime trans_date = new DateTime(int.Parse(trans_date_res[2]), int.Parse(trans_date_res[1]), int.Parse(trans_date_res[0]));
-                        DateTime value_date = new DateTime(int.Parse(value_date_res[2]), int.Parse(value_date_res[1]), int.Parse(value_date_res[0]));
-                        objPayment.transaction_date = trans_date;
-                        objPayment.value_date = value_date;
-                        objPayment.subscription_value_date = value_date;
-                        objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
-                        objPayment.subscription_amount = decimal.Parse(dr["Transaction Amount"].ToString());
+                    // Insert new payment
+                    Payment objPayment = new Payment();
+                    objPayment.transaction_ref_no = get_trans_ref_code(dr["Value Date"].ToString(), dr["Transaction Date"].ToString());
+                    objPayment.job_id = jobId;
+                    objPayment.transaction_details = dr["Transaction Details"].ToString();
+                    DateTime trans_date = new DateTime(int.Parse(trans_date_res[2]), int.Parse(trans_date_res[1]), int.Parse(trans_date_res[0]));
+                    DateTime value_date = new DateTime(int.Parse(value_date_res[2]), int.Parse(value_date_res[1]), int.Parse(value_date_res[0]));
+                    objPayment.transaction_date = trans_date;
+                    objPayment.value_date = value_date;
+                    objPayment.subscription_value_date = value_date;
+                    objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
+                    objPayment.subscription_amount = decimal.Parse(dr["Transaction Amount"].ToString());
 
-                            if (dr["Dr / Cr Indicator"].ToString() == "Credit") 
-                            {
-                                objPayment.status = "Unidentified"; 
-                            }
-                            else if (dr["Dr / Cr Indicator"].ToString() == "Debit")
-                            { 
-                                objPayment.status = "Returned";
-                            }
-
-                        objPayment.owner = ini_user.id;
-                        objPayment.created_at = DateTime.Now;
-                        trackerDB.Payments.InsertOnSubmit(objPayment);
-
-                        //Submit changes to db
-                        trackerDB.SubmitChanges();
-
-                        isUploaded = true;
+                    objPayment.status = (dr["Dr / Cr Indicator"].ToString() == "Credit") ? "Unidentified" : "Returned";
+                    objPayment.owner = TrackerUser.GetCurrentUser().id;
+                    objPayment.created_at = DateTime.Now;
+                    objPayment.updated_at = DateTime.Now;
+                    _trackerDB.Payments.InsertOnSubmit(objPayment);
+                    _trackerDB.SubmitChanges();
                 }
+
+                return true;
             }
             catch (Exception uploadError)
             {
-                isUploaded = false;
                 MessageBox.Show("An error occured while uploading the file.\n" + uploadError.Message, "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //log error
+                return false;
             }
-
         }
 
-        private string get_trans_ref_code(string val_date, string trans_date)
+        #endregion
+
+        #region Private Helper Methods
+
+        private static string get_trans_ref_code(string val_date, string trans_date)
         {
             return "TR" + val_date.Replace("/", string.Empty) + trans_date.Replace("/", string.Empty);
         }
 
-        public static bool upload_payment()
-        {
-            return true;
-        }
-
-        public static bool validate_company_code()
-        {
-            return true;
-        }
-
+        #endregion
     }
 }

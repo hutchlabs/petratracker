@@ -19,6 +19,7 @@
       <Column Name="ContribType_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Tier" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Association Name="FundDeal_FundDealLine" Member="FundDealLines" ThisKey="FundDealID" OtherKey="FundDealID" Type="FundDealLine" />
+      <Association Name="ScheduleStatus_FundDeal" Member="ScheduleStatus" ThisKey="ScheduleStatusID" OtherKey="ScheduleStatusID" Type="ScheduleStatus" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.FundDealLines" Member="FundDealLines">
@@ -49,6 +50,13 @@
       <Column Name="LineForFile" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="FileToWriteTo" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Association Name="FundDeal_FundDealLine" Member="FundDeal" ThisKey="FundDealID" OtherKey="FundDealID" Type="FundDeal" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ScheduleStatus" Member="ScheduleStatus">
+    <Type Name="ScheduleStatus">
+      <Column Name="ScheduleStatusID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ScheduleStatus" Member="ScheduleStatus1" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Association Name="ScheduleStatus_FundDeal" Member="FundDeals" ThisKey="ScheduleStatusID" OtherKey="ScheduleStatusID" Type="FundDeal" />
     </Type>
   </Table>
 </Database>

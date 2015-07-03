@@ -39,6 +39,9 @@ namespace petratracker.Models
     partial void InsertFundDealLine(FundDealLine instance);
     partial void UpdateFundDealLine(FundDealLine instance);
     partial void DeleteFundDealLine(FundDealLine instance);
+    partial void InsertScheduleStatus(ScheduleStatus instance);
+    partial void UpdateScheduleStatus(ScheduleStatus instance);
+    partial void DeleteScheduleStatus(ScheduleStatus instance);
     #endregion
 		
 		public PTASDataContext() : 
@@ -92,6 +95,14 @@ namespace petratracker.Models
 			get
 			{
 				return this.GetTable<FundDealLine>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ScheduleStatus> ScheduleStatus
+		{
+			get
+			{
+				return this.GetTable<ScheduleStatus>();
 			}
 		}
 	}
@@ -210,6 +221,8 @@ namespace petratracker.Models
 		
 		private EntitySet<FundDealLine> _FundDealLines;
 		
+		private EntityRef<ScheduleStatus> _ScheduleStatus;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -239,6 +252,7 @@ namespace petratracker.Models
 		public FundDeal()
 		{
 			this._FundDealLines = new EntitySet<FundDealLine>(new Action<FundDealLine>(this.attach_FundDealLines), new Action<FundDealLine>(this.detach_FundDealLines));
+			this._ScheduleStatus = default(EntityRef<ScheduleStatus>);
 			OnCreated();
 		}
 		
@@ -373,6 +387,10 @@ namespace petratracker.Models
 			{
 				if ((this._ScheduleStatusID != value))
 				{
+					if (this._ScheduleStatus.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnScheduleStatusIDChanging(value);
 					this.SendPropertyChanging();
 					this._ScheduleStatusID = value;
@@ -452,6 +470,40 @@ namespace petratracker.Models
 			set
 			{
 				this._FundDealLines.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ScheduleStatus_FundDeal", Storage="_ScheduleStatus", ThisKey="ScheduleStatusID", OtherKey="ScheduleStatusID", IsForeignKey=true)]
+		public ScheduleStatus ScheduleStatus
+		{
+			get
+			{
+				return this._ScheduleStatus.Entity;
+			}
+			set
+			{
+				ScheduleStatus previousValue = this._ScheduleStatus.Entity;
+				if (((previousValue != value) 
+							|| (this._ScheduleStatus.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ScheduleStatus.Entity = null;
+						previousValue.FundDeals.Remove(this);
+					}
+					this._ScheduleStatus.Entity = value;
+					if ((value != null))
+					{
+						value.FundDeals.Add(this);
+						this._ScheduleStatusID = value.ScheduleStatusID;
+					}
+					else
+					{
+						this._ScheduleStatusID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("ScheduleStatus");
+				}
 			}
 		}
 		
@@ -1164,6 +1216,120 @@ namespace petratracker.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ScheduleStatus")]
+	public partial class ScheduleStatus : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ScheduleStatusID;
+		
+		private string _ScheduleStatus1;
+		
+		private EntitySet<FundDeal> _FundDeals;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnScheduleStatusIDChanging(int value);
+    partial void OnScheduleStatusIDChanged();
+    partial void OnScheduleStatus1Changing(string value);
+    partial void OnScheduleStatus1Changed();
+    #endregion
+		
+		public ScheduleStatus()
+		{
+			this._FundDeals = new EntitySet<FundDeal>(new Action<FundDeal>(this.attach_FundDeals), new Action<FundDeal>(this.detach_FundDeals));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ScheduleStatusID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ScheduleStatusID
+		{
+			get
+			{
+				return this._ScheduleStatusID;
+			}
+			set
+			{
+				if ((this._ScheduleStatusID != value))
+				{
+					this.OnScheduleStatusIDChanging(value);
+					this.SendPropertyChanging();
+					this._ScheduleStatusID = value;
+					this.SendPropertyChanged("ScheduleStatusID");
+					this.OnScheduleStatusIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="ScheduleStatus", Storage="_ScheduleStatus1", DbType="VarChar(150)")]
+		public string ScheduleStatus1
+		{
+			get
+			{
+				return this._ScheduleStatus1;
+			}
+			set
+			{
+				if ((this._ScheduleStatus1 != value))
+				{
+					this.OnScheduleStatus1Changing(value);
+					this.SendPropertyChanging();
+					this._ScheduleStatus1 = value;
+					this.SendPropertyChanged("ScheduleStatus1");
+					this.OnScheduleStatus1Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ScheduleStatus_FundDeal", Storage="_FundDeals", ThisKey="ScheduleStatusID", OtherKey="ScheduleStatusID")]
+		public EntitySet<FundDeal> FundDeals
+		{
+			get
+			{
+				return this._FundDeals;
+			}
+			set
+			{
+				this._FundDeals.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_FundDeals(FundDeal entity)
+		{
+			this.SendPropertyChanging();
+			entity.ScheduleStatus = this;
+		}
+		
+		private void detach_FundDeals(FundDeal entity)
+		{
+			this.SendPropertyChanging();
+			entity.ScheduleStatus = null;
 		}
 	}
 }

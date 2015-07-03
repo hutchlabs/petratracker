@@ -87,11 +87,13 @@
     </ApplicationDefinition>
     <Compile Include="Code\ActiveScript.cs" />
     <Compile Include="Code\BCrypt.cs" />
+    <Compile Include="Code\NumToMonthConverter.cs" />
     <Compile Include="Code\StringToColorConverter.cs" />
     <Compile Include="Code\Utils.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\TrackerEmail.cs" />
     <Compile Include="Models\TrackerJobs.cs" />
     <Compile Include="Models\TrackerSettings.cs" />
     <Compile Include="UserControls\Dashboard.xaml.cs">
@@ -150,14 +152,8 @@
     <Compile Include="Models\TrackerNotification.cs" />
     <Compile Include="Models\TrackerSchedule.cs" />
     <Compile Include="Models\TrackerUser.cs" />
-    <Compile Include="Pages\ApproveRejectSubscription.xaml.cs">
-      <DependentUpon>ApproveRejectSubscription.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\payments.xaml.cs">
-      <DependentUpon>payments.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\schedules.xaml.cs">
-      <DependentUpon>schedules.xaml</DependentUpon>
+    <Compile Include="Pages\subscriptions_approve.xaml.cs">
+      <DependentUpon>subscriptions_approve.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\subscriptions.xaml.cs">
       <DependentUpon>subscriptions.xaml</DependentUpon>
@@ -165,8 +161,8 @@
     <Compile Include="Pages\schedules_view.xaml.cs">
       <DependentUpon>schedules_view.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\verifySubscription.xaml.cs">
-      <DependentUpon>verifySubscription.xaml</DependentUpon>
+    <Compile Include="Pages\subscriptions_verify.xaml.cs">
+      <DependentUpon>subscriptions_verify.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -246,15 +242,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Resource Include="Resources\Entypo.ttf" />
-    <Page Include="Pages\ApproveRejectSubscription.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\payments.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\schedules.xaml">
+    <Page Include="Pages\subscriptions_approve.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -274,7 +262,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\verifySubscription.xaml">
+    <Page Include="Pages\subscriptions_verify.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

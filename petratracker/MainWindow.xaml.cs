@@ -3,8 +3,10 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using petratracker.Models;
 using petratracker.Pages;
+using petratracker.Code;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,18 +15,26 @@ using System.Windows.Input;
 
 namespace petratracker
 {
-	public partial class MainWindow : MetroWindow
+	public partial class MainWindow : MetroWindow, INotifyPropertyChanged
 	{
         #region Private Members
 
         private string _selectedAccent;
         private string _selectedTheme;
+        private bool _animateOnPositionChange = true;
 
+        #endregion
+
+        #region Public Members
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+        
         #endregion
 
         #region Public Properties
 
         public IEnumerable<string> AccentColorlist { get; private set; }
+      
         public IEnumerable<string> ThemeColorlist  { get; private set; }
 
         public Visibility ShowAdminTab
@@ -34,6 +44,24 @@ namespace petratracker
                 return (TrackerUser.IsCurrentUserAdmin()) ? Visibility.Visible : Visibility.Collapsed;
             }
             private set {}
+        }
+
+        public Visibility ShowJobsTab
+        {
+            get
+            {
+                return (TrackerUser.IsCurrentUserParser()) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            private set { }
+        }
+
+        public Visibility ShowSettingsTab
+        {
+            get
+            {
+                return (TrackerUser.IsCurrentUserSuperAdmin()) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            private set { }
         }
 
         public string SelectedAccent
@@ -62,6 +90,19 @@ namespace petratracker
             }
         }
 
+        public bool AnimateOnPositionChange
+        {
+            get
+            {
+                return _animateOnPositionChange;
+            }
+            set
+            {
+                if (Equals(_animateOnPositionChange, value)) return;
+                _animateOnPositionChange = value;
+                RaisePropertyChanged("AnimateOnPositionChange");
+            }
+        }
         #endregion
 
         #region Constructor
@@ -77,6 +118,31 @@ namespace petratracker
             StartNotificationService();
 
             this.lbl_name.Text = TrackerUser.GetCurrentUserTitle();
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public bool UpdateNotifications()
+        {
+            // Update Notifications
+            lbl_notifications.Text = TrackerNotification.GetNotificationStatus();
+            lbl_notifications.ToolTip = TrackerNotification.GetNotificationToolTip();
+            lv_notifications.ItemsSource = TrackerNotification.GetNotifications();
+            return true;
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         #endregion
@@ -127,41 +193,23 @@ namespace petratracker
 
             if(item !=null)
             {
-                ApproveRejectSubscription frm = new ApproveRejectSubscription(item.id);
+                SubscriptionsApproveReject frm = new SubscriptionsApproveReject(item.id);
                 frm.ShowDialog();         
                 //MessageBox.Show("Approve this noticifcation " + item.id);
             }
         }
 
+
+
         #endregion
 
         #region Private Helper Methods
         
-        private void StartNotificationService()
+        private async void StartNotificationService()
         {
             var dueTime = TimeSpan.FromSeconds(0);
             var interval = TimeSpan.FromSeconds(30);
-            DoPeriodicWorkAsync(dueTime, interval, CancellationToken.None);
-        }
-
-        private async Task DoPeriodicWorkAsync(TimeSpan dueTime, TimeSpan interval, CancellationToken token)
-        {
-            // Initial wait time before we begin the periodic loop.
-            if (dueTime > TimeSpan.Zero)
-                await Task.Delay(dueTime, token);
-
-            // Repeat this loop until cancelled.
-            while (!token.IsCancellationRequested)
-            {
-                // Update Notifications
-                lbl_notifications.Text = TrackerNotification.GetNotificationStatus();
-                lbl_notifications.ToolTip = TrackerNotification.GetNotificationToolTip();
-                lv_notifications.ItemsSource = TrackerNotification.GetNotifications();
-
-                // Wait to repeat again.
-                if (interval > TimeSpan.Zero)
-                    await Task.Delay(interval, token);
-            }
+            await Utils.DoPeriodicWorkAsync(new Func<bool>(UpdateNotifications),dueTime,interval,CancellationToken.None);
         }
 
         private void SetAppearance()

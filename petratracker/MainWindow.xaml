@@ -147,10 +147,10 @@
 
             <Rectangle Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="{DynamicResource AccentColorBrush}" Stroke="{DynamicResource AccentColorBrush}" Width="25" Height="85" VerticalAlignment="Top" Margin="0,10,5,0" StrokeThickness="0"/>
 
-            <Controls:MetroAnimatedSingleRowTabControl Grid.Row="0" Grid.Column="1" Margin="0,10,10,0" x:Name="MainTabControl">
+            <Controls:MetroAnimatedSingleRowTabControl Grid.Row="0" Grid.Column="1" Margin="0,10,10,0"  x:Name="MainTabControl">
                 
                 <!-- Dashboard Tab -->
-                <TabItem Header="Home" ToolTip="Dashboard" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}">
+                <TabItem Header="Home" ToolTip="Dashboard" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Margin="0" HorizontalContentAlignment="Stretch">
                     <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
                         <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
                             <PetraControls:Dashboard />
@@ -159,7 +159,7 @@
                 </TabItem>
                 
                 <!-- Reports Tab -->
-                <TabItem Header="Reports" ToolTip="Reports" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Margin="5,0,0,0">
+                <TabItem Header="Reports" ToolTip="Reports" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Width="130" Margin="20,0,0,0">
                     <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
                         <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
                             <PetraControls:Reports />
@@ -168,7 +168,7 @@
                 </TabItem>
                 
                 <!-- Schedules Tab -->
-                <TabItem Header="Schedules" ToolTip="Schedules" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Margin="5,0,0,0">
+                <TabItem Header="Schedules" ToolTip="Schedules" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Width="160" Margin="20,0,0,0" Visibility="{Binding ShowJobsTab}">
                     <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
                         <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
                             <PetraControls:Schedules />
@@ -177,7 +177,7 @@
                 </TabItem>
 
                 <!-- Payments Tab -->
-                <TabItem Header="Payments" ToolTip="Payments" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Margin="5,0,0,0">
+                <TabItem Header="Payments" ToolTip="Payments" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Width="160" Margin="20,0,0,0"  Visibility="{Binding ShowJobsTab}">
                     <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
                         <TabItem Header="SUBSCRIPTIONS" ToolTip="Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
                             <PetraControls:PaymentsSubscriptions />
@@ -192,7 +192,7 @@
                 </TabItem>
                 
                <!-- Admin Tab -->
-                <TabItem Header="Admin" ToolTip="Admin" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Margin="5,0,0,0" Visibility="{Binding ShowAdminTab}">
+                <TabItem Header="Admin" ToolTip="Admin" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Width="160" Margin="20,0,0,0"  Visibility="{Binding ShowAdminTab}">
                     <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
                         <TabItem Header="USERS" ToolTip="Users" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
                             <PetraControls:AdminUsers />

@@ -21,10 +21,42 @@ namespace petratracker.Models
         {
             return (from n in _trackerDB.Notifications
                     where (n.status != "Expired") && (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
-                    orderby n.status descending 
+                    orderby n.times_sent descending, n.updated_at descending, n.status descending 
                     select n);
         }
 
+        public static Notification GetNotificationByJob(string notification_type, string job_type, int job_id)
+        {
+            try
+            {
+                return (from n in _trackerDB.Notifications
+                        where (n.status != "Expired") && (n.notification_type == notification_type) &&
+                        (n.job_id == job_id) && (n.job_type==job_type)
+                        select n).Single();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public static void ExpireByJob(string notification_type, string job_type, int job_id)
+        {
+            try
+            {
+                var nf =  (from n in _trackerDB.Notifications
+                          where (n.status != "Expired") && (n.notification_type == notification_type) &&
+                           (n.job_id == job_id) && (n.job_type == job_type)
+                           select n).Single();
+                nf.status = "Expired";
+                Save(nf);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }    
+        }
+     
         public static string GetNotificationStatus()
         {
             var total_notifications = (from n in _trackerDB.Notifications
@@ -49,7 +81,7 @@ namespace petratracker.Models
             return  status;
         }
 
-        internal static object GetNotificationToolTip()
+        public static object GetNotificationToolTip()
         {
             var total_notifications = (from n in _trackerDB.Notifications
                                        where (n.status != "Expired") && (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
@@ -71,6 +103,19 @@ namespace petratracker.Models
             return tip;
         }
 
+        public static void Save(Notification nf)
+        {
+            try
+            {
+                nf.modified_by = TrackerUser.GetCurrentUser().id;
+                nf.updated_at = DateTime.Now;
+                _trackerDB.SubmitChanges();
+            } catch(Exception e)
+            {
+                throw e;
+            }
+        }
+
         public static void Add(int role_id, string notification_type, string job_type, int jobid)
         {
             try 
@@ -81,6 +126,8 @@ namespace petratracker.Models
                 n.notification_type = notification_type;
                 n.job_type = job_type;
                 n.job_id = jobid;
+                n.times_sent = 1;
+                n.last_sent = DateTime.Now;
                 n.status = "New";
                 n.modified_by = TrackerUser.GetCurrentUser().id;
                 n.created_at = DateTime.Now;
@@ -93,5 +140,7 @@ namespace petratracker.Models
                 throw (ex);
             }
         }
+
+    
     }
 }

@@ -31,15 +31,7 @@ namespace petratracker.UserControls
         public PaymentsSubscriptions()
         {
             InitializeComponent();
-
-            try
-            {
-                viewSubscriptionsJobs.ItemsSource = TrackerJobs.GetJobs();
-            }
-            catch (Exception jobsErr)
-            {
-                MessageBox.Show(jobsErr.Message);
-            }
+            LoadSubscriptions();
         }
 
         #endregion
@@ -51,13 +43,10 @@ namespace petratracker.UserControls
         private void viewJobs_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Job selVal = (Job) viewSubscriptionsJobs.SelectedItem;
-            Code.ActiveScript.job_id = selVal.id;
-            //subscriptions openSubs = new subscriptions();
-            this.viewSubscriptionFrame.NavigationService.Navigate(new Uri("pages/subscriptions.xaml", UriKind.Relative));
+            this.viewSubscriptionFrame.NavigationService.Navigate(new Pages.subscriptions(selVal.id));
             this.viewSubscriptionsJobs.Visibility = Visibility.Collapsed;
             this.viewSubscriptionFrame.Visibility = Visibility.Visible;
         }
-
 
         private void viewJobs_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
@@ -73,35 +62,30 @@ namespace petratracker.UserControls
                 e.Column.Header = "Description";
             }
         }
+
         #endregion
 
         #region Add Subscriptions Events
         
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
-            // Set filter for file extension and default file extension 
             _dlg.DefaultExt = ".xls";
             _dlg.Filter = "Text documents (.xls)|*.xls";
 
-            // Display OpenFileDialog by calling ShowDialog method 
             Nullable<bool> result = _dlg.ShowDialog();
 
-            // Get the selected file name and display in a TextBox 
             if (result == true)
             {
-                // Open document 
                 txtfileLocation.Text = _dlg.SafeFileName;
             }
         }
 
         private void btnUploadFile_Click(object sender, RoutedEventArgs e)
         {
-            Models.TrackerPayment newUpload = new Models.TrackerPayment();
-            newUpload.read_microgen_data(_dlg.FileName, cmbDealType.Text, txtDealDescription.Text);
-            if (newUpload.isUploaded)
+            if (TrackerPayment.read_microgen_data(_dlg.FileName, cmbDealType.Text, txtDealDescription.Text))
             {
                 MessageBox.Show("File upload Successfully", "Upload Complete", MessageBoxButton.OK, MessageBoxImage.Information);
-                viewSubscriptionsJobs.ItemsSource = TrackerJobs.GetJobs();
+                LoadSubscriptions();
                 InnerSubTabControl.SelectedIndex = 0;
             }
             else
@@ -111,6 +95,22 @@ namespace petratracker.UserControls
         }
         
         #endregion
+
+        #endregion
+
+        #region Private Helper Methods
+     
+        private void LoadSubscriptions()
+        {
+            try
+            {
+                viewSubscriptionsJobs.ItemsSource = TrackerJobs.GetJobs();
+            }
+            catch (Exception jobsErr)
+            {
+                MessageBox.Show(jobsErr.Message);
+            }
+        }
 
         #endregion
     }

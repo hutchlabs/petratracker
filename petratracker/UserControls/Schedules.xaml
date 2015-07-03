@@ -4,11 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
+             xmlns:Code="clr-namespace:petratracker.Code"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
 
     <Grid>
         <Grid.Resources>
-            <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+                <Code:StringToColorConverter x:Key="numToMonthConv"/>
+            </ResourceDictionary>
         </Grid.Resources>
 
         <TabControl Margin="0,10,10,0" x:Name="InnerSubTabControl" TabStripPlacement="Left">
@@ -16,13 +22,26 @@
                 <DockPanel LastChildFill="True" Margin="20" HorizontalAlignment="Left">
                     <UniformGrid Rows="1">
                         <Frame x:Name="vSPageHolder" NavigationUIVisibility="Hidden" Visibility="Collapsed"/>
-                        <DataGrid x:Name="viewSchedules" IsReadOnly="True" HorizontalContentAlignment="Left" VerticalContentAlignment="Stretch" ColumnWidth="*"  PreviewMouseDoubleClick="viewSchedules_MouseDoubleClick" AutoGenerateColumns="False">
+                        <DataGrid x:Name="viewSchedules" IsReadOnly="True" ItemsSource="{Binding MySchedules}" HorizontalContentAlignment="Left" VerticalContentAlignment="Stretch" ColumnWidth="*"  PreviewMouseDoubleClick="viewSchedules_MouseDoubleClick" AutoGenerateColumns="False">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Company" Width="200" Binding="{Binding company}" />
                                 <DataGridTextColumn Header="Tier" Width="60" Binding="{Binding tier}" />
-                                <!-- <DataGridTextColumn Header="Month" Binding="{Binding Path=month, StringFormat='{}{m, yyyy}'}" />-->
-                                <DataGridTextColumn Header="Month" Binding="{Binding month}" />
-                                <DataGridCheckBoxColumn Header="Validated Status" Binding="{Binding validated_status}" />
+                                <DataGridTextColumn Header="Contribution Type" Width="150" Binding="{Binding contributiontype}" />
+                                <DataGridTemplateColumn Header="Period">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat=" {0}, {1}">
+                                                        <Binding Path="month" />
+                                                        <Binding Path="year"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Validation Status" Width="150" Binding="{Binding validation_status}" />
                                 <DataGridCheckBoxColumn Header="Receipt Sent" Binding="{Binding receipt_sent}" />
                                 <DataGridCheckBoxColumn Header="File Downloaded" Binding="{Binding file_downloaded}" />
                                 <DataGridCheckBoxColumn Header="File Uploaded" Binding="{Binding file_uploaded}" />
@@ -63,13 +82,13 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Row="0" Grid.Column="0" Content="Company" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="cbx_companies" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" />
+                        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="cbx_companies" ItemsSource="{Binding Companies}" DisplayMemberPath="_Value" SelectedValuePath="_Key" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" />
 
                         <Label Grid.Row="1" Grid.Column="0" Content="Tier" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cbx_tiers" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" />
+                        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cbx_tiers" ItemsSource="{Binding Tiers}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" />
 
                         <Label Grid.Row="2" Grid.Column="0" Content="Contribution Type" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <ComboBox Grid.Row="2" Grid.Column="1" x:Name="cbx_contributiontype" Style="{DynamicResource VirtualisedMetroComboBox}"
+                        <ComboBox Grid.Row="2" Grid.Column="1" x:Name="cbx_contributiontype" ItemsSource="{Binding ContributionTypes}" DisplayMemberPath="_Value" SelectedValuePath="_Key" Style="{DynamicResource VirtualisedMetroComboBox}"
                                       Controls:TextBoxHelper.Watermark="Type or select contribution type"
                                       IsEditable="True"
                                       MaxDropDownHeight="125" />
@@ -89,7 +108,7 @@
                             <ComboBoxItem Content="November" Tag="11" />
                             <ComboBoxItem Content="December" Tag="12" />
                         </ComboBox>
-                        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="cbx_year"  HorizontalAlignment="Right" VerticalAlignment="Center" Width="140" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="cbx_year"  ItemsSource="{Binding Years}" DisplayMemberPath="_Value" SelectedValuePath="_Key" HorizontalAlignment="Right" VerticalAlignment="Center" Width="140" />
 
                         <Button Grid.Row="4" Grid.Column="1" x:Name="btnAddSchedule" Content="Add Schedule" HorizontalAlignment="Right"  VerticalAlignment="Center" Click="btnAddSchedule_Click" />
                     </Grid>

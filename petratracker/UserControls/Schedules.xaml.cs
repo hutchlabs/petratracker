@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using petratracker.Models;
 using petratracker.Code;
+using petratracker.Pages;
 
 namespace petratracker.UserControls
 {
@@ -21,33 +22,57 @@ namespace petratracker.UserControls
     {
         #region Private Members
         
-        private TrackerSchedule _trackerSH = new TrackerSchedule();
         private readonly string[] _tiers = { "Tier 2", "Tier 3", "Tier 4" };
         
+        #endregion
+
+        #region Public Properties
+
+        public string[] Tiers
+        {
+            private set { ; }
+            get { return _tiers; }
+        }
+
+        public IEnumerable<Schedule> MySchedules
+        {
+            private set { ; }
+            get { return TrackerSchedule.GetSchedules(); }
+        }
+
+        public IEnumerable<ComboBoxPairs> Companies
+        {
+            private set { ; }
+            get { return TrackerSchedule.GetCompanies();  }
+        }
+
+        public IEnumerable<ComboBoxPairs> ContributionTypes
+        {
+            private set { ; }
+            get { return TrackerSchedule.GetContributionTypes(); }
+        }
+
+        public IEnumerable<ComboBoxPairs> Years
+        {
+            private set { ; }
+            get { return TrackerSchedule.GetYears(); }
+        }
+
         #endregion
 
         #region Constructor
 
         public Schedules()
         {
-            InitializeComponent();
-            viewSchedules.ItemsSource = _trackerSH.GetSchedules();
-            cbx_tiers.ItemsSource = _tiers;
-
-            // Set companies
-            cbx_companies.DisplayMemberPath = "_Value";
-            cbx_companies.SelectedValuePath = "_Key";
-            cbx_companies.ItemsSource = _trackerSH.GetCompanies();
-
-            // Set contribution types
-            cbx_contributiontype.DisplayMemberPath = "_Value";
-            cbx_contributiontype.SelectedValuePath = "_Key";
-            cbx_contributiontype.ItemsSource = _trackerSH.GetContributionTypes();
-
-            // Set year combo
-            cbx_year.DisplayMemberPath = "_Value";
-            cbx_year.SelectedValuePath = "_Key";
-            cbx_year.ItemsSource = _trackerSH.GetYears();
+            try
+            {
+                InitializeComponent();
+                this.DataContext = this;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Schedules load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         #endregion
@@ -58,11 +83,10 @@ namespace petratracker.UserControls
         {
             try
             {
-                /*Schedule j = viewSchedules.SelectedItem as Schedule;
+                Schedule j = viewSchedules.SelectedItem as Schedule;
                 viewSchedules.Visibility = Visibility.Collapsed;
-                vSPageHolder.NavigationService.Navigate(new ScheduleView(j.id));
+                vSPageHolder.NavigationService.Navigate(new ScheduleView(j.id, this));
                 vSPageHolder.Visibility = Visibility.Visible;
-                 * */
             }
             catch (Exception subError)
             {
@@ -76,22 +100,32 @@ namespace petratracker.UserControls
         {
             try
             {
-                _trackerSH.AddSchedule(((ComboBoxPairs)cbx_companies.SelectedItem)._Value,
-                                      ((ComboBoxPairs)cbx_companies.SelectedItem)._Key,
-                                      cbx_tiers.SelectedValue.ToString(),
-                                      cbx_month.SelectedValue.ToString(),
-                                      ((ComboBoxPairs)cbx_year.SelectedItem)._Value);
+                TrackerSchedule.AddSchedule(((ComboBoxPairs)cbx_companies.SelectedItem)._Value,
+                                            ((ComboBoxPairs)cbx_companies.SelectedItem)._Key,
+                                            cbx_tiers.SelectedValue.ToString(),
+                                            cbx_contributiontype.SelectedValue.ToString(),
+                                            cbx_month.SelectedValue.ToString(),
+                                            ((ComboBoxPairs)cbx_year.SelectedItem)._Value);
 
-                viewSchedules.ItemsSource = _trackerSH.GetSchedules();
+                viewSchedules.ItemsSource = TrackerSchedule.GetSchedules();
                 InnerSubTabControl.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Upload Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Add Scchedule Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         #endregion
 
+        #region Public Methods
+
+        public void SwitchToGrid()
+        {
+            vSPageHolder.Visibility = Visibility.Collapsed;
+            viewSchedules.Visibility = Visibility.Visible;
+        }
+
+        #endregion
     }
 }

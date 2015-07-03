@@ -87,7 +87,7 @@ namespace petratracker
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Logout Error");
+                MessageBox.Show(ex.GetBaseException().ToString(), "Logout Error");
             }
         }
 

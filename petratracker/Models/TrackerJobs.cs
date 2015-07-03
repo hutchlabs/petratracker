@@ -12,16 +12,11 @@ namespace petratracker.Models
     {
         #region Private Members
 
-        private static TrackerDataContext _trackerDB;
+        private static TrackerDataContext _trackerDB  = (App.Current as App).TrackerDBo;
 
         #endregion
 
         #region Constructors
-
-        static TrackerJobs()
-        {
-            _trackerDB = (App.Current as App).TrackerDBo;
-        }
         
         public TrackerJobs()
         { }
@@ -29,6 +24,28 @@ namespace petratracker.Models
         #endregion
 
         #region Public Jobs Methods
+
+        public static int Add(string job_type, string deal_description)
+        {
+            try
+            {
+                Job j = new Job();
+                j.job_type = job_type;
+                j.job_description = deal_description;
+                j.status = "In Progress";
+                j.owner = TrackerUser.GetCurrentUser().id;
+                j.created_at = DateTime.Now;
+                j.updated_at = DateTime.Now;
+                _trackerDB.Jobs.InsertOnSubmit(j);
+                _trackerDB.SubmitChanges();
+
+                return j.id;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         public static IEnumerable<Job> GetJobs(string type="")
         {

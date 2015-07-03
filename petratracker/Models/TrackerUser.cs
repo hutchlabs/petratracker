@@ -12,22 +12,16 @@ namespace petratracker.Models
     {
         #region Private Members
 
-        private static TrackerDataContext _trackerDB;
+        private static TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
         private static readonly string[] _adminRoles = { "Super User", "Administrator" }; // TODO: pull from DB
 
         #endregion
 
         #region Constructors
-
-        static TrackerUser()
-        {
-            _trackerDB = (App.Current as App).TrackerDBo;
-        }
         
         public TrackerUser()
         {
         }
-
 
         #endregion
 
@@ -95,6 +89,42 @@ namespace petratracker.Models
             try
             {
                 return (App.Current as App).CurrentUser.Role.role1.Equals("Super User");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public static bool IsCurrentUserSuperOps()
+        {
+            try
+            {
+                return (App.Current as App).CurrentUser.Role.role1.Equals("Super Ops User");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public static bool IsCurrentUserOps()
+        {
+            try
+            {
+                return (App.Current as App).CurrentUser.Role.role1.Equals("Ops User");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public static bool IsCurrentUserParser()
+        {
+            try
+            {
+                return (IsCurrentUserAdmin() || IsCurrentUserSuperOps() || IsCurrentUserOps());
             }
             catch (Exception e)
             {

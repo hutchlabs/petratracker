@@ -47,10 +47,15 @@ namespace petratracker
                 tbx_password.Password = "dogdog";
                 tbx_username.Text = "superops@petratrust.com";
             }
-            else
+            else if(user.Equals("Ops User Login"))
             {
                 tbx_password.Password = "dogdog";
                 tbx_username.Text = "opsuser@petratrust.com";
+            }
+            else
+            {
+                tbx_password.Password = "dogdog";
+                tbx_username.Text = "reporter@petratrust.com";
             }
             doLogin();
         }
