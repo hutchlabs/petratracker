@@ -36,7 +36,7 @@
         <Label Content="Subcription Value Date :" HorizontalAlignment="Left" Margin="580,158,0,0" VerticalAlignment="Top" Height="26" Width="138"/>
         <Label x:Name="lblCompsFound" Content="0 suggestions found" HorizontalAlignment="Left" Margin="207,388,0,0" VerticalAlignment="Top" FontSize="11" Height="25" Width="109"/>
         <Button x:Name="btnGetAllComapnies" Content="Search" HorizontalAlignment="Left" Margin="417,353,0,0" VerticalAlignment="Top" Width="60" Click="btnGetAllComapnies_Click" Height="25"/>
-        <CheckBox x:Name="chkReturned" Content="Payment is returned" HorizontalAlignment="Left" Margin="536,537,0,0" VerticalAlignment="Top" Height="18" Width="130"/>
+        <CheckBox x:Name="chkReturned" Content="Payment is returned" HorizontalAlignment="Left" Margin="553,537,0,0" VerticalAlignment="Top" Height="18" Width="130"/>
         <Label Content="Company Name :" HorizontalAlignment="Left" Margin="45,353,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.314,-0.535" Height="26" Width="101"/>
         <TextBox x:Name="txtSearchCompany" HorizontalAlignment="Left" Height="26" Margin="207,353,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="205"/>
         <Label Content="Deal Description :" HorizontalAlignment="Left" Margin="576,98,0,0" VerticalAlignment="Top" Height="26" Width="103"/>
