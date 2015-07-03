@@ -11,12 +11,15 @@
         </Grid.Resources>
 
         <TabControl Margin="0,10,10,0" x:Name="InnerSubTabControl" TabStripPlacement="Left">
+            
             <TabItem Header="View Subscriptions" ToolTip="View Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" >
                 <DockPanel LastChildFill="True" Margin="20" HorizontalAlignment="Left">
                     <Label DockPanel.Dock="Top" Content="Subscriptions" Style="{StaticResource DescriptionHeaderStyle}" />
+                    <Frame x:Name="viewSubscriptionFrame" Visibility="Collapsed"/>
                     <DataGrid x:Name="viewSubscriptionsJobs" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*"  Margin="0,10" AutoGeneratingColumn="viewJobs_AutoGeneratingColumn" MinWidth="600"  MouseDoubleClick="viewJobs_MouseDoubleClick" />
                 </DockPanel>
             </TabItem>
+            
             <TabItem Header="Add Subscriptions" ToolTip="Add Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" >
                 <GroupBox Header="Load New Subscriptions" Style="{StaticResource GroupBoxHeaderStyle}">
                     <Grid HorizontalAlignment="Left" Height="340" Margin="0,0,0,0" VerticalAlignment="Top" Width="405">

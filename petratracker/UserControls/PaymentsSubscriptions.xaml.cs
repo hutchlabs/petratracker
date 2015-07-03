@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using petratracker.Models;
+using MahApps.Metro.Controls;
 
 namespace petratracker.UserControls
 {
@@ -45,13 +46,16 @@ namespace petratracker.UserControls
 
         #region Event Handlers
 
-        #region View Schedules Events
+        #region View Subscriptions Events
+
         private void viewJobs_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Job selVal = (Job) viewSubscriptionsJobs.SelectedItem;
-            //Code.ActiveScript.job_id = selVal.id;
+            Code.ActiveScript.job_id = selVal.id;
             //subscriptions openSubs = new subscriptions();
-            //this.NavigationService.Navigate(new Uri("pages/subscriptions.xaml", UriKind.Relative));
+            this.viewSubscriptionFrame.NavigationService.Navigate(new Uri("pages/subscriptions.xaml", UriKind.Relative));
+            this.viewSubscriptionsJobs.Visibility = Visibility.Collapsed;
+            this.viewSubscriptionFrame.Visibility = Visibility.Visible;
         }
 
 
@@ -71,7 +75,7 @@ namespace petratracker.UserControls
         }
         #endregion
 
-        #region Add Schedules Events
+        #region Add Subscriptions Events
         
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
@@ -97,6 +101,8 @@ namespace petratracker.UserControls
             if (newUpload.isUploaded)
             {
                 MessageBox.Show("File upload Successfully", "Upload Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                viewSubscriptionsJobs.ItemsSource = TrackerJobs.GetJobs();
+                InnerSubTabControl.SelectedIndex = 0;
             }
             else
             {
