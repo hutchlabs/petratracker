@@ -1,4 +1,4 @@
-﻿<Window x:Class="petratracker.Pages.SubscriptionsVerify"
+<Window x:Class="petratracker.Pages.SubscriptionsVerify"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Verify Subscription" Height="614.62" Width="1067.406" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
