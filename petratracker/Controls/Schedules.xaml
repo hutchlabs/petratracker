@@ -7,120 +7,113 @@
              xmlns:Code="clr-namespace:petratracker.Utility"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" Loaded="UserControl_Loaded">
 
-    <Grid>
-        <Grid.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
-                </ResourceDictionary.MergedDictionaries>
-                <Code:StringToColorConverter x:Key="numToMonthConv"/>
-            </ResourceDictionary>
-        </Grid.Resources>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        <TabControl Margin="0,10,10,0" x:Name="InnerSubTabControl" TabStripPlacement="Left">
-            <TabItem Header="View Schedules" ToolTip="View Schedules" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" Width="120">
-                <DockPanel LastChildFill="True" Margin="20" HorizontalAlignment="Left">
-                    <UniformGrid Rows="1">
-                        <Frame x:Name="vSPageHolder" NavigationUIVisibility="Hidden" Visibility="Collapsed"/>
-                        <DataGrid x:Name="viewSchedules" IsReadOnly="True" ItemsSource="{Binding MySchedules}" HorizontalContentAlignment="Left" VerticalContentAlignment="Stretch" ColumnWidth="*"  PreviewMouseDoubleClick="viewSchedules_MouseDoubleClick" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Company" Width="200" Binding="{Binding company}" />
-                                <DataGridTextColumn Header="Tier" Width="55" Binding="{Binding tier}" />
-                                <DataGridTextColumn Header="Contribution Type" Width="150" Binding="{Binding contributiontype}" />
-                                <DataGridTemplateColumn Header="Period" Width="80">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock>
-                                                <TextBlock.Text>
-                                                    <MultiBinding StringFormat=" {0}-{1}">
-                                                        <Binding Path="month" />
-                                                        <Binding Path="year"/>
-                                                    </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Status" Width="100" Binding="{Binding validation_status}" />
-                                <DataGridTextColumn Header="State" Width="150" Binding="{Binding workflow_status}" />
-                                <DataGridCheckBoxColumn Header="Receipt?" Binding="{Binding receipt_sent}" />
-                                <DataGridCheckBoxColumn Header="Download?" Binding="{Binding file_downloaded}" />
-                                <DataGridCheckBoxColumn Header="Upload?" Binding="{Binding file_uploaded}" />
-                                <DataGridTemplateColumn Header="Owner">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock>
-                                                <TextBlock.Text>
-                                                    <MultiBinding StringFormat=" {0} {1}">
-                                                        <Binding Path="User.first_name"/>
-                                                        <Binding Path="User.last_name"/>
-                                                    </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </UniformGrid>
-                </DockPanel>
-            </TabItem>
-            
-            <TabItem Header="Add Schedule" ToolTip="Add Schedule" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" Width="120" >
-                <DockPanel LastChildFill="True" Margin="20">
-                    <Label DockPanel.Dock="Top" Content="Create New Schedule" HorizontalAlignment="Left"  VerticalAlignment="Top" FontSize="20"/>
-                    <Grid HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="40" />
-                            <RowDefinition Height="40" />
-                            <RowDefinition Height="40" />
-                            <RowDefinition Height="40" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.3*" />
-                            <ColumnDefinition Width="0.7*" />
-                        </Grid.ColumnDefinitions>
+            <Code:NumToMonthConverter x:Key="numToMonthConv"/>
 
-                        <Label Grid.Row="0" Grid.Column="0" Content="Company" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="cbx_companies" ItemsSource="{Binding Companies}" DisplayMemberPath="_Value" SelectedValuePath="_Key" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" SelectionChanged="cbx_companies_SelectionChanged" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <Grid RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Display">
+        <DockPanel LastChildFill="True"  HorizontalAlignment="Left" Margin="0,40,0,0">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label  Content="Schedules" Style="{StaticResource ControlHeaderStyle}" Margin="0" />
+            </StackPanel>
 
-                        <Label Grid.Row="1" Grid.Column="0" Content="Tier" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cbx_tiers" ItemsSource="{Binding Tiers}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="321" />
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,5,0,0">
+                <Controls:SplitButton x:Name="ScheduleListFilter"
+                                  HorizontalContentAlignment="Left" HorizontalAlignment="Left"
+                                  Width="120" Height="20"
+                                  SelectedIndex="0"
+                                  Click="ScheduleListFilter_Click"
+                                  SelectionChanged="ScheduleListFilter_SelectionChanged"
+                                  ItemsSource="{Binding ScheduleFilterOptions}">
+                    <Controls:SplitButton.Icon>
+                        <Viewbox Width="20" Height="20" Stretch="Uniform">
+                            <CheckBox x:Name="chx_schedulefilter" Checked="ScheduleListFilter_Click" Unchecked="ScheduleListFilter_Click" Margin="10,0,0,0" Focusable="False" />
+                        </Viewbox>
+                    </Controls:SplitButton.Icon>
+                </Controls:SplitButton>
 
-                        <Label Grid.Row="2" Grid.Column="0" Content="Contribution Type" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <ComboBox Grid.Row="2" Grid.Column="1" x:Name="cbx_contributiontype" ItemsSource="{Binding ContributionTypes}" DisplayMemberPath="_Value" SelectedValuePath="_Key" Style="{DynamicResource VirtualisedMetroComboBox}"
-                                      Controls:TextBoxHelper.Watermark="Type or select contribution type"
-                                      IsEditable="True"
-                                      MaxDropDownHeight="125" />
+                <Label x:Name="lbl_scheduleCount" Content="0 Schedules" FontFamily="Segoe WP Light" FontSize="14" Foreground="{DynamicResource AccentColorBrush}" Margin="10,0,0,0" VerticalAlignment="Center"/>
 
-                        <Label Grid.Row="3" Grid.Column="0" Content="Month" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="cbx_month" HorizontalAlignment="Left" VerticalAlignment="Center" Width="140" SelectedValuePath="Tag">
-                            <ComboBoxItem Content="January" Tag="1" />
-                            <ComboBoxItem Content="February" Tag="2" />
-                            <ComboBoxItem Content="March" Tag="3" />
-                            <ComboBoxItem Content="April" Tag="4" />
-                            <ComboBoxItem Content="May" Tag="5" />
-                            <ComboBoxItem Content="June" Tag="6" />
-                            <ComboBoxItem Content="July" Tag="7" />
-                            <ComboBoxItem Content="August" Tag="8" />
-                            <ComboBoxItem Content="September" Tag="9" />
-                            <ComboBoxItem Content="October" Tag="10" />
-                            <ComboBoxItem Content="November" Tag="11" />
-                            <ComboBoxItem Content="December" Tag="12" />
-                        </ComboBox>
-                        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="cbx_year"  ItemsSource="{Binding Years}" DisplayMemberPath="_Value" SelectedValuePath="_Key" HorizontalAlignment="Right" VerticalAlignment="Center" Width="140" />
+                <StackPanel x:Name="actionBar" Orientation="Horizontal" Margin="20,0,0,0">
+                    <!--
+                    <Button x:Name="btn_activateUser" Click="btn_activateUser_Click"  Width="40" Height="40"  ToolTip="Activate Selected Users" Margin="10,0,0,0" Style="{DynamicResource MetroCircleButtonStyle}">
+                        <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_camera_flash_auto}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
 
-                        <CheckBox Grid.Row="4" Grid.Column="0" x:Name="chx_reval" HorizontalAlignment="Right" VerticalAlignment="Center"  Content="Revalidation? Pick Original Schedule" Checked="chx_reval_Checked" Unchecked="chx_reval_Checked"/>
+                    <Button x:Name="btn_deactivateUser" Click="btn_deactivateUser_Click" Width="40" Height="40"  ToolTip="De-Activate Selected Users" Margin="10,0,0,0" Style="{DynamicResource MetroCircleButtonStyle}">
+                        <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_camera_flash_off}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                    -->
+                </StackPanel>
 
-                        <ComboBox Grid.Row="4" Grid.Column="1" x:Name="cbx_schedules" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" ItemsSource="{Binding Path=ParentSchedules}" DisplayMemberPath="_Value" SelectedValuePath="_Key" IsSynchronizedWithCurrentItem="True" />
+                <Button x:Name="btn_showAddSchedule" Click="btn_showAddSchedule_Click" Width="40" Height="40" Margin="20,0,0,0" ToolTip="Add" Style="{DynamicResource MetroCircleButtonStyle}">
+                    <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </Button>
+            </StackPanel>
 
-
-                        <Button Grid.Row="5" Grid.Column="1" x:Name="btnAddSchedule" Content="Add Schedule" HorizontalAlignment="Right"  VerticalAlignment="Center" Click="btnAddSchedule_Click" />
-                    </Grid>
-                </DockPanel>
-            </TabItem>
-        </TabControl>
+            <DataGrid x:Name="viewSchedules" 
+                      RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Display"
+                      HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                      MinWidth="600" ColumnWidth="*" Margin="0,30,0,10" 
+                      SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
+                      IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                      ItemsSource="{Binding}" PreviewMouseDoubleClick="viewSchedules_MouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Company" Width="200" Binding="{Binding company}" />
+                    <DataGridTextColumn Header="Tier" Width="55" Binding="{Binding tier}" />
+                    <DataGridTextColumn Header="Contribution Type" Width="150" Binding="{Binding contributiontype}" />
+                    <DataGridTemplateColumn Header="Period" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat=" {0} {1}">
+                                            <Binding Path="month" Converter="{StaticResource numToMonthConv}" />
+                                            <Binding Path="year"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Status" Width="200" Binding="{Binding workflow_status}" />
+                    <DataGridTextColumn Header="State" Width="200" Binding="{Binding workflow_status}" />
+                    <DataGridTemplateColumn Width="Auto" Header="Owner">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat=" {0} {1}">
+                                            <Binding Path="User.first_name"/>
+                                            <Binding Path="User.last_name"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
     </Grid>
 </UserControl>

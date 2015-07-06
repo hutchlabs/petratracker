@@ -27,6 +27,12 @@ namespace petratracker.Models
             return (from n in TrackerDB.Tracker.Settings orderby n.setting1 descending select n);
         }
 
+        public static string GetSetting(string setting)
+        {
+            var x = (from n in TrackerDB.Tracker.Settings where n.setting1==setting select n).Single();
+            return x.value;
+        }
+
         public static void Add(string name, string value)
         {
             //TODO: check for duplicate entry

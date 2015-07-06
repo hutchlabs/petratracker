@@ -92,8 +92,11 @@
     <Compile Include="Models\TrackerDB.cs">
       <DependentUpon>trackerDB.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\AddUser.xaml.cs">
-      <DependentUpon>AddUser.xaml</DependentUpon>
+    <Compile Include="Pages\schedules_add.xaml.cs">
+      <DependentUpon>schedules_add.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\users_add.xaml.cs">
+      <DependentUpon>users_add.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Utility\ActiveScript.cs" />
@@ -251,7 +254,11 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Resource Include="Resources\Entypo.ttf" />
-    <Page Include="Pages\AddUser.xaml">
+    <Page Include="Pages\schedules_add.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\users_add.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

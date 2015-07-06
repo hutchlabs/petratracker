@@ -12,7 +12,6 @@ namespace petratracker.Utility
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             int month = (int) value;
-            Console.WriteLine("MONTH IS " + month.ToString());
             return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
         }
 

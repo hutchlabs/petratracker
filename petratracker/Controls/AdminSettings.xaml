@@ -10,6 +10,7 @@
         <Grid.Resources>
             <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
         </Grid.Resources>
+  
 
         <TabControl Margin="0,10,10,0" x:Name="InnerSubTabControl" TabStripPlacement="Left">
             <TabItem Header="View Settings" ToolTip="View Settings" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" Width="120">
@@ -28,5 +29,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
+  
     </Grid>
 </UserControl>

@@ -136,6 +136,10 @@
       <Column Name="year" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="validated" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="validation_status" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="validation_valuetime" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="resolution_type" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="resolution_info" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="resolution_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Column Name="payment_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="receipt_sent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="receipt_sent_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
@@ -147,6 +151,7 @@
       <Column Name="emails_sent" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="processing" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="workflow_status" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="workflow_summary" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="parent_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />

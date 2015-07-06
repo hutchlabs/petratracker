@@ -53,7 +53,7 @@ namespace petratracker.Models
                 Email em = new Email();
                 em.sent_to = addr;
                 em.sent_to_id = uid;
-                em.email_text = string.Format("Dear Sir/Madam\nPlease fix this problem: {0}", msg);
+                em.email_text = string.Format("Dear Sir/Madam\nPlease request company {0} to have this problem fixed: {1}", uid, msg);
                 em.email_type = email_type;
                 em.job_type = job_type;
                 em.job_id = job_id;

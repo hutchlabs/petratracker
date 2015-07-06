@@ -1,16 +1,21 @@
-﻿<Page
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="petratracker.Pages.ScheduleView"
-        Title="View Schedule" Loaded="Window_Loaded">
-
-    <Page.Resources>
+﻿<UserControl x:Class="petratracker.Pages.ScheduleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"  Loaded="Window_Loaded">
+    <UserControl.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
             <Thickness x:Key="ControlMargin">0 5 0 0</Thickness>
-        </ResourceDictionary>
-    </Page.Resources>
 
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+ 
     <Grid Width="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
@@ -39,9 +44,8 @@
         </GroupBox>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button x:Name="sentr" Content="Send Receipt" Click="Button_Click_1" Width="156" Height="50" Margin="5" IsEnabled="false"/>
-            <Button x:Name="download" Content="Download File" Click="Button_Click_2" Width="156" Height="50" Margin="5" IsEnabled="false"/>
-            <Button x:Name="upload" Content="Upload File" Click="Button_Click_3" Width="156" Height="50" Margin="5" IsEnabled="False"/>
+            <Button x:Name="sentr" Content="Send Receipt" Click="btn_MarkReceiptSent" Width="156" Height="50" Margin="5" IsEnabled="false"/>
+            <Button x:Name="download" Content="Download File" Click="btn_MarkFileDownloaded" Width="156" Height="50" Margin="5" IsEnabled="false"/>
         </StackPanel>
 
 
@@ -50,4 +54,4 @@
         </StackPanel>
 
     </Grid>
-</Page>
+</UserControl>

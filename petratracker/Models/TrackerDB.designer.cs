@@ -2895,6 +2895,14 @@ namespace petratracker.Models
 		
 		private string _validation_status;
 		
+		private System.Nullable<System.DateTime> _validation_valuetime;
+		
+		private string _resolution_type;
+		
+		private string _resolution_info;
+		
+		private System.Nullable<System.DateTime> _resolution_date;
+		
 		private int _payment_id;
 		
 		private bool _receipt_sent;
@@ -2916,6 +2924,8 @@ namespace petratracker.Models
 		private bool _processing;
 		
 		private string _workflow_status;
+		
+		private string _workflow_summary;
 		
 		private int _parent_id;
 		
@@ -2951,6 +2961,14 @@ namespace petratracker.Models
     partial void OnvalidatedChanged();
     partial void Onvalidation_statusChanging(string value);
     partial void Onvalidation_statusChanged();
+    partial void Onvalidation_valuetimeChanging(System.Nullable<System.DateTime> value);
+    partial void Onvalidation_valuetimeChanged();
+    partial void Onresolution_typeChanging(string value);
+    partial void Onresolution_typeChanged();
+    partial void Onresolution_infoChanging(string value);
+    partial void Onresolution_infoChanged();
+    partial void Onresolution_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onresolution_dateChanged();
     partial void Onpayment_idChanging(int value);
     partial void Onpayment_idChanged();
     partial void Onreceipt_sentChanging(bool value);
@@ -2973,6 +2991,8 @@ namespace petratracker.Models
     partial void OnprocessingChanged();
     partial void Onworkflow_statusChanging(string value);
     partial void Onworkflow_statusChanged();
+    partial void Onworkflow_summaryChanging(string value);
+    partial void Onworkflow_summaryChanged();
     partial void Onparent_idChanging(int value);
     partial void Onparent_idChanged();
     partial void Onmodified_byChanging(int value);
@@ -3185,6 +3205,86 @@ namespace petratracker.Models
 					this._validation_status = value;
 					this.SendPropertyChanged("validation_status");
 					this.Onvalidation_statusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validation_valuetime", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> validation_valuetime
+		{
+			get
+			{
+				return this._validation_valuetime;
+			}
+			set
+			{
+				if ((this._validation_valuetime != value))
+				{
+					this.Onvalidation_valuetimeChanging(value);
+					this.SendPropertyChanging();
+					this._validation_valuetime = value;
+					this.SendPropertyChanged("validation_valuetime");
+					this.Onvalidation_valuetimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_type", DbType="NChar(10)")]
+		public string resolution_type
+		{
+			get
+			{
+				return this._resolution_type;
+			}
+			set
+			{
+				if ((this._resolution_type != value))
+				{
+					this.Onresolution_typeChanging(value);
+					this.SendPropertyChanging();
+					this._resolution_type = value;
+					this.SendPropertyChanged("resolution_type");
+					this.Onresolution_typeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_info", DbType="NVarChar(MAX)")]
+		public string resolution_info
+		{
+			get
+			{
+				return this._resolution_info;
+			}
+			set
+			{
+				if ((this._resolution_info != value))
+				{
+					this.Onresolution_infoChanging(value);
+					this.SendPropertyChanging();
+					this._resolution_info = value;
+					this.SendPropertyChanged("resolution_info");
+					this.Onresolution_infoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> resolution_date
+		{
+			get
+			{
+				return this._resolution_date;
+			}
+			set
+			{
+				if ((this._resolution_date != value))
+				{
+					this.Onresolution_dateChanging(value);
+					this.SendPropertyChanging();
+					this._resolution_date = value;
+					this.SendPropertyChanged("resolution_date");
+					this.Onresolution_dateChanged();
 				}
 			}
 		}
@@ -3405,6 +3505,26 @@ namespace petratracker.Models
 					this._workflow_status = value;
 					this.SendPropertyChanged("workflow_status");
 					this.Onworkflow_statusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_workflow_summary", DbType="NVarChar(MAX)")]
+		public string workflow_summary
+		{
+			get
+			{
+				return this._workflow_summary;
+			}
+			set
+			{
+				if ((this._workflow_summary != value))
+				{
+					this.Onworkflow_summaryChanging(value);
+					this.SendPropertyChanging();
+					this._workflow_summary = value;
+					this.SendPropertyChanged("workflow_summary");
+					this.Onworkflow_summaryChanged();
 				}
 			}
 		}

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using petratracker.Models;
 using petratracker.Utility;
 using petratracker.Pages;
+using MahApps.Metro.Controls;
 
 namespace petratracker.Controls
 {
@@ -22,47 +23,33 @@ namespace petratracker.Controls
     {
         #region Private Members
         
-        private readonly string[] _tiers = { "Tier 2", "Tier 3", "Tier 4" };
-        private IEnumerable<ComboBoxPairs> _parentSchedules;
+        private readonly string[] _scheduleFilterOptions = { 
+                                                             "All", 
+                                                             Constants.WF_VALIDATION_NOTDONE,
+                                                             Constants.WF_VALIDATION_NOTDONE_REMINDER,
+                                                             Constants.WF_STATUS_ERROR_SSNIT,
+                                                             Constants.WF_STATUS_ERROR_NAME,
+                                                             Constants.WF_STATUS_ERROR_SSNIT_NAME,
+                                                             Constants.WF_STATUS_ERROR_NEW_EMPLOYEE,
+                                                             Constants.WF_STATUS_ERROR_ALL,
+                                                             Constants.WF_STATUS_ERROR_ESCALATED,
+                                                             Constants.WF_STATUS_PAYMENTS_PENDING,
+                                                             Constants.WF_STATUS_PAYMENTS_RECEIVED,
+                                                             Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD,
+                                                             Constants.WF_STATUS_RF_SENT_DOWNLOAD_NOUPLOAD,
+                                                             Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD,
+                                                             Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD,
+                                                             Constants.WF_STATUS_COMPLETED
+                                                           };
 
         #endregion
 
         #region Public Properties
 
-        public string[] Tiers
+        public string[] ScheduleFilterOptions
         {
-            private set { ; }
-            get { return _tiers; }
-        }
-
-        public IEnumerable<Schedule> MySchedules
-        {
-            private set { ; }
-            get { return TrackerSchedule.GetSchedules(); }
-        }
-
-        public IEnumerable<ComboBoxPairs> ParentSchedules
-        {
-            set { _parentSchedules = value;  }
-            get { return _parentSchedules;  }
-        }
-
-        public IEnumerable<ComboBoxPairs> Companies
-        {
-            private set { ; }
-            get { return TrackerSchedule.GetCompanies();  }
-        }
-
-        public IEnumerable<ComboBoxPairs> ContributionTypes
-        {
-            private set { ; }
-            get { return TrackerSchedule.GetContributionTypes(); }
-        }
-
-        public IEnumerable<ComboBoxPairs> Years
-        {
-            private set { ; }
-            get { return TrackerSchedule.GetYears(); }
+            get { return _scheduleFilterOptions; }
+            private set { ;  }
         }
 
         #endregion
@@ -71,8 +58,8 @@ namespace petratracker.Controls
 
         public Schedules()
         {
-            InitializeComponent();
             this.DataContext = this;  
+            InitializeComponent();
         }
 
         #endregion
@@ -81,83 +68,75 @@ namespace petratracker.Controls
         
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                _parentSchedules = TrackerSchedule.GetCBSchedules();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Schedules load Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            UpdateGrid();
         }
 
-        private void chx_reval_Checked(object sender, RoutedEventArgs e)
+        private void ScheduleListFilter_Click(object sender, RoutedEventArgs e)
         {
-            cbx_schedules.IsEnabled = chx_reval.IsChecked.Value;
-            
-            if (cbx_schedules.IsEnabled)
-            {
-                cbx_schedules.SelectedIndex = 0;
-            }
+            UpdateGrid();
         }
 
-        private void cbx_companies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ScheduleListFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //string company_id = ((ComboBoxPairs)cbx_companies.SelectedItem)._Key;
-            //cbx_schedules.ItemsSource = TrackerSchedule.GetCBSchedules(company_id);
+            UpdateGrid();
         }
 
         private void viewSchedules_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            try
-            {
-                Schedule j = viewSchedules.SelectedItem as Schedule;
-                viewSchedules.Visibility = Visibility.Collapsed;
-                vSPageHolder.NavigationService.Navigate(new ScheduleView(j.id, this));
-                vSPageHolder.Visibility = Visibility.Visible;
-            }
-            catch (Exception subError)
-            {
-                vSPageHolder.Visibility = Visibility.Collapsed;
-                viewSchedules.Visibility = Visibility.Visible;
-                MessageBox.Show(subError.Message + subError.Source + subError.StackTrace);
-            }
+            Schedule j = viewSchedules.SelectedItem as Schedule;
+
+            Window parentWindow = Window.GetWindow(this);
+            object obj = parentWindow.FindName("surrogateFlyout");
+            Flyout flyout = (Flyout)obj;
+
+            flyout.ClosingFinished += flyout_ClosingFinished;
+            flyout.Content = new ScheduleView(j.id, true);
+            flyout.IsOpen = !flyout.IsOpen;
         }
 
-        private void btnAddSchedule_Click(object sender, RoutedEventArgs e)
+        private void btn_showAddSchedule_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                int parent_id = (chx_reval.IsChecked == true) ? int.Parse(((ComboBoxPairs)cbx_schedules.SelectedItem)._Key) : 0;
-                TrackerSchedule.AddSchedule(((ComboBoxPairs)cbx_companies.SelectedItem)._Value,
-                                            ((ComboBoxPairs)cbx_companies.SelectedItem)._Key,
-                                            cbx_tiers.SelectedValue.ToString(),
-                                            ((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Value,
-                                            cbx_month.SelectedValue.ToString(),
-                                            ((ComboBoxPairs)cbx_year.SelectedItem)._Value,
-                                            parent_id);
+            Window parentWindow = Window.GetWindow(this);
+            object obj = parentWindow.FindName("surrogateFlyout");
+            Flyout flyout = (Flyout) obj;
 
-                viewSchedules.ItemsSource = TrackerSchedule.GetSchedules();
-                InnerSubTabControl.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Add Scchedule Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            flyout.ClosingFinished += flyout_ClosingFinished;
+            flyout.Content = new AddSchedule(true);
+            flyout.IsOpen = !flyout.IsOpen;
+        }
+
+        private void flyout_ClosingFinished(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
         }
 
         #endregion
 
-        #region Public Methods
+        #region Private Methods
 
-        public void SwitchToGrid()
+        private void UpdateGrid()
         {
-            vSPageHolder.Visibility = Visibility.Collapsed;
-            viewSchedules.Visibility = Visibility.Visible;
+            string filter = (string)((SplitButton)ScheduleListFilter).SelectedItem;
+
+            // Get items
+            if (filter == "All") { viewSchedules.ItemsSource = TrackerSchedule.GetSchedules(); }
+            else { viewSchedules.ItemsSource = TrackerSchedule.GetScheduleByStatus(filter); }
+                
+            lbl_scheduleCount.Content = string.Format("{0} Schedules", viewSchedules.Items.Count);
+
+            // Highlight items if checked.
+            if (this.chx_schedulefilter.IsChecked == true)
+            {
+                actionBar.Visibility = Visibility.Visible;
+                viewSchedules.SelectAll();
+            }
+            else
+            {
+                actionBar.Visibility = Visibility.Collapsed;
+                viewSchedules.UnselectAll();
+            }
         }
 
         #endregion
-
-
     }
 }

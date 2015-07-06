@@ -40,7 +40,7 @@ namespace petratracker.Models
 
         #region Public Helper Methods
 
-        public static Payment GetSubscription(string company_code, decimal? amount, DateTime dealDate)
+        public static Payment GetSubscription(string company_code, string tier, decimal? amount, DateTime dealDate)
         {
             try
             {
