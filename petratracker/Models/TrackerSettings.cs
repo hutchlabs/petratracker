@@ -10,21 +10,21 @@ namespace petratracker.Models
     {
         #region Private Members
 
-        private static readonly TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
-
         #endregion
 
         #region Constructor
+       
         public TrackerSettings()
         {
         }
+        
         #endregion
 
         #region Public Helper Methods
 
         public static IEnumerable<Setting> GetSettings()
         {
-            return (from n in _trackerDB.Settings orderby n.setting1 descending select n);
+            return (from n in TrackerDB.Tracker.Settings orderby n.setting1 descending select n);
         }
 
         public static void Add(string name, string value)
@@ -38,12 +38,12 @@ namespace petratracker.Models
                 s.modified_by = TrackerUser.GetCurrentUser().id;
                 s.created_at = DateTime.Now;
                 s.updated_at = DateTime.Now;
-                _trackerDB.Settings.InsertOnSubmit(s);
-                _trackerDB.SubmitChanges();
+                TrackerDB.Tracker.Settings.InsertOnSubmit(s);
+                TrackerDB.Tracker.SubmitChanges();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw (ex);
+                throw;
             }
         }
      

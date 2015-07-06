@@ -3,7 +3,7 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using petratracker.Models;
 using petratracker.Pages;
-using petratracker.Code;
+using petratracker.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -117,7 +117,7 @@ namespace petratracker
 
             StartNotificationService();
 
-            StartScheduleWorkflowService();
+           // StartScheduleWorkflowService();
 
             this.lbl_name.Text = TrackerUser.GetCurrentUserTitle();
         }

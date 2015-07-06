@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using petratracker.Code;
+using petratracker.Utility;
 
 namespace petratracker.Models
 {
     class TrackerJobs
     {
         #region Private Members
-
-        private static TrackerDataContext _trackerDB  = (App.Current as App).TrackerDBo;
 
         #endregion
 
@@ -36,14 +34,14 @@ namespace petratracker.Models
                 j.owner = TrackerUser.GetCurrentUser().id;
                 j.created_at = DateTime.Now;
                 j.updated_at = DateTime.Now;
-                _trackerDB.Jobs.InsertOnSubmit(j);
-                _trackerDB.SubmitChanges();
+                TrackerDB.Tracker.Jobs.InsertOnSubmit(j);
+                TrackerDB.Tracker.SubmitChanges();
 
                 return j.id;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -51,11 +49,11 @@ namespace petratracker.Models
         {
             if (type == string.Empty)
             {
-               return (from j in _trackerDB.Jobs select j);
+                return (from j in TrackerDB.Tracker.Jobs select j);
             }
             else
             {
-                return (from j in _trackerDB.Jobs where j.job_type == type select j);
+                return (from j in TrackerDB.Tracker.Jobs where j.job_type == type select j);
             }
         }
 

@@ -11,15 +11,13 @@ namespace petratracker.Models
 {
     public class TrackerNotification
     {
-        private static readonly TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
-
         public TrackerNotification()
         {
         }
 
         public static IEnumerable<Notification> GetNotifications()
         {
-            return (from n in _trackerDB.Notifications
+            return (from n in TrackerDB.Tracker.Notifications
                     where (n.status != "Expired") && (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                     orderby n.times_sent descending, n.updated_at descending, n.status descending 
                     select n);
@@ -29,7 +27,7 @@ namespace petratracker.Models
         {
             try
             {
-                return (from n in _trackerDB.Notifications
+                return (from n in TrackerDB.Tracker.Notifications
                         where (n.status != "Expired") && (n.notification_type == notification_type) &&
                         (n.job_id == job_id) && (n.job_type==job_type)
                         select n).Single();
@@ -44,25 +42,25 @@ namespace petratracker.Models
         {
             try
             {
-                var nf =  (from n in _trackerDB.Notifications
+                var nf =  (from n in TrackerDB.Tracker.Notifications
                           where (n.status != "Expired") && (n.notification_type == notification_type) &&
                            (n.job_id == job_id) && (n.job_type == job_type)
                            select n).Single();
                 nf.status = "Expired";
                 Save(nf);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }    
         }
      
         public static string GetNotificationStatus()
         {
-            var total_notifications = (from n in _trackerDB.Notifications
+            var total_notifications = (from n in TrackerDB.Tracker.Notifications
                                        where (n.status != "Expired") && (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                                        select n).Count();
-            var new_notifications = (from n in _trackerDB.Notifications
+            var new_notifications = (from n in TrackerDB.Tracker.Notifications
                                      where (n.to_role_id == TrackerUser.GetCurrentUser().role_id) && (n.status == "New")
                                      select n
                                     ).Count();
@@ -83,10 +81,10 @@ namespace petratracker.Models
 
         public static object GetNotificationToolTip()
         {
-            var total_notifications = (from n in _trackerDB.Notifications
+            var total_notifications = (from n in TrackerDB.Tracker.Notifications
                                        where (n.status != "Expired") && (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                                        select n).Count();
-            var new_notifications = (from n in _trackerDB.Notifications
+            var new_notifications = (from n in TrackerDB.Tracker.Notifications
                                      where (n.to_role_id == TrackerUser.GetCurrentUser().role_id) && (n.status == "New")
                                      select n
                                     ).Count();
@@ -109,10 +107,10 @@ namespace petratracker.Models
             {
                 nf.modified_by = TrackerUser.GetCurrentUser().id;
                 nf.updated_at = DateTime.Now;
-                _trackerDB.SubmitChanges();
-            } catch(Exception e)
+                TrackerDB.Tracker.SubmitChanges();
+            } catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -132,12 +130,12 @@ namespace petratracker.Models
                 n.modified_by = TrackerUser.GetCurrentUser().id;
                 n.created_at = DateTime.Now;
                 n.updated_at = DateTime.Now;
-                _trackerDB.Notifications.InsertOnSubmit(n);
-                _trackerDB.SubmitChanges();
+                TrackerDB.Tracker.Notifications.InsertOnSubmit(n);
+                TrackerDB.Tracker.SubmitChanges();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw (ex);
+                throw;
             }
         }
 

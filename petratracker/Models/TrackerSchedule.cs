@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using petratracker.Code;
+using petratracker.Utility;
 using System.Data;
 using System.Threading;
+using System.Globalization;
 
 namespace petratracker.Models
 {
@@ -14,10 +15,8 @@ namespace petratracker.Models
     {
         #region Private Members
         
-        private static TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
-        private static PTASDataContext _ptasDB = (App.Current as App).PTASDBo;
         private static string[] _validationStatus = { "Not Validated", "SSNIT Number Error", "Name Error", "SSNIT Number & Name Errors", "New Employee", "New Employee & Errors", "Passed" };
-       
+
         #endregion
 
         #region Constructor
@@ -32,12 +31,12 @@ namespace petratracker.Models
 
         public static Schedule GetSchedule(int id)
         {
-           return (from j in _trackerDB.Schedules where j.id == id select j).Single();
+           return (from j in TrackerDB.Tracker.Schedules where j.id == id select j).Single();
         }
 
         public static IEnumerable<Schedule> GetSchedules()
         {
-            return (from j in _trackerDB.Schedules orderby j.created_at descending select j);
+            return (from j in TrackerDB.Tracker.Schedules orderby j.created_at descending select j);
         }
 
         public static IEnumerable<ComboBoxPairs> GetCBSchedules(string company_id="")
@@ -49,31 +48,32 @@ namespace petratracker.Models
 
                 if (company_id == string.Empty)
                 {
-                   sc = (from j in _trackerDB.Schedules orderby j.created_at descending select j);
+                    sc = (from j in TrackerDB.Tracker.Schedules orderby j.created_at descending select j);
                 }
                 else
                 {
-                    sc = (from j in _trackerDB.Schedules where (j.company_id==company_id) orderby j.created_at descending select j);
+                    sc = (from j in TrackerDB.Tracker.Schedules where (j.company_id == company_id) orderby j.created_at descending select j);
                 }
                 
                 foreach (var s in sc)
                 {
-                    string desc = string.Format("{0} - {1} for {2}-{3}",s.company,s.contributiontype,s.year,s.month);
+                    string month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.month);
+                    string desc = string.Format("{0} {1} - {2} - for {3}-{4}",s.company,s.tier,s.contributiontype,s.year, month);
                     cbpc.Add(new ComboBoxPairs(s.id.ToString(), desc));
                 }
 
                 return cbpc.AsEnumerable();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
 
         }
 
         public static IEnumerable<Schedule> GetSchedulesForProcessing()
         {
-            return (from j in _trackerDB.Schedules 
+            return (from j in TrackerDB.Tracker.Schedules 
                     where j.processing==false && j.workflow_status != "Complete"
                     orderby j.updated_at ascending 
                     select j);
@@ -83,7 +83,7 @@ namespace petratracker.Models
         {
             //s.modified_by = TrackerUser.GetCurrentUser().id;
             s.updated_at = DateTime.Now;
-            _trackerDB.SubmitChanges();
+            TrackerDB.Tracker.SubmitChanges();
         }
 
         public static void AddSchedule(string company, string companyid, string tier, string ct, string month, string year, int parent_id)
@@ -93,7 +93,7 @@ namespace petratracker.Models
                 Schedule s = new Schedule();
                 s.company = company;
                 s.company_id = companyid;
-                s.company_email = Utils.GetCompanyEmail(companyid) ;
+                s.company_email = TrackerDB.GetCompanyEmail(companyid) ;
                 s.tier = tier;
                 s.contributiontype = ct;
                 s.month = int.Parse(month);
@@ -109,13 +109,13 @@ namespace petratracker.Models
                 s.modified_by = TrackerUser.GetCurrentUser().id;
                 s.created_at = DateTime.Now;
                 s.updated_at = DateTime.Now;
-                _trackerDB.Schedules.InsertOnSubmit(s);
-                _trackerDB.SubmitChanges();
+                TrackerDB.Tracker.Schedules.InsertOnSubmit(s);
+                TrackerDB.Tracker.SubmitChanges();
                 InitiateScheduleWorkFlow(s);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw (e);
+                throw;
             }
         }
 
@@ -145,7 +145,7 @@ namespace petratracker.Models
         {
             try
             {
-                var companies = Utils.GetCompanies();
+                var companies = TrackerDB.GetCompanies();
                 List<ComboBoxPairs> cbpc = new List<ComboBoxPairs>();
 
                 foreach (var c in companies)
@@ -156,9 +156,9 @@ namespace petratracker.Models
                 return cbpc.AsEnumerable();
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -169,12 +169,12 @@ namespace petratracker.Models
 
             if (company == string.Empty)
             {
-                cts = (from j in _ptasDB.ContributionTypes select j);
+                cts = (from j in TrackerDB.PTAS.ContributionTypes select j);
             }
             else
             {
-                cts = (from j in _ptasDB.ContributionTypes
-                       join f in _ptasDB.FundDeals on j.ContribTypeID equals f.ContribType_ID
+                cts = (from j in TrackerDB.PTAS.ContributionTypes
+                       join f in TrackerDB.PTAS.FundDeals on j.ContribTypeID equals f.ContribType_ID
                        where f.CompanyEntityId == company
                        select j);
             }
@@ -299,6 +299,7 @@ namespace petratracker.Models
                 {
                     if (s.emails_sent == 3) // It's the 5th day, send email and esacalate
                     {
+                        //TODO: send email -- mark as escalated/done.
                         TrackerEmail.Add(s.company_email, s.company_id, s.validation_status, "Schedule Error Fix Request", "Schedule", s.id);
                         TrackerNotification.Add(3, "Escalation: Schedule Error Fix Request", "Schedule", s.id);
                         s.emails_sent += 1;
@@ -320,6 +321,8 @@ namespace petratracker.Models
                 {
                     if (s.emails_sent == 1) // It's the 2nd day, send email
                     {
+                        /// TODO: Change to Reminder to OP user
+                        /// Has the initial email been sent
                         TrackerEmail.Add(s.company_email, s.company_id, s.validation_status, "Schedule Error Fix Request", "Schedule", s.id);
                         s.emails_sent += 1;
                         s.email_last_sent = DateTime.Now;
@@ -414,13 +417,13 @@ namespace petratracker.Models
                     nf.last_sent = DateTime.Now;
                     nf.status = "New";
                     TrackerNotification.Save(nf);
-                    s.workflow_status = string.Format("Schedule Receipt sent {0). No download though. {1} notification requests sent to owner", s.receipt_sent_date.ToString(), nf.times_sent);
+                    s.workflow_status = string.Format("Schedule Receipt sent {0}. No download though. {1} notification requests sent to owner", s.receipt_sent_date.ToString(), nf.times_sent);
                 }
             }
             else
             {
                 TrackerNotification.Add(TrackerUser.GetCurrentUser().role_id, "Schedule File Download Request", "Schedule", s.id);
-                s.workflow_status = string.Format("Schedule Receipt sent {0). No download though. A notification requests sent to owner", s.receipt_sent_date.ToString());
+                s.workflow_status = string.Format("Schedule Receipt sent {0}. No download though. A notification requests sent to owner", s.receipt_sent_date.ToString());
             }
 
             s.processing = false;
@@ -439,7 +442,7 @@ namespace petratracker.Models
                     nf.last_sent = DateTime.Now;
                     nf.status = "New";
                     TrackerNotification.Save(nf);
-                    s.workflow_status = string.Format("Schedule File downloaded {0). No upload though. {1} notification requests sent to owner", s.file_downloaded_date.ToString(), nf.times_sent);
+                    s.workflow_status = string.Format("Schedule File downloaded {0}. No upload though. {1} notification requests sent to owner", s.file_downloaded_date.ToString(), nf.times_sent);
                 }
             }
             else
@@ -462,7 +465,7 @@ namespace petratracker.Models
 
             try
             {
-                var fd = (from j in _ptasDB.FundDeals
+                var fd = (from j in TrackerDB.PTAS.FundDeals
                           where j.ContribType_ID == int.Parse(ct.Trim()) &&
                            j.CompanyEntityId == companyid.Trim() &&
                            j.Tier == tier.Replace(" ", "") &&
@@ -486,7 +489,7 @@ namespace petratracker.Models
             DateTime dealDate = new DateTime(year, month, 1);           
             try
             {
-                int fd = (from j in _ptasDB.FundDeals
+                int fd = (from j in TrackerDB.PTAS.FundDeals
                                 where j.ContribType_ID == int.Parse(ct.Trim()) &&
                                       j.CompanyEntityId == companyid.Trim() &&
                                       j.Tier == tier.Replace(" ","") &&
@@ -508,7 +511,7 @@ namespace petratracker.Models
            
             try
             {
-                var fd = (from j in _ptasDB.FundDeals
+                var fd = (from j in TrackerDB.PTAS.FundDeals
                                where j.ContribType_ID == int.Parse(ct.Trim()) &&
                                 j.CompanyEntityId == companyid.Trim() &&
                                 j.Tier == tier.Replace(" ", "") &&
@@ -516,7 +519,7 @@ namespace petratracker.Models
                                 j.DealDate == dealDate
                                 select j).Single();
 
-                var fld = (from k in _ptasDB.FundDealLines where k.FundDealID == fd.FundDealID select k);
+                var fld = (from k in TrackerDB.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k);
 
                 string status = "Not Validated";
                 bool passed = true;
@@ -552,9 +555,9 @@ namespace petratracker.Models
 
                 return status;            
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
     

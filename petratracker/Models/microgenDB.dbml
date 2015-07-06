@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Petra5" Class="MicrogenDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="ConnectionString" ConnectionString="Data Source=ELMINA\SQLEXPRESS;Initial Catalog=Petra5;Integrated Security=True" Provider="System.Data.SqlClient" />
   <Table Name="dbo.cclv_AllEntities" Member="cclv_AllEntities">
     <Type Name="cclv_AllEntity">
       <Column Name="EntityID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />

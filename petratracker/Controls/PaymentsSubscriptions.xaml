@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="petratracker.UserControls.PaymentsSubscriptions"
+﻿<UserControl x:Class="petratracker.Controls.PaymentsSubscriptions"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -21,7 +21,7 @@
             </TabItem>
             
             <TabItem Header="Add Subscriptions" ToolTip="Add Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" >
-                <GroupBox Header="Load New Subscriptions" Style="{StaticResource GroupBoxHeaderStyle}">
+                <GroupBox Header="Load New Subscriptions">
                     <Grid HorizontalAlignment="Left" Height="340" Margin="0,0,0,0" VerticalAlignment="Top" Width="405">
                         <Label Content="Deal Type" HorizontalAlignment="Left" Margin="44,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
                         <ComboBox x:Name="cmbDealType" SelectedIndex="0" HorizontalAlignment="Left" Margin="44,43,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="14">

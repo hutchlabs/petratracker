@@ -5,7 +5,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using MahApps.Metro;
 
-namespace petratracker.Code
+namespace petratracker.Utility
 {
     public class NumToMonthConverter : IValueConverter
     {

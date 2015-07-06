@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
 
-using petratracker.Code;
+using petratracker.Utility;
 
 namespace petratracker.Models
 {
@@ -16,7 +16,6 @@ namespace petratracker.Models
     {
         #region Private Members
 
-        private static readonly TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
         private bool _isUploaded = false;
 
         #endregion
@@ -45,21 +44,21 @@ namespace petratracker.Models
         {
             try
             {
-                return (from p in _trackerDB.Payments
+                return (from p in TrackerDB.Tracker.Payments
                         where p.company_code == company_code &&
                               p.transaction_date == dealDate &&
                               p.transaction_amount == amount
                         select p).Single();
             } 
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
         public static IEnumerable<Payment> GetSubscriptions(int job_id, string sub_status)
         {
-            return (from p in _trackerDB.Payments where p.job_id == job_id && p.status == sub_status select p);
+            return (from p in TrackerDB.Tracker.Payments where p.job_id == job_id && p.status == sub_status select p);
         }
 
         public static bool read_microgen_data(string doc_source, string job_type, string deal_description)
@@ -97,8 +96,8 @@ namespace petratracker.Models
                     objPayment.owner = TrackerUser.GetCurrentUser().id;
                     objPayment.created_at = DateTime.Now;
                     objPayment.updated_at = DateTime.Now;
-                    _trackerDB.Payments.InsertOnSubmit(objPayment);
-                    _trackerDB.SubmitChanges();
+                    TrackerDB.Tracker.Payments.InsertOnSubmit(objPayment);
+                    TrackerDB.Tracker.SubmitChanges();
                 }
 
                 return true;

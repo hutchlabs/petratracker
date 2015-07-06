@@ -13,10 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using petratracker.Models;
-using petratracker.Code;
+using petratracker.Utility;
 using petratracker.Pages;
 
-namespace petratracker.UserControls
+namespace petratracker.Controls
 {
     public partial class Schedules : UserControl
     {
@@ -71,21 +71,25 @@ namespace petratracker.UserControls
 
         public Schedules()
         {
-            try
-            {
-                InitializeComponent();
-                this.DataContext = this;
-                _parentSchedules = TrackerSchedule.GetCBSchedules();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Schedules load Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            InitializeComponent();
+            this.DataContext = this;  
         }
 
         #endregion
 
         #region Event Handlers
+        
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _parentSchedules = TrackerSchedule.GetCBSchedules();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Schedules load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void chx_reval_Checked(object sender, RoutedEventArgs e)
         {
@@ -153,8 +157,6 @@ namespace petratracker.UserControls
         }
 
         #endregion
-
-    
 
 
     }

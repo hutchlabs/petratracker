@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Petra_tracker" Class="TrackerDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="ConnectionString" ConnectionString="Data Source=ELMINA\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=True" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Jobs" Member="Jobs">
     <Type Name="Job">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />

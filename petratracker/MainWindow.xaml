@@ -4,9 +4,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-    xmlns:PetraControls="clr-namespace:petratracker.UserControls"
+    xmlns:PetraControls="clr-namespace:petratracker.Controls"
     xmlns:Models="clr-namespace:petratracker.Models" 
-    xmlns:Code="clr-namespace:petratracker.Code"
+    xmlns:Code="clr-namespace:petratracker.Utility"
     xmlns:Pages="clr-namespace:petratracker.Pages"
     mc:Ignorable="d"
     x:Class="petratracker.MainWindow" 
@@ -20,7 +20,7 @@
     TitleCaps="False" Title="Petra Trust Tracker" Closing="MetroWindow_Closing">
 
     <Window.Resources>
-        <ResourceDictionary>         
+        <ResourceDictionary>
             <Code:StringToColorConverter x:Key="stringToColorConv"/>
             <Style TargetType="ComboBoxItem" x:Key="ThemeColorComboItemStyle">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -49,13 +49,12 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-        </ResourceDictionary> 
+        </ResourceDictionary>
     </Window.Resources>
 
     <!-- Window commands -->
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-
             <Button Click="Notifications_Click" >
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" Height="10" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
@@ -82,6 +81,15 @@
     <!-- Flyouts -->
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl x:Name="flyoutsControl">
+            <Controls:Flyout x:Name="surrogateFlyout" Theme="Accent" 
+                             Height="Auto" 
+                             CloseButtonVisibility="Collapsed"
+                             TitleVisibility="Collapsed"
+                             IsPinned="False"
+                             Position="Top" 
+                             IsModal="True">                
+            </Controls:Flyout>
+
             <Controls:Flyout x:Name="notificationsFlyout" 
                              Header="Notifications"
                              Theme="Accent"
@@ -101,7 +109,7 @@
 
                             </GridView>
                         </ListView.View>
-                    </ListView>               
+                    </ListView>
                 </UniformGrid>
             </Controls:Flyout>
 
@@ -125,19 +133,19 @@
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Theme Settings" FontSize="16" />
                     <Label Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" Content="Theme:" />
                     <ComboBox Grid.Row="1" Grid.Column="1" x:Name="AppThemes" Margin="0,5,5,5"  VerticalAlignment="Center" SelectedItem="{Binding SelectedTheme}" ItemsSource="{Binding ThemeColorlist}" ItemContainerStyle="{DynamicResource ThemeColorComboItemStyle}"  />
-                    
+
                     <Label Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" Content="Accent:" />
                     <ComboBox Grid.Row="2" Grid.Column="1" x:Name="AccentColors" Margin="0,5,5,5"  VerticalAlignment="Center" SelectedItem="{Binding SelectedAccent}" ItemsSource="{Binding AccentColorlist}" ItemContainerStyle="{DynamicResource AccentColorComboItemStyle}"/>
                 </Grid>
             </Controls:Flyout>
         </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
-        
+
     <!-- Content area -->
-    <Controls:MetroContentControl Margin="0,20,0,0">
+    <Controls:MetroContentControl Margin="0,0,0,0">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -145,67 +153,64 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Rectangle Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="{DynamicResource AccentColorBrush}" Stroke="{DynamicResource AccentColorBrush}" Width="25" Height="85" VerticalAlignment="Top" Margin="0,10,5,0" StrokeThickness="0"/>
+            <Rectangle Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="{DynamicResource AccentColorBrush}" Stroke="{DynamicResource AccentColorBrush}" Width="25" Height="85" VerticalAlignment="Top" Margin="0,10,5,0" StrokeThickness="0" HorizontalAlignment="Left"/>
 
             <Controls:MetroAnimatedSingleRowTabControl Grid.Row="0" Grid.Column="1" Margin="0,10,10,0"  x:Name="MainTabControl">
-                
+
                 <!-- Dashboard Tab -->
-                <TabItem Header="Home" ToolTip="Dashboard" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Margin="0" HorizontalContentAlignment="Stretch">
+                <TabItem Header="home" ToolTip="Dashboard" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Margin="0" HorizontalContentAlignment="Stretch" FontFamily="Segoe WP">
                     <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
-                        <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                        <TabItem Header="WELCOME" ToolTip="Welcome"  Controls:ControlsHelper.HeaderFontWeight="Bold" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}" FontFamily="Segoe WP Light">
                             <PetraControls:Dashboard />
                         </TabItem>
                     </Controls:MetroAnimatedSingleRowTabControl>
                 </TabItem>
-                
+
                 <!-- Reports Tab -->
-                <TabItem Header="Reports" ToolTip="Reports" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Width="130" Margin="20,0,0,0">
+                <TabItem Header="reports" ToolTip="Reports" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Width="130" Margin="20,0,0,0" FontFamily="Segoe WP">
                     <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
-                        <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
-                            <PetraControls:Reports />
+                        <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}" FontFamily="Segoe WP Light">
+                            <PetraControls:Reports  />
                         </TabItem>
                     </Controls:MetroAnimatedSingleRowTabControl>
                 </TabItem>
-                
+
                 <!-- Schedules Tab -->
-                <TabItem Header="Schedules" ToolTip="Schedules" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Width="160" Margin="20,0,0,0" Visibility="{Binding ShowJobsTab}">
+                <TabItem Header="schedules" ToolTip="schedules" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Width="160" Margin="20,0,0,0" Visibility="{Binding ShowJobsTab}" FontFamily="Segoe WP">
                     <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
-                        <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
-                            <PetraControls:Schedules />
+                        <TabItem Header="WELCOME" ToolTip="Welcome" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}" FontFamily="Segoe WP Light">
+                           <PetraControls:Schedules   />
                         </TabItem>
                     </Controls:MetroAnimatedSingleRowTabControl>
                 </TabItem>
 
                 <!-- Payments Tab -->
-                <TabItem Header="Payments" ToolTip="Payments" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Width="160" Margin="20,0,0,0"  Visibility="{Binding ShowJobsTab}">
+                <TabItem Header="payments" ToolTip="Payments" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}" Width="160" Margin="20,0,0,0"  Visibility="{Binding ShowJobsTab}" FontFamily="Segoe WP">
                     <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
-                        <TabItem Header="SUBSCRIPTIONS" ToolTip="Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                        <TabItem Header="SUBSCRIPTIONS" ToolTip="Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}" FontFamily="Segoe WP Light">
                             <PetraControls:PaymentsSubscriptions />
                         </TabItem>
-                        <TabItem IsEnabled="False" Header="TRANSFERS" ToolTip="Transfer" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                        <TabItem IsEnabled="False" Header="TRANSFERS" ToolTip="Transfer" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}" FontFamily="Segoe WP Light">
                             <PetraControls:PaymentsTransfers />
                         </TabItem>
-                        <TabItem IsEnabled="False" Header="REDEMPTIONS" ToolTip="Redemptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                        <TabItem IsEnabled="False" Header="REDEMPTIONS" ToolTip="Redemptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}" FontFamily="Segoe WP Light">
                             <PetraControls:PaymentsRedemptions />
                         </TabItem>
                     </Controls:MetroAnimatedSingleRowTabControl>
                 </TabItem>
-                
-               <!-- Admin Tab -->
-                <TabItem Header="Admin" ToolTip="Admin" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Width="160" Margin="20,0,0,0"  Visibility="{Binding ShowAdminTab}">
+
+                <!-- Admin Tab -->
+                <TabItem Header="admin" ToolTip="Admin" Controls:ControlsHelper.HeaderFontSize="{StaticResource MainTabFontSize}"  Width="160" Margin="20,0,0,0"  Visibility="{Binding ShowAdminTab}" FontFamily="Segoe WP">
                     <Controls:MetroAnimatedSingleRowTabControl Margin="0,10,10,0">
-                        <TabItem Header="USERS" ToolTip="Users" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
+                        <TabItem Header="USERS" ToolTip="Users" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}" FontFamily="Segoe WP Light">
                             <PetraControls:AdminUsers />
                         </TabItem>
-                        <TabItem Header="ROLES" ToolTip="Roles" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}">
-                            <PetraControls:AdminRoles />
-                        </TabItem>
-                        <TabItem Header="SETTINGS" ToolTip="Settings" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}" Visibility="{Binding ShowSettingsTab}">
+                        <TabItem Header="SETTINGS" ToolTip="Settings" Controls:ControlsHelper.HeaderFontSize="{StaticResource SubTabFontSize}" Visibility="{Binding ShowSettingsTab}" FontFamily="Segoe WP Light">
                             <PetraControls:AdminSettings />
                         </TabItem>
                     </Controls:MetroAnimatedSingleRowTabControl>
                 </TabItem>
-                
+
             </Controls:MetroAnimatedSingleRowTabControl>
 
             <StatusBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">

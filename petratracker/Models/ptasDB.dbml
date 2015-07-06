@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="PTASDB" Class="PTASDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="ConnectionString" ConnectionString="Data Source=ELMINA\SQLEXPRESS;Initial Catalog=PTASDB;Integrated Security=True" Provider="System.Data.SqlClient" />
   <Table Name="dbo.ContributionTypes" Member="ContributionTypes">
     <Type Name="ContributionType">
       <Column Name="ContribTypeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />

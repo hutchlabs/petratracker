@@ -23,23 +23,9 @@ namespace petratracker.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string username {
-            get {
-                return ((string)(this["username"]));
-            }
-            set {
-                this["username"] = value;
-            }
-        }
-        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=T" +
-            "rue")]
         public string Petra_trackerConnectionString {
             get {
                 return ((string)(this["Petra_trackerConnectionString"]));
@@ -48,7 +34,8 @@ namespace petratracker.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=T" +
+            "rue")]
         public string database_tracker {
             get {
                 return ((string)(this["database_tracker"]));
@@ -60,7 +47,7 @@ namespace petratracker.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=Petra5;Integrated Security=True")]
         public string database_microgen {
             get {
                 return ((string)(this["database_microgen"]));
@@ -73,7 +60,6 @@ namespace petratracker.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=Petra5;Integrated Security=True")]
         public string Petra5ConnectionString {
             get {
                 return ((string)(this["Petra5ConnectionString"]));
@@ -83,7 +69,6 @@ namespace petratracker.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=PTASDB;Integrated Security=True")]
         public string PTASDBConnectionString {
             get {
                 return ((string)(this["PTASDBConnectionString"]));

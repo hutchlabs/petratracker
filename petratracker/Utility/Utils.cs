@@ -1,16 +1,10 @@
-﻿using petratracker.Models;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
-namespace petratracker.Code
+namespace petratracker.Utility
 {
     public class ComboBoxPairs
     {
@@ -44,43 +38,8 @@ namespace petratracker.Code
             }
         }
 
-
-        public static string GetCompanyEmail(string company_id)
-        {
-            try
-            {
-                MicrogenDataContext microgenDB = (App.Current as App).MicrogenDBo;
-
-                /*var c = (from c in microgenDB.cclv_AllEntities
-                         where c.EntityID == int.Parse(company_id)
-                         select c).Single();*/
-                return "no-reply@petratrust.com";
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
-
-        public static IEnumerable<cclv_AllEntity> GetCompanies()
-        {
-            try
-            {
-                MicrogenDataContext microgenDB = (App.Current as App).MicrogenDBo;
-
-                return (from c in microgenDB.cclv_AllEntities
-                        where c.EntityTypeDesc == "Company"  && c.FullName.ToLower() != "available" &&
-                              c.FullName != "Available Company"
-                        orderby c.FullName
-                        select c);
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
-
-        public static DataTable GetDataTable(string sql, string connectionString)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+        public static DataTable GetDataTable(string excelQL, string connectionString)
         {
             DataTable dt = new DataTable();
             try
@@ -88,7 +47,7 @@ namespace petratracker.Code
                 using (OleDbConnection conn = new OleDbConnection(connectionString))
                 {
                     conn.Open();
-                    using (OleDbCommand cmd = new OleDbCommand(sql, conn))
+                    using (OleDbCommand cmd = new OleDbCommand(excelQL, conn))
                     {
                         using (OleDbDataReader rdr = cmd.ExecuteReader())
                         {
@@ -97,9 +56,9 @@ namespace petratracker.Code
                     }
                 }
             }
-            catch (Exception errMsg)
+            catch (Exception)
             {
-                throw(errMsg);
+                throw;
             }
 
             return dt;

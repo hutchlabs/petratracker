@@ -56,13 +56,6 @@ namespace petratracker.Models
     partial void DeleteSchedule(Schedule instance);
     #endregion
 		
-		public TrackerDataContext() : 
-				base("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=T" +
-						"rue", mappingSource)
-		{
-			OnCreated();
-		}
-		
 		public TrackerDataContext(string connection) : 
 				base(connection, mappingSource)
 		{

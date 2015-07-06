@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using petratracker.Models;
 
+using petratracker.Models;
+
 namespace petratracker.Pages
 {
     /// <summary>
@@ -21,8 +23,6 @@ namespace petratracker.Pages
     public partial class SubscriptionsApproveReject : Window
     {
 
-        TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
-        MicrogenDataContext microgenDB = (App.Current as App).MicrogenDBo;
         private User ini_user = new User();
         private int payment_id;
 
@@ -42,7 +42,7 @@ namespace petratracker.Pages
         {
             try
             {
-                var subscription = (from p in trackerDB.Payments
+                var subscription = (from p in TrackerDB.Tracker.Payments
                                     where p.id == this.payment_id 
                                     select p).Single();
 

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace petratracker.UserControls
+namespace petratracker.Controls
 {
     public partial class AdminSettings : UserControl
     {
@@ -12,7 +12,14 @@ namespace petratracker.UserControls
         public AdminSettings()
         {
             InitializeComponent();
-            viewSettings.ItemsSource = Models.TrackerSettings.GetSettings();
+            try
+            {
+                viewSettings.ItemsSource = Models.TrackerSettings.GetSettings();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.GetBaseException().ToString());
+            }
         }
 
         #endregion

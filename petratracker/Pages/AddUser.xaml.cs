@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,30 +15,72 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace petratracker.UserControls
+namespace petratracker.Pages
 {
-    public partial class AdminUsers : UserControl
+
+    public partial class AddUser : UserControl, INotifyPropertyChanged
     {
-        #region Constructor
+        #region Private Members
 
-        public AdminUsers()
+        private bool _loadedInFlyout = false;
+        private string _textNotEmptyProperty;
+
+        #endregion
+
+        #region Public Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        #region Public Properties
+
+        public string TextNotEmptyProperty
         {
-            InitializeComponent();
+            get { return this._textNotEmptyProperty; }
+            set
+            {
+                if (Equals(value, _textNotEmptyProperty))
+                {
+                    return;
+                }
 
-            try
-            {
-                viewUsers.ItemsSource = Models.TrackerUser.GetUsers();
-                cmbUserRole.ItemsSource = Models.TrackerUser.GetRoles();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "System Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _textNotEmptyProperty = value;
+                RaisePropertyChanged("TextNotEmptyProperty");
             }
         }
 
         #endregion
 
+        #region Constructor
+
+        public AddUser(bool inFlyout = false)
+        {
+            this.DataContext = this;
+
+            InitializeComponent();
+
+            _loadedInFlyout = inFlyout;
+            cmbUserRole.ItemsSource = Models.TrackerUser.GetRoles();
+        }
+
+        #endregion
+
         #region Event Handlers
+
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            if (_loadedInFlyout)
+                close_flyout();
+        }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
@@ -45,41 +89,19 @@ namespace petratracker.UserControls
                 if (validate_entries())
                 {
                     Models.TrackerUser.AddUser(txtEmail.Text, txtPassword.Password, txtFirstName.Text, txtLastName.Text, txtMiddleName.Text, (int)cmbUserRole.SelectedValue);
-                    clear_entries();
-                    viewUsers.ItemsSource = Models.TrackerUser.GetUsers();
-                    InnerSubTabControl.SelectedIndex = 0;
+
+                    if (_loadedInFlyout)
+                        close_flyout();
                 }
             }
             catch (Exception ex)
             {
+                Utility.LogUtil.LogError("AddUsers", "btnSave_Click", ex);
                 MessageBox.Show("Could not create user: " + ex.GetBaseException().ToString(), "System Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void viewUsers_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            string[] hiddenHeaders = { "password", "id", "role_id", "first_login", "Payments", "Settings", 
-                                       "Notifications", "Jobs", "theme", "accent", "Schedules","SchedulesItems",
-                                       "Role", "logged_in", "middle_name" ,"updated_at","modified_by","created_at", };
-
-            if (hiddenHeaders.Contains(e.Column.Header.ToString()))
+            finally
             {
-                e.Cancel = true;
-            }
-
-            if (e.Column.Header.ToString().Equals("first_name"))
-            {
-                e.Column.Header = "First Name";
-            }
-
-            if (e.Column.Header.ToString().Equals("last_name"))
-            {
-                e.Column.Header = "Last Name";
-            }
-
-            if (e.Column.Header.ToString().Equals("last_login"))
-            {
-                e.Column.Header = "Last Login";
+   
             }
         }
 
@@ -87,15 +109,27 @@ namespace petratracker.UserControls
 
         #region Private Helper Methods
 
-        private void clear_entries()
+        private void close_flyout()
         {
-            txtFirstName.Text = "";
-            txtMiddleName.Text = "";
-            txtLastName.Text = "";
-            txtEmail.Text = "";
-            txtPassword.Password = "";
-            cmbUserRole.SelectedIndex = -1;
+            Window parentWindow = Window.GetWindow(this);
+            object obj = parentWindow.FindName("surrogateFlyout");
+            Flyout flyout = (Flyout)obj;
+            flyout.Content = null;
+            flyout.IsOpen = !flyout.IsOpen;
         }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                if (columnName == "TextNotEmptyProperty" && this.TextNotEmptyProperty.Equals(string.Empty))
+                {
+                    return "Field cannot be empty. Please enter a value";
+                }
+                return null;
+            }
+        }
+
 
         private bool validate_entries()
         {
@@ -131,7 +165,6 @@ namespace petratracker.UserControls
 
             return cont;
         }
-
         #endregion
     }
 }

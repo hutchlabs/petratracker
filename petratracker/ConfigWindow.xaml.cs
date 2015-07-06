@@ -1,10 +1,11 @@
-﻿using petratracker.Models;
+﻿using MahApps.Metro.Controls;
+using petratracker.Models;
 using System;
 using System.Windows;
 
 namespace petratracker
 {
-    public partial class ConfigWindow : Window
+    public partial class ConfigWindow : MetroWindow
     {
         #region Private Members
 
@@ -26,58 +27,22 @@ namespace petratracker
 
         private void frmDatabaseConnection_Loaded(object sender, RoutedEventArgs e)
         {
-            try
-            {               
-                char[] charSeparators = new char[] { ';' };
-
-                if (Properties.Settings.Default.database_tracker != string.Empty)
-                {
-                    String conStr = Properties.Settings.Default.database_tracker;           
-                    string[] results = conStr.Split(charSeparators);
-                    txtTrackerDataSource.Text= results[0].Substring(results[0].IndexOf('=') + 1);
-                }              
-            }
-            catch(Exception configFileError)
-            {
-                MessageBox.Show(configFileError.Message);
-            }
+            txtTrackerDataSource.Text = TrackerDB.GetConnectionString();
         }
 
         private void btnTrackerTestConnection_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (validate_tracker_entries())
             {
-                if (validate_tracker_entries())
+                spinner.IsActive = true;
+
+                try
                 {
-                    String tconStr = "Data Source=" + txtTrackerDataSource.Text + ";Initial Catalog=Petra_tracker;Integrated Security=True";
-                    String pconStr = "Data Source=" + txtTrackerDataSource.Text + ";Initial Catalog=Petra5;Integrated Security=True";
-                    String ptasStr = "Data Source=" + txtTrackerDataSource.Text + ";Initial Catalog=PTASDB;Integrated Security=True";
-
-                    TrackerDataContext tdc = new TrackerDataContext(tconStr);
-                    MicrogenDataContext mdc = new MicrogenDataContext(pconStr);
-                    PTASDataContext pdc = new PTASDataContext(ptasStr);
-
-                    bool t=false;
-                    bool m=false;
-                    bool p=false;
-
-                    t = tdc.DatabaseExists();
-                    m = mdc.DatabaseExists();
-                    p = pdc.DatabaseExists();
-
-                    if (m && t && p)
+                    if (TrackerDB.Setup(txtTrackerDataSource.Text))
                     {
-                        MessageBox.Show("Connection to databases were successful.", "Connection Successfull", MessageBoxButton.OK, MessageBoxImage.Information);
-                        Properties.Settings.Default.database_tracker = tconStr;
-                        Properties.Settings.Default.database_microgen = pconStr;
-                        Properties.Settings.Default.database_ptas = ptasStr;
+                        spinner.IsActive = false;
 
-                        Properties.Settings.Default.Save();
-
-                        (App.Current as App).TrackerDBo = tdc;
-                        (App.Current as App).MicrogenDBo = mdc;
-                        (App.Current as App).PTASDBo = pdc;
-
+                        MessageBox.Show("Connection to databases were successful.", "Connection Successful", MessageBoxButton.OK, MessageBoxImage.Information);
 
                         if (_exitToLoginWindow)
                         {
@@ -85,29 +50,18 @@ namespace petratracker
                         }
                         this.Close();
                     }
-                    else if (m)
-                    {
-                        MessageBox.Show("Connection to Tracker DB failed.", "Connection Status", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                    else if (t)
-                    {
-                        MessageBox.Show("Connection to Microgen failed.", "Connection Status", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                    else if (p)
-                    {
-                        MessageBox.Show("Connection to PTAS DB failed.", "Connection Status", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Connection could not be established with Tracker. Please enter correct details.", "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Connection could not be established with databases. "+ex.GetBaseException().ToString(), "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
-
-            }
+                catch (Exceptions.TrackerDBConnectionException ex)
+                {
+                    spinner.IsActive = false;
+                    MessageBox.Show(ex.Message, "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch(Exception ex)
+                {
+                    spinner.IsActive = false;
+                     MessageBox.Show("Database setup error: " + ex.GetBaseException().ToString(), "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }       
         }
 
         #endregion
@@ -120,7 +74,7 @@ namespace petratracker
 
             if (txtTrackerDataSource.Text == string.Empty)
             {
-                MessageBox.Show("Please specify the Data Source.");
+                MessageBox.Show("Please specify the Database server name.");
                 txtTrackerDataSource.Focus();
             }
             else

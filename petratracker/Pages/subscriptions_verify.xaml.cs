@@ -27,9 +27,6 @@ namespace petratracker.Pages
             InitializeComponent();
         }
 
-
-        TrackerDataContext trackerDB = (App.Current as App).TrackerDBo;
-        MicrogenDataContext microgenDB = (App.Current as App).MicrogenDBo;
         private User ini_user = new User();
         public int subID = -1;
         //DateTime nowDate = new DateTime();
@@ -50,7 +47,7 @@ namespace petratracker.Pages
 
         private void load_subscription()
         {
-            var subscription = (from p in trackerDB.Payments
+            var subscription = (from p in TrackerDB.Tracker.Payments
                                  where p.id == this.subID && p.status != "Identified"
                                  select p).Single();
 
@@ -79,7 +76,7 @@ namespace petratracker.Pages
             {  
                 cmbCompanies.Items.Clear();       
      
-                var companies = (from c in microgenDB.cclv_AllEntities
+                var companies = (from c in TrackerDB.Microgen.cclv_AllEntities
 
                                  where c.FullName.Contains(txtSearchCompany.Text) && c.EntityTypeDesc == "Company"
                                  
@@ -103,7 +100,7 @@ namespace petratracker.Pages
             {
                 cmbClient.Items.Clear();
 
-                var clients = (from c in microgenDB.cclv_AllEntities
+                var clients = (from c in TrackerDB.Microgen.cclv_AllEntities
 
                                where c.FullName.Contains(txtSearchClients.Text) && c.EntityKey.Contains("HI")
 
@@ -139,7 +136,7 @@ namespace petratracker.Pages
         {
             try
             {
-                var subscription = from p in trackerDB.Payments
+                var subscription = from p in TrackerDB.Tracker.Payments
                                    where p.id == this.subID && p.status != verifyType
                                    select p;
 
@@ -166,7 +163,7 @@ namespace petratracker.Pages
                     }
                 }
 
-                trackerDB.SubmitChanges();
+                TrackerDB.Tracker.SubmitChanges();
                 
             }
             catch(Exception updateError)
@@ -215,7 +212,7 @@ namespace petratracker.Pages
                         if (update_payment("Identified"))
                         {
                             MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information);
-                            TrackerNotification.Add(3, "Subscription Approval", "Payments", Code.ActiveScript.subscription_id);
+                            TrackerNotification.Add(3, "Subscription Approval", "Payments", Utility.ActiveScript.subscription_id);
                             this.Close();
                         }
                     }

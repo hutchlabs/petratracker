@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using petratracker.Code;
+using petratracker.Utility;
+using petratracker.Models;
 
 namespace petratracker.Models
 {
     public class TrackerEmail
     {
         #region Private Members
-        
-        private static readonly TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
-        
+                
         #endregion
 
         #region Constructor
@@ -26,7 +25,7 @@ namespace petratracker.Models
        
         public static IEnumerable<Email> GetEmails()
         {
-            return (from n in _trackerDB.Emails
+            return (from n in TrackerDB.Tracker.Emails
                     orderby n.created_at descending, n.updated_at descending
                     select n);
         }
@@ -35,7 +34,7 @@ namespace petratracker.Models
         {
             try
             {
-                return (from n in _trackerDB.Emails
+                return (from n in TrackerDB.Tracker.Emails
                         where  (n.email_type == email_type) &&
                         (n.job_id == job_id) && (n.job_type == job_type)
                         orderby n.created_at ascending
@@ -61,14 +60,14 @@ namespace petratracker.Models
                 em.modified_by = TrackerUser.GetCurrentUser().id;
                 em.created_at = DateTime.Now;
                 em.updated_at = DateTime.Now;
-                _trackerDB.Emails.InsertOnSubmit(em);
-                _trackerDB.SubmitChanges();
+                TrackerDB.Tracker.Emails.InsertOnSubmit(em);
+                TrackerDB.Tracker.SubmitChanges();
 
                 SendEmail.sendFixErrorMail(addr, em.email_text);
             } 
-            catch(Exception e) 
+            catch(Exception) 
             {
-                throw e;
+                throw;
             }
         }
         #endregion

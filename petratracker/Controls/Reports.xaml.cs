@@ -13,11 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace petratracker.UserControls
+namespace petratracker.Controls
 {
-    public partial class PaymentsRedemptions : UserControl
+    /// <summary>
+    /// Interaction logic for Reports.xaml
+    /// </summary>
+    public partial class Reports : UserControl
     {
-        public PaymentsRedemptions()
+        public Reports()
         {
             InitializeComponent();
         }

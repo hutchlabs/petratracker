@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace petratracker.UserControls
+namespace petratracker.Controls
 {
     /// <summary>
-    /// Interaction logic for Reports.xaml
+    /// Interaction logic for Dashboard.xaml
     /// </summary>
-    public partial class Reports : UserControl
+    public partial class Dashboard : UserControl
     {
-        public Reports()
+        public Dashboard()
         {
             InitializeComponent();
         }

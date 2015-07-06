@@ -13,14 +13,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace petratracker.UserControls
+namespace petratracker.Controls
 {
-    /// <summary>
-    /// Interaction logic for Dashboard.xaml
-    /// </summary>
-    public partial class Dashboard : UserControl
+    public partial class PaymentsRedemptions : UserControl
     {
-        public Dashboard()
+        public PaymentsRedemptions()
         {
             InitializeComponent();
         }

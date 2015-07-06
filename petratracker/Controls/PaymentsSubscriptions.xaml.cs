@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 using petratracker.Models;
 using MahApps.Metro.Controls;
 
-namespace petratracker.UserControls
+namespace petratracker.Controls
 {
     public partial class PaymentsSubscriptions : UserControl
     {

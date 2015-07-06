@@ -32,12 +32,6 @@ namespace petratracker.Models
     partial void OnCreated();
     #endregion
 		
-		public MicrogenDataContext() : 
-				base("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=Petra5;Integrated Security=True", mappingSource)
-		{
-			OnCreated();
-		}
-		
 		public MicrogenDataContext(string connection) : 
 				base(connection, mappingSource)
 		{

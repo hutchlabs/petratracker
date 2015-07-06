@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 using System.Data;
 
 using petratracker.Models;
-using petratracker.UserControls;
+using petratracker.Controls;
 using System.Globalization;
 
 namespace petratracker.Pages

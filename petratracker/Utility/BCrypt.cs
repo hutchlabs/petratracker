@@ -57,7 +57,7 @@ using System.Text;
 /// </para>
 /// </remarks>
 /// 
-namespace petratracker.Code
+namespace petratracker.Utility
 {
     public class BCrypt
     {

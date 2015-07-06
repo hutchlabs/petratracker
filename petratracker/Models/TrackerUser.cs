@@ -1,10 +1,8 @@
-﻿using System;
+﻿using petratracker.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using petratracker.Code;
+using System.Windows;
 
 namespace petratracker.Models
 {
@@ -12,13 +10,24 @@ namespace petratracker.Models
     {
         #region Private Members
 
-        private static TrackerDataContext _trackerDB = (App.Current as App).TrackerDBo;
+        private static Models.User _user;
+
         private static readonly string[] _adminRoles = { "Super User", "Administrator" }; // TODO: pull from DB
 
         #endregion
 
+        #region Public Properties
+
+        public static Models.User CurrentUser
+        {
+            get  { return _user; }
+            set { _user = value; }
+        }
+
+        #endregion
+
         #region Constructors
-        
+
         public TrackerUser()
         {
         }
@@ -31,44 +40,40 @@ namespace petratracker.Models
         {
             try
             {
-                (App.Current as App).CurrentUser = _trackerDB.Users.Single(u => u.username == username);
+                CurrentUser = TrackerDB.Tracker.Users.Single(u => u.username == username);
+                
                 if (!CheckPassword(password))
                 {
-                    (App.Current as App).CurrentUser = null;
-                    throw new Exception("Password Error");
+                    CurrentUser = null;
+                    throw new Exceptions.TrackerUserInvalidPasswordException("Password Error");
                 }
-
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                (App.Current as App).CurrentUser = null;
-                throw new Exception("Username not found", e.InnerException);
+                CurrentUser = null;
+                LogUtil.LogError("TrackerUser","SetCurrentUser",ex);
+                throw new Exceptions.TrackerUserNotFoundException("Username not found: "+ex.Message);
             }
         }
 
         public static User GetCurrentUser()
         {
-            try
-            {
-                return (App.Current as App).CurrentUser;
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
+             return CurrentUser;
         }
 
         public static string GetCurrentUserTitle()
         {
             try
             {
-                return String.Format("{0} {1} ({2})", (App.Current as App).CurrentUser.first_name,
-                                                      (App.Current as App).CurrentUser.last_name,
-                                                      (App.Current as App).CurrentUser.Role.role1);
+                return String.Format("{0} {1} ({2})", CurrentUser.first_name,
+                                                      CurrentUser.last_name,
+                                                      CurrentUser.Role.role1);
             }
-            catch(Exception e)
+            catch(Exception)
             {
-               throw e;
+                System.Windows.MessageBox.Show("User title not found");
+
+               throw;
             }
         }
 
@@ -76,11 +81,13 @@ namespace petratracker.Models
         {
             try
             {
-                return _adminRoles.Contains((App.Current as App).CurrentUser.Role.role1);
+                return _adminRoles.Contains(CurrentUser.Role.role1);
             } 
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                System.Windows.MessageBox.Show("Is admin");
+
+                throw;
             }
         }
 
@@ -88,11 +95,11 @@ namespace petratracker.Models
         {
             try
             {
-                return (App.Current as App).CurrentUser.Role.role1.Equals("Super User");
+                return CurrentUser.Role.role1.Equals("Super User");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -100,11 +107,11 @@ namespace petratracker.Models
         {
             try
             {
-                return (App.Current as App).CurrentUser.Role.role1.Equals("Super Ops User");
+                return CurrentUser.Role.role1.Equals("Super Ops User");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -112,11 +119,11 @@ namespace petratracker.Models
         {
             try
             {
-                return (App.Current as App).CurrentUser.Role.role1.Equals("Ops User");
+                return CurrentUser.Role.role1.Equals("Ops User");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -126,9 +133,9 @@ namespace petratracker.Models
             {
                 return (IsCurrentUserAdmin() || IsCurrentUserSuperOps() || IsCurrentUserOps());
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -136,7 +143,7 @@ namespace petratracker.Models
         {
             try
             {
-                return (App.Current as App).CurrentUser.first_login;     
+                return CurrentUser.first_login;     
             }
             catch(Exception e)
             {
@@ -149,7 +156,7 @@ namespace petratracker.Models
         {
             try
             {
-               return BCrypt.CheckPassword(password, (App.Current as App).CurrentUser.password);
+               return BCrypt.CheckPassword(password, CurrentUser.password);
             }
             catch(Exception e)
             {
@@ -163,15 +170,15 @@ namespace petratracker.Models
             try
             {
                 var newpassword = BCrypt.HashPassword(p, BCrypt.GenerateSalt());
-                (App.Current as App).CurrentUser.password = newpassword;
-                (App.Current as App).CurrentUser.first_login = false;
-                (App.Current as App).CurrentUser.modified_by = (App.Current as App).CurrentUser.id;
-                (App.Current as App).CurrentUser.updated_at = DateTime.Now;
-                _trackerDB.SubmitChanges();
+                CurrentUser.password = newpassword;
+                CurrentUser.first_login = false;
+                CurrentUser.modified_by = CurrentUser.id;
+                CurrentUser.updated_at = DateTime.Now;
+                TrackerDB.Tracker.SubmitChanges();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw (ex);
+                throw;
             }
         }
 
@@ -179,15 +186,15 @@ namespace petratracker.Models
         {
             try
             {
-                (App.Current as App).CurrentUser.theme = SelectedTheme;
-                (App.Current as App).CurrentUser.accent = SelectedAccent;
-                (App.Current as App).CurrentUser.modified_by = (App.Current as App).CurrentUser.id;
-                (App.Current as App).CurrentUser.updated_at = DateTime.Now;
-                _trackerDB.SubmitChanges();
+                CurrentUser.theme = SelectedTheme;
+                CurrentUser.accent = SelectedAccent;
+                CurrentUser.modified_by = CurrentUser.id;
+                CurrentUser.updated_at = DateTime.Now;
+                TrackerDB.Tracker.SubmitChanges();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw (ex);
+                throw;
             }
         }
 
@@ -197,12 +204,32 @@ namespace petratracker.Models
 
         public static IEnumerable<User> GetUsers()
         {
-            return (from u in _trackerDB.Users select u);
+            return (from u in TrackerDB.Tracker.Users select u);
+        }
+
+        public static IEnumerable<User> GetActiveUsers()
+        {
+            return (from u in TrackerDB.Tracker.Users where u.status==true select u);
+        }
+
+        public static IEnumerable<User> GetNonActiveUsers()
+        {
+            return (from u in TrackerDB.Tracker.Users where u.status == false select u);
+        }
+
+        public static IEnumerable<User> GetOnlineUsers()
+        {
+            return (from u in TrackerDB.Tracker.Users where u.logged_in == true select u);
+        }
+
+        public static IEnumerable<User> GetOfflineUsers()
+        {
+            return (from u in TrackerDB.Tracker.Users where u.logged_in == false select u);
         }
 
         public static IEnumerable<Role> GetRoles()
         {
-            return (from r in _trackerDB.Roles select r);
+            return (from r in TrackerDB.Tracker.Roles select r);
         }
 
         public static void AddUser(string username, string password, string first_name, string last_name, string middle_name, int role)
@@ -219,17 +246,17 @@ namespace petratracker.Models
                 newUser.first_login = true;
                 newUser.theme = "BaseLight";
                 newUser.accent = "Blue";
-                newUser.modified_by = (App.Current as App).CurrentUser.id;
+                newUser.modified_by = CurrentUser.id;
                 newUser.created_at = DateTime.Now;
                 newUser.updated_at = DateTime.Now;
-                _trackerDB.Users.InsertOnSubmit(newUser);
-                _trackerDB.SubmitChanges();
+                TrackerDB.Tracker.Users.InsertOnSubmit(newUser);
+                TrackerDB.Tracker.SubmitChanges();
 
                 SendEmail.sendNewUserMail(first_name + " " + last_name, username, password);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw (e);
+                throw;
             }
         }
 
@@ -237,12 +264,12 @@ namespace petratracker.Models
         {
             try
             {
-                var user = _trackerDB.Users.Single(u => u.username == username);
+                var user = TrackerDB.Tracker.Users.Single(u => u.username == username);
                 //SendEmail.sendResetPasswordMail(username);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -253,15 +280,19 @@ namespace petratracker.Models
                 Role newRole = new Role();
                 newRole.role1 = name;
                 newRole.description = description;
-                newRole.modified_by = (App.Current as App).CurrentUser.id;
+                newRole.modified_by = CurrentUser.id;
                 newRole.created_at = DateTime.Now;
                 newRole.updated_at = DateTime.Now;
-                _trackerDB.Roles.InsertOnSubmit(newRole);
-                _trackerDB.SubmitChanges();
+                TrackerDB.Tracker.Roles.InsertOnSubmit(newRole);
+                TrackerDB.Tracker.SubmitChanges();
             }
             catch (Exception ex)
             {
-                throw ex; 
+                LogUtil.LogError("TrackerUser","AddNewRole", ex);
+            }
+            finally
+            {
+                MessageBox.Show("Cannot add user", "Add User Error",MessageBoxButton.OK,MessageBoxImage.Error);
             }
         }
 

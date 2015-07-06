@@ -44,12 +44,6 @@ namespace petratracker.Models
     partial void DeleteScheduleStatus(ScheduleStatus instance);
     #endregion
 		
-		public PTASDataContext() : 
-				base("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=PTASDB;Integrated Security=True", mappingSource)
-		{
-			OnCreated();
-		}
-		
 		public PTASDataContext(string connection) : 
 				base(connection, mappingSource)
 		{
