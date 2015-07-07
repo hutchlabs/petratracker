@@ -202,6 +202,10 @@ namespace petratracker.Models
             return cbp.AsEnumerable();
         }
 
+        #endregion
+
+        #region Workflow Methods
+
         public static async void InitiateScheduleWorkFlow(Schedule schedule = null)
         {
             if (schedule != null)
@@ -209,7 +213,7 @@ namespace petratracker.Models
                 EvaluateScheduleWorkFlow(schedule);
             }
             var dueTime = TimeSpan.FromSeconds(60);
-            var interval = TimeSpan.FromSeconds(int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_SCHEDULE_UPDATE_INTERVAL))); 
+            var interval = TimeSpan.FromSeconds(int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_SCHEDULE_UPDATE_INTERVAL)));
             await Utils.DoPeriodicWorkAsync(new Func<bool>(UpdateScheduleWorkFlowStatus), dueTime, interval, CancellationToken.None);
         }
 
@@ -227,7 +231,7 @@ namespace petratracker.Models
 
         public static Schedule ResolveScheduleIssue(Schedule s)
         {
-            DateTime newVT = CheckValidationTime(s.company_id,s.tier,s.contributiontype,s.month,s.year);
+            DateTime newVT = CheckValidationTime(s.company_id, s.tier, s.contributiontype, s.month, s.year);
 
             if (s.validation_valuetime == newVT) // Do data start revalidation;
             {
@@ -245,9 +249,28 @@ namespace petratracker.Models
             return s;
         }
 
-        #endregion
+        public static Schedule MarkReceiptSent(Schedule schedule)
+        {
+            schedule.receipt_sent = true;
+            schedule.receipt_sent_date = DateTime.Now;
+            schedule = EvaluatePaymentReceivedSchedule(schedule);
 
-        #region Workflow Methods
+            TrackerNotification.ResolveByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.JOB_TYPE_SCHEDULE, schedule.id);
+
+            return schedule;
+        }
+
+        public static Schedule MarkFileDownloaded(Schedule schedule)
+        {
+            schedule.file_downloaded = true;
+            schedule.file_downloaded_date = DateTime.Now;
+            schedule = EvaluatePaymentReceivedSchedule(schedule);
+
+            TrackerNotification.ResolveByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD, Constants.JOB_TYPE_SCHEDULE, schedule.id);
+
+            return schedule;
+        }
+      
 
         private static void EvaluateScheduleWorkFlow(Schedule s)
         {
@@ -394,7 +417,7 @@ namespace petratracker.Models
             }    
         }
     
-        public static Schedule EvaluatePaymentReceivedSchedule(Schedule s)
+        private static Schedule EvaluatePaymentReceivedSchedule(Schedule s)
         {
             s.processing = true;
             Save(s);
@@ -449,7 +472,16 @@ namespace petratracker.Models
 
         private static Schedule EvaluateFileUploadNotificationStatus(Schedule s)
         {
-            if (CheckFileUploaded(s.company,s.company_id,s.tier, s.month, s.year, s.Payment.transaction_amount))
+            bool fileuploaded = false;
+            try
+            {
+                fileuploaded = CheckFileUploaded(s.company, s.company_id, s.tier, s.month, s.year, s.Payment.transaction_amount);
+            }
+            catch(Exception)
+            {
+            }
+
+            if (fileuploaded)
             {
                  s.file_uploaded = true;
                  s.file_uploaded_date = DateTime.Now;
@@ -633,14 +665,15 @@ namespace petratracker.Models
             }
             catch (Exception)
             {
-                throw;
+                return dealDate;
             }
         }
 
         private static string CheckValidationStatus(string companyid, string tier, string ct, int month, int year)
         {
             DateTime dealDate = new DateTime(year, month, 1);
-           
+            string status = Constants.WF_VALIDATION_NOTDONE;
+
             try
             {
                 var fd = (from j in TrackerDB.PTAS.FundDeals
@@ -653,7 +686,6 @@ namespace petratracker.Models
 
                 var fld = (from k in TrackerDB.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k);
 
-                string status = Constants.WF_VALIDATION_NOTDONE;
                 bool passed = true;
                 bool newemp = false;
                 bool ssnit = false;
@@ -689,7 +721,7 @@ namespace petratracker.Models
             }
             catch (Exception)
             {
-                throw;
+                return status;
             }
         }
     

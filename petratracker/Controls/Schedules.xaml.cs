@@ -82,6 +82,15 @@ namespace petratracker.Controls
             UpdateGrid();
         }
 
+        private void viewSchedules_SelectionChanged(object sender, MouseButtonEventArgs e)
+        {
+            if (viewSchedules.SelectedItem != null)
+            {
+                Schedule j = viewSchedules.SelectedItem as Schedule;
+                ShowActionBarButtons(j.workflow_status);
+            }
+        }
+
         private void viewSchedules_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Schedule j = viewSchedules.SelectedItem as Schedule;
@@ -93,6 +102,49 @@ namespace petratracker.Controls
             flyout.ClosingFinished += flyout_ClosingFinished;
             flyout.Content = new ScheduleView(j.id, true);
             flyout.IsOpen = !flyout.IsOpen;
+        }
+
+
+        private void btn_groupMarkReceiptSent_Click(object sender, RoutedEventArgs e)
+        {
+            string[] validReceiptStates = {  Constants.WF_STATUS_PAYMENTS_RECEIVED,
+                                             Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD,
+                                             Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD,
+                                          };
+            MessageBoxResult rs = MessageBox.Show("Are you want to mark all of these as Receipt Sent?", "Schedules Update",MessageBoxButton.YesNo,MessageBoxImage.Question);
+
+            if (rs == MessageBoxResult.Yes)
+            {           
+                foreach (var item in viewSchedules.SelectedItems)
+                {
+                    if (validReceiptStates.Contains(((Schedule)item).workflow_status))
+                    {
+                        TrackerSchedule.MarkReceiptSent((Schedule)item);
+                    }
+                }
+                UpdateGrid();
+            }
+        }
+
+        private void btn_groupMarkFileDownload_Click(object sender, RoutedEventArgs e)
+        {
+            string[] validFiledownloadStates = { Constants.WF_STATUS_PAYMENTS_RECEIVED,
+                                                 Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD
+                                                };
+
+            MessageBoxResult rs = MessageBox.Show("Are you want to mark all of these as File Downloaded?", "Schedules Update", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (rs == MessageBoxResult.Yes)
+            {
+                foreach (var item in viewSchedules.SelectedItems)
+                {
+                    if (validFiledownloadStates.Contains(((Schedule)item).workflow_status))
+                    {
+                        TrackerSchedule.MarkFileDownloaded((Schedule)item);
+                    }
+                }
+                UpdateGrid();
+            }
         }
 
         private void btn_showAddSchedule_Click(object sender, RoutedEventArgs e)
@@ -128,16 +180,54 @@ namespace petratracker.Controls
             // Highlight items if checked.
             if (this.chx_schedulefilter.IsChecked == true)
             {
-                actionBar.Visibility = Visibility.Visible;
+                ShowActionBarButtons(filter);
                 viewSchedules.SelectAll();
             }
             else
             {
-                actionBar.Visibility = Visibility.Collapsed;
+                ShowActionBarButtons();
                 viewSchedules.UnselectAll();
             }
         }
 
+        private bool ShowActionBarButtons(string filter="")
+        {
+            bool activebuttons = false;
+
+            HideActionBarButtons();
+
+             if (filter=="All" || filter == Constants.WF_STATUS_PAYMENTS_RECEIVED)
+            {
+                btn_groupMarkReceiptSent.Visibility = Visibility.Visible;
+                btn_groupMarkFileDownload.Visibility = Visibility.Visible;
+                activebuttons = true;
+            } else if (filter==Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD){
+                btn_groupMarkFileDownload.Visibility = Visibility.Visible;
+                activebuttons = true;
+            } else if ((filter==Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD) || filter==Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD) {
+                btn_groupMarkReceiptSent.Visibility = Visibility.Visible;
+                activebuttons = true;
+            }
+
+             if (activebuttons)
+             {
+                 actionBar.Visibility = Visibility.Visible;
+             }
+             else
+             {
+                 actionBar.Visibility = Visibility.Collapsed;
+             }
+
+            return activebuttons;
+        }
+
+        private void HideActionBarButtons()
+        {
+            btn_groupMarkReceiptSent.Visibility = Visibility.Collapsed;
+            btn_groupMarkFileDownload.Visibility = Visibility.Collapsed;
+        }
         #endregion
+
+
     }
 }

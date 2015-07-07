@@ -28,7 +28,7 @@
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,5,0,0">
                 <Controls:SplitButton x:Name="ScheduleListFilter"
                                   HorizontalContentAlignment="Left" HorizontalAlignment="Left"
-                                  Width="120" Height="20"
+                                  Width="Auto" Height="20"
                                   SelectedIndex="0"
                                   Click="ScheduleListFilter_Click"
                                   SelectionChanged="ScheduleListFilter_SelectionChanged"
@@ -42,24 +42,21 @@
 
                 <Label x:Name="lbl_scheduleCount" Content="0 Schedules" FontFamily="Segoe WP Light" FontSize="14" Foreground="{DynamicResource AccentColorBrush}" Margin="10,0,0,0" VerticalAlignment="Center"/>
 
-                <StackPanel x:Name="actionBar" Orientation="Horizontal" Margin="20,0,0,0">
+                <StackPanel x:Name="actionBar" Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
+                    
                     <!--
-                    <Button x:Name="btn_activateUser" Click="btn_activateUser_Click"  Width="40" Height="40"  ToolTip="Activate Selected Users" Margin="10,0,0,0" Style="{DynamicResource MetroCircleButtonStyle}">
+                    <Button x:Name="btn_groupMarkReceiptSent" Visibility="Collapsed" Click="btn_groupMarkReceiptSent_Click" Width="40" Height="40"  ToolTip="Mark Receipt as sent for selected schedules" Margin="10,0,0,0" Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                             <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_camera_flash_auto}" />
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
-
-                    <Button x:Name="btn_deactivateUser" Click="btn_deactivateUser_Click" Width="40" Height="40"  ToolTip="De-Activate Selected Users" Margin="10,0,0,0" Style="{DynamicResource MetroCircleButtonStyle}">
-                        <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_camera_flash_off}" />
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_reply_email}" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
                     -->
+
+                    <Button x:Name="btn_groupMarkReceiptSent" Content="Mark all as Receipt Sent" Visibility="Collapsed" Click="btn_groupMarkReceiptSent_Click" Width="Auto" Height="30"  ToolTip="Mark Receipt as sent for selected schedules" Margin="10,0,0,0"/>
+                    <Button x:Name="btn_groupMarkFileDownload" Content="Mark all as File Downloaded" Visibility="Collapsed" Click="btn_groupMarkFileDownload_Click" Width="Auto" Height="30"  ToolTip="Mark File as downloaded for selected schedules" Margin="5,0,0,0" />
+
                 </StackPanel>
 
                 <Button x:Name="btn_showAddSchedule" Click="btn_showAddSchedule_Click" Width="40" Height="40" Margin="20,0,0,0" ToolTip="Add" Style="{DynamicResource MetroCircleButtonStyle}">
@@ -77,7 +74,7 @@
                       MinWidth="600" ColumnWidth="*" Margin="0,30,0,10" 
                       SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
                       IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
-                      ItemsSource="{Binding}" PreviewMouseDoubleClick="viewSchedules_MouseDoubleClick">
+                      ItemsSource="{Binding}" PreviewMouseDoubleClick="viewSchedules_MouseDoubleClick" MouseLeftButtonUp="viewSchedules_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Company" Width="200" Binding="{Binding company}" />
                     <DataGridTextColumn Header="Tier" Width="55" Binding="{Binding tier}" />
@@ -96,8 +93,8 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Status" Width="210" Binding="{Binding workflow_status}" />
-                    <DataGridTemplateColumn Width="Auto" Header="Owner">
+                    <DataGridTextColumn Header="Status" Width="280" Binding="{Binding workflow_status}" />
+                    <DataGridTemplateColumn Width="100" Header="Owner">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock>

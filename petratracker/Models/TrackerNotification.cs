@@ -56,7 +56,6 @@ namespace petratracker.Models
             }
             catch (Exception)
             {
-                throw;
             }    
         }
 
@@ -75,7 +74,6 @@ namespace petratracker.Models
             }
             catch (Exception)
             {
-                throw;
             }
         }
      

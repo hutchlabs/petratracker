@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 using petratracker.Models;
 using MahApps.Metro.Controls;
+using petratracker.Pages;
 
 namespace petratracker.Controls
 {
@@ -43,7 +44,7 @@ namespace petratracker.Controls
         private void viewJobs_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Job selVal = (Job) viewSubscriptionsJobs.SelectedItem;
-            this.viewSubscriptionFrame.NavigationService.Navigate(new Pages.subscriptions(selVal.id));
+            this.viewSubscriptionFrame.NavigationService.Navigate(new subscriptions(selVal.id));
             this.viewSubscriptionsJobs.Visibility = Visibility.Collapsed;
             this.viewSubscriptionFrame.Visibility = Visibility.Visible;
         }

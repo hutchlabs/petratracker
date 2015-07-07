@@ -103,7 +103,7 @@ namespace petratracker.Pages
         private void cbx_companies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string company_id = ((ComboBoxPairs)cbx_companies.SelectedItem)._Key;
-            string tier = cbx_tiers.SelectedValue.ToString();
+            string tier = (cbx_tiers.SelectedIndex==-1) ? "" : cbx_tiers.SelectedValue.ToString();
             cbx_schedules.ItemsSource = TrackerSchedule.GetCBSchedules(company_id, tier);
         }
 

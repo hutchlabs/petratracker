@@ -19,59 +19,81 @@ namespace petratracker.Pages
 {
     public partial class subscriptions : Page
     {
-        #region Private Members
+        string [] ops_user = { "Unidentified", "Identified and Approved", "Returned", "Rejected" };
+        string [] super_ops_user = { "Identified", "Unidentified", "Identified and Approved", "Returned", "Rejected" };
+        private int _jobid;
 
-        private int _jobId;
-        private readonly string[] _ops_user = { "Unidentified", "Identified and Approved", "Returned" };
-        private readonly string[] _super_ops_user = { "Identified", "Un-Identified", "Identified and Approved", "Returned" };
-                
-        #endregion
-
-        #region Constructor
-
-        public subscriptions(int id)
+        public subscriptions()
         {
             InitializeComponent();
-            _jobId = id;
         }
 
-        #endregion
+        public subscriptions(int job_id)
+        {
+            _jobid = job_id;
+        }
+        
+        private void load_subscriptions(string sub_status)
+        { 
+            try
+            {
+                var subscriptions = (from p in TrackerDB.Tracker.Payments
+                                     where p.job_id == _jobid && p.status == sub_status
+                                     select p
+                                    );
 
-        #region Event Handlers
+                viewSubscriptions.ItemsSource = subscriptions;
+
+                viewSubscriptions.Columns[0].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[1].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[4].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[5].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[6].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[7].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[8].Visibility = System.Windows.Visibility.Hidden;
+                //viewSubscriptions.Columns[9].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[10].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[11].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[12].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[13].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[14].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[15].Visibility = System.Windows.Visibility.Hidden;
+                viewSubscriptions.Columns[16].Visibility = System.Windows.Visibility.Hidden;
+            }
+            catch(Exception)
+            {
+                //MessageBox.Show(subsError.Message);
+            }
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             load_subscriptions("Unidentified");
 
-            if (TrackerUser.IsCurrentUserOps())
+            if (TrackerUser.GetCurrentUser().Role.role1.ToLower().Equals("ops user"))
             {
-                cmbSubType.ItemsSource = _ops_user.ToList();
+                cmbSubType.ItemsSource = ops_user.ToList();
             }
-            else if (TrackerUser.IsCurrentUserSuperOps() || TrackerUser.IsCurrentUserAdmin())
+            else if (TrackerUser.GetCurrentUser().Role.role1.ToLower().Equals("super ops user"))
             {
-                cmbSubType.ItemsSource = _super_ops_user.ToList();
+                cmbSubType.ItemsSource = super_ops_user.ToList();
             }
             else
             {
                 MessageBox.Show("Your user role does not have previleges to handle subscriptions.", "Unauthorized User", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
+
+
         }
 
         private void viewSubscriptions_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             try
             {
-                if((cmbSubType.SelectedValue as string).Equals("Unidentified"))
-                {
-                    SubscriptionsVerify openVerification = new SubscriptionsVerify();
-                    Payment selVal = (Payment)viewSubscriptions.SelectedItem;
-                    openVerification.subID = selVal.id;
-                    openVerification.ShowDialog();           
-                }
-                else if((cmbSubType.SelectedValue as string).Equals("Identified"))
-                {
-                
-                }
+                var option = cmbSubType.SelectedValue.ToString();
+                Payment selVal = (Payment)viewSubscriptions.SelectedItem;
+                verifySubscription openVerification = new verifySubscription(option.ToString(), selVal.id);
+                openVerification.ShowDialog();               
             }
             catch(Exception subError)
             {
@@ -91,6 +113,7 @@ namespace petratracker.Pages
                     case "Unidentified": load_subscriptions("Unidentified"); break;
                     case "Returned": load_subscriptions("Returned"); break;
                     case "Identified and Approved": load_subscriptions("Identified and Approved"); break;
+                    case "Rejected": load_subscriptions("Rejected"); break;
                     default:
                         load_subscriptions("Unidentified");
                         break;
@@ -101,38 +124,5 @@ namespace petratracker.Pages
                 MessageBox.Show(loadErr.Message);
             }
         }
-
-        #endregion
-
-        #region Private Helper Methods
-
-        private void load_subscriptions(string sub_status)
-        {
-            try
-            {
-                viewSubscriptions.ItemsSource = TrackerPayment.GetSubscriptions(_jobId, sub_status);
-                viewSubscriptions.Columns[0].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[1].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[4].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[5].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[6].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[7].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[8].Visibility = System.Windows.Visibility.Hidden;
-                //viewSubscriptions.Columns[9].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[10].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[11].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[12].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[13].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[14].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[15].Visibility = System.Windows.Visibility.Hidden;
-                viewSubscriptions.Columns[16].Visibility = System.Windows.Visibility.Hidden;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        #endregion
     }
 }
