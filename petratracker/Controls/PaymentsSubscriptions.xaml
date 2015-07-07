@@ -15,7 +15,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Display">
+    <Grid>
         <DockPanel LastChildFill="True"  HorizontalAlignment="Left" Margin="0,40,0,0">
           
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
@@ -31,7 +31,7 @@
                                       SelectedIndex="0"
                                       Click="JobsListFilter_Click"
                                       SelectionChanged="JobsListFilter_SelectionChanged"
-                                      ItemsSource="{Binding JobsFilterOptions}">
+                                      ItemsSource="{Binding JobsFilterOptions}" BorderBrush="{x:Null}">
 
                         <Controls:SplitButton.Icon>
                             <Viewbox Width="20" Height="20" Stretch="Uniform">
@@ -40,7 +40,7 @@
                         </Controls:SplitButton.Icon>
                     </Controls:SplitButton>
 
-                    <Label x:Name="lbl_jobsCount" Content="0 Payments" FontFamily="Segoe WP Light" FontSize="14" Foreground="Black" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <Label x:Name="lbl_jobsCount" Content="0 Payments" FontFamily="Segoe WP Semibold" FontSize="14" Foreground="Black" Margin="10,0,0,0" VerticalAlignment="Center"/>
 
                     <StackPanel x:Name="jobs_actionBar" Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
                         <Button x:Name="btn_approveJobs" Content="Approve" Visibility="Collapsed" Click="btn_approveJobs_Click" Width="Auto" Height="30"  ToolTip="Approve selected payments" Margin="10,0,0,0"/>
@@ -55,8 +55,7 @@
                     </Button>
                 </StackPanel>
 
-                <DataGrid x:Name="viewJobs" 
-                      RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Display"
+                <DataGrid x:Name="viewJobs" RenderOptions.ClearTypeHint="Enabled"
                       HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
                       MinWidth="300" ColumnWidth="*" Margin="10,0,10,10" 
                       SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
@@ -92,7 +91,7 @@
                                   SelectedIndex="0"
                                   Click="SubsListFilter_Click"
                                   SelectionChanged="SubsListFilter_SelectionChanged"
-                                  ItemsSource="{Binding SubsFilterOptions}">
+                                  ItemsSource="{Binding SubsFilterOptions}" BorderBrush="Black">
                     <Controls:SplitButton.Icon>
                         <Viewbox Width="20" Height="20" Stretch="Uniform">
                             <CheckBox x:Name="chx_subsfilter" Checked="SubsListFilter_Click" Unchecked="SubsListFilter_Click" Margin="10,0,0,0" Focusable="False" />
@@ -100,7 +99,7 @@
                     </Controls:SplitButton.Icon>
                 </Controls:SplitButton>
 
-                <Label x:Name="lbl_subsCount" Content="0 Subscriptions Items" FontFamily="Segoe WP Light" FontSize="14" Foreground="{DynamicResource AccentColorBrush}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                <Label x:Name="lbl_subsCount" Content="0 Subscriptions Items" FontFamily="Segoe WP Semibold" FontSize="14" Foreground="{DynamicResource AccentColorBrush}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <!--
                 <StackPanel x:Name="actionBar" Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
                     <Button x:Name="btn_groupMarkReceiptSent" Content="Mark all as Receipt Sent" Visibility="Collapsed" Click="btn_groupMarkReceiptSent_Click" Width="Auto" Height="30"  ToolTip="Mark Receipt as sent for selected schedules" Margin="10,0,0,0"/>
@@ -109,8 +108,7 @@
                   -->
             </StackPanel>
 
-            <DataGrid x:Name="viewSubs" 
-                      RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Display"
+            <DataGrid x:Name="viewSubs" RenderOptions.ClearTypeHint="Enabled"
                       HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
                       MinWidth="600" ColumnWidth="*" Margin="10,30,0,10" 
                       SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"

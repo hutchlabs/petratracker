@@ -19,7 +19,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     
-    <Grid RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Display">
+    <Grid RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Ideal">
         <DockPanel LastChildFill="True"  HorizontalAlignment="Left" Margin="0,40,0,0">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Label  Content="Schedules" Style="{StaticResource ControlHeaderStyle}" Margin="0" />
@@ -69,7 +69,7 @@
             </StackPanel>
 
             <DataGrid x:Name="viewSchedules" 
-                      RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Display"
+                      RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Ideal"
                       HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
                       MinWidth="600" ColumnWidth="*" Margin="0,30,0,10" 
                       SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
