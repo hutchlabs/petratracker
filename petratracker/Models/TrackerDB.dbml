@@ -60,6 +60,8 @@
       <Association Name="User_Notification" Member="Notifications" ThisKey="id" OtherKey="from_user_id" Type="Notification" />
       <Association Name="User_Email" Member="Emails" ThisKey="id" OtherKey="modified_by" Type="Email" />
       <Association Name="User_Schedule" Member="Schedules" ThisKey="id" OtherKey="modified_by" Type="Schedule" />
+      <Association Name="User_Payment" Member="Payments" ThisKey="id" OtherKey="approved_by" Type="Payment" />
+      <Association Name="User_Payment1" Member="Payments1" ThisKey="id" OtherKey="owner" Type="Payment" />
       <Association Name="Role_User" Member="Role" ThisKey="role_id" OtherKey="id" Type="Role" IsForeignKey="true" />
     </Type>
   </Table>
@@ -159,6 +161,8 @@
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Association Name="Payment_Schedule" Member="Schedules" ThisKey="id" OtherKey="payment_id" Type="Schedule" />
+      <Association Name="User_Payment" Member="User" ThisKey="approved_by" OtherKey="id" Type="User" IsForeignKey="true" />
+      <Association Name="User_Payment1" Member="User1" ThisKey="owner" OtherKey="id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

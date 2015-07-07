@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MahApps.Metro.Controls;
+using petratracker.Models;
+using petratracker.Pages;
+using petratracker.Utility;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-using petratracker.Models;
-using MahApps.Metro.Controls;
-using petratracker.Pages;
 
 namespace petratracker.Controls
 {
@@ -23,7 +13,36 @@ namespace petratracker.Controls
     {
         #region Private Members 
 
-        private Microsoft.Win32.OpenFileDialog _dlg = new Microsoft.Win32.OpenFileDialog();
+        private readonly string[] _jobsOptions = { "All", Constants.PAYMENT_STATUS_APPROVED, Constants.PAYMENT_STATUS_INPROGRESS }; 
+
+        private readonly string[] _opsUserOptions   = { "All", Constants.PAYMENT_STATUS_UNIDENTIFIED,
+                                                        Constants.PAYMENT_STATUS_IDENTIFIED_APPROVED, 
+                                                        Constants.PAYMENT_STATUS_RETURNED, 
+                                                        Constants.PAYMENT_STATUS_REJECTED};
+        private readonly string[] _superUserOptions = { "All", Constants.PAYMENT_STATUS_UNIDENTIFIED,
+                                                        Constants.PAYMENT_STATUS_IDENTIFIED,
+                                                        Constants.PAYMENT_STATUS_IDENTIFIED_APPROVED, 
+                                                        Constants.PAYMENT_STATUS_RETURNED, 
+                                                        Constants.PAYMENT_STATUS_REJECTED};
+        
+        #endregion
+
+        #region Public Properties
+
+        public string[] JobsFilterOptions
+        {
+            private set { ; }
+            get { return _jobsOptions;  }
+        }
+
+        public string[] SubsFilterOptions
+        {
+            get 
+            {
+                return (TrackerUser.IsCurrentUserOps()) ? _opsUserOptions : _superUserOptions;
+            }
+            private set { ;  }
+        }
 
         #endregion
 
@@ -31,88 +50,234 @@ namespace petratracker.Controls
 
         public PaymentsSubscriptions()
         {
+            this.DataContext = this;
             InitializeComponent();
-            LoadSubscriptions();
         }
 
         #endregion
 
         #region Event Handlers
 
-        #region View Subscriptions Events
-
-        private void viewJobs_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            Job selVal = (Job) viewSubscriptionsJobs.SelectedItem;
-            this.viewSubscriptionFrame.NavigationService.Navigate(new subscriptions(selVal.id));
-            this.viewSubscriptionsJobs.Visibility = Visibility.Collapsed;
-            this.viewSubscriptionFrame.Visibility = Visibility.Visible;
+            UpdatePaymentJobs();
+            UpdateSubscriptions();
         }
 
-        private void viewJobs_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        #region Jobs Grid Methods
+       
+        private void JobsListFilter_Click(object sender, RoutedEventArgs e)
         {
-            string[] hiddenHeaders = { "id", "updated_at", "job_type", "approved_by", "modified_by", "created_at", "User", "owner" };
+            UpdatePaymentJobs();
+        }
 
-            if (hiddenHeaders.Contains(e.Column.Header.ToString()))
+        private void JobsListFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdatePaymentJobs();
+        }
+
+        private void viewJobs_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {                    
+            UpdateSubscriptions();
+        }
+
+        private void viewJobs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (viewJobs.SelectedItem != null)
             {
-                e.Cancel = true;
+                Job j = viewJobs.SelectedItem as Job;
+                ShowJobsActionBarButtons(j.status.Trim());
             }
+        }
 
-            if (e.Column.Header.ToString().Equals("job_description"))
+        private void btn_showAddSubscription_Click(object sender, RoutedEventArgs e)
+        {
+            Window parentWindow = Window.GetWindow(this);
+            object obj = parentWindow.FindName("surrogateFlyout");
+            Flyout flyout = (Flyout)obj;
+
+            flyout.ClosingFinished += jobsflyout_ClosingFinished;
+            flyout.Content = new AddSubscription(true);
+            flyout.IsOpen = !flyout.IsOpen;
+        }
+
+        private void btn_approveJobs_Click(object sender, RoutedEventArgs e)
+        {
+            string[] validStates = { Constants.PAYMENT_STATUS_INPROGRESS };
+                    
+            MessageBoxResult rs = MessageBox.Show("Are you want to mark all of these as Approved?", "Payments Update", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (rs == MessageBoxResult.Yes)
             {
-                e.Column.Header = "Description";
+                foreach (var item in viewJobs.SelectedItems)
+                {
+                    if (validStates.Contains(((Job)item).status.Trim()))
+                    {
+                        TrackerJobs.Approve((Job)item);
+                    }
+                }
+                UpdatePaymentJobs();
             }
         }
 
         #endregion
 
-        #region Add Subscriptions Events
-        
-        private void btnBrowse_Click(object sender, RoutedEventArgs e)
+        #region Subcriptions Grid Methods
+
+        private void SubsListFilter_Click(object sender, RoutedEventArgs e)
         {
-            _dlg.DefaultExt = ".xls";
-            _dlg.Filter = "Text documents (.xls)|*.xls";
+            UpdateSubscriptions();
+        }
 
-            Nullable<bool> result = _dlg.ShowDialog();
+        private void SubsListFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateSubscriptions();
+        }
+     
+        private void viewSubs_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Payment p = (Payment) viewSubs.SelectedItem;
 
-            if (result == true)
+            Window parentWindow = Window.GetWindow(this);
+            object obj = parentWindow.FindName("surrogateFlyout");
+            Flyout flyout = (Flyout)obj;
+
+            flyout.ClosingFinished += subsflyout_ClosingFinished;
+            flyout.Content = new verifySubscription(p.status.Trim(), p.id, true);
+            flyout.IsOpen = !flyout.IsOpen;
+        }
+
+        private void viewSubs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (viewSubs.SelectedItem != null)
             {
-                txtfileLocation.Text = _dlg.SafeFileName;
+                Payment p = viewSubs.SelectedItem as Payment;
+                ShowSubsActionBarButtons(p.status.Trim());
             }
         }
 
-        private void btnUploadFile_Click(object sender, RoutedEventArgs e)
-        {
-            if (TrackerPayment.read_microgen_data(_dlg.FileName, cmbDealType.Text, txtDealDescription.Text))
-            {
-                MessageBox.Show("File upload Successfully", "Upload Complete", MessageBoxButton.OK, MessageBoxImage.Information);
-                LoadSubscriptions();
-                InnerSubTabControl.SelectedIndex = 0;
-            }
-            else
-            {
-                MessageBox.Show("File upload was not successful, please use a valid file format.", "Upload Failure", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            }
-        }
-        
         #endregion
 
+    
+
+        private void jobsflyout_ClosingFinished(object sender, RoutedEventArgs e)
+        {
+            UpdatePaymentJobs();
+        }
+
+        private void subsflyout_ClosingFinished(object sender, RoutedEventArgs e)
+        {
+            UpdateSubscriptions();
+        }
+         
         #endregion
 
         #region Private Helper Methods
-     
-        private void LoadSubscriptions()
+        
+        private void UpdatePaymentJobs()
         {
-            try
+            string filter = (string)((SplitButton)JobsListFilter).SelectedItem;
+    
+            if (filter == "All") { viewJobs.ItemsSource = TrackerJobs.GetJobs(Constants.JOB_TYPE_SUBSCRIPTION); }
+            else { viewJobs.ItemsSource = TrackerJobs.GetJobs(Constants.JOB_TYPE_SUBSCRIPTION, filter); }
+
+            lbl_jobsCount.Content = string.Format("{0} Payments", viewJobs.Items.Count);
+
+            if (viewJobs.Items.Count > 0) { viewJobs.SelectedIndex = 0; }
+
+            if (this.chx_jobsfilter.IsChecked == true)
             {
-                viewSubscriptionsJobs.ItemsSource = TrackerJobs.GetJobs();
+                ShowJobsActionBarButtons(filter);
+                viewJobs.SelectAll();
             }
-            catch (Exception jobsErr)
+            else
             {
-                MessageBox.Show(jobsErr.Message);
+                ShowJobsActionBarButtons();
+                viewJobs.UnselectAll();
+                if (viewJobs.Items.Count > 0) { viewJobs.SelectedIndex = 0; }
             }
         }
 
-        #endregion
+        private void UpdateSubscriptions()
+        {
+            Job job = (Job)viewJobs.SelectedItem;
+
+            if (job != null)
+            {
+                string filter = (string)((SplitButton)SubsListFilter).SelectedItem;
+                filter = (filter == null) ? "" : filter;
+
+                if (filter == "All") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id); }
+                else { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id, filter); }
+
+                /*
+                viewSubs.Columns[0].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[1].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[4].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[5].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[6].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[7].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[8].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[10].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[11].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[12].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[13].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[14].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[15].Visibility = System.Windows.Visibility.Hidden;
+                viewSubs.Columns[16].Visibility = System.Windows.Visibility.Hidden;
+                */
+
+                lbl_subsCount.Content = string.Format("{0} Subscriptions", viewSubs.Items.Count);
+
+                if (this.chx_subsfilter.IsChecked == true)
+                {
+                    ShowSubsActionBarButtons(filter);
+                    viewSubs.SelectAll();
+                }
+                else
+                {
+                    ShowSubsActionBarButtons();
+                    viewSubs.UnselectAll();
+                }
+            }
+        }
+
+        private bool ShowJobsActionBarButtons(string filter="")
+        {
+            bool activebuttons = false;
+
+            btn_approveJobs.Visibility = Visibility.Collapsed;
+
+            if (filter == "All" || filter == Constants.PAYMENT_STATUS_INPROGRESS)
+            {
+                btn_approveJobs.Visibility = Visibility.Visible;
+                activebuttons = true;
+            }
+     
+            jobs_actionBar.Visibility = (activebuttons) ? Visibility.Visible : Visibility.Collapsed;
+   
+            return activebuttons;
+        }
+
+        private bool ShowSubsActionBarButtons(string filter="")
+        {
+            bool activebuttons = false;
+
+            /*btn_approveJobs.Visibility = Visibility.Collapsed;
+
+            if (filter == "All" || filter == Constants.PAYMENT_STATUS_INPROGRESS)
+            {
+                btn_approveJobs.Visibility = Visibility.Visible;
+                activebuttons = true;
+            }
+
+            jobs_actionBar.Visibility = (activebuttons) ? Visibility.Visible : Visibility.Collapsed;
+            */
+            return activebuttons;
+        }
+
+
+      #endregion
+
     }
 }

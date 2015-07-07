@@ -30,7 +30,7 @@ namespace petratracker.Models
                 Job j = new Job();
                 j.job_type = job_type;
                 j.job_description = deal_description;
-                j.status = "In Progress";
+                j.status = Constants.PAYMENT_STATUS_INPROGRESS;
                 j.owner = TrackerUser.GetCurrentUser().id;
                 j.created_at = DateTime.Now;
                 j.updated_at = DateTime.Now;
@@ -45,16 +45,30 @@ namespace petratracker.Models
             }
         }
 
-        public static IEnumerable<Job> GetJobs(string type="")
+        public static IEnumerable<Job> GetJobs(string type="", string status="")
         {
-            if (type == string.Empty)
+            if (type == string.Empty && status == string.Empty)
             {
-                return (from j in TrackerDB.Tracker.Jobs select j);
+                return (from j in TrackerDB.Tracker.Jobs orderby j.created_at descending select j);
             }
             else
             {
-                return (from j in TrackerDB.Tracker.Jobs where j.job_type == type select j);
+                if (status == string.Empty)
+                {
+                    return (from j in TrackerDB.Tracker.Jobs where j.job_type == type orderby j.created_at descending select j);
+                }
+                else
+                {
+                    return (from j in TrackerDB.Tracker.Jobs where j.job_type == type && j.status==status orderby j.created_at descending select j);
+                }
             }
+        }
+  
+        public static void Approve(Job job)
+        {
+            job.status = Constants.PAYMENT_STATUS_APPROVED;
+            job.updated_at = DateTime.Now;
+            TrackerDB.Tracker.SubmitChanges();
         }
 
         #endregion

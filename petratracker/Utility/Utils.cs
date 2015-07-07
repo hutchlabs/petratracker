@@ -27,6 +27,18 @@ namespace petratracker.Utility
  
         // Job types for Jobs table
         public const string JOB_TYPE_SCHEDULE = "Schedule";
+        public const string JOB_TYPE_SUBSCRIPTION = "Subscription";
+
+
+        // Payments status
+        public const string PAYMENT_STATUS_APPROVED = "Approved";
+        public const string PAYMENT_STATUS_INPROGRESS = "In Progress";
+
+        public const string PAYMENT_STATUS_UNIDENTIFIED = "Unidentified";
+        public const string PAYMENT_STATUS_IDENTIFIED = "Identified";
+        public const string PAYMENT_STATUS_IDENTIFIED_APPROVED = "Identified and Approved";
+        public const string PAYMENT_STATUS_RETURNED = "Returned";
+        public const string PAYMENT_STATUS_REJECTED = "Rejected";
 
         // Notification status and types
         public const string NF_STATUS_NEW = "New";

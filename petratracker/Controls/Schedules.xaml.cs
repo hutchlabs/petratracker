@@ -104,7 +104,6 @@ namespace petratracker.Controls
             flyout.IsOpen = !flyout.IsOpen;
         }
 
-
         private void btn_groupMarkReceiptSent_Click(object sender, RoutedEventArgs e)
         {
             string[] validReceiptStates = {  Constants.WF_STATUS_PAYMENTS_RECEIVED,
@@ -194,7 +193,8 @@ namespace petratracker.Controls
         {
             bool activebuttons = false;
 
-            HideActionBarButtons();
+            btn_groupMarkReceiptSent.Visibility = Visibility.Collapsed;
+            btn_groupMarkFileDownload.Visibility = Visibility.Collapsed;
 
              if (filter=="All" || filter == Constants.WF_STATUS_PAYMENTS_RECEIVED)
             {
@@ -221,13 +221,7 @@ namespace petratracker.Controls
             return activebuttons;
         }
 
-        private void HideActionBarButtons()
-        {
-            btn_groupMarkReceiptSent.Visibility = Visibility.Collapsed;
-            btn_groupMarkFileDownload.Visibility = Visibility.Collapsed;
-        }
+   
         #endregion
-
-
     }
 }

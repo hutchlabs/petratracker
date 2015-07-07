@@ -973,6 +973,10 @@ namespace petratracker.Models
 		
 		private EntitySet<Schedule> _Schedules;
 		
+		private EntitySet<Payment> _Payments;
+		
+		private EntitySet<Payment> _Payments1;
+		
 		private EntityRef<Role> _Role;
 		
     #region Extensibility Method Definitions
@@ -1020,6 +1024,8 @@ namespace petratracker.Models
 			this._Notifications = new EntitySet<Notification>(new Action<Notification>(this.attach_Notifications), new Action<Notification>(this.detach_Notifications));
 			this._Emails = new EntitySet<Email>(new Action<Email>(this.attach_Emails), new Action<Email>(this.detach_Emails));
 			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
+			this._Payments = new EntitySet<Payment>(new Action<Payment>(this.attach_Payments), new Action<Payment>(this.detach_Payments));
+			this._Payments1 = new EntitySet<Payment>(new Action<Payment>(this.attach_Payments1), new Action<Payment>(this.detach_Payments1));
 			this._Role = default(EntityRef<Role>);
 			OnCreated();
 		}
@@ -1413,6 +1419,32 @@ namespace petratracker.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Payment", Storage="_Payments", ThisKey="id", OtherKey="approved_by")]
+		public EntitySet<Payment> Payments
+		{
+			get
+			{
+				return this._Payments;
+			}
+			set
+			{
+				this._Payments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Payment1", Storage="_Payments1", ThisKey="id", OtherKey="owner")]
+		public EntitySet<Payment> Payments1
+		{
+			get
+			{
+				return this._Payments1;
+			}
+			set
+			{
+				this._Payments1.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_User", Storage="_Role", ThisKey="role_id", OtherKey="id", IsForeignKey=true)]
 		public Role Role
 		{
@@ -1525,6 +1557,30 @@ namespace petratracker.Models
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
+		}
+		
+		private void attach_Payments(Payment entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Payments(Payment entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
+		private void attach_Payments1(Payment entity)
+		{
+			this.SendPropertyChanging();
+			entity.User1 = this;
+		}
+		
+		private void detach_Payments1(Payment entity)
+		{
+			this.SendPropertyChanging();
+			entity.User1 = null;
 		}
 	}
 	
@@ -3151,6 +3207,10 @@ namespace petratracker.Models
 		
 		private EntitySet<Schedule> _Schedules;
 		
+		private EntityRef<User> _User;
+		
+		private EntityRef<User> _User1;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -3208,6 +3268,8 @@ namespace petratracker.Models
 		public Payment()
 		{
 			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
+			this._User = default(EntityRef<User>);
+			this._User1 = default(EntityRef<User>);
 			OnCreated();
 		}
 		
@@ -3562,6 +3624,10 @@ namespace petratracker.Models
 			{
 				if ((this._approved_by != value))
 				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.Onapproved_byChanging(value);
 					this.SendPropertyChanging();
 					this._approved_by = value;
@@ -3622,6 +3688,10 @@ namespace petratracker.Models
 			{
 				if ((this._owner != value))
 				{
+					if (this._User1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnownerChanging(value);
 					this.SendPropertyChanging();
 					this._owner = value;
@@ -3701,6 +3771,74 @@ namespace petratracker.Models
 			set
 			{
 				this._Schedules.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Payment", Storage="_User", ThisKey="approved_by", OtherKey="id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Payments.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Payments.Add(this);
+						this._approved_by = value.id;
+					}
+					else
+					{
+						this._approved_by = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Payment1", Storage="_User1", ThisKey="owner", OtherKey="id", IsForeignKey=true)]
+		public User User1
+		{
+			get
+			{
+				return this._User1.Entity;
+			}
+			set
+			{
+				User previousValue = this._User1.Entity;
+				if (((previousValue != value) 
+							|| (this._User1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User1.Entity = null;
+						previousValue.Payments1.Remove(this);
+					}
+					this._User1.Entity = value;
+					if ((value != null))
+					{
+						value.Payments1.Add(this);
+						this._owner = value.id;
+					}
+					else
+					{
+						this._owner = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("User1");
+				}
 			}
 		}
 		

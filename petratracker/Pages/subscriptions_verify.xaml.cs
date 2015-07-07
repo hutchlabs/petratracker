@@ -14,17 +14,21 @@ using System.Windows.Shapes;
 using System.Data;
 
 using petratracker.Models;
+using MahApps.Metro.Controls;
 
 namespace petratracker.Pages
 {
-    public partial class verifySubscription : Window
+    public partial class verifySubscription : UserControl
     {
         private int subID = -1;
         private string subType = string.Empty;
+        private bool _loadedInFlyout = false;
 
-        public verifySubscription(string subscription_status,int subscription_id)
+
+        public verifySubscription(string subscription_status,int subscription_id,bool inFlyout=false)
         {
             InitializeComponent();
+            _loadedInFlyout = inFlyout;
             subID = subscription_id;
             subType = subscription_status;
             lblSubscriptionType.Content = (object)subscription_status;
@@ -265,7 +269,8 @@ namespace petratracker.Pages
             else if(subType == "Unidentified"){load_unidentified_subscription();}
             else if(subType == "Returned"){load_unidentified_subscription();}
             else if(subType == "Identified and Approved"){load_approved_subscription();}
-            else {MessageBox.Show("Transaction was not identiifed.","Invalid Id",MessageBoxButton.OK,MessageBoxImage.Exclamation);this.Close();}        
+            else {MessageBox.Show("Transaction was not identiifed.","Invalid Id",MessageBoxButton.OK,MessageBoxImage.Exclamation);
+                this.Close();}        
         }
 
         private bool update_payment(string verifyType)
@@ -484,9 +489,19 @@ namespace petratracker.Pages
            
         }
 
-       
-
-
+        private void Close()
+        {
+            if (_loadedInFlyout)
+                close_flyout();
+        }
+        private void close_flyout()
+        {
+            Window parentWindow = Window.GetWindow(this);
+            object obj = parentWindow.FindName("surrogateFlyout");
+            Flyout flyout = (Flyout)obj;
+            flyout.Content = null;
+            flyout.IsOpen = !flyout.IsOpen;
+        }
 
 
     }

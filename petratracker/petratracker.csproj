@@ -170,8 +170,8 @@
     <Compile Include="Pages\subscriptions_approve.xaml.cs">
       <DependentUpon>subscriptions_approve.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\subscriptions.xaml.cs">
-      <DependentUpon>subscriptions.xaml</DependentUpon>
+    <Compile Include="Pages\subscriptions_add.xaml.cs">
+      <DependentUpon>subscriptions_add.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\schedules_view.xaml.cs">
       <DependentUpon>schedules_view.xaml</DependentUpon>
@@ -266,7 +266,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\subscriptions.xaml">
+    <Page Include="Pages\subscriptions_add.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -4,39 +4,127 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             mc:Ignorable="d">
-    <Grid>
-        <Grid.Resources>
-            <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
-        </Grid.Resources>
+             mc:Ignorable="d" Loaded="UserControl_Loaded">
 
-        <TabControl Margin="0,10,10,0" x:Name="InnerSubTabControl" TabStripPlacement="Left">
-            
-            <TabItem Header="View Subscriptions" ToolTip="View Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" >
-                <DockPanel LastChildFill="True" Margin="20" HorizontalAlignment="Left">
-                    <Label DockPanel.Dock="Top" Content="Subscriptions" Style="{StaticResource DescriptionHeaderStyle}" />
-                    <Frame x:Name="viewSubscriptionFrame" Visibility="Collapsed"/>
-                    <DataGrid x:Name="viewSubscriptionsJobs" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*"  Margin="0,10" AutoGeneratingColumn="viewJobs_AutoGeneratingColumn" MinWidth="600"  MouseDoubleClick="viewJobs_MouseDoubleClick" />
-                </DockPanel>
-            </TabItem>
-            
-            <TabItem Header="Add Subscriptions" ToolTip="Add Subscriptions" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" >
-                <GroupBox Header="Load New Subscriptions">
-                    <Grid HorizontalAlignment="Left" Height="340" Margin="0,0,0,0" VerticalAlignment="Top" Width="405">
-                        <Label Content="Deal Type" HorizontalAlignment="Left" Margin="44,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
-                        <ComboBox x:Name="cmbDealType" SelectedIndex="0" HorizontalAlignment="Left" Margin="44,43,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="14">
-                            <ComboBoxItem Content="Subscription"/>
-                        </ComboBox>
-                        <Label Content="File Location" HorizontalAlignment="Left" Margin="44,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
-                        <Button x:Name="btnBrowse" Content="Browse " HorizontalAlignment="Left" Margin="279,211,0,0" VerticalAlignment="Top" Width="85" Click="btnBrowse_Click" Height="33" FontWeight="Normal" FontFamily="Segoe UI"/>
-                        <TextBox x:Name="txtfileLocation" HorizontalAlignment="Left"  Height="33" Margin="44,211,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="230"  UseLayoutRounding="true" FontSize="14"/>
-                        <Button x:Name="btnUploadFile" Content="Upload File" HorizontalAlignment="Left" Margin="44,276,0,0" VerticalAlignment="Top" Width="152" Click="btnUploadFile_Click" RenderTransformOrigin="0.04,-0.3"  FontSize="12" FontFamily="Segoe UI" Height="32" FontWeight="Normal"/>
-                        <TextBox x:Name="txtDealDescription" HorizontalAlignment="Left"  Height="33" Margin="44,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="320"  UseLayoutRounding="true" FontSize="14"/>
-                        <Label Content="Upload Description" HorizontalAlignment="Left" Margin="44,91,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
-                    </Grid>
-                </GroupBox>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
 
-            </TabItem>
-        </TabControl>
+    <Grid RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Display">
+        <DockPanel LastChildFill="True"  HorizontalAlignment="Left" Margin="0,40,0,0">
+          
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label  Content="Subscriptions" Style="{StaticResource ControlHeaderStyle}" Margin="0" />
+            </StackPanel>
+            
+            <!-- Jobs GRID -->
+            <StackPanel DockPanel.Dock="Left" Margin="10" Background="{DynamicResource AccentColorBrush}">
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Controls:SplitButton x:Name="JobsListFilter"
+                                      HorizontalContentAlignment="Left" HorizontalAlignment="Left"
+                                      Width="120" Height="20"
+                                      SelectedIndex="0"
+                                      Click="JobsListFilter_Click"
+                                      SelectionChanged="JobsListFilter_SelectionChanged"
+                                      ItemsSource="{Binding JobsFilterOptions}">
+
+                        <Controls:SplitButton.Icon>
+                            <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                <CheckBox x:Name="chx_jobsfilter" Checked="JobsListFilter_Click" Unchecked="JobsListFilter_Click" Margin="10,0,0,0" Focusable="False" />
+                            </Viewbox>
+                        </Controls:SplitButton.Icon>
+                    </Controls:SplitButton>
+
+                    <Label x:Name="lbl_jobsCount" Content="0 Payments" FontFamily="Segoe WP Light" FontSize="14" Foreground="Black" Margin="10,0,0,0" VerticalAlignment="Center"/>
+
+                    <StackPanel x:Name="jobs_actionBar" Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
+                        <Button x:Name="btn_approveJobs" Content="Approve" Visibility="Collapsed" Click="btn_approveJobs_Click" Width="Auto" Height="30"  ToolTip="Approve selected payments" Margin="10,0,0,0"/>
+                    </StackPanel>
+
+                    <Button x:Name="btn_showAddSubscription" Click="btn_showAddSubscription_Click" Width="40" Height="40" Margin="20,0,0,0" ToolTip="Add" Style="{DynamicResource MetroCircleButtonStyle}">
+                        <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                </StackPanel>
+
+                <DataGrid x:Name="viewJobs" 
+                      RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Display"
+                      HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                      MinWidth="300" ColumnWidth="*" Margin="10,0,10,10" 
+                      SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
+                      IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                      ItemsSource="{Binding}" PreviewMouseDoubleClick="viewJobs_PreviewMouseDoubleClick"
+                      SelectionChanged="viewJobs_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Description" Width="150" Binding="{Binding job_description}" />
+                        <DataGridTextColumn Header="Status" Width="80" Binding="{Binding status}" />
+                        <DataGridTemplateColumn Width="100" Header="Owner">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat=" {0} {1}">
+                                                <Binding Path="User.first_name"/>
+                                                <Binding Path="User.last_name"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+
+            <!-- Subscription Grid -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,20,0,0">
+                <Controls:SplitButton x:Name="SubsListFilter"
+                                  HorizontalContentAlignment="Left" HorizontalAlignment="Left"
+                                  Width="Auto" Height="20"
+                                  SelectedIndex="0"
+                                  Click="SubsListFilter_Click"
+                                  SelectionChanged="SubsListFilter_SelectionChanged"
+                                  ItemsSource="{Binding SubsFilterOptions}">
+                    <Controls:SplitButton.Icon>
+                        <Viewbox Width="20" Height="20" Stretch="Uniform">
+                            <CheckBox x:Name="chx_subsfilter" Checked="SubsListFilter_Click" Unchecked="SubsListFilter_Click" Margin="10,0,0,0" Focusable="False" />
+                        </Viewbox>
+                    </Controls:SplitButton.Icon>
+                </Controls:SplitButton>
+
+                <Label x:Name="lbl_subsCount" Content="0 Subscriptions Items" FontFamily="Segoe WP Light" FontSize="14" Foreground="{DynamicResource AccentColorBrush}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                <!--
+                <StackPanel x:Name="actionBar" Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
+                    <Button x:Name="btn_groupMarkReceiptSent" Content="Mark all as Receipt Sent" Visibility="Collapsed" Click="btn_groupMarkReceiptSent_Click" Width="Auto" Height="30"  ToolTip="Mark Receipt as sent for selected schedules" Margin="10,0,0,0"/>
+                    <Button x:Name="btn_groupMarkFileDownload" Content="Mark all as File Downloaded" Visibility="Collapsed" Click="btn_groupMarkFileDownload_Click" Width="Auto" Height="30"  ToolTip="Mark File as downloaded for selected schedules" Margin="5,0,0,0" />
+                </StackPanel>
+                  -->
+            </StackPanel>
+
+            <DataGrid x:Name="viewSubs" 
+                      RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Display"
+                      HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                      MinWidth="600" ColumnWidth="*" Margin="10,30,0,10" 
+                      SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
+                      IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                      ItemsSource="{Binding}" PreviewMouseDoubleClick="viewSubs_PreviewMouseDoubleClick" SelectionChanged="viewSubs_SelectionChanged">
+            <DataGrid.Columns>
+                    <DataGridTextColumn Header="Status" Width="75" Binding="{Binding status}" />
+                    <DataGridTextColumn Header="Trans Ref. no" Width="100" Binding="{Binding transaction_ref_no}" />
+                    <DataGridTextColumn Header="Tran. Details" Width="200" Binding="{Binding transaction_details}" />
+                    <DataGridTextColumn Header="Company Code" Width="Auto" Binding="{Binding company_code}" />
+                    <DataGridTextColumn Header="Approved By" Width="Auto" Binding="{Binding approved_by}" />
+                    <DataGridTextColumn Header="Approval Date" Width="Auto" Binding="{Binding date_approved}" />
+            </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
     </Grid>
 </UserControl>
