@@ -24,7 +24,7 @@ namespace petratracker.Utility
         // Role ids
         public const int ROLES_OPS_USER = 4;
         public const int ROLES_SUPER_OPS_USER = 3;
-
+ 
         // Job types for Jobs table
         public const string JOB_TYPE_SCHEDULE = "Schedule";
 
@@ -64,6 +64,8 @@ namespace petratracker.Utility
         public const string WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD = "No Receipt Sent. File Downloaded. File Uploaded";
         public const string WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD = "No Receipt Sent. File Downloaded. No Upload";
         public const string WF_STATUS_COMPLETED = "Completed";
+        public const string WF_STATUS_EXPIRED = "Resolved and Expired";
+
 
         // Settings
         public const string SETTINGS_TIME_VALIDATION_REQUEST_INTERVAL = "time_retry_validationrequest";

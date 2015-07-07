@@ -33,6 +33,7 @@ namespace petratracker.Controls
                                                              Constants.WF_STATUS_ERROR_NEW_EMPLOYEE,
                                                              Constants.WF_STATUS_ERROR_ALL,
                                                              Constants.WF_STATUS_ERROR_ESCALATED,
+                                                             Constants.WF_STATUS_EXPIRED,
                                                              Constants.WF_STATUS_PAYMENTS_PENDING,
                                                              Constants.WF_STATUS_PAYMENTS_RECEIVED,
                                                              Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD,

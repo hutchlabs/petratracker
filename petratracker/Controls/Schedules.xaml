@@ -96,8 +96,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Status" Width="200" Binding="{Binding workflow_status}" />
-                    <DataGridTextColumn Header="State" Width="200" Binding="{Binding workflow_status}" />
+                    <DataGridTextColumn Header="Status" Width="210" Binding="{Binding workflow_status}" />
                     <DataGridTemplateColumn Width="Auto" Header="Owner">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

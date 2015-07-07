@@ -84,6 +84,15 @@ namespace petratracker.Pages
             load_schedule();
         }
 
+        private void btn_ResolveIssue(object sender, RoutedEventArgs e)
+        {
+            _schedule.resolution_date = DateTime.Now;
+            _schedule.resolution_type = ""; //TODO : real values
+            _schedule.resolution_info = "";
+            _schedule = TrackerSchedule.ResolveScheduleIssue(_schedule);
+            load_schedule();
+        }
+
         #endregion
 
         #region Private Helper Methods

@@ -12,7 +12,7 @@ namespace petratracker.Pages
     public partial class AddSchedule : UserControl, INotifyPropertyChanged
     {
         #region Private Members
-        
+
         private readonly string[] _tiers = { "Tier 2", "Tier 3", "Tier 4" };
         private bool _loadedInFlyout = false;
         private string _textNotEmptyProperty;

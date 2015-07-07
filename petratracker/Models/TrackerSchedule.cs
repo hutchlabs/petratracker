@@ -88,8 +88,10 @@ namespace petratracker.Models
         public static IEnumerable<Schedule> GetSchedulesForProcessing()
         {
             return (from j in TrackerDB.Tracker.Schedules
-                    where j.processing == false && j.workflow_status != Constants.WF_STATUS_COMPLETED && 
-                          j.workflow_status != Constants.WF_STATUS_ERROR_ESCALATED
+                    where j.processing == false && 
+                          j.workflow_status != Constants.WF_STATUS_COMPLETED && 
+                          j.workflow_status != Constants.WF_STATUS_ERROR_ESCALATED  &&
+                          j.workflow_status != Constants.WF_STATUS_EXPIRED
                     orderby j.updated_at ascending 
                     select j);
         }
@@ -221,6 +223,26 @@ namespace petratracker.Models
             }
 
             return true;
+        }
+
+        public static Schedule ResolveScheduleIssue(Schedule s)
+        {
+            DateTime newVT = CheckValidationTime(s.company_id,s.tier,s.contributiontype,s.month,s.year);
+
+            if (s.validation_valuetime == newVT) // Do data start revalidation;
+            {
+                EvaluateScheduleWorkFlow(s);
+            }
+            else
+            {
+                // Add new schedule with similar details and retire the old one
+                AddSchedule(s.company, s.company_id, s.tier, s.contributiontype, s.month.ToString(), s.year.ToString(), s.id);
+                s.workflow_status = Constants.WF_STATUS_EXPIRED;
+                s.workflow_summary = "Schedule issues resolved, but there was a new valuetime so a new schedule has been created.";
+                Save(s);
+            }
+
+            return s;
         }
 
         #endregion
@@ -427,7 +449,7 @@ namespace petratracker.Models
 
         private static Schedule EvaluateFileUploadNotificationStatus(Schedule s)
         {
-            if (CheckFileUploaded(s.company,s.company_id,s.tier, s.month, s.year, s.Payment.transaction_amount)
+            if (CheckFileUploaded(s.company,s.company_id,s.tier, s.month, s.year, s.Payment.transaction_amount))
             {
                  s.file_uploaded = true;
                  s.file_uploaded_date = DateTime.Now;
