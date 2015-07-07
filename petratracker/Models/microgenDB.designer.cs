@@ -30,6 +30,12 @@ namespace petratracker.Models
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
+    partial void InsertAssociation(Association instance);
+    partial void UpdateAssociation(Association instance);
+    partial void DeleteAssociation(Association instance);
+    partial void InsertfndDeal(fndDeal instance);
+    partial void UpdatefndDeal(fndDeal instance);
+    partial void DeletefndDeal(fndDeal instance);
     #endregion
 		
 		public MicrogenDataContext(string connection) : 
@@ -61,6 +67,22 @@ namespace petratracker.Models
 			get
 			{
 				return this.GetTable<cclv_AllEntity>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Association> Associations
+		{
+			get
+			{
+				return this.GetTable<Association>();
+			}
+		}
+		
+		public System.Data.Linq.Table<fndDeal> fndDeals
+		{
+			get
+			{
+				return this.GetTable<fndDeal>();
 			}
 		}
 	}
@@ -395,6 +417,2860 @@ namespace petratracker.Models
 					this._ManagingEntityID = value;
 				}
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Association")]
+	public partial class Association : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _AssociationID;
+		
+		private int _SourceEntityID;
+		
+		private int _TargetEntityID;
+		
+		private int _RoleTypeID;
+		
+		private char _StatusID;
+		
+		private System.Nullable<int> _ParentID;
+		
+		private System.Nullable<System.DateTime> _StartDate;
+		
+		private System.Nullable<System.DateTime> _EndDate;
+		
+		private System.Nullable<decimal> _PercentageHeld;
+		
+		private System.Nullable<int> _DirectorAssociationID;
+		
+		private System.Nullable<int> _EntityBankID;
+		
+		private System.Nullable<int> _POAID;
+		
+		private string _Notes;
+		
+		private System.Nullable<System.DateTime> _CreatedOn;
+		
+		private string _CreatedBy;
+		
+		private System.Nullable<System.DateTime> _AmendedOn;
+		
+		private string _AmendedBy;
+		
+		private System.Data.Linq.Binary _TS;
+		
+		private bool _IsFirst;
+		
+		private System.Nullable<int> _PortfolioID;
+		
+		private EntitySet<Association> _Associations;
+		
+		private EntityRef<Association> _Association1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnAssociationIDChanging(int value);
+    partial void OnAssociationIDChanged();
+    partial void OnSourceEntityIDChanging(int value);
+    partial void OnSourceEntityIDChanged();
+    partial void OnTargetEntityIDChanging(int value);
+    partial void OnTargetEntityIDChanged();
+    partial void OnRoleTypeIDChanging(int value);
+    partial void OnRoleTypeIDChanged();
+    partial void OnStatusIDChanging(char value);
+    partial void OnStatusIDChanged();
+    partial void OnParentIDChanging(System.Nullable<int> value);
+    partial void OnParentIDChanged();
+    partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnStartDateChanged();
+    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnEndDateChanged();
+    partial void OnPercentageHeldChanging(System.Nullable<decimal> value);
+    partial void OnPercentageHeldChanged();
+    partial void OnDirectorAssociationIDChanging(System.Nullable<int> value);
+    partial void OnDirectorAssociationIDChanged();
+    partial void OnEntityBankIDChanging(System.Nullable<int> value);
+    partial void OnEntityBankIDChanged();
+    partial void OnPOAIDChanging(System.Nullable<int> value);
+    partial void OnPOAIDChanged();
+    partial void OnNotesChanging(string value);
+    partial void OnNotesChanged();
+    partial void OnCreatedOnChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreatedOnChanged();
+    partial void OnCreatedByChanging(string value);
+    partial void OnCreatedByChanged();
+    partial void OnAmendedOnChanging(System.Nullable<System.DateTime> value);
+    partial void OnAmendedOnChanged();
+    partial void OnAmendedByChanging(string value);
+    partial void OnAmendedByChanged();
+    partial void OnTSChanging(System.Data.Linq.Binary value);
+    partial void OnTSChanged();
+    partial void OnIsFirstChanging(bool value);
+    partial void OnIsFirstChanged();
+    partial void OnPortfolioIDChanging(System.Nullable<int> value);
+    partial void OnPortfolioIDChanged();
+    #endregion
+		
+		public Association()
+		{
+			this._Associations = new EntitySet<Association>(new Action<Association>(this.attach_Associations), new Action<Association>(this.detach_Associations));
+			this._Association1 = default(EntityRef<Association>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AssociationID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		public int AssociationID
+		{
+			get
+			{
+				return this._AssociationID;
+			}
+			set
+			{
+				if ((this._AssociationID != value))
+				{
+					this.OnAssociationIDChanging(value);
+					this.SendPropertyChanging();
+					this._AssociationID = value;
+					this.SendPropertyChanged("AssociationID");
+					this.OnAssociationIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SourceEntityID", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public int SourceEntityID
+		{
+			get
+			{
+				return this._SourceEntityID;
+			}
+			set
+			{
+				if ((this._SourceEntityID != value))
+				{
+					this.OnSourceEntityIDChanging(value);
+					this.SendPropertyChanging();
+					this._SourceEntityID = value;
+					this.SendPropertyChanged("SourceEntityID");
+					this.OnSourceEntityIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TargetEntityID", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public int TargetEntityID
+		{
+			get
+			{
+				return this._TargetEntityID;
+			}
+			set
+			{
+				if ((this._TargetEntityID != value))
+				{
+					this.OnTargetEntityIDChanging(value);
+					this.SendPropertyChanging();
+					this._TargetEntityID = value;
+					this.SendPropertyChanged("TargetEntityID");
+					this.OnTargetEntityIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleTypeID", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public int RoleTypeID
+		{
+			get
+			{
+				return this._RoleTypeID;
+			}
+			set
+			{
+				if ((this._RoleTypeID != value))
+				{
+					this.OnRoleTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._RoleTypeID = value;
+					this.SendPropertyChanged("RoleTypeID");
+					this.OnRoleTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StatusID", DbType="Char(1) NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public char StatusID
+		{
+			get
+			{
+				return this._StatusID;
+			}
+			set
+			{
+				if ((this._StatusID != value))
+				{
+					this.OnStatusIDChanging(value);
+					this.SendPropertyChanging();
+					this._StatusID = value;
+					this.SendPropertyChanged("StatusID");
+					this.OnStatusIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ParentID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> ParentID
+		{
+			get
+			{
+				return this._ParentID;
+			}
+			set
+			{
+				if ((this._ParentID != value))
+				{
+					if (this._Association1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnParentIDChanging(value);
+					this.SendPropertyChanging();
+					this._ParentID = value;
+					this.SendPropertyChanged("ParentID");
+					this.OnParentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<System.DateTime> StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<System.DateTime> EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PercentageHeld", DbType="Decimal(10,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> PercentageHeld
+		{
+			get
+			{
+				return this._PercentageHeld;
+			}
+			set
+			{
+				if ((this._PercentageHeld != value))
+				{
+					this.OnPercentageHeldChanging(value);
+					this.SendPropertyChanging();
+					this._PercentageHeld = value;
+					this.SendPropertyChanged("PercentageHeld");
+					this.OnPercentageHeldChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DirectorAssociationID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> DirectorAssociationID
+		{
+			get
+			{
+				return this._DirectorAssociationID;
+			}
+			set
+			{
+				if ((this._DirectorAssociationID != value))
+				{
+					this.OnDirectorAssociationIDChanging(value);
+					this.SendPropertyChanging();
+					this._DirectorAssociationID = value;
+					this.SendPropertyChanged("DirectorAssociationID");
+					this.OnDirectorAssociationIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EntityBankID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> EntityBankID
+		{
+			get
+			{
+				return this._EntityBankID;
+			}
+			set
+			{
+				if ((this._EntityBankID != value))
+				{
+					this.OnEntityBankIDChanging(value);
+					this.SendPropertyChanging();
+					this._EntityBankID = value;
+					this.SendPropertyChanged("EntityBankID");
+					this.OnEntityBankIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_POAID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> POAID
+		{
+			get
+			{
+				return this._POAID;
+			}
+			set
+			{
+				if ((this._POAID != value))
+				{
+					this.OnPOAIDChanging(value);
+					this.SendPropertyChanging();
+					this._POAID = value;
+					this.SendPropertyChanged("POAID");
+					this.OnPOAIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Notes", DbType="VarChar(255)", UpdateCheck=UpdateCheck.Never)]
+		public string Notes
+		{
+			get
+			{
+				return this._Notes;
+			}
+			set
+			{
+				if ((this._Notes != value))
+				{
+					this.OnNotesChanging(value);
+					this.SendPropertyChanging();
+					this._Notes = value;
+					this.SendPropertyChanged("Notes");
+					this.OnNotesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedOn", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<System.DateTime> CreatedOn
+		{
+			get
+			{
+				return this._CreatedOn;
+			}
+			set
+			{
+				if ((this._CreatedOn != value))
+				{
+					this.OnCreatedOnChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedOn = value;
+					this.SendPropertyChanged("CreatedOn");
+					this.OnCreatedOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedBy", DbType="VarChar(30)", UpdateCheck=UpdateCheck.Never)]
+		public string CreatedBy
+		{
+			get
+			{
+				return this._CreatedBy;
+			}
+			set
+			{
+				if ((this._CreatedBy != value))
+				{
+					this.OnCreatedByChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedBy = value;
+					this.SendPropertyChanged("CreatedBy");
+					this.OnCreatedByChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmendedOn", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<System.DateTime> AmendedOn
+		{
+			get
+			{
+				return this._AmendedOn;
+			}
+			set
+			{
+				if ((this._AmendedOn != value))
+				{
+					this.OnAmendedOnChanging(value);
+					this.SendPropertyChanging();
+					this._AmendedOn = value;
+					this.SendPropertyChanged("AmendedOn");
+					this.OnAmendedOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmendedBy", DbType="VarChar(30)", UpdateCheck=UpdateCheck.Never)]
+		public string AmendedBy
+		{
+			get
+			{
+				return this._AmendedBy;
+			}
+			set
+			{
+				if ((this._AmendedBy != value))
+				{
+					this.OnAmendedByChanging(value);
+					this.SendPropertyChanging();
+					this._AmendedBy = value;
+					this.SendPropertyChanged("AmendedBy");
+					this.OnAmendedByChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TS", AutoSync=AutoSync.Always, DbType="rowversion", IsDbGenerated=true, IsVersion=true, UpdateCheck=UpdateCheck.Never)]
+		public System.Data.Linq.Binary TS
+		{
+			get
+			{
+				return this._TS;
+			}
+			set
+			{
+				if ((this._TS != value))
+				{
+					this.OnTSChanging(value);
+					this.SendPropertyChanging();
+					this._TS = value;
+					this.SendPropertyChanged("TS");
+					this.OnTSChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsFirst", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public bool IsFirst
+		{
+			get
+			{
+				return this._IsFirst;
+			}
+			set
+			{
+				if ((this._IsFirst != value))
+				{
+					this.OnIsFirstChanging(value);
+					this.SendPropertyChanging();
+					this._IsFirst = value;
+					this.SendPropertyChanged("IsFirst");
+					this.OnIsFirstChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PortfolioID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> PortfolioID
+		{
+			get
+			{
+				return this._PortfolioID;
+			}
+			set
+			{
+				if ((this._PortfolioID != value))
+				{
+					this.OnPortfolioIDChanging(value);
+					this.SendPropertyChanging();
+					this._PortfolioID = value;
+					this.SendPropertyChanged("PortfolioID");
+					this.OnPortfolioIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Association_Association", Storage="_Associations", ThisKey="AssociationID", OtherKey="ParentID")]
+		public EntitySet<Association> Associations
+		{
+			get
+			{
+				return this._Associations;
+			}
+			set
+			{
+				this._Associations.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Association_Association", Storage="_Association1", ThisKey="ParentID", OtherKey="AssociationID", IsForeignKey=true)]
+		public Association Association1
+		{
+			get
+			{
+				return this._Association1.Entity;
+			}
+			set
+			{
+				Association previousValue = this._Association1.Entity;
+				if (((previousValue != value) 
+							|| (this._Association1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Association1.Entity = null;
+						previousValue.Associations.Remove(this);
+					}
+					this._Association1.Entity = value;
+					if ((value != null))
+					{
+						value.Associations.Add(this);
+						this._ParentID = value.AssociationID;
+					}
+					else
+					{
+						this._ParentID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Association1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Associations(Association entity)
+		{
+			this.SendPropertyChanging();
+			entity.Association1 = this;
+		}
+		
+		private void detach_Associations(Association entity)
+		{
+			this.SendPropertyChanging();
+			entity.Association1 = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.fndDeal")]
+	public partial class fndDeal : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _DealID;
+		
+		private string _DealReference;
+		
+		private string _DealReferenceSuffix;
+		
+		private int _DealTypeID;
+		
+		private string _OrderReference;
+		
+		private System.Nullable<int> _ProductID;
+		
+		private System.Nullable<int> _WrapperEntityFundID;
+		
+		private bool _VoidWrapper;
+		
+		private System.Nullable<int> _EntityFundID;
+		
+		private int _FundHolderID;
+		
+		private bool _CancellationStatus;
+		
+		private char _Certificated;
+		
+		private System.DateTime _DealingDate;
+		
+		private System.Nullable<System.DateTime> _ValueDate;
+		
+		private System.DateTime _BookedDate;
+		
+		private System.Nullable<System.DateTime> _PriceDate;
+		
+		private System.Nullable<int> _DealingCurrencyID;
+		
+		private System.Nullable<decimal> _NAVPrice;
+		
+		private System.Nullable<decimal> _QuotedPrice;
+		
+		private System.Nullable<decimal> _DealingPrice;
+		
+		private System.Nullable<bool> _DilutionLevyApplied;
+		
+		private System.Nullable<decimal> _DilutionLevy;
+		
+		private System.Nullable<int> _PaymentCurrencyID;
+		
+		private string _ExchangeRateBasis;
+		
+		private System.Nullable<decimal> _ExchangeRate;
+		
+		private string _DealBasis;
+		
+		private System.Nullable<decimal> _PaymentAmountDealCcy;
+		
+		private System.Nullable<decimal> _PaymentAmountPayCcy;
+		
+		private System.Nullable<decimal> _Group1Units;
+		
+		private System.Nullable<decimal> _Group2Units;
+		
+		private System.Nullable<decimal> _AmountThisYearDealCcy;
+		
+		private System.Nullable<decimal> _AmountThisYearPayCcy;
+		
+		private System.Nullable<decimal> _DealingAmountDealCcy;
+		
+		private System.Nullable<decimal> _DealingAmountPayCcy;
+		
+		private string _FrontEndFeeModified;
+		
+		private System.Nullable<decimal> _FrontEndFeeRate;
+		
+		private System.Nullable<decimal> _FrontEndFeeDealCcy;
+		
+		private System.Nullable<decimal> _FrontEndFeePayCcy;
+		
+		private string _DiscountModified;
+		
+		private System.Nullable<decimal> _DiscountRate;
+		
+		private System.Nullable<decimal> _DiscountDealCcy;
+		
+		private System.Nullable<decimal> _DiscountPayCcy;
+		
+		private string _ExitFeeModified;
+		
+		private System.Nullable<decimal> _ExitFeeRate;
+		
+		private System.Nullable<decimal> _ExitFeeDealCcy;
+		
+		private System.Nullable<decimal> _ExitFeePayCcy;
+		
+		private System.Nullable<decimal> _CommissionRate;
+		
+		private System.Nullable<decimal> _CommissionDealCcy;
+		
+		private System.Nullable<decimal> _CommissionPayCcy;
+		
+		private System.Nullable<int> _SourceOfBusinessID;
+		
+		private System.Nullable<int> _AdvertID;
+		
+		private string _SettlementBasis;
+		
+		private System.Nullable<decimal> _SettlementAmountPayCcy;
+		
+		private System.Nullable<decimal> _OutstandingSettlementPayCcy;
+		
+		private System.Nullable<bool> _Renunciation;
+		
+		private System.Nullable<int> _DealStatusID;
+		
+		private System.Nullable<int> _CancellingDealID;
+		
+		private System.Nullable<int> _RejectReasonID;
+		
+		private string _PrintStatus;
+		
+		private System.Nullable<int> _NumberReprints;
+		
+		private System.Nullable<int> _DealSlipOriginID;
+		
+		private System.Nullable<int> _FundHolderPlanProductID;
+		
+		private System.Nullable<int> _PaymentID;
+		
+		private string _InternalNotes;
+		
+		private string _ExternalNotes;
+		
+		private bool _HasBeneficialOwnershipChange;
+		
+		private System.Nullable<int> _BeneficialOwnershipCurrencyID;
+		
+		private System.Nullable<decimal> _BeneficialOwnershipAmount;
+		
+		private System.Nullable<int> _ContractEnclosureID;
+		
+		private System.Nullable<int> _UnitRounding;
+		
+		private System.Nullable<decimal> _PreRoundedUnits;
+		
+		private System.Nullable<decimal> _PreRoundedAmount;
+		
+		private System.Nullable<System.DateTime> _FullySettledDealingDate;
+		
+		private System.Nullable<System.DateTime> _AmendDate;
+		
+		private System.Nullable<int> _AmendedDealID;
+		
+		private System.Nullable<int> _VersionNumber;
+		
+		private bool _DealAtNAV;
+		
+		private string _SetUpFeeModified;
+		
+		private System.Nullable<decimal> _SetUpFeeRate;
+		
+		private System.Nullable<decimal> _SetUpFeeDealCcy;
+		
+		private System.Nullable<decimal> _SetUpFeePayCcy;
+		
+		private System.Data.Linq.Binary _TS;
+		
+		private System.Nullable<bool> _PotentialDilutionLevy;
+		
+		private System.Nullable<System.DateTime> _FirstSubscriptionDate;
+		
+		private bool _AdvisedSale;
+		
+		private bool _CloseAccount;
+		
+		private System.Nullable<decimal> _DilutionLevyPayCcy;
+		
+		private System.Nullable<decimal> _DilutionLevyDealCcy;
+		
+		private bool _AdviserCharge;
+		
+		private System.Nullable<int> _FundHolderPlanID;
+		
+		private EntitySet<fndDeal> _fndDeals;
+		
+		private EntityRef<fndDeal> _fndDeal1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnDealIDChanging(int value);
+    partial void OnDealIDChanged();
+    partial void OnDealReferenceChanging(string value);
+    partial void OnDealReferenceChanged();
+    partial void OnDealReferenceSuffixChanging(string value);
+    partial void OnDealReferenceSuffixChanged();
+    partial void OnDealTypeIDChanging(int value);
+    partial void OnDealTypeIDChanged();
+    partial void OnOrderReferenceChanging(string value);
+    partial void OnOrderReferenceChanged();
+    partial void OnProductIDChanging(System.Nullable<int> value);
+    partial void OnProductIDChanged();
+    partial void OnWrapperEntityFundIDChanging(System.Nullable<int> value);
+    partial void OnWrapperEntityFundIDChanged();
+    partial void OnVoidWrapperChanging(bool value);
+    partial void OnVoidWrapperChanged();
+    partial void OnEntityFundIDChanging(System.Nullable<int> value);
+    partial void OnEntityFundIDChanged();
+    partial void OnFundHolderIDChanging(int value);
+    partial void OnFundHolderIDChanged();
+    partial void OnCancellationStatusChanging(bool value);
+    partial void OnCancellationStatusChanged();
+    partial void OnCertificatedChanging(char value);
+    partial void OnCertificatedChanged();
+    partial void OnDealingDateChanging(System.DateTime value);
+    partial void OnDealingDateChanged();
+    partial void OnValueDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnValueDateChanged();
+    partial void OnBookedDateChanging(System.DateTime value);
+    partial void OnBookedDateChanged();
+    partial void OnPriceDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnPriceDateChanged();
+    partial void OnDealingCurrencyIDChanging(System.Nullable<int> value);
+    partial void OnDealingCurrencyIDChanged();
+    partial void OnNAVPriceChanging(System.Nullable<decimal> value);
+    partial void OnNAVPriceChanged();
+    partial void OnQuotedPriceChanging(System.Nullable<decimal> value);
+    partial void OnQuotedPriceChanged();
+    partial void OnDealingPriceChanging(System.Nullable<decimal> value);
+    partial void OnDealingPriceChanged();
+    partial void OnDilutionLevyAppliedChanging(System.Nullable<bool> value);
+    partial void OnDilutionLevyAppliedChanged();
+    partial void OnDilutionLevyChanging(System.Nullable<decimal> value);
+    partial void OnDilutionLevyChanged();
+    partial void OnPaymentCurrencyIDChanging(System.Nullable<int> value);
+    partial void OnPaymentCurrencyIDChanged();
+    partial void OnExchangeRateBasisChanging(string value);
+    partial void OnExchangeRateBasisChanged();
+    partial void OnExchangeRateChanging(System.Nullable<decimal> value);
+    partial void OnExchangeRateChanged();
+    partial void OnDealBasisChanging(string value);
+    partial void OnDealBasisChanged();
+    partial void OnPaymentAmountDealCcyChanging(System.Nullable<decimal> value);
+    partial void OnPaymentAmountDealCcyChanged();
+    partial void OnPaymentAmountPayCcyChanging(System.Nullable<decimal> value);
+    partial void OnPaymentAmountPayCcyChanged();
+    partial void OnGroup1UnitsChanging(System.Nullable<decimal> value);
+    partial void OnGroup1UnitsChanged();
+    partial void OnGroup2UnitsChanging(System.Nullable<decimal> value);
+    partial void OnGroup2UnitsChanged();
+    partial void OnAmountThisYearDealCcyChanging(System.Nullable<decimal> value);
+    partial void OnAmountThisYearDealCcyChanged();
+    partial void OnAmountThisYearPayCcyChanging(System.Nullable<decimal> value);
+    partial void OnAmountThisYearPayCcyChanged();
+    partial void OnDealingAmountDealCcyChanging(System.Nullable<decimal> value);
+    partial void OnDealingAmountDealCcyChanged();
+    partial void OnDealingAmountPayCcyChanging(System.Nullable<decimal> value);
+    partial void OnDealingAmountPayCcyChanged();
+    partial void OnFrontEndFeeModifiedChanging(string value);
+    partial void OnFrontEndFeeModifiedChanged();
+    partial void OnFrontEndFeeRateChanging(System.Nullable<decimal> value);
+    partial void OnFrontEndFeeRateChanged();
+    partial void OnFrontEndFeeDealCcyChanging(System.Nullable<decimal> value);
+    partial void OnFrontEndFeeDealCcyChanged();
+    partial void OnFrontEndFeePayCcyChanging(System.Nullable<decimal> value);
+    partial void OnFrontEndFeePayCcyChanged();
+    partial void OnDiscountModifiedChanging(string value);
+    partial void OnDiscountModifiedChanged();
+    partial void OnDiscountRateChanging(System.Nullable<decimal> value);
+    partial void OnDiscountRateChanged();
+    partial void OnDiscountDealCcyChanging(System.Nullable<decimal> value);
+    partial void OnDiscountDealCcyChanged();
+    partial void OnDiscountPayCcyChanging(System.Nullable<decimal> value);
+    partial void OnDiscountPayCcyChanged();
+    partial void OnExitFeeModifiedChanging(string value);
+    partial void OnExitFeeModifiedChanged();
+    partial void OnExitFeeRateChanging(System.Nullable<decimal> value);
+    partial void OnExitFeeRateChanged();
+    partial void OnExitFeeDealCcyChanging(System.Nullable<decimal> value);
+    partial void OnExitFeeDealCcyChanged();
+    partial void OnExitFeePayCcyChanging(System.Nullable<decimal> value);
+    partial void OnExitFeePayCcyChanged();
+    partial void OnCommissionRateChanging(System.Nullable<decimal> value);
+    partial void OnCommissionRateChanged();
+    partial void OnCommissionDealCcyChanging(System.Nullable<decimal> value);
+    partial void OnCommissionDealCcyChanged();
+    partial void OnCommissionPayCcyChanging(System.Nullable<decimal> value);
+    partial void OnCommissionPayCcyChanged();
+    partial void OnSourceOfBusinessIDChanging(System.Nullable<int> value);
+    partial void OnSourceOfBusinessIDChanged();
+    partial void OnAdvertIDChanging(System.Nullable<int> value);
+    partial void OnAdvertIDChanged();
+    partial void OnSettlementBasisChanging(string value);
+    partial void OnSettlementBasisChanged();
+    partial void OnSettlementAmountPayCcyChanging(System.Nullable<decimal> value);
+    partial void OnSettlementAmountPayCcyChanged();
+    partial void OnOutstandingSettlementPayCcyChanging(System.Nullable<decimal> value);
+    partial void OnOutstandingSettlementPayCcyChanged();
+    partial void OnRenunciationChanging(System.Nullable<bool> value);
+    partial void OnRenunciationChanged();
+    partial void OnDealStatusIDChanging(System.Nullable<int> value);
+    partial void OnDealStatusIDChanged();
+    partial void OnCancellingDealIDChanging(System.Nullable<int> value);
+    partial void OnCancellingDealIDChanged();
+    partial void OnRejectReasonIDChanging(System.Nullable<int> value);
+    partial void OnRejectReasonIDChanged();
+    partial void OnPrintStatusChanging(string value);
+    partial void OnPrintStatusChanged();
+    partial void OnNumberReprintsChanging(System.Nullable<int> value);
+    partial void OnNumberReprintsChanged();
+    partial void OnDealSlipOriginIDChanging(System.Nullable<int> value);
+    partial void OnDealSlipOriginIDChanged();
+    partial void OnFundHolderPlanProductIDChanging(System.Nullable<int> value);
+    partial void OnFundHolderPlanProductIDChanged();
+    partial void OnPaymentIDChanging(System.Nullable<int> value);
+    partial void OnPaymentIDChanged();
+    partial void OnInternalNotesChanging(string value);
+    partial void OnInternalNotesChanged();
+    partial void OnExternalNotesChanging(string value);
+    partial void OnExternalNotesChanged();
+    partial void OnHasBeneficialOwnershipChangeChanging(bool value);
+    partial void OnHasBeneficialOwnershipChangeChanged();
+    partial void OnBeneficialOwnershipCurrencyIDChanging(System.Nullable<int> value);
+    partial void OnBeneficialOwnershipCurrencyIDChanged();
+    partial void OnBeneficialOwnershipAmountChanging(System.Nullable<decimal> value);
+    partial void OnBeneficialOwnershipAmountChanged();
+    partial void OnContractEnclosureIDChanging(System.Nullable<int> value);
+    partial void OnContractEnclosureIDChanged();
+    partial void OnUnitRoundingChanging(System.Nullable<int> value);
+    partial void OnUnitRoundingChanged();
+    partial void OnPreRoundedUnitsChanging(System.Nullable<decimal> value);
+    partial void OnPreRoundedUnitsChanged();
+    partial void OnPreRoundedAmountChanging(System.Nullable<decimal> value);
+    partial void OnPreRoundedAmountChanged();
+    partial void OnFullySettledDealingDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnFullySettledDealingDateChanged();
+    partial void OnAmendDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnAmendDateChanged();
+    partial void OnAmendedDealIDChanging(System.Nullable<int> value);
+    partial void OnAmendedDealIDChanged();
+    partial void OnVersionNumberChanging(System.Nullable<int> value);
+    partial void OnVersionNumberChanged();
+    partial void OnDealAtNAVChanging(bool value);
+    partial void OnDealAtNAVChanged();
+    partial void OnSetUpFeeModifiedChanging(string value);
+    partial void OnSetUpFeeModifiedChanged();
+    partial void OnSetUpFeeRateChanging(System.Nullable<decimal> value);
+    partial void OnSetUpFeeRateChanged();
+    partial void OnSetUpFeeDealCcyChanging(System.Nullable<decimal> value);
+    partial void OnSetUpFeeDealCcyChanged();
+    partial void OnSetUpFeePayCcyChanging(System.Nullable<decimal> value);
+    partial void OnSetUpFeePayCcyChanged();
+    partial void OnTSChanging(System.Data.Linq.Binary value);
+    partial void OnTSChanged();
+    partial void OnPotentialDilutionLevyChanging(System.Nullable<bool> value);
+    partial void OnPotentialDilutionLevyChanged();
+    partial void OnFirstSubscriptionDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnFirstSubscriptionDateChanged();
+    partial void OnAdvisedSaleChanging(bool value);
+    partial void OnAdvisedSaleChanged();
+    partial void OnCloseAccountChanging(bool value);
+    partial void OnCloseAccountChanged();
+    partial void OnDilutionLevyPayCcyChanging(System.Nullable<decimal> value);
+    partial void OnDilutionLevyPayCcyChanged();
+    partial void OnDilutionLevyDealCcyChanging(System.Nullable<decimal> value);
+    partial void OnDilutionLevyDealCcyChanged();
+    partial void OnAdviserChargeChanging(bool value);
+    partial void OnAdviserChargeChanged();
+    partial void OnFundHolderPlanIDChanging(System.Nullable<int> value);
+    partial void OnFundHolderPlanIDChanged();
+    #endregion
+		
+		public fndDeal()
+		{
+			this._fndDeals = new EntitySet<fndDeal>(new Action<fndDeal>(this.attach_fndDeals), new Action<fndDeal>(this.detach_fndDeals));
+			this._fndDeal1 = default(EntityRef<fndDeal>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		public int DealID
+		{
+			get
+			{
+				return this._DealID;
+			}
+			set
+			{
+				if ((this._DealID != value))
+				{
+					this.OnDealIDChanging(value);
+					this.SendPropertyChanging();
+					this._DealID = value;
+					this.SendPropertyChanged("DealID");
+					this.OnDealIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealReference", DbType="NVarChar(20) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string DealReference
+		{
+			get
+			{
+				return this._DealReference;
+			}
+			set
+			{
+				if ((this._DealReference != value))
+				{
+					this.OnDealReferenceChanging(value);
+					this.SendPropertyChanging();
+					this._DealReference = value;
+					this.SendPropertyChanged("DealReference");
+					this.OnDealReferenceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealReferenceSuffix", DbType="NVarChar(3)", UpdateCheck=UpdateCheck.Never)]
+		public string DealReferenceSuffix
+		{
+			get
+			{
+				return this._DealReferenceSuffix;
+			}
+			set
+			{
+				if ((this._DealReferenceSuffix != value))
+				{
+					this.OnDealReferenceSuffixChanging(value);
+					this.SendPropertyChanging();
+					this._DealReferenceSuffix = value;
+					this.SendPropertyChanged("DealReferenceSuffix");
+					this.OnDealReferenceSuffixChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealTypeID", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public int DealTypeID
+		{
+			get
+			{
+				return this._DealTypeID;
+			}
+			set
+			{
+				if ((this._DealTypeID != value))
+				{
+					this.OnDealTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._DealTypeID = value;
+					this.SendPropertyChanged("DealTypeID");
+					this.OnDealTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrderReference", DbType="NVarChar(50)", UpdateCheck=UpdateCheck.Never)]
+		public string OrderReference
+		{
+			get
+			{
+				return this._OrderReference;
+			}
+			set
+			{
+				if ((this._OrderReference != value))
+				{
+					this.OnOrderReferenceChanging(value);
+					this.SendPropertyChanging();
+					this._OrderReference = value;
+					this.SendPropertyChanged("OrderReference");
+					this.OnOrderReferenceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> ProductID
+		{
+			get
+			{
+				return this._ProductID;
+			}
+			set
+			{
+				if ((this._ProductID != value))
+				{
+					this.OnProductIDChanging(value);
+					this.SendPropertyChanging();
+					this._ProductID = value;
+					this.SendPropertyChanged("ProductID");
+					this.OnProductIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WrapperEntityFundID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> WrapperEntityFundID
+		{
+			get
+			{
+				return this._WrapperEntityFundID;
+			}
+			set
+			{
+				if ((this._WrapperEntityFundID != value))
+				{
+					this.OnWrapperEntityFundIDChanging(value);
+					this.SendPropertyChanging();
+					this._WrapperEntityFundID = value;
+					this.SendPropertyChanged("WrapperEntityFundID");
+					this.OnWrapperEntityFundIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VoidWrapper", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public bool VoidWrapper
+		{
+			get
+			{
+				return this._VoidWrapper;
+			}
+			set
+			{
+				if ((this._VoidWrapper != value))
+				{
+					this.OnVoidWrapperChanging(value);
+					this.SendPropertyChanging();
+					this._VoidWrapper = value;
+					this.SendPropertyChanged("VoidWrapper");
+					this.OnVoidWrapperChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EntityFundID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> EntityFundID
+		{
+			get
+			{
+				return this._EntityFundID;
+			}
+			set
+			{
+				if ((this._EntityFundID != value))
+				{
+					this.OnEntityFundIDChanging(value);
+					this.SendPropertyChanging();
+					this._EntityFundID = value;
+					this.SendPropertyChanged("EntityFundID");
+					this.OnEntityFundIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FundHolderID", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public int FundHolderID
+		{
+			get
+			{
+				return this._FundHolderID;
+			}
+			set
+			{
+				if ((this._FundHolderID != value))
+				{
+					this.OnFundHolderIDChanging(value);
+					this.SendPropertyChanging();
+					this._FundHolderID = value;
+					this.SendPropertyChanged("FundHolderID");
+					this.OnFundHolderIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CancellationStatus", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public bool CancellationStatus
+		{
+			get
+			{
+				return this._CancellationStatus;
+			}
+			set
+			{
+				if ((this._CancellationStatus != value))
+				{
+					this.OnCancellationStatusChanging(value);
+					this.SendPropertyChanging();
+					this._CancellationStatus = value;
+					this.SendPropertyChanged("CancellationStatus");
+					this.OnCancellationStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Certificated", DbType="Char(1) NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public char Certificated
+		{
+			get
+			{
+				return this._Certificated;
+			}
+			set
+			{
+				if ((this._Certificated != value))
+				{
+					this.OnCertificatedChanging(value);
+					this.SendPropertyChanging();
+					this._Certificated = value;
+					this.SendPropertyChanged("Certificated");
+					this.OnCertificatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealingDate", DbType="DateTime NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public System.DateTime DealingDate
+		{
+			get
+			{
+				return this._DealingDate;
+			}
+			set
+			{
+				if ((this._DealingDate != value))
+				{
+					this.OnDealingDateChanging(value);
+					this.SendPropertyChanging();
+					this._DealingDate = value;
+					this.SendPropertyChanged("DealingDate");
+					this.OnDealingDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ValueDate", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<System.DateTime> ValueDate
+		{
+			get
+			{
+				return this._ValueDate;
+			}
+			set
+			{
+				if ((this._ValueDate != value))
+				{
+					this.OnValueDateChanging(value);
+					this.SendPropertyChanging();
+					this._ValueDate = value;
+					this.SendPropertyChanged("ValueDate");
+					this.OnValueDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BookedDate", DbType="DateTime NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public System.DateTime BookedDate
+		{
+			get
+			{
+				return this._BookedDate;
+			}
+			set
+			{
+				if ((this._BookedDate != value))
+				{
+					this.OnBookedDateChanging(value);
+					this.SendPropertyChanging();
+					this._BookedDate = value;
+					this.SendPropertyChanged("BookedDate");
+					this.OnBookedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceDate", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<System.DateTime> PriceDate
+		{
+			get
+			{
+				return this._PriceDate;
+			}
+			set
+			{
+				if ((this._PriceDate != value))
+				{
+					this.OnPriceDateChanging(value);
+					this.SendPropertyChanging();
+					this._PriceDate = value;
+					this.SendPropertyChanged("PriceDate");
+					this.OnPriceDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealingCurrencyID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> DealingCurrencyID
+		{
+			get
+			{
+				return this._DealingCurrencyID;
+			}
+			set
+			{
+				if ((this._DealingCurrencyID != value))
+				{
+					this.OnDealingCurrencyIDChanging(value);
+					this.SendPropertyChanging();
+					this._DealingCurrencyID = value;
+					this.SendPropertyChanged("DealingCurrencyID");
+					this.OnDealingCurrencyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NAVPrice", DbType="Decimal(19,6)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> NAVPrice
+		{
+			get
+			{
+				return this._NAVPrice;
+			}
+			set
+			{
+				if ((this._NAVPrice != value))
+				{
+					this.OnNAVPriceChanging(value);
+					this.SendPropertyChanging();
+					this._NAVPrice = value;
+					this.SendPropertyChanged("NAVPrice");
+					this.OnNAVPriceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_QuotedPrice", DbType="Decimal(19,6)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> QuotedPrice
+		{
+			get
+			{
+				return this._QuotedPrice;
+			}
+			set
+			{
+				if ((this._QuotedPrice != value))
+				{
+					this.OnQuotedPriceChanging(value);
+					this.SendPropertyChanging();
+					this._QuotedPrice = value;
+					this.SendPropertyChanged("QuotedPrice");
+					this.OnQuotedPriceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealingPrice", DbType="Decimal(19,6)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> DealingPrice
+		{
+			get
+			{
+				return this._DealingPrice;
+			}
+			set
+			{
+				if ((this._DealingPrice != value))
+				{
+					this.OnDealingPriceChanging(value);
+					this.SendPropertyChanging();
+					this._DealingPrice = value;
+					this.SendPropertyChanged("DealingPrice");
+					this.OnDealingPriceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DilutionLevyApplied", DbType="Bit", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<bool> DilutionLevyApplied
+		{
+			get
+			{
+				return this._DilutionLevyApplied;
+			}
+			set
+			{
+				if ((this._DilutionLevyApplied != value))
+				{
+					this.OnDilutionLevyAppliedChanging(value);
+					this.SendPropertyChanging();
+					this._DilutionLevyApplied = value;
+					this.SendPropertyChanged("DilutionLevyApplied");
+					this.OnDilutionLevyAppliedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DilutionLevy", DbType="Decimal(19,8)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> DilutionLevy
+		{
+			get
+			{
+				return this._DilutionLevy;
+			}
+			set
+			{
+				if ((this._DilutionLevy != value))
+				{
+					this.OnDilutionLevyChanging(value);
+					this.SendPropertyChanging();
+					this._DilutionLevy = value;
+					this.SendPropertyChanged("DilutionLevy");
+					this.OnDilutionLevyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentCurrencyID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> PaymentCurrencyID
+		{
+			get
+			{
+				return this._PaymentCurrencyID;
+			}
+			set
+			{
+				if ((this._PaymentCurrencyID != value))
+				{
+					this.OnPaymentCurrencyIDChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentCurrencyID = value;
+					this.SendPropertyChanged("PaymentCurrencyID");
+					this.OnPaymentCurrencyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExchangeRateBasis", DbType="NVarChar(1)", UpdateCheck=UpdateCheck.Never)]
+		public string ExchangeRateBasis
+		{
+			get
+			{
+				return this._ExchangeRateBasis;
+			}
+			set
+			{
+				if ((this._ExchangeRateBasis != value))
+				{
+					this.OnExchangeRateBasisChanging(value);
+					this.SendPropertyChanging();
+					this._ExchangeRateBasis = value;
+					this.SendPropertyChanged("ExchangeRateBasis");
+					this.OnExchangeRateBasisChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExchangeRate", DbType="Decimal(19,8)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> ExchangeRate
+		{
+			get
+			{
+				return this._ExchangeRate;
+			}
+			set
+			{
+				if ((this._ExchangeRate != value))
+				{
+					this.OnExchangeRateChanging(value);
+					this.SendPropertyChanging();
+					this._ExchangeRate = value;
+					this.SendPropertyChanged("ExchangeRate");
+					this.OnExchangeRateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealBasis", DbType="NVarChar(1)", UpdateCheck=UpdateCheck.Never)]
+		public string DealBasis
+		{
+			get
+			{
+				return this._DealBasis;
+			}
+			set
+			{
+				if ((this._DealBasis != value))
+				{
+					this.OnDealBasisChanging(value);
+					this.SendPropertyChanging();
+					this._DealBasis = value;
+					this.SendPropertyChanged("DealBasis");
+					this.OnDealBasisChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentAmountDealCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> PaymentAmountDealCcy
+		{
+			get
+			{
+				return this._PaymentAmountDealCcy;
+			}
+			set
+			{
+				if ((this._PaymentAmountDealCcy != value))
+				{
+					this.OnPaymentAmountDealCcyChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentAmountDealCcy = value;
+					this.SendPropertyChanged("PaymentAmountDealCcy");
+					this.OnPaymentAmountDealCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentAmountPayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> PaymentAmountPayCcy
+		{
+			get
+			{
+				return this._PaymentAmountPayCcy;
+			}
+			set
+			{
+				if ((this._PaymentAmountPayCcy != value))
+				{
+					this.OnPaymentAmountPayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentAmountPayCcy = value;
+					this.SendPropertyChanged("PaymentAmountPayCcy");
+					this.OnPaymentAmountPayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Group1Units", DbType="Decimal(19,6)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> Group1Units
+		{
+			get
+			{
+				return this._Group1Units;
+			}
+			set
+			{
+				if ((this._Group1Units != value))
+				{
+					this.OnGroup1UnitsChanging(value);
+					this.SendPropertyChanging();
+					this._Group1Units = value;
+					this.SendPropertyChanged("Group1Units");
+					this.OnGroup1UnitsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Group2Units", DbType="Decimal(19,6)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> Group2Units
+		{
+			get
+			{
+				return this._Group2Units;
+			}
+			set
+			{
+				if ((this._Group2Units != value))
+				{
+					this.OnGroup2UnitsChanging(value);
+					this.SendPropertyChanging();
+					this._Group2Units = value;
+					this.SendPropertyChanged("Group2Units");
+					this.OnGroup2UnitsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmountThisYearDealCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> AmountThisYearDealCcy
+		{
+			get
+			{
+				return this._AmountThisYearDealCcy;
+			}
+			set
+			{
+				if ((this._AmountThisYearDealCcy != value))
+				{
+					this.OnAmountThisYearDealCcyChanging(value);
+					this.SendPropertyChanging();
+					this._AmountThisYearDealCcy = value;
+					this.SendPropertyChanged("AmountThisYearDealCcy");
+					this.OnAmountThisYearDealCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmountThisYearPayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> AmountThisYearPayCcy
+		{
+			get
+			{
+				return this._AmountThisYearPayCcy;
+			}
+			set
+			{
+				if ((this._AmountThisYearPayCcy != value))
+				{
+					this.OnAmountThisYearPayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._AmountThisYearPayCcy = value;
+					this.SendPropertyChanged("AmountThisYearPayCcy");
+					this.OnAmountThisYearPayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealingAmountDealCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> DealingAmountDealCcy
+		{
+			get
+			{
+				return this._DealingAmountDealCcy;
+			}
+			set
+			{
+				if ((this._DealingAmountDealCcy != value))
+				{
+					this.OnDealingAmountDealCcyChanging(value);
+					this.SendPropertyChanging();
+					this._DealingAmountDealCcy = value;
+					this.SendPropertyChanged("DealingAmountDealCcy");
+					this.OnDealingAmountDealCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealingAmountPayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> DealingAmountPayCcy
+		{
+			get
+			{
+				return this._DealingAmountPayCcy;
+			}
+			set
+			{
+				if ((this._DealingAmountPayCcy != value))
+				{
+					this.OnDealingAmountPayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._DealingAmountPayCcy = value;
+					this.SendPropertyChanged("DealingAmountPayCcy");
+					this.OnDealingAmountPayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FrontEndFeeModified", DbType="NVarChar(1)", UpdateCheck=UpdateCheck.Never)]
+		public string FrontEndFeeModified
+		{
+			get
+			{
+				return this._FrontEndFeeModified;
+			}
+			set
+			{
+				if ((this._FrontEndFeeModified != value))
+				{
+					this.OnFrontEndFeeModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._FrontEndFeeModified = value;
+					this.SendPropertyChanged("FrontEndFeeModified");
+					this.OnFrontEndFeeModifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FrontEndFeeRate", DbType="Decimal(19,8)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> FrontEndFeeRate
+		{
+			get
+			{
+				return this._FrontEndFeeRate;
+			}
+			set
+			{
+				if ((this._FrontEndFeeRate != value))
+				{
+					this.OnFrontEndFeeRateChanging(value);
+					this.SendPropertyChanging();
+					this._FrontEndFeeRate = value;
+					this.SendPropertyChanged("FrontEndFeeRate");
+					this.OnFrontEndFeeRateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FrontEndFeeDealCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> FrontEndFeeDealCcy
+		{
+			get
+			{
+				return this._FrontEndFeeDealCcy;
+			}
+			set
+			{
+				if ((this._FrontEndFeeDealCcy != value))
+				{
+					this.OnFrontEndFeeDealCcyChanging(value);
+					this.SendPropertyChanging();
+					this._FrontEndFeeDealCcy = value;
+					this.SendPropertyChanged("FrontEndFeeDealCcy");
+					this.OnFrontEndFeeDealCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FrontEndFeePayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> FrontEndFeePayCcy
+		{
+			get
+			{
+				return this._FrontEndFeePayCcy;
+			}
+			set
+			{
+				if ((this._FrontEndFeePayCcy != value))
+				{
+					this.OnFrontEndFeePayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._FrontEndFeePayCcy = value;
+					this.SendPropertyChanged("FrontEndFeePayCcy");
+					this.OnFrontEndFeePayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DiscountModified", DbType="NVarChar(1)", UpdateCheck=UpdateCheck.Never)]
+		public string DiscountModified
+		{
+			get
+			{
+				return this._DiscountModified;
+			}
+			set
+			{
+				if ((this._DiscountModified != value))
+				{
+					this.OnDiscountModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._DiscountModified = value;
+					this.SendPropertyChanged("DiscountModified");
+					this.OnDiscountModifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DiscountRate", DbType="Decimal(19,8)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> DiscountRate
+		{
+			get
+			{
+				return this._DiscountRate;
+			}
+			set
+			{
+				if ((this._DiscountRate != value))
+				{
+					this.OnDiscountRateChanging(value);
+					this.SendPropertyChanging();
+					this._DiscountRate = value;
+					this.SendPropertyChanged("DiscountRate");
+					this.OnDiscountRateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DiscountDealCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> DiscountDealCcy
+		{
+			get
+			{
+				return this._DiscountDealCcy;
+			}
+			set
+			{
+				if ((this._DiscountDealCcy != value))
+				{
+					this.OnDiscountDealCcyChanging(value);
+					this.SendPropertyChanging();
+					this._DiscountDealCcy = value;
+					this.SendPropertyChanged("DiscountDealCcy");
+					this.OnDiscountDealCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DiscountPayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> DiscountPayCcy
+		{
+			get
+			{
+				return this._DiscountPayCcy;
+			}
+			set
+			{
+				if ((this._DiscountPayCcy != value))
+				{
+					this.OnDiscountPayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._DiscountPayCcy = value;
+					this.SendPropertyChanged("DiscountPayCcy");
+					this.OnDiscountPayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExitFeeModified", DbType="NVarChar(1)", UpdateCheck=UpdateCheck.Never)]
+		public string ExitFeeModified
+		{
+			get
+			{
+				return this._ExitFeeModified;
+			}
+			set
+			{
+				if ((this._ExitFeeModified != value))
+				{
+					this.OnExitFeeModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._ExitFeeModified = value;
+					this.SendPropertyChanged("ExitFeeModified");
+					this.OnExitFeeModifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExitFeeRate", DbType="Decimal(19,8)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> ExitFeeRate
+		{
+			get
+			{
+				return this._ExitFeeRate;
+			}
+			set
+			{
+				if ((this._ExitFeeRate != value))
+				{
+					this.OnExitFeeRateChanging(value);
+					this.SendPropertyChanging();
+					this._ExitFeeRate = value;
+					this.SendPropertyChanged("ExitFeeRate");
+					this.OnExitFeeRateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExitFeeDealCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> ExitFeeDealCcy
+		{
+			get
+			{
+				return this._ExitFeeDealCcy;
+			}
+			set
+			{
+				if ((this._ExitFeeDealCcy != value))
+				{
+					this.OnExitFeeDealCcyChanging(value);
+					this.SendPropertyChanging();
+					this._ExitFeeDealCcy = value;
+					this.SendPropertyChanged("ExitFeeDealCcy");
+					this.OnExitFeeDealCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExitFeePayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> ExitFeePayCcy
+		{
+			get
+			{
+				return this._ExitFeePayCcy;
+			}
+			set
+			{
+				if ((this._ExitFeePayCcy != value))
+				{
+					this.OnExitFeePayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._ExitFeePayCcy = value;
+					this.SendPropertyChanged("ExitFeePayCcy");
+					this.OnExitFeePayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CommissionRate", DbType="Decimal(19,8)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> CommissionRate
+		{
+			get
+			{
+				return this._CommissionRate;
+			}
+			set
+			{
+				if ((this._CommissionRate != value))
+				{
+					this.OnCommissionRateChanging(value);
+					this.SendPropertyChanging();
+					this._CommissionRate = value;
+					this.SendPropertyChanged("CommissionRate");
+					this.OnCommissionRateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CommissionDealCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> CommissionDealCcy
+		{
+			get
+			{
+				return this._CommissionDealCcy;
+			}
+			set
+			{
+				if ((this._CommissionDealCcy != value))
+				{
+					this.OnCommissionDealCcyChanging(value);
+					this.SendPropertyChanging();
+					this._CommissionDealCcy = value;
+					this.SendPropertyChanged("CommissionDealCcy");
+					this.OnCommissionDealCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CommissionPayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> CommissionPayCcy
+		{
+			get
+			{
+				return this._CommissionPayCcy;
+			}
+			set
+			{
+				if ((this._CommissionPayCcy != value))
+				{
+					this.OnCommissionPayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._CommissionPayCcy = value;
+					this.SendPropertyChanged("CommissionPayCcy");
+					this.OnCommissionPayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SourceOfBusinessID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> SourceOfBusinessID
+		{
+			get
+			{
+				return this._SourceOfBusinessID;
+			}
+			set
+			{
+				if ((this._SourceOfBusinessID != value))
+				{
+					this.OnSourceOfBusinessIDChanging(value);
+					this.SendPropertyChanging();
+					this._SourceOfBusinessID = value;
+					this.SendPropertyChanged("SourceOfBusinessID");
+					this.OnSourceOfBusinessIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdvertID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> AdvertID
+		{
+			get
+			{
+				return this._AdvertID;
+			}
+			set
+			{
+				if ((this._AdvertID != value))
+				{
+					this.OnAdvertIDChanging(value);
+					this.SendPropertyChanging();
+					this._AdvertID = value;
+					this.SendPropertyChanged("AdvertID");
+					this.OnAdvertIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementBasis", DbType="NVarChar(1)", UpdateCheck=UpdateCheck.Never)]
+		public string SettlementBasis
+		{
+			get
+			{
+				return this._SettlementBasis;
+			}
+			set
+			{
+				if ((this._SettlementBasis != value))
+				{
+					this.OnSettlementBasisChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementBasis = value;
+					this.SendPropertyChanged("SettlementBasis");
+					this.OnSettlementBasisChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementAmountPayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> SettlementAmountPayCcy
+		{
+			get
+			{
+				return this._SettlementAmountPayCcy;
+			}
+			set
+			{
+				if ((this._SettlementAmountPayCcy != value))
+				{
+					this.OnSettlementAmountPayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementAmountPayCcy = value;
+					this.SendPropertyChanged("SettlementAmountPayCcy");
+					this.OnSettlementAmountPayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OutstandingSettlementPayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> OutstandingSettlementPayCcy
+		{
+			get
+			{
+				return this._OutstandingSettlementPayCcy;
+			}
+			set
+			{
+				if ((this._OutstandingSettlementPayCcy != value))
+				{
+					this.OnOutstandingSettlementPayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._OutstandingSettlementPayCcy = value;
+					this.SendPropertyChanged("OutstandingSettlementPayCcy");
+					this.OnOutstandingSettlementPayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Renunciation", DbType="Bit", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<bool> Renunciation
+		{
+			get
+			{
+				return this._Renunciation;
+			}
+			set
+			{
+				if ((this._Renunciation != value))
+				{
+					this.OnRenunciationChanging(value);
+					this.SendPropertyChanging();
+					this._Renunciation = value;
+					this.SendPropertyChanged("Renunciation");
+					this.OnRenunciationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealStatusID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> DealStatusID
+		{
+			get
+			{
+				return this._DealStatusID;
+			}
+			set
+			{
+				if ((this._DealStatusID != value))
+				{
+					this.OnDealStatusIDChanging(value);
+					this.SendPropertyChanging();
+					this._DealStatusID = value;
+					this.SendPropertyChanged("DealStatusID");
+					this.OnDealStatusIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CancellingDealID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> CancellingDealID
+		{
+			get
+			{
+				return this._CancellingDealID;
+			}
+			set
+			{
+				if ((this._CancellingDealID != value))
+				{
+					if (this._fndDeal1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCancellingDealIDChanging(value);
+					this.SendPropertyChanging();
+					this._CancellingDealID = value;
+					this.SendPropertyChanged("CancellingDealID");
+					this.OnCancellingDealIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RejectReasonID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> RejectReasonID
+		{
+			get
+			{
+				return this._RejectReasonID;
+			}
+			set
+			{
+				if ((this._RejectReasonID != value))
+				{
+					this.OnRejectReasonIDChanging(value);
+					this.SendPropertyChanging();
+					this._RejectReasonID = value;
+					this.SendPropertyChanged("RejectReasonID");
+					this.OnRejectReasonIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrintStatus", DbType="NVarChar(20)", UpdateCheck=UpdateCheck.Never)]
+		public string PrintStatus
+		{
+			get
+			{
+				return this._PrintStatus;
+			}
+			set
+			{
+				if ((this._PrintStatus != value))
+				{
+					this.OnPrintStatusChanging(value);
+					this.SendPropertyChanging();
+					this._PrintStatus = value;
+					this.SendPropertyChanged("PrintStatus");
+					this.OnPrintStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumberReprints", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> NumberReprints
+		{
+			get
+			{
+				return this._NumberReprints;
+			}
+			set
+			{
+				if ((this._NumberReprints != value))
+				{
+					this.OnNumberReprintsChanging(value);
+					this.SendPropertyChanging();
+					this._NumberReprints = value;
+					this.SendPropertyChanged("NumberReprints");
+					this.OnNumberReprintsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealSlipOriginID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> DealSlipOriginID
+		{
+			get
+			{
+				return this._DealSlipOriginID;
+			}
+			set
+			{
+				if ((this._DealSlipOriginID != value))
+				{
+					this.OnDealSlipOriginIDChanging(value);
+					this.SendPropertyChanging();
+					this._DealSlipOriginID = value;
+					this.SendPropertyChanged("DealSlipOriginID");
+					this.OnDealSlipOriginIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FundHolderPlanProductID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> FundHolderPlanProductID
+		{
+			get
+			{
+				return this._FundHolderPlanProductID;
+			}
+			set
+			{
+				if ((this._FundHolderPlanProductID != value))
+				{
+					this.OnFundHolderPlanProductIDChanging(value);
+					this.SendPropertyChanging();
+					this._FundHolderPlanProductID = value;
+					this.SendPropertyChanged("FundHolderPlanProductID");
+					this.OnFundHolderPlanProductIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> PaymentID
+		{
+			get
+			{
+				return this._PaymentID;
+			}
+			set
+			{
+				if ((this._PaymentID != value))
+				{
+					this.OnPaymentIDChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentID = value;
+					this.SendPropertyChanged("PaymentID");
+					this.OnPaymentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InternalNotes", DbType="NVarChar(255)", UpdateCheck=UpdateCheck.Never)]
+		public string InternalNotes
+		{
+			get
+			{
+				return this._InternalNotes;
+			}
+			set
+			{
+				if ((this._InternalNotes != value))
+				{
+					this.OnInternalNotesChanging(value);
+					this.SendPropertyChanging();
+					this._InternalNotes = value;
+					this.SendPropertyChanged("InternalNotes");
+					this.OnInternalNotesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExternalNotes", DbType="NVarChar(255)", UpdateCheck=UpdateCheck.Never)]
+		public string ExternalNotes
+		{
+			get
+			{
+				return this._ExternalNotes;
+			}
+			set
+			{
+				if ((this._ExternalNotes != value))
+				{
+					this.OnExternalNotesChanging(value);
+					this.SendPropertyChanging();
+					this._ExternalNotes = value;
+					this.SendPropertyChanged("ExternalNotes");
+					this.OnExternalNotesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HasBeneficialOwnershipChange", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public bool HasBeneficialOwnershipChange
+		{
+			get
+			{
+				return this._HasBeneficialOwnershipChange;
+			}
+			set
+			{
+				if ((this._HasBeneficialOwnershipChange != value))
+				{
+					this.OnHasBeneficialOwnershipChangeChanging(value);
+					this.SendPropertyChanging();
+					this._HasBeneficialOwnershipChange = value;
+					this.SendPropertyChanged("HasBeneficialOwnershipChange");
+					this.OnHasBeneficialOwnershipChangeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BeneficialOwnershipCurrencyID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> BeneficialOwnershipCurrencyID
+		{
+			get
+			{
+				return this._BeneficialOwnershipCurrencyID;
+			}
+			set
+			{
+				if ((this._BeneficialOwnershipCurrencyID != value))
+				{
+					this.OnBeneficialOwnershipCurrencyIDChanging(value);
+					this.SendPropertyChanging();
+					this._BeneficialOwnershipCurrencyID = value;
+					this.SendPropertyChanged("BeneficialOwnershipCurrencyID");
+					this.OnBeneficialOwnershipCurrencyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BeneficialOwnershipAmount", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> BeneficialOwnershipAmount
+		{
+			get
+			{
+				return this._BeneficialOwnershipAmount;
+			}
+			set
+			{
+				if ((this._BeneficialOwnershipAmount != value))
+				{
+					this.OnBeneficialOwnershipAmountChanging(value);
+					this.SendPropertyChanging();
+					this._BeneficialOwnershipAmount = value;
+					this.SendPropertyChanged("BeneficialOwnershipAmount");
+					this.OnBeneficialOwnershipAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractEnclosureID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> ContractEnclosureID
+		{
+			get
+			{
+				return this._ContractEnclosureID;
+			}
+			set
+			{
+				if ((this._ContractEnclosureID != value))
+				{
+					this.OnContractEnclosureIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractEnclosureID = value;
+					this.SendPropertyChanged("ContractEnclosureID");
+					this.OnContractEnclosureIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UnitRounding", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> UnitRounding
+		{
+			get
+			{
+				return this._UnitRounding;
+			}
+			set
+			{
+				if ((this._UnitRounding != value))
+				{
+					this.OnUnitRoundingChanging(value);
+					this.SendPropertyChanging();
+					this._UnitRounding = value;
+					this.SendPropertyChanged("UnitRounding");
+					this.OnUnitRoundingChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PreRoundedUnits", DbType="Decimal(19,6)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> PreRoundedUnits
+		{
+			get
+			{
+				return this._PreRoundedUnits;
+			}
+			set
+			{
+				if ((this._PreRoundedUnits != value))
+				{
+					this.OnPreRoundedUnitsChanging(value);
+					this.SendPropertyChanging();
+					this._PreRoundedUnits = value;
+					this.SendPropertyChanged("PreRoundedUnits");
+					this.OnPreRoundedUnitsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PreRoundedAmount", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> PreRoundedAmount
+		{
+			get
+			{
+				return this._PreRoundedAmount;
+			}
+			set
+			{
+				if ((this._PreRoundedAmount != value))
+				{
+					this.OnPreRoundedAmountChanging(value);
+					this.SendPropertyChanging();
+					this._PreRoundedAmount = value;
+					this.SendPropertyChanged("PreRoundedAmount");
+					this.OnPreRoundedAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullySettledDealingDate", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<System.DateTime> FullySettledDealingDate
+		{
+			get
+			{
+				return this._FullySettledDealingDate;
+			}
+			set
+			{
+				if ((this._FullySettledDealingDate != value))
+				{
+					this.OnFullySettledDealingDateChanging(value);
+					this.SendPropertyChanging();
+					this._FullySettledDealingDate = value;
+					this.SendPropertyChanged("FullySettledDealingDate");
+					this.OnFullySettledDealingDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmendDate", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<System.DateTime> AmendDate
+		{
+			get
+			{
+				return this._AmendDate;
+			}
+			set
+			{
+				if ((this._AmendDate != value))
+				{
+					this.OnAmendDateChanging(value);
+					this.SendPropertyChanging();
+					this._AmendDate = value;
+					this.SendPropertyChanged("AmendDate");
+					this.OnAmendDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AmendedDealID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> AmendedDealID
+		{
+			get
+			{
+				return this._AmendedDealID;
+			}
+			set
+			{
+				if ((this._AmendedDealID != value))
+				{
+					this.OnAmendedDealIDChanging(value);
+					this.SendPropertyChanging();
+					this._AmendedDealID = value;
+					this.SendPropertyChanged("AmendedDealID");
+					this.OnAmendedDealIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VersionNumber", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> VersionNumber
+		{
+			get
+			{
+				return this._VersionNumber;
+			}
+			set
+			{
+				if ((this._VersionNumber != value))
+				{
+					this.OnVersionNumberChanging(value);
+					this.SendPropertyChanging();
+					this._VersionNumber = value;
+					this.SendPropertyChanged("VersionNumber");
+					this.OnVersionNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DealAtNAV", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public bool DealAtNAV
+		{
+			get
+			{
+				return this._DealAtNAV;
+			}
+			set
+			{
+				if ((this._DealAtNAV != value))
+				{
+					this.OnDealAtNAVChanging(value);
+					this.SendPropertyChanging();
+					this._DealAtNAV = value;
+					this.SendPropertyChanged("DealAtNAV");
+					this.OnDealAtNAVChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SetUpFeeModified", DbType="NVarChar(1)", UpdateCheck=UpdateCheck.Never)]
+		public string SetUpFeeModified
+		{
+			get
+			{
+				return this._SetUpFeeModified;
+			}
+			set
+			{
+				if ((this._SetUpFeeModified != value))
+				{
+					this.OnSetUpFeeModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._SetUpFeeModified = value;
+					this.SendPropertyChanged("SetUpFeeModified");
+					this.OnSetUpFeeModifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SetUpFeeRate", DbType="Decimal(19,8)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> SetUpFeeRate
+		{
+			get
+			{
+				return this._SetUpFeeRate;
+			}
+			set
+			{
+				if ((this._SetUpFeeRate != value))
+				{
+					this.OnSetUpFeeRateChanging(value);
+					this.SendPropertyChanging();
+					this._SetUpFeeRate = value;
+					this.SendPropertyChanged("SetUpFeeRate");
+					this.OnSetUpFeeRateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SetUpFeeDealCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> SetUpFeeDealCcy
+		{
+			get
+			{
+				return this._SetUpFeeDealCcy;
+			}
+			set
+			{
+				if ((this._SetUpFeeDealCcy != value))
+				{
+					this.OnSetUpFeeDealCcyChanging(value);
+					this.SendPropertyChanging();
+					this._SetUpFeeDealCcy = value;
+					this.SendPropertyChanged("SetUpFeeDealCcy");
+					this.OnSetUpFeeDealCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SetUpFeePayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> SetUpFeePayCcy
+		{
+			get
+			{
+				return this._SetUpFeePayCcy;
+			}
+			set
+			{
+				if ((this._SetUpFeePayCcy != value))
+				{
+					this.OnSetUpFeePayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._SetUpFeePayCcy = value;
+					this.SendPropertyChanged("SetUpFeePayCcy");
+					this.OnSetUpFeePayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TS", AutoSync=AutoSync.Always, DbType="rowversion", IsDbGenerated=true, IsVersion=true, UpdateCheck=UpdateCheck.Never)]
+		public System.Data.Linq.Binary TS
+		{
+			get
+			{
+				return this._TS;
+			}
+			set
+			{
+				if ((this._TS != value))
+				{
+					this.OnTSChanging(value);
+					this.SendPropertyChanging();
+					this._TS = value;
+					this.SendPropertyChanged("TS");
+					this.OnTSChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PotentialDilutionLevy", DbType="Bit", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<bool> PotentialDilutionLevy
+		{
+			get
+			{
+				return this._PotentialDilutionLevy;
+			}
+			set
+			{
+				if ((this._PotentialDilutionLevy != value))
+				{
+					this.OnPotentialDilutionLevyChanging(value);
+					this.SendPropertyChanging();
+					this._PotentialDilutionLevy = value;
+					this.SendPropertyChanged("PotentialDilutionLevy");
+					this.OnPotentialDilutionLevyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstSubscriptionDate", DbType="DateTime", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<System.DateTime> FirstSubscriptionDate
+		{
+			get
+			{
+				return this._FirstSubscriptionDate;
+			}
+			set
+			{
+				if ((this._FirstSubscriptionDate != value))
+				{
+					this.OnFirstSubscriptionDateChanging(value);
+					this.SendPropertyChanging();
+					this._FirstSubscriptionDate = value;
+					this.SendPropertyChanged("FirstSubscriptionDate");
+					this.OnFirstSubscriptionDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdvisedSale", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public bool AdvisedSale
+		{
+			get
+			{
+				return this._AdvisedSale;
+			}
+			set
+			{
+				if ((this._AdvisedSale != value))
+				{
+					this.OnAdvisedSaleChanging(value);
+					this.SendPropertyChanging();
+					this._AdvisedSale = value;
+					this.SendPropertyChanged("AdvisedSale");
+					this.OnAdvisedSaleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CloseAccount", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public bool CloseAccount
+		{
+			get
+			{
+				return this._CloseAccount;
+			}
+			set
+			{
+				if ((this._CloseAccount != value))
+				{
+					this.OnCloseAccountChanging(value);
+					this.SendPropertyChanging();
+					this._CloseAccount = value;
+					this.SendPropertyChanged("CloseAccount");
+					this.OnCloseAccountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DilutionLevyPayCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> DilutionLevyPayCcy
+		{
+			get
+			{
+				return this._DilutionLevyPayCcy;
+			}
+			set
+			{
+				if ((this._DilutionLevyPayCcy != value))
+				{
+					this.OnDilutionLevyPayCcyChanging(value);
+					this.SendPropertyChanging();
+					this._DilutionLevyPayCcy = value;
+					this.SendPropertyChanged("DilutionLevyPayCcy");
+					this.OnDilutionLevyPayCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DilutionLevyDealCcy", DbType="Decimal(19,4)", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<decimal> DilutionLevyDealCcy
+		{
+			get
+			{
+				return this._DilutionLevyDealCcy;
+			}
+			set
+			{
+				if ((this._DilutionLevyDealCcy != value))
+				{
+					this.OnDilutionLevyDealCcyChanging(value);
+					this.SendPropertyChanging();
+					this._DilutionLevyDealCcy = value;
+					this.SendPropertyChanged("DilutionLevyDealCcy");
+					this.OnDilutionLevyDealCcyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdviserCharge", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public bool AdviserCharge
+		{
+			get
+			{
+				return this._AdviserCharge;
+			}
+			set
+			{
+				if ((this._AdviserCharge != value))
+				{
+					this.OnAdviserChargeChanging(value);
+					this.SendPropertyChanging();
+					this._AdviserCharge = value;
+					this.SendPropertyChanged("AdviserCharge");
+					this.OnAdviserChargeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FundHolderPlanID", DbType="Int", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<int> FundHolderPlanID
+		{
+			get
+			{
+				return this._FundHolderPlanID;
+			}
+			set
+			{
+				if ((this._FundHolderPlanID != value))
+				{
+					this.OnFundHolderPlanIDChanging(value);
+					this.SendPropertyChanging();
+					this._FundHolderPlanID = value;
+					this.SendPropertyChanged("FundHolderPlanID");
+					this.OnFundHolderPlanIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="fndDeal_fndDeal", Storage="_fndDeals", ThisKey="DealID", OtherKey="CancellingDealID")]
+		public EntitySet<fndDeal> fndDeals
+		{
+			get
+			{
+				return this._fndDeals;
+			}
+			set
+			{
+				this._fndDeals.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="fndDeal_fndDeal", Storage="_fndDeal1", ThisKey="CancellingDealID", OtherKey="DealID", IsForeignKey=true)]
+		public fndDeal fndDeal1
+		{
+			get
+			{
+				return this._fndDeal1.Entity;
+			}
+			set
+			{
+				fndDeal previousValue = this._fndDeal1.Entity;
+				if (((previousValue != value) 
+							|| (this._fndDeal1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._fndDeal1.Entity = null;
+						previousValue.fndDeals.Remove(this);
+					}
+					this._fndDeal1.Entity = value;
+					if ((value != null))
+					{
+						value.fndDeals.Add(this);
+						this._CancellingDealID = value.DealID;
+					}
+					else
+					{
+						this._CancellingDealID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("fndDeal1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_fndDeals(fndDeal entity)
+		{
+			this.SendPropertyChanging();
+			entity.fndDeal1 = this;
+		}
+		
+		private void detach_fndDeals(fndDeal entity)
+		{
+			this.SendPropertyChanging();
+			entity.fndDeal1 = null;
 		}
 	}
 }

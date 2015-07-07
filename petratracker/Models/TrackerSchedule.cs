@@ -223,62 +223,7 @@ namespace petratracker.Models
             return true;
         }
 
-        public static Schedule EvaluatePaymentReceivedSchedule(Schedule s)
-        {
-            s.processing = true;
-            Save(s);
-
-            if (s.receipt_sent && s.file_downloaded && s.file_uploaded)
-            {
-                s.workflow_status = Constants.WF_STATUS_COMPLETED;
-                s.workflow_summary = string.Format("Receipt sent {0} and File downloaded {1} and File uploaded {2}", s.receipt_sent_date.ToString(), s.file_downloaded_date.ToString(), s.file_uploaded_date.ToString());
-            }
-            else if (s.receipt_sent && s.file_downloaded && !s.file_uploaded)
-            {
-                s.workflow_status = Constants.WF_STATUS_RF_SENT_DOWNLOAD_NOUPLOAD;
-                s.workflow_summary = string.Format("Receipt sent {0} and File downloaded {1}. No File uploaded", s.receipt_sent_date.ToString(), s.file_downloaded_date.ToString());
-                s = EvaluateFileUploadNotificationStatus(s);
-            }
-            else if (s.receipt_sent && !s.file_downloaded && !s.file_uploaded)
-            {
-                s.workflow_status = Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD;
-                s.workflow_summary = string.Format("Receipt sent {0}. No File downloaded and no File uploaded", s.receipt_sent_date.ToString());
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
-            }
-            else if (!s.receipt_sent && s.file_downloaded && s.file_uploaded)
-            {
-                s.workflow_status = Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD;
-                s.workflow_summary = string.Format("No Receipt sent. File downloaded {0} and File uploaded {1}", s.file_downloaded_date.ToString(), s.file_uploaded_date.ToString());
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
-            }
-            else if (!s.receipt_sent && s.file_downloaded && !s.file_uploaded)
-            {
-                s.workflow_status = Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD;
-                s.workflow_summary = string.Format("No Receipt sent. File downloaded {0} and no File uploaded", s.file_downloaded_date.ToString());
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
-                s = EvaluateFileUploadNotificationStatus(s);
-            }
-            else if (!s.receipt_sent && !s.file_downloaded && !s.file_uploaded)
-            {
-                s.workflow_status = Constants.WF_STATUS_PAYMENTS_RECEIVED;
-                s.workflow_summary = "Schedule linked to Payments. Waiting for Receipt to be sent and File download & uploaded";
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
-            }
-            else
-            {
-                // Shouldn't reach here..but we should handle file_uploaded, but not downloaded yet issue. how?
-            }
-
-            s.processing = false;
-            Save(s);
-
-            return s;
-        }
-
         #endregion
-
-        #region Private Helper Methods
 
         #region Workflow Methods
 
@@ -299,6 +244,8 @@ namespace petratracker.Models
                 
                 if (s.validated)
                 {
+                    s.validation_valuetime = CheckValidationTime(s.company_id, s.tier, s.contributiontype, s.month, s.year);
+
                     s.validation_status = CheckValidationStatus(s.company_id, s.tier, s.contributiontype, s.month, s.year);
 
                     //  Has Schedule has now passed?
@@ -424,36 +371,114 @@ namespace petratracker.Models
                 EvaluatePaymentReceivedSchedule(s);
             }    
         }
-        
-        private static Schedule EvaluateFileUploadNotificationStatus(Schedule s)
+    
+        public static Schedule EvaluatePaymentReceivedSchedule(Schedule s)
         {
-            if (FileUploadWindowHasExpired(s.file_downloaded_date))
+            s.processing = true;
+            Save(s);
+
+            if (s.receipt_sent && s.file_downloaded && s.file_uploaded)
             {
-                s.file_downloaded = false;
-                s.file_downloaded_date = DateTime.Parse("0000-00-00 00:00:00");
-
-                if (s.receipt_sent)
-                {
-                    s.workflow_status = Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD;
-                    s.workflow_summary = string.Format("Receipt sent {0}. No File downloaded and no File uploaded", s.receipt_sent_date.ToString());
-                }
-                else
-                {
-                    s.workflow_status = Constants.WF_STATUS_PAYMENTS_RECEIVED;
-                    s.workflow_summary = "Schedule linked to Payments. Waiting for Receipt to be sent and File download & uploaded";
-                }
-
-                // Expire old notifications and send a new one for the file download.
-                TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_UPLOAD, Constants.JOB_TYPE_SCHEDULE, s.id);
+                s.workflow_status = Constants.WF_STATUS_COMPLETED;
+                s.workflow_summary = string.Format("Receipt sent {0} and File downloaded {1} and File uploaded {2}", s.receipt_sent_date.ToString(), s.file_downloaded_date.ToString(), s.file_uploaded_date.ToString());
+            }
+            else if (s.receipt_sent && s.file_downloaded && !s.file_uploaded)
+            {
+                s.workflow_status = Constants.WF_STATUS_RF_SENT_DOWNLOAD_NOUPLOAD;
+                s.workflow_summary = string.Format("Receipt sent {0} and File downloaded {1}. No File uploaded", s.receipt_sent_date.ToString(), s.file_downloaded_date.ToString());
+                s = EvaluateFileUploadNotificationStatus(s);
+            }
+            else if (s.receipt_sent && !s.file_downloaded && !s.file_uploaded)
+            {
+                s.workflow_status = Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD;
+                s.workflow_summary = string.Format("Receipt sent {0}. No File downloaded and no File uploaded", s.receipt_sent_date.ToString());
+                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
+            }
+            else if (!s.receipt_sent && s.file_downloaded && s.file_uploaded)
+            {
+                s.workflow_status = Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD;
+                s.workflow_summary = string.Format("No Receipt sent. File downloaded {0} and File uploaded {1}", s.file_downloaded_date.ToString(), s.file_uploaded_date.ToString());
+                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
+            }
+            else if (!s.receipt_sent && s.file_downloaded && !s.file_uploaded)
+            {
+                s.workflow_status = Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD;
+                s.workflow_summary = string.Format("No Receipt sent. File downloaded {0} and no File uploaded", s.file_downloaded_date.ToString());
+                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
+                s = EvaluateFileUploadNotificationStatus(s);
+            }
+            else if (!s.receipt_sent && !s.file_downloaded && !s.file_uploaded)
+            {
+                s.workflow_status = Constants.WF_STATUS_PAYMENTS_RECEIVED;
+                s.workflow_summary = "Schedule linked to Payments. Waiting for Receipt to be sent and File download & uploaded";
+                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
                 UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
             }
             else
             {
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_UPLOAD, Constants.SETTINGS_TIME_FILE_UPLOAD_INTERVAL);
+                // Shouldn't reach here..but we should handle file_uploaded, but not downloaded yet issue. how?
             }
+
+            s.processing = false;
+            Save(s);
 
             return s;
         }
+
+        private static Schedule EvaluateFileUploadNotificationStatus(Schedule s)
+        {
+            if (CheckFileUploaded(s.company,s.company_id,s.tier, s.month, s.year, s.Payment.transaction_amount)
+            {
+                 s.file_uploaded = true;
+                 s.file_uploaded_date = DateTime.Now;
+                               
+                if (s.receipt_sent)
+                {
+                    s.workflow_status = Constants.WF_STATUS_COMPLETED;
+                    s.workflow_summary = string.Format("Receipt sent {0} and File downloaded {1} and File uploaded {2}", s.receipt_sent_date.ToString(), s.file_downloaded_date.ToString(), s.file_uploaded_date.ToString());
+                }
+                else
+                {
+                    s.workflow_status = Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD;
+                    s.workflow_summary = string.Format("No Receipt sent. File downloaded {0} and File uploaded {1}", s.file_downloaded_date.ToString(), s.file_uploaded_date.ToString());
+                }
+
+                // Resolve old notifications
+                TrackerNotification.ResolveByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_UPLOAD, Constants.JOB_TYPE_SCHEDULE, s.id);
+            }
+            else
+            {
+                if (FileUploadWindowHasExpired(s.file_downloaded_date))
+                {
+                    s.file_downloaded = false;
+                    s.file_downloaded_date = DateTime.Parse("0000-00-00 00:00:00");
+
+                    if (s.receipt_sent)
+                    {
+                        s.workflow_status = Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD;
+                        s.workflow_summary = string.Format("Receipt sent {0}. No File downloaded and no File uploaded", s.receipt_sent_date.ToString());
+                    }
+                    else
+                    {
+                        s.workflow_status = Constants.WF_STATUS_PAYMENTS_RECEIVED;
+                        s.workflow_summary = "Schedule linked to Payments. Waiting for Receipt to be sent and File download & uploaded";
+                    }
+
+                    // Expire old notifications and send a new one for the file download.
+                    TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_UPLOAD, Constants.JOB_TYPE_SCHEDULE, s.id);
+                    UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
+                }
+                else
+                {
+                    UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_UPLOAD, Constants.SETTINGS_TIME_FILE_UPLOAD_INTERVAL);
+                }
+            }
+            return s;
+        }
+
+        #endregion
+
+        #region Private Helper Methods
 
         private static bool FileUploadWindowHasExpired(DateTime file_downloaded_date)
         {
@@ -498,7 +523,7 @@ namespace petratracker.Models
                            j.CompanyEntityId == companyid.Trim() &&
                            j.Tier == tier.Replace(" ", "") &&
                            j.TotalContribution != 0 &&
-                           j.DealDate == dealDate
+                           ((DateTime)j.DealDate).Date == dealDate.Date
                           select j).Single();
 
                 Payment pm = TrackerPayment.GetSubscription(companyid, tier, fd.TotalContribution, dealDate);
@@ -522,14 +547,71 @@ namespace petratracker.Models
                                       j.CompanyEntityId == companyid.Trim() &&
                                       j.Tier == tier.Replace(" ","") &&
                                       j.TotalContribution != 0 &&
-                                      j.DealDate == dealDate
-                                select j).Count();
+                                ((DateTime)j.DealDate).Date == dealDate.Date
+                          select j).Count();
 
                 return (fd > 0);
             } 
             catch(Exception) 
             {
                 return false;
+            }
+        }
+
+        private static bool CheckFileUploaded(string company, string companyid, string tier, int month, int year, decimal? amount)
+        {
+            DateTime dealDate = new DateTime(year, month, 1);
+            
+            string fundName = company + tier;
+
+            try
+            {
+                var fd = from a in TrackerDB.Microgen.Associations
+                         join ae2 in TrackerDB.Microgen.cclv_AllEntities on a.TargetEntityID equals ae2.EntityID
+                         join ae3 in TrackerDB.Microgen.cclv_AllEntities on a.SourceEntityID equals ae3.EntityID
+                         join d in TrackerDB.Microgen.fndDeals on ae3.EntityID equals d.EntityFundID
+                         where (a.RoleTypeID == 1003) &&
+                               (ae3.FullName == fundName) &&
+                               (ae2.EntityKey == companyid.Trim()) &&
+                               (((DateTime)d.DealingDate).Date == dealDate.Date)
+                         group d by new { d.DealingDate } into s
+                         select new
+                         {
+                             DealDate = s.Key.DealingDate,
+                             TotalAmount = s.Sum(y => y.PaymentAmountDealCcy),
+                         };
+                foreach(var f in fd)
+                {
+                    if (f.TotalAmount == amount)
+                        return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private static DateTime CheckValidationTime(string companyid, string tier, string ct, int month, int year)
+        {
+            DateTime dealDate = new DateTime(year, month, 1);
+            try
+            {
+
+               var fd = (from j in TrackerDB.PTAS.FundDeals
+                          where j.ContribType_ID == int.Parse(ct.Trim()) &&
+                                j.CompanyEntityId == companyid.Trim() &&
+                                j.Tier == tier.Replace(" ", "") &&
+                                j.TotalContribution != 0 &&
+                                ((DateTime)j.DealDate).Date == dealDate.Date
+                         select j).Single();
+
+               return (DateTime)fd.DealDate;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -544,7 +626,7 @@ namespace petratracker.Models
                                 j.CompanyEntityId == companyid.Trim() &&
                                 j.Tier == tier.Replace(" ", "") &&
                                 j.TotalContribution != 0 &&
-                                j.DealDate == dealDate
+                                ((DateTime)j.DealDate).Date == dealDate.Date
                                 select j).Single();
 
                 var fld = (from k in TrackerDB.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k);
@@ -589,8 +671,6 @@ namespace petratracker.Models
             }
         }
     
-        #endregion
-
         #endregion
     }
 }

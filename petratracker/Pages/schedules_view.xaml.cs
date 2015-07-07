@@ -90,15 +90,13 @@ namespace petratracker.Pages
 
         private void load_schedule()
         {
-            Schedule s = TrackerSchedule.GetSchedule(_schedule_id);
+            this.lbl_company.Content = _schedule.company;
+            this.lbl_month.Content = string.Format("{0}, {1}", CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(_schedule.month), _schedule.year);
+            this.lbl_owner.Content = string.Format("{0} {1}", _schedule.User.first_name, _schedule.User.last_name);
+            this.lbl_tier.Content = _schedule.tier;
+            this.status_summary.Text = _schedule.workflow_summary;
 
-            this.lbl_company.Content = s.company;
-            this.lbl_month.Content = string.Format("{0}, {1}", CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.month), s.year);
-            this.lbl_owner.Content = string.Format("{0} {1}", s.User.first_name, s.User.last_name);
-            this.lbl_tier.Content = s.tier;
-            this.status_summary.Text = TrackerSchedule.GetSummary(_schedule_id);
-
-            if (s.workflow_status.Equals("Schedule linked to Payments. Waiting for Receipt to be sent."))
+            /*if (s.workflow_status.Equals("Schedule linked to Payments. Waiting for Receipt to be sent."))
             {
                 this.sentr.IsEnabled = true;
             }
@@ -110,6 +108,7 @@ namespace petratracker.Pages
 
             if (s.receipt_sent) { this.sentr.IsEnabled = false; this.sentr.Content = "Receipt Sent"; }
             if (s.file_downloaded) { this.download.IsEnabled = false; this.download.Content = "File Downloaded"; }
+             * */
         }
 
         private void close_flyout()

@@ -1,12 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="microgenDB">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 19.375" name="microgenDB">
   <DataContextMoniker Name="/MicrogenDataContext" />
   <nestedChildShapes>
-    <classShape Id="a1282fe9-6a13-44bc-aa2f-3f56dc11700f" absoluteBounds="1.625, 0.5, 2, 4.2708154296875">
+    <classShape Id="a1282fe9-6a13-44bc-aa2f-3f56dc11700f" absoluteBounds="0.5, 0.5, 2, 4.2708154296875">
       <DataClassMoniker Name="/MicrogenDataContext/cclv_AllEntity" />
       <nestedChildShapes>
-        <elementListCompartment Id="3b3c2172-23a3-4fbe-9907-22358b62a93e" absoluteBounds="1.6400000000000001, 0.96, 1.9700000000000002, 3.7108154296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="3b3c2172-23a3-4fbe-9907-22358b62a93e" absoluteBounds="0.51500000000000012, 0.96, 1.9700000000000002, 3.7108154296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="10436130-fbe3-4c7f-a603-ca1af14f9487" absoluteBounds="2.875, 0.5, 2, 4.6554182942708326">
+      <DataClassMoniker Name="/MicrogenDataContext/Association" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0ff007e8-1975-49a0-9a6d-2f44be2ca5ca" absoluteBounds="2.8899999999999997, 0.96, 1.9700000000000002, 4.095418294270833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.58423076923077 : 5.15541829427083); (3.58423076923077 : 5.40541829427083); (4.17961538461539 : 5.40541829427083); (4.17961538461539 : 5.15541829427083)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/MicrogenDataContext/Association/Association_Association" />
+      <nodes>
+        <classShapeMoniker Id="10436130-fbe3-4c7f-a603-ca1af14f9487" />
+        <classShapeMoniker Id="10436130-fbe3-4c7f-a603-ca1af14f9487" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="85e78f4a-f535-4e8e-9616-210cf8997893" absoluteBounds="5.5, 0.5, 2, 18.116518554687502">
+      <DataClassMoniker Name="/MicrogenDataContext/fndDeal" />
+      <nestedChildShapes>
+        <elementListCompartment Id="04c8fd3b-59a7-4f05-a804-cee6a4277638" absoluteBounds="5.515, 0.96, 1.9700000000000002, 17.5565185546875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(6.20923076923077 : 18.6165185546875); (6.20923076923077 : 18.8665185546875); (6.80461538461539 : 18.8665185546875); (6.80461538461539 : 18.6165185546875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/MicrogenDataContext/fndDeal/fndDeal_fndDeal" />
+      <nodes>
+        <classShapeMoniker Id="85e78f4a-f535-4e8e-9616-210cf8997893" />
+        <classShapeMoniker Id="85e78f4a-f535-4e8e-9616-210cf8997893" />
+      </nodes>
+    </associationConnector>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

@@ -14,34 +14,6 @@
       <Association Name="User_Job" Member="User" ThisKey="owner" OtherKey="id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Payments" Member="Payments">
-    <Type Name="Payment">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="job_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="transaction_ref_no" Type="System.String" DbType="NChar(20) NOT NULL" CanBeNull="false" />
-      <Column Name="transaction_details" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="transaction_date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Column Name="value_date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Column Name="transaction_amount" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
-      <Column Name="subscription_value_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="subscription_amount" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="company_code" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
-      <Column Name="savings_booster" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="savings_booster_client_code" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
-      <Column Name="deal_description" Type="System.String" DbType="NChar(222)" CanBeNull="true" />
-      <Column Name="deal_description_period" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
-      <Column Name="status" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="identified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="date_identified" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="approved_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="date_approved" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="comments" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="owner" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Roles" Member="Roles">
     <Type Name="Role">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -140,7 +112,7 @@
       <Column Name="resolution_type" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
       <Column Name="resolution_info" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="resolution_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="payment_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="payment_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="receipt_sent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="receipt_sent_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Column Name="file_downloaded" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
@@ -157,6 +129,36 @@
       <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Association Name="User_Schedule" Member="User" ThisKey="modified_by" OtherKey="id" Type="User" IsForeignKey="true" />
+      <Association Name="Payment_Schedule" Member="Payment" ThisKey="payment_id" OtherKey="id" Type="Payment" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Payments" Member="Payments">
+    <Type Name="Payment">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="job_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="transaction_ref_no" Type="System.String" DbType="NChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="transaction_details" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="transaction_date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="value_date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="transaction_amount" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="subscription_value_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="subscription_amount" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="company_code" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
+      <Column Name="savings_booster" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="savings_booster_client_code" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
+      <Column Name="deal_description" Type="System.String" DbType="NChar(222)" CanBeNull="true" />
+      <Column Name="deal_description_period" Type="System.String" DbType="NChar(30)" CanBeNull="true" />
+      <Column Name="status" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="identified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="date_identified" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="approved_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="date_approved" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="comments" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="owner" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="modified_by" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Association Name="Payment_Schedule" Member="Schedules" ThisKey="id" OtherKey="payment_id" Type="Schedule" />
     </Type>
   </Table>
 </Database>

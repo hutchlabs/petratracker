@@ -33,9 +33,6 @@ namespace petratracker.Models
     partial void InsertJob(Job instance);
     partial void UpdateJob(Job instance);
     partial void DeleteJob(Job instance);
-    partial void InsertPayment(Payment instance);
-    partial void UpdatePayment(Payment instance);
-    partial void DeletePayment(Payment instance);
     partial void InsertRole(Role instance);
     partial void UpdateRole(Role instance);
     partial void DeleteRole(Role instance);
@@ -54,6 +51,9 @@ namespace petratracker.Models
     partial void InsertSchedule(Schedule instance);
     partial void UpdateSchedule(Schedule instance);
     partial void DeleteSchedule(Schedule instance);
+    partial void InsertPayment(Payment instance);
+    partial void UpdatePayment(Payment instance);
+    partial void DeletePayment(Payment instance);
     #endregion
 		
 		public TrackerDataContext(string connection) : 
@@ -85,14 +85,6 @@ namespace petratracker.Models
 			get
 			{
 				return this.GetTable<Job>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Payment> Payments
-		{
-			get
-			{
-				return this.GetTable<Payment>();
 			}
 		}
 		
@@ -141,6 +133,14 @@ namespace petratracker.Models
 			get
 			{
 				return this.GetTable<Schedule>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Payment> Payments
+		{
+			get
+			{
+				return this.GetTable<Payment>();
 			}
 		}
 	}
@@ -439,620 +439,6 @@ namespace petratracker.Models
 						this._owner = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Payments")]
-	public partial class Payment : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id;
-		
-		private System.Nullable<int> _job_id;
-		
-		private string _transaction_ref_no;
-		
-		private string _transaction_details;
-		
-		private System.DateTime _transaction_date;
-		
-		private System.DateTime _value_date;
-		
-		private decimal _transaction_amount;
-		
-		private System.Nullable<System.DateTime> _subscription_value_date;
-		
-		private System.Nullable<decimal> _subscription_amount;
-		
-		private string _company_code;
-		
-		private System.Nullable<bool> _savings_booster;
-		
-		private string _savings_booster_client_code;
-		
-		private string _deal_description;
-		
-		private string _deal_description_period;
-		
-		private string _status;
-		
-		private System.Nullable<int> _identified_by;
-		
-		private System.Nullable<System.DateTime> _date_identified;
-		
-		private System.Nullable<int> _approved_by;
-		
-		private System.Nullable<System.DateTime> _date_approved;
-		
-		private string _comments;
-		
-		private System.Nullable<int> _owner;
-		
-		private System.Nullable<int> _modified_by;
-		
-		private System.Nullable<System.DateTime> _created_at;
-		
-		private System.Nullable<System.DateTime> _updated_at;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void Onjob_idChanging(System.Nullable<int> value);
-    partial void Onjob_idChanged();
-    partial void Ontransaction_ref_noChanging(string value);
-    partial void Ontransaction_ref_noChanged();
-    partial void Ontransaction_detailsChanging(string value);
-    partial void Ontransaction_detailsChanged();
-    partial void Ontransaction_dateChanging(System.DateTime value);
-    partial void Ontransaction_dateChanged();
-    partial void Onvalue_dateChanging(System.DateTime value);
-    partial void Onvalue_dateChanged();
-    partial void Ontransaction_amountChanging(decimal value);
-    partial void Ontransaction_amountChanged();
-    partial void Onsubscription_value_dateChanging(System.Nullable<System.DateTime> value);
-    partial void Onsubscription_value_dateChanged();
-    partial void Onsubscription_amountChanging(System.Nullable<decimal> value);
-    partial void Onsubscription_amountChanged();
-    partial void Oncompany_codeChanging(string value);
-    partial void Oncompany_codeChanged();
-    partial void Onsavings_boosterChanging(System.Nullable<bool> value);
-    partial void Onsavings_boosterChanged();
-    partial void Onsavings_booster_client_codeChanging(string value);
-    partial void Onsavings_booster_client_codeChanged();
-    partial void Ondeal_descriptionChanging(string value);
-    partial void Ondeal_descriptionChanged();
-    partial void Ondeal_description_periodChanging(string value);
-    partial void Ondeal_description_periodChanged();
-    partial void OnstatusChanging(string value);
-    partial void OnstatusChanged();
-    partial void Onidentified_byChanging(System.Nullable<int> value);
-    partial void Onidentified_byChanged();
-    partial void Ondate_identifiedChanging(System.Nullable<System.DateTime> value);
-    partial void Ondate_identifiedChanged();
-    partial void Onapproved_byChanging(System.Nullable<int> value);
-    partial void Onapproved_byChanged();
-    partial void Ondate_approvedChanging(System.Nullable<System.DateTime> value);
-    partial void Ondate_approvedChanged();
-    partial void OncommentsChanging(string value);
-    partial void OncommentsChanged();
-    partial void OnownerChanging(System.Nullable<int> value);
-    partial void OnownerChanged();
-    partial void Onmodified_byChanging(System.Nullable<int> value);
-    partial void Onmodified_byChanged();
-    partial void Oncreated_atChanging(System.Nullable<System.DateTime> value);
-    partial void Oncreated_atChanged();
-    partial void Onupdated_atChanging(System.Nullable<System.DateTime> value);
-    partial void Onupdated_atChanged();
-    #endregion
-		
-		public Payment()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id
-		{
-			get
-			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this.OnidChanging(value);
-					this.SendPropertyChanging();
-					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_job_id", DbType="Int")]
-		public System.Nullable<int> job_id
-		{
-			get
-			{
-				return this._job_id;
-			}
-			set
-			{
-				if ((this._job_id != value))
-				{
-					this.Onjob_idChanging(value);
-					this.SendPropertyChanging();
-					this._job_id = value;
-					this.SendPropertyChanged("job_id");
-					this.Onjob_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_transaction_ref_no", DbType="NChar(20) NOT NULL", CanBeNull=false)]
-		public string transaction_ref_no
-		{
-			get
-			{
-				return this._transaction_ref_no;
-			}
-			set
-			{
-				if ((this._transaction_ref_no != value))
-				{
-					this.Ontransaction_ref_noChanging(value);
-					this.SendPropertyChanging();
-					this._transaction_ref_no = value;
-					this.SendPropertyChanged("transaction_ref_no");
-					this.Ontransaction_ref_noChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_transaction_details", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string transaction_details
-		{
-			get
-			{
-				return this._transaction_details;
-			}
-			set
-			{
-				if ((this._transaction_details != value))
-				{
-					this.Ontransaction_detailsChanging(value);
-					this.SendPropertyChanging();
-					this._transaction_details = value;
-					this.SendPropertyChanged("transaction_details");
-					this.Ontransaction_detailsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_transaction_date", DbType="Date NOT NULL")]
-		public System.DateTime transaction_date
-		{
-			get
-			{
-				return this._transaction_date;
-			}
-			set
-			{
-				if ((this._transaction_date != value))
-				{
-					this.Ontransaction_dateChanging(value);
-					this.SendPropertyChanging();
-					this._transaction_date = value;
-					this.SendPropertyChanged("transaction_date");
-					this.Ontransaction_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_value_date", DbType="Date NOT NULL")]
-		public System.DateTime value_date
-		{
-			get
-			{
-				return this._value_date;
-			}
-			set
-			{
-				if ((this._value_date != value))
-				{
-					this.Onvalue_dateChanging(value);
-					this.SendPropertyChanging();
-					this._value_date = value;
-					this.SendPropertyChanged("value_date");
-					this.Onvalue_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_transaction_amount", DbType="Money NOT NULL")]
-		public decimal transaction_amount
-		{
-			get
-			{
-				return this._transaction_amount;
-			}
-			set
-			{
-				if ((this._transaction_amount != value))
-				{
-					this.Ontransaction_amountChanging(value);
-					this.SendPropertyChanging();
-					this._transaction_amount = value;
-					this.SendPropertyChanged("transaction_amount");
-					this.Ontransaction_amountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_subscription_value_date", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> subscription_value_date
-		{
-			get
-			{
-				return this._subscription_value_date;
-			}
-			set
-			{
-				if ((this._subscription_value_date != value))
-				{
-					this.Onsubscription_value_dateChanging(value);
-					this.SendPropertyChanging();
-					this._subscription_value_date = value;
-					this.SendPropertyChanged("subscription_value_date");
-					this.Onsubscription_value_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_subscription_amount", DbType="Money")]
-		public System.Nullable<decimal> subscription_amount
-		{
-			get
-			{
-				return this._subscription_amount;
-			}
-			set
-			{
-				if ((this._subscription_amount != value))
-				{
-					this.Onsubscription_amountChanging(value);
-					this.SendPropertyChanging();
-					this._subscription_amount = value;
-					this.SendPropertyChanged("subscription_amount");
-					this.Onsubscription_amountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company_code", DbType="NChar(30)")]
-		public string company_code
-		{
-			get
-			{
-				return this._company_code;
-			}
-			set
-			{
-				if ((this._company_code != value))
-				{
-					this.Oncompany_codeChanging(value);
-					this.SendPropertyChanging();
-					this._company_code = value;
-					this.SendPropertyChanged("company_code");
-					this.Oncompany_codeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_savings_booster", DbType="Bit")]
-		public System.Nullable<bool> savings_booster
-		{
-			get
-			{
-				return this._savings_booster;
-			}
-			set
-			{
-				if ((this._savings_booster != value))
-				{
-					this.Onsavings_boosterChanging(value);
-					this.SendPropertyChanging();
-					this._savings_booster = value;
-					this.SendPropertyChanged("savings_booster");
-					this.Onsavings_boosterChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_savings_booster_client_code", DbType="NChar(30)")]
-		public string savings_booster_client_code
-		{
-			get
-			{
-				return this._savings_booster_client_code;
-			}
-			set
-			{
-				if ((this._savings_booster_client_code != value))
-				{
-					this.Onsavings_booster_client_codeChanging(value);
-					this.SendPropertyChanging();
-					this._savings_booster_client_code = value;
-					this.SendPropertyChanged("savings_booster_client_code");
-					this.Onsavings_booster_client_codeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_deal_description", DbType="NChar(222)")]
-		public string deal_description
-		{
-			get
-			{
-				return this._deal_description;
-			}
-			set
-			{
-				if ((this._deal_description != value))
-				{
-					this.Ondeal_descriptionChanging(value);
-					this.SendPropertyChanging();
-					this._deal_description = value;
-					this.SendPropertyChanged("deal_description");
-					this.Ondeal_descriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_deal_description_period", DbType="NChar(30)")]
-		public string deal_description_period
-		{
-			get
-			{
-				return this._deal_description_period;
-			}
-			set
-			{
-				if ((this._deal_description_period != value))
-				{
-					this.Ondeal_description_periodChanging(value);
-					this.SendPropertyChanging();
-					this._deal_description_period = value;
-					this.SendPropertyChanged("deal_description_period");
-					this.Ondeal_description_periodChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="NChar(30) NOT NULL", CanBeNull=false)]
-		public string status
-		{
-			get
-			{
-				return this._status;
-			}
-			set
-			{
-				if ((this._status != value))
-				{
-					this.OnstatusChanging(value);
-					this.SendPropertyChanging();
-					this._status = value;
-					this.SendPropertyChanged("status");
-					this.OnstatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_identified_by", DbType="Int")]
-		public System.Nullable<int> identified_by
-		{
-			get
-			{
-				return this._identified_by;
-			}
-			set
-			{
-				if ((this._identified_by != value))
-				{
-					this.Onidentified_byChanging(value);
-					this.SendPropertyChanging();
-					this._identified_by = value;
-					this.SendPropertyChanged("identified_by");
-					this.Onidentified_byChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date_identified", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> date_identified
-		{
-			get
-			{
-				return this._date_identified;
-			}
-			set
-			{
-				if ((this._date_identified != value))
-				{
-					this.Ondate_identifiedChanging(value);
-					this.SendPropertyChanging();
-					this._date_identified = value;
-					this.SendPropertyChanged("date_identified");
-					this.Ondate_identifiedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_approved_by", DbType="Int")]
-		public System.Nullable<int> approved_by
-		{
-			get
-			{
-				return this._approved_by;
-			}
-			set
-			{
-				if ((this._approved_by != value))
-				{
-					this.Onapproved_byChanging(value);
-					this.SendPropertyChanging();
-					this._approved_by = value;
-					this.SendPropertyChanged("approved_by");
-					this.Onapproved_byChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date_approved", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> date_approved
-		{
-			get
-			{
-				return this._date_approved;
-			}
-			set
-			{
-				if ((this._date_approved != value))
-				{
-					this.Ondate_approvedChanging(value);
-					this.SendPropertyChanging();
-					this._date_approved = value;
-					this.SendPropertyChanged("date_approved");
-					this.Ondate_approvedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_comments", DbType="Text", UpdateCheck=UpdateCheck.Never)]
-		public string comments
-		{
-			get
-			{
-				return this._comments;
-			}
-			set
-			{
-				if ((this._comments != value))
-				{
-					this.OncommentsChanging(value);
-					this.SendPropertyChanging();
-					this._comments = value;
-					this.SendPropertyChanged("comments");
-					this.OncommentsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_owner", DbType="Int")]
-		public System.Nullable<int> owner
-		{
-			get
-			{
-				return this._owner;
-			}
-			set
-			{
-				if ((this._owner != value))
-				{
-					this.OnownerChanging(value);
-					this.SendPropertyChanging();
-					this._owner = value;
-					this.SendPropertyChanged("owner");
-					this.OnownerChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_modified_by", DbType="Int")]
-		public System.Nullable<int> modified_by
-		{
-			get
-			{
-				return this._modified_by;
-			}
-			set
-			{
-				if ((this._modified_by != value))
-				{
-					this.Onmodified_byChanging(value);
-					this.SendPropertyChanging();
-					this._modified_by = value;
-					this.SendPropertyChanged("modified_by");
-					this.Onmodified_byChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_at", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> created_at
-		{
-			get
-			{
-				return this._created_at;
-			}
-			set
-			{
-				if ((this._created_at != value))
-				{
-					this.Oncreated_atChanging(value);
-					this.SendPropertyChanging();
-					this._created_at = value;
-					this.SendPropertyChanged("created_at");
-					this.Oncreated_atChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_at", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> updated_at
-		{
-			get
-			{
-				return this._updated_at;
-			}
-			set
-			{
-				if ((this._updated_at != value))
-				{
-					this.Onupdated_atChanging(value);
-					this.SendPropertyChanging();
-					this._updated_at = value;
-					this.SendPropertyChanged("updated_at");
-					this.Onupdated_atChanged();
 				}
 			}
 		}
@@ -2903,7 +2289,7 @@ namespace petratracker.Models
 		
 		private System.Nullable<System.DateTime> _resolution_date;
 		
-		private int _payment_id;
+		private System.Nullable<int> _payment_id;
 		
 		private bool _receipt_sent;
 		
@@ -2937,6 +2323,8 @@ namespace petratracker.Models
 		
 		private EntityRef<User> _User;
 		
+		private EntityRef<Payment> _Payment;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2969,7 +2357,7 @@ namespace petratracker.Models
     partial void Onresolution_infoChanged();
     partial void Onresolution_dateChanging(System.Nullable<System.DateTime> value);
     partial void Onresolution_dateChanged();
-    partial void Onpayment_idChanging(int value);
+    partial void Onpayment_idChanging(System.Nullable<int> value);
     partial void Onpayment_idChanged();
     partial void Onreceipt_sentChanging(bool value);
     partial void Onreceipt_sentChanged();
@@ -3006,6 +2394,7 @@ namespace petratracker.Models
 		public Schedule()
 		{
 			this._User = default(EntityRef<User>);
+			this._Payment = default(EntityRef<Payment>);
 			OnCreated();
 		}
 		
@@ -3289,8 +2678,8 @@ namespace petratracker.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_payment_id", DbType="Int NOT NULL")]
-		public int payment_id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_payment_id", DbType="Int")]
+		public System.Nullable<int> payment_id
 		{
 			get
 			{
@@ -3300,6 +2689,10 @@ namespace petratracker.Models
 			{
 				if ((this._payment_id != value))
 				{
+					if (this._Payment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.Onpayment_idChanging(value);
 					this.SendPropertyChanging();
 					this._payment_id = value;
@@ -3647,6 +3040,40 @@ namespace petratracker.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_Schedule", Storage="_Payment", ThisKey="payment_id", OtherKey="id", IsForeignKey=true)]
+		public Payment Payment
+		{
+			get
+			{
+				return this._Payment.Entity;
+			}
+			set
+			{
+				Payment previousValue = this._Payment.Entity;
+				if (((previousValue != value) 
+							|| (this._Payment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Payment.Entity = null;
+						previousValue.Schedules.Remove(this);
+					}
+					this._Payment.Entity = value;
+					if ((value != null))
+					{
+						value.Schedules.Add(this);
+						this._payment_id = value.id;
+					}
+					else
+					{
+						this._payment_id = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Payment");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3665,6 +3092,648 @@ namespace petratracker.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Payments")]
+	public partial class Payment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id;
+		
+		private System.Nullable<int> _job_id;
+		
+		private string _transaction_ref_no;
+		
+		private string _transaction_details;
+		
+		private System.DateTime _transaction_date;
+		
+		private System.DateTime _value_date;
+		
+		private decimal _transaction_amount;
+		
+		private System.Nullable<System.DateTime> _subscription_value_date;
+		
+		private System.Nullable<decimal> _subscription_amount;
+		
+		private string _company_code;
+		
+		private System.Nullable<bool> _savings_booster;
+		
+		private string _savings_booster_client_code;
+		
+		private string _deal_description;
+		
+		private string _deal_description_period;
+		
+		private string _status;
+		
+		private System.Nullable<int> _identified_by;
+		
+		private System.Nullable<System.DateTime> _date_identified;
+		
+		private System.Nullable<int> _approved_by;
+		
+		private System.Nullable<System.DateTime> _date_approved;
+		
+		private string _comments;
+		
+		private System.Nullable<int> _owner;
+		
+		private System.Nullable<int> _modified_by;
+		
+		private System.Nullable<System.DateTime> _created_at;
+		
+		private System.Nullable<System.DateTime> _updated_at;
+		
+		private EntitySet<Schedule> _Schedules;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void Onjob_idChanging(System.Nullable<int> value);
+    partial void Onjob_idChanged();
+    partial void Ontransaction_ref_noChanging(string value);
+    partial void Ontransaction_ref_noChanged();
+    partial void Ontransaction_detailsChanging(string value);
+    partial void Ontransaction_detailsChanged();
+    partial void Ontransaction_dateChanging(System.DateTime value);
+    partial void Ontransaction_dateChanged();
+    partial void Onvalue_dateChanging(System.DateTime value);
+    partial void Onvalue_dateChanged();
+    partial void Ontransaction_amountChanging(decimal value);
+    partial void Ontransaction_amountChanged();
+    partial void Onsubscription_value_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onsubscription_value_dateChanged();
+    partial void Onsubscription_amountChanging(System.Nullable<decimal> value);
+    partial void Onsubscription_amountChanged();
+    partial void Oncompany_codeChanging(string value);
+    partial void Oncompany_codeChanged();
+    partial void Onsavings_boosterChanging(System.Nullable<bool> value);
+    partial void Onsavings_boosterChanged();
+    partial void Onsavings_booster_client_codeChanging(string value);
+    partial void Onsavings_booster_client_codeChanged();
+    partial void Ondeal_descriptionChanging(string value);
+    partial void Ondeal_descriptionChanged();
+    partial void Ondeal_description_periodChanging(string value);
+    partial void Ondeal_description_periodChanged();
+    partial void OnstatusChanging(string value);
+    partial void OnstatusChanged();
+    partial void Onidentified_byChanging(System.Nullable<int> value);
+    partial void Onidentified_byChanged();
+    partial void Ondate_identifiedChanging(System.Nullable<System.DateTime> value);
+    partial void Ondate_identifiedChanged();
+    partial void Onapproved_byChanging(System.Nullable<int> value);
+    partial void Onapproved_byChanged();
+    partial void Ondate_approvedChanging(System.Nullable<System.DateTime> value);
+    partial void Ondate_approvedChanged();
+    partial void OncommentsChanging(string value);
+    partial void OncommentsChanged();
+    partial void OnownerChanging(System.Nullable<int> value);
+    partial void OnownerChanged();
+    partial void Onmodified_byChanging(System.Nullable<int> value);
+    partial void Onmodified_byChanged();
+    partial void Oncreated_atChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_atChanged();
+    partial void Onupdated_atChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_atChanged();
+    #endregion
+		
+		public Payment()
+		{
+			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_job_id", DbType="Int")]
+		public System.Nullable<int> job_id
+		{
+			get
+			{
+				return this._job_id;
+			}
+			set
+			{
+				if ((this._job_id != value))
+				{
+					this.Onjob_idChanging(value);
+					this.SendPropertyChanging();
+					this._job_id = value;
+					this.SendPropertyChanged("job_id");
+					this.Onjob_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_transaction_ref_no", DbType="NChar(20) NOT NULL", CanBeNull=false)]
+		public string transaction_ref_no
+		{
+			get
+			{
+				return this._transaction_ref_no;
+			}
+			set
+			{
+				if ((this._transaction_ref_no != value))
+				{
+					this.Ontransaction_ref_noChanging(value);
+					this.SendPropertyChanging();
+					this._transaction_ref_no = value;
+					this.SendPropertyChanged("transaction_ref_no");
+					this.Ontransaction_ref_noChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_transaction_details", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string transaction_details
+		{
+			get
+			{
+				return this._transaction_details;
+			}
+			set
+			{
+				if ((this._transaction_details != value))
+				{
+					this.Ontransaction_detailsChanging(value);
+					this.SendPropertyChanging();
+					this._transaction_details = value;
+					this.SendPropertyChanged("transaction_details");
+					this.Ontransaction_detailsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_transaction_date", DbType="Date NOT NULL")]
+		public System.DateTime transaction_date
+		{
+			get
+			{
+				return this._transaction_date;
+			}
+			set
+			{
+				if ((this._transaction_date != value))
+				{
+					this.Ontransaction_dateChanging(value);
+					this.SendPropertyChanging();
+					this._transaction_date = value;
+					this.SendPropertyChanged("transaction_date");
+					this.Ontransaction_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_value_date", DbType="Date NOT NULL")]
+		public System.DateTime value_date
+		{
+			get
+			{
+				return this._value_date;
+			}
+			set
+			{
+				if ((this._value_date != value))
+				{
+					this.Onvalue_dateChanging(value);
+					this.SendPropertyChanging();
+					this._value_date = value;
+					this.SendPropertyChanged("value_date");
+					this.Onvalue_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_transaction_amount", DbType="Money NOT NULL")]
+		public decimal transaction_amount
+		{
+			get
+			{
+				return this._transaction_amount;
+			}
+			set
+			{
+				if ((this._transaction_amount != value))
+				{
+					this.Ontransaction_amountChanging(value);
+					this.SendPropertyChanging();
+					this._transaction_amount = value;
+					this.SendPropertyChanged("transaction_amount");
+					this.Ontransaction_amountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_subscription_value_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> subscription_value_date
+		{
+			get
+			{
+				return this._subscription_value_date;
+			}
+			set
+			{
+				if ((this._subscription_value_date != value))
+				{
+					this.Onsubscription_value_dateChanging(value);
+					this.SendPropertyChanging();
+					this._subscription_value_date = value;
+					this.SendPropertyChanged("subscription_value_date");
+					this.Onsubscription_value_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_subscription_amount", DbType="Money")]
+		public System.Nullable<decimal> subscription_amount
+		{
+			get
+			{
+				return this._subscription_amount;
+			}
+			set
+			{
+				if ((this._subscription_amount != value))
+				{
+					this.Onsubscription_amountChanging(value);
+					this.SendPropertyChanging();
+					this._subscription_amount = value;
+					this.SendPropertyChanged("subscription_amount");
+					this.Onsubscription_amountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company_code", DbType="NChar(30)")]
+		public string company_code
+		{
+			get
+			{
+				return this._company_code;
+			}
+			set
+			{
+				if ((this._company_code != value))
+				{
+					this.Oncompany_codeChanging(value);
+					this.SendPropertyChanging();
+					this._company_code = value;
+					this.SendPropertyChanged("company_code");
+					this.Oncompany_codeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_savings_booster", DbType="Bit")]
+		public System.Nullable<bool> savings_booster
+		{
+			get
+			{
+				return this._savings_booster;
+			}
+			set
+			{
+				if ((this._savings_booster != value))
+				{
+					this.Onsavings_boosterChanging(value);
+					this.SendPropertyChanging();
+					this._savings_booster = value;
+					this.SendPropertyChanged("savings_booster");
+					this.Onsavings_boosterChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_savings_booster_client_code", DbType="NChar(30)")]
+		public string savings_booster_client_code
+		{
+			get
+			{
+				return this._savings_booster_client_code;
+			}
+			set
+			{
+				if ((this._savings_booster_client_code != value))
+				{
+					this.Onsavings_booster_client_codeChanging(value);
+					this.SendPropertyChanging();
+					this._savings_booster_client_code = value;
+					this.SendPropertyChanged("savings_booster_client_code");
+					this.Onsavings_booster_client_codeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_deal_description", DbType="NChar(222)")]
+		public string deal_description
+		{
+			get
+			{
+				return this._deal_description;
+			}
+			set
+			{
+				if ((this._deal_description != value))
+				{
+					this.Ondeal_descriptionChanging(value);
+					this.SendPropertyChanging();
+					this._deal_description = value;
+					this.SendPropertyChanged("deal_description");
+					this.Ondeal_descriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_deal_description_period", DbType="NChar(30)")]
+		public string deal_description_period
+		{
+			get
+			{
+				return this._deal_description_period;
+			}
+			set
+			{
+				if ((this._deal_description_period != value))
+				{
+					this.Ondeal_description_periodChanging(value);
+					this.SendPropertyChanging();
+					this._deal_description_period = value;
+					this.SendPropertyChanged("deal_description_period");
+					this.Ondeal_description_periodChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="NChar(30) NOT NULL", CanBeNull=false)]
+		public string status
+		{
+			get
+			{
+				return this._status;
+			}
+			set
+			{
+				if ((this._status != value))
+				{
+					this.OnstatusChanging(value);
+					this.SendPropertyChanging();
+					this._status = value;
+					this.SendPropertyChanged("status");
+					this.OnstatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_identified_by", DbType="Int")]
+		public System.Nullable<int> identified_by
+		{
+			get
+			{
+				return this._identified_by;
+			}
+			set
+			{
+				if ((this._identified_by != value))
+				{
+					this.Onidentified_byChanging(value);
+					this.SendPropertyChanging();
+					this._identified_by = value;
+					this.SendPropertyChanged("identified_by");
+					this.Onidentified_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date_identified", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> date_identified
+		{
+			get
+			{
+				return this._date_identified;
+			}
+			set
+			{
+				if ((this._date_identified != value))
+				{
+					this.Ondate_identifiedChanging(value);
+					this.SendPropertyChanging();
+					this._date_identified = value;
+					this.SendPropertyChanged("date_identified");
+					this.Ondate_identifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_approved_by", DbType="Int")]
+		public System.Nullable<int> approved_by
+		{
+			get
+			{
+				return this._approved_by;
+			}
+			set
+			{
+				if ((this._approved_by != value))
+				{
+					this.Onapproved_byChanging(value);
+					this.SendPropertyChanging();
+					this._approved_by = value;
+					this.SendPropertyChanged("approved_by");
+					this.Onapproved_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date_approved", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> date_approved
+		{
+			get
+			{
+				return this._date_approved;
+			}
+			set
+			{
+				if ((this._date_approved != value))
+				{
+					this.Ondate_approvedChanging(value);
+					this.SendPropertyChanging();
+					this._date_approved = value;
+					this.SendPropertyChanged("date_approved");
+					this.Ondate_approvedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_comments", DbType="Text", UpdateCheck=UpdateCheck.Never)]
+		public string comments
+		{
+			get
+			{
+				return this._comments;
+			}
+			set
+			{
+				if ((this._comments != value))
+				{
+					this.OncommentsChanging(value);
+					this.SendPropertyChanging();
+					this._comments = value;
+					this.SendPropertyChanged("comments");
+					this.OncommentsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_owner", DbType="Int")]
+		public System.Nullable<int> owner
+		{
+			get
+			{
+				return this._owner;
+			}
+			set
+			{
+				if ((this._owner != value))
+				{
+					this.OnownerChanging(value);
+					this.SendPropertyChanging();
+					this._owner = value;
+					this.SendPropertyChanged("owner");
+					this.OnownerChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_modified_by", DbType="Int")]
+		public System.Nullable<int> modified_by
+		{
+			get
+			{
+				return this._modified_by;
+			}
+			set
+			{
+				if ((this._modified_by != value))
+				{
+					this.Onmodified_byChanging(value);
+					this.SendPropertyChanging();
+					this._modified_by = value;
+					this.SendPropertyChanged("modified_by");
+					this.Onmodified_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_at", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> created_at
+		{
+			get
+			{
+				return this._created_at;
+			}
+			set
+			{
+				if ((this._created_at != value))
+				{
+					this.Oncreated_atChanging(value);
+					this.SendPropertyChanging();
+					this._created_at = value;
+					this.SendPropertyChanged("created_at");
+					this.Oncreated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_at", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> updated_at
+		{
+			get
+			{
+				return this._updated_at;
+			}
+			set
+			{
+				if ((this._updated_at != value))
+				{
+					this.Onupdated_atChanging(value);
+					this.SendPropertyChanging();
+					this._updated_at = value;
+					this.SendPropertyChanged("updated_at");
+					this.Onupdated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_Schedule", Storage="_Schedules", ThisKey="id", OtherKey="payment_id")]
+		public EntitySet<Schedule> Schedules
+		{
+			get
+			{
+				return this._Schedules;
+			}
+			set
+			{
+				this._Schedules.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Schedules(Schedule entity)
+		{
+			this.SendPropertyChanging();
+			entity.Payment = this;
+		}
+		
+		private void detach_Schedules(Schedule entity)
+		{
+			this.SendPropertyChanging();
+			entity.Payment = null;
 		}
 	}
 }
