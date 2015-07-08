@@ -1,774 +1,391 @@
--- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
---
--- Host: 127.0.0.1    Database: petra_tracker_db
--- ------------------------------------------------------
--- Server version	5.6.21
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Current Database: `petra_tracker_db`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `petra_tracker_db` /*!40100 DEFAULT CHARACTER SET latin1 */;
-
-USE `petra_tracker_db`;
-
-CREATE TABLE IF NOT EXISTS `notifications` (
-  `id` int(11) NOT NULL,
-  `to` varchar(255) NOT NULL,
-  `notification_type` enum('savings_booster','subscription_approval') NOT NULL,
-  `job_type` enum('subscription','transfer','redemption','schedule') NOT NULL,
-  `job_id` int(11) NOT NULL,
-  `status` enum('active','expired') NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-
---
--- Table structure for table `payment_jobs`
---
-
-DROP TABLE IF EXISTS `payment_jobs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `payment_jobs` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Payment_ID` varchar(30) NOT NULL DEFAULT '',
-  `Trans_Ref` varchar(50) NOT NULL DEFAULT '',
-  `Trans_Details` text NOT NULL,
-  `Statement_Amt` double NOT NULL DEFAULT '0',
-  `Contribution_Date` date DEFAULT NULL,
-  `Statement_Value_Date` date DEFAULT NULL,
-  `Subscribtion_Amt` double DEFAULT NULL,
-  `Subscribtion_Value_Date` date DEFAULT NULL,
-  `Comments` text,
-  `Company_Code` varchar(50) DEFAULT NULL,
-  `Savings_Booster` varchar(1) DEFAULT NULL,
-  `Status` varchar(50) DEFAULT NULL,
-  `Created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `Owner` varchar(30) DEFAULT NULL,
-  `Updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Updated_by` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `payment_jobs`
---
-
-LOCK TABLES `payment_jobs` WRITE;
-/*!40000 ALTER TABLE `payment_jobs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `payment_jobs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_departments`
---
-
-DROP TABLE IF EXISTS `tbl_departments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_departments` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `modified_by` varchar(255) DEFAULT NULL,
-  `created_at` varchar(255) DEFAULT NULL,
-  `updated_at` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_departments`
---
-
-LOCK TABLES `tbl_departments` WRITE;
-/*!40000 ALTER TABLE `tbl_departments` DISABLE KEYS */;
-INSERT INTO `tbl_departments` VALUES (1,'I.T Department','I.T Department',NULL,NULL,NULL),(2,'Accounts Department','Accounts',NULL,'2015-05-21 13:55:16',NULL),(3,'Operations Department','Operations',NULL,'2015-05-22 09:21:10',NULL);
-/*!40000 ALTER TABLE `tbl_departments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_payments`
---
-
-DROP TABLE IF EXISTS `tbl_payments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_payments` (
-  `Payment_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Job_Type` varchar(30) DEFAULT NULL,
-  `Owner` varchar(30) DEFAULT NULL,
-  `Created_at` timestamp NULL DEFAULT NULL,
-  `Modified_by` varchar(255) DEFAULT NULL,
-  `Updated_at` timestamp NULL DEFAULT NULL,
-  `Status` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`Payment_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_payments`
---
-
-LOCK TABLES `tbl_payments` WRITE;
-/*!40000 ALTER TABLE `tbl_payments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_payments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_roles`
---
-
-DROP TABLE IF EXISTS `tbl_roles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_roles` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(255) DEFAULT NULL,
-  `Description` varchar(255) DEFAULT NULL,
-  `Modified_By` varchar(255) DEFAULT NULL,
-  `Created_At` varchar(255) DEFAULT NULL,
-  `Updated_At` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_roles`
---
-
-LOCK TABLES `tbl_roles` WRITE;
-/*!40000 ALTER TABLE `tbl_roles` DISABLE KEYS */;
-INSERT INTO `tbl_roles` VALUES (1,'Administrator','Admin',NULL,NULL,NULL),(2,'Super User','',NULL,NULL,NULL);
-/*!40000 ALTER TABLE `tbl_roles` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tbl_users`
---
-
-DROP TABLE IF EXISTS `tbl_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tbl_users` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_id` varchar(255) DEFAULT NULL,
-  `department_id` varchar(100) NOT NULL DEFAULT '',
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `password` varchar(50) NOT NULL DEFAULT '',
-  `first_name` varchar(30) NOT NULL DEFAULT '',
-  `last_name` varchar(30) NOT NULL DEFAULT '',
-  `first_login` varchar(255) DEFAULT '',
-  `active` varchar(255) DEFAULT NULL,
-  `modified_by` varchar(225) DEFAULT NULL,
-  `created_at` varchar(50) DEFAULT NULL,
-  `updated_at` varchar(255) NOT NULL DEFAULT 'Active',
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `Email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tbl_users`
---
-
-LOCK TABLES `tbl_users` WRITE;
-/*!40000 ALTER TABLE `tbl_users` DISABLE KEYS */;
-INSERT INTO `tbl_users` VALUES (1,'2','1','john@abc.com','ÊßI¥ä‰:%á7è¨R','john','doe','','Active',NULL,NULL,'Active'),(2,'1','1','jdoe@gmail.com','§¬lÌ‹\n0Šôä[ó¤±','David','Doe','','Active',NULL,NULL,'Active'),(3,'1','1','niicoark27@gmail.com','™›öè« KþÝYöÙ9}Ç','Nicholas','Arkaah','','Active',NULL,NULL,'Active'),(5,'2','1','niicoark@yahoo.com','GÍW«œÝñ…?—9ŸÚm','John','Nketai','','Active',NULL,NULL,'Active'),(6, '2', '1', 'dhutchful@gmail.com', 'œô0¥q™2½ìU%©P', 'David', 'Hutchful', '', 'Active', NULL, NULL, 'Active');
-/*!40000 ALTER TABLE `tbl_users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Temporary table structure for view `view_users`
---
-
-DROP TABLE IF EXISTS `view_users`;
-/*!50001 DROP VIEW IF EXISTS `view_users`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE TABLE `view_users` (
-  `ID` tinyint NOT NULL,
-  `Name of User` tinyint NOT NULL,
-  `User Role` tinyint NOT NULL,
-  `Status` tinyint NOT NULL
-) ENGINE=MyISAM */;
-SET character_set_client = @saved_cs_client;
-
---
--- Current Database: `bmfdb`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `bmfdb` /*!40100 DEFAULT CHARACTER SET latin1 */;
-
-USE `bmfdb`;
-
---
--- Table structure for table `accounts`
---
-
-DROP TABLE IF EXISTS `accounts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `accounts` (
-  `AcctNo` varchar(30) NOT NULL,
-  `AcctBal` double NOT NULL,
-  `Principal` double NOT NULL,
-  `iniInterest` double NOT NULL,
-  `CurrentPrincipal` double NOT NULL,
-  `Divisor` int(11) NOT NULL,
-  `UPay` double NOT NULL,
-  `Duration` varchar(30) NOT NULL,
-  `LastTransDate` date NOT NULL,
-  `AcctType` text NOT NULL,
-  `OpCode` varchar(10) NOT NULL,
-  `PackCode` varchar(10) NOT NULL,
-  `DateOfAcct` date NOT NULL,
-  PRIMARY KEY (`AcctNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `accounts`
---
-
-LOCK TABLES `accounts` WRITE;
-/*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
-INSERT INTO `accounts` VALUES ('12201100,February2011',70,70,0,70,0,0,'','0000-00-00','Orinary','01','98','2011-02-04'),('122018910001',20,20,0,20,0,0,'','0000-00-00','Gow','01','89','2011-01-16'),('122019910001',20,20,0,20,0,0,'','0000-00-00','Joakes','01','99','2011-01-16'),('12202101,January2011',20,20,0,20,0,0,'','0000-00-00','Orinary','02','98','2011-01-16'),('122028910001',20,20,0,20,0,0,'','0000-00-00','Gow','02','89','2011-01-16'),('122029910001',20,20,0,20,0,0,'','0000-00-00','Joakes','02','99','2011-01-16');
-/*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `accountsdump`
---
-
-DROP TABLE IF EXISTS `accountsdump`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `accountsdump` (
-  `AcctNo` varchar(30) NOT NULL,
-  `AcctBal` double NOT NULL,
-  `Principal` double NOT NULL,
-  `iniInterest` double NOT NULL,
-  `CurrentPrincipal` double NOT NULL,
-  `Divisor` int(11) NOT NULL,
-  `UPay` double NOT NULL,
-  `Duration` varchar(30) NOT NULL,
-  `LastTransDate` date NOT NULL,
-  `AcctType` text NOT NULL,
-  `OpCode` varchar(10) NOT NULL,
-  `PackCode` varchar(10) NOT NULL,
-  `DateOfAcct` date NOT NULL,
-  PRIMARY KEY (`AcctNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `accountsdump`
---
-
-LOCK TABLES `accountsdump` WRITE;
-/*!40000 ALTER TABLE `accountsdump` DISABLE KEYS */;
-INSERT INTO `accountsdump` VALUES ('12201101,January2011',2,2,0,2,0,0,'','0000-00-00','Orinary','01','98','2011-01-16');
-/*!40000 ALTER TABLE `accountsdump` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `acctinttrans`
---
-
-DROP TABLE IF EXISTS `acctinttrans`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `acctinttrans` (
-  `AcctNo` varchar(20) NOT NULL,
-  `PrincipalBF` double NOT NULL,
-  `InterestRate` double NOT NULL,
-  `Interest` double NOT NULL,
-  `Type` varchar(15) NOT NULL,
-  `OfficerID` varchar(30) NOT NULL,
-  `DateOfTrans` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `acctinttrans`
---
-
-LOCK TABLES `acctinttrans` WRITE;
-/*!40000 ALTER TABLE `acctinttrans` DISABLE KEYS */;
-INSERT INTO `acctinttrans` VALUES ('122018910001',0,0,0,'N/A','','2011-01-16'),('122028910001',0,0,0,'N/A','','2011-01-16'),('122029910001',0,0,0,'N/A','','2011-01-16'),('122019910001',0,0,0,'N/A','','2011-01-16'),('12201101,January2011',0,0,0,'N/A','','2011-01-16'),('12202101,January2011',0,0,0,'N/A','','2011-01-16'),('12201100,February201',0,0,0,'N/A','','2011-02-04');
-/*!40000 ALTER TABLE `acctinttrans` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `accttrans`
---
-
-DROP TABLE IF EXISTS `accttrans`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `accttrans` (
-  `AcctNo` varchar(30) NOT NULL,
-  `Transaction` varchar(15) NOT NULL,
-  `Amount` double NOT NULL,
-  `DeptMode` varchar(15) DEFAULT 'None',
-  `Bankers` varchar(100) DEFAULT 'None',
-  `ChequeNo` varchar(50) DEFAULT 'None',
-  `OfficerID` varchar(30) NOT NULL,
-  `DateOfTrans` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `accttrans`
---
-
-LOCK TABLES `accttrans` WRITE;
-/*!40000 ALTER TABLE `accttrans` DISABLE KEYS */;
-INSERT INTO `accttrans` VALUES ('122018910001','Deposite',20,'Cash','','','100923','2011-01-16'),('122028910001','Deposite',20,'Cash','','','100923','2011-01-16'),('122019910001','Deposite',20,'Cash','','','100923','2011-01-16'),('122029910001','Deposite',20,'Cash','','','100923','2011-01-16'),('12201101,January2011','Deposite',20,'Cash','','','100923','2011-01-16'),('12202101,January2011','Deposite',20,'Cash','','','100923','2011-01-16'),('12201101,January2011','Withdrawal',18,'','','','100923','2011-01-16'),('12201100,February2011','Deposite',70,'','','','100923','2011-02-04');
-/*!40000 ALTER TABLE `accttrans` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `accttype`
---
-
-DROP TABLE IF EXISTS `accttype`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `accttype` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) NOT NULL,
-  `Description` text NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `accttype`
---
-
-LOCK TABLES `accttype` WRITE;
-/*!40000 ALTER TABLE `accttype` DISABLE KEYS */;
-/*!40000 ALTER TABLE `accttype` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `autogen`
---
-
-DROP TABLE IF EXISTS `autogen`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `autogen` (
-  `Linker` varchar(5) NOT NULL,
-  `OfficeCode` varchar(3) NOT NULL,
-  `CompanyName` varchar(50) NOT NULL,
-  `Address` varchar(50) NOT NULL,
-  `Phone` varchar(20) NOT NULL,
-  `Fax` varchar(20) NOT NULL,
-  `WebSite` varchar(50) NOT NULL,
-  `Email` varchar(50) NOT NULL,
-  `Location` varchar(100) NOT NULL,
-  `Logo` longblob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `autogen`
---
-
-LOCK TABLES `autogen` WRITE;
-/*!40000 ALTER TABLE `autogen` DISABLE KEYS */;
-INSERT INTO `autogen` VALUES ('','122','Unregistered Version','N/A','N/A','N/A','www.datapalgh.com','info@datapalgh.com','Online','');
-/*!40000 ALTER TABLE `autogen` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `bankers`
---
-
-DROP TABLE IF EXISTS `bankers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `bankers` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Bankers` varchar(100) NOT NULL,
-  `Description` text NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `bankers`
---
-
-LOCK TABLES `bankers` WRITE;
-/*!40000 ALTER TABLE `bankers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `bankers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `clients`
---
-
-DROP TABLE IF EXISTS `clients`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `clients` (
-  `ClientID` varchar(30) NOT NULL,
-  `FirstName` varchar(30) NOT NULL,
-  `LastName` varchar(30) NOT NULL,
-  `Gender` varchar(10) NOT NULL,
-  `DOB` varchar(10) NOT NULL,
-  `Phone` varchar(30) NOT NULL,
-  `Address` text NOT NULL,
-  `Email` varchar(70) NOT NULL,
-  `Occupation` varchar(50) NOT NULL,
-  `Location` text NOT NULL,
-  `MaritalStatus` varchar(10) NOT NULL,
-  `Picture` varchar(100) NOT NULL,
-  `BioSignature` varchar(100) NOT NULL,
-  `NOKName` varchar(50) NOT NULL,
-  `NOKPhone` varchar(30) NOT NULL,
-  `NOKAddress` text NOT NULL,
-  `NOKEmail` varchar(70) NOT NULL,
-  `Relationship` varchar(50) NOT NULL,
-  `Age` varchar(10) NOT NULL,
-  `OfficerID` varchar(30) NOT NULL,
-  `DateOfReg` varchar(10) NOT NULL,
-  `AcctNo` varchar(30) NOT NULL,
-  `Linker` varchar(5) NOT NULL,
-  PRIMARY KEY (`AcctNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `clients`
---
-
-LOCK TABLES `clients` WRITE;
-/*!40000 ALTER TABLE `clients` DISABLE KEYS */;
-INSERT INTO `clients` VALUES ('12201100,February2011','htut','hooo','','2011-02-04','','','','','','','','','','','','','','','','2005','12201100,February2011',''),('122018910001','John','Homes','','2011-01-16','','','','','','','','','','','','','','','','1994','122018910001',''),('122019910001','Jakson','Samson','','2011-01-16','','','','','','','','','','','','','','','','1994','122019910001',''),('12202101,January2011','Homer','Jokkk','','2011-01-16','','','','','','','','','','','','','','','','1994','12202101,January2011',''),('122028910001','Kate','Komi','','2011-01-16','','','','','','','','','','','','','','','','1994','122028910001',''),('122029910001','Kumson','Kofi','','2011-01-16','','','','','','','','','','','','','','','','1994','122029910001','');
-/*!40000 ALTER TABLE `clients` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `clientsdump`
---
-
-DROP TABLE IF EXISTS `clientsdump`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `clientsdump` (
-  `ClientID` varchar(30) NOT NULL,
-  `FirstName` varchar(30) NOT NULL,
-  `LastName` varchar(30) NOT NULL,
-  `Gender` varchar(10) NOT NULL,
-  `DOB` varchar(10) NOT NULL,
-  `Phone` varchar(30) NOT NULL,
-  `Address` text NOT NULL,
-  `Email` varchar(70) NOT NULL,
-  `Occupation` varchar(50) NOT NULL,
-  `Location` text NOT NULL,
-  `MaritalStatus` varchar(10) NOT NULL,
-  `Picture` varchar(100) NOT NULL,
-  `BioSignature` varchar(100) NOT NULL,
-  `NOKName` varchar(50) NOT NULL,
-  `NOKPhone` varchar(30) NOT NULL,
-  `NOKAddress` text NOT NULL,
-  `NOKEmail` varchar(70) NOT NULL,
-  `Relationship` varchar(50) NOT NULL,
-  `Age` varchar(10) NOT NULL,
-  `OfficerID` varchar(30) NOT NULL,
-  `DateOfReg` varchar(10) NOT NULL,
-  `AcctNo` varchar(30) NOT NULL,
-  `Linker` varchar(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `clientsdump`
---
-
-LOCK TABLES `clientsdump` WRITE;
-/*!40000 ALTER TABLE `clientsdump` DISABLE KEYS */;
-INSERT INTO `clientsdump` VALUES ('12201101,January2011','Jokers','Hiosio','','2011-01-16','','','','','','','','','','','','','','','','1994','12201101,January2011','');
-/*!40000 ALTER TABLE `clientsdump` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `codegen`
---
-
-DROP TABLE IF EXISTS `codegen`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `codegen` (
-  `OfficeCode` varchar(5) NOT NULL,
-  `OpCode` varchar(5) NOT NULL,
-  `PackCode` varchar(5) NOT NULL,
-  `IniSerial` int(11) NOT NULL,
-  `IniDate` date NOT NULL,
-  PRIMARY KEY (`OfficeCode`,`OpCode`,`PackCode`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `codegen`
---
-
-LOCK TABLES `codegen` WRITE;
-/*!40000 ALTER TABLE `codegen` DISABLE KEYS */;
-INSERT INTO `codegen` VALUES ('122','01','89',10002,'2011-01-16'),('122','01','98',101,'2011-02-04'),('122','01','99',10002,'2011-01-16'),('122','02','89',10002,'2011-01-16'),('122','02','98',100,'2011-01-16'),('122','02','99',10002,'2011-01-16');
-/*!40000 ALTER TABLE `codegen` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `departments`
---
-
-DROP TABLE IF EXISTS `departments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `departments` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(100) NOT NULL,
-  `Head` varchar(100) NOT NULL,
-  `Description` text NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `departments`
---
-
-LOCK TABLES `departments` WRITE;
-/*!40000 ALTER TABLE `departments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `departments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `investments`
---
-
-DROP TABLE IF EXISTS `investments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `investments` (
-  `Code` varchar(10) NOT NULL,
-  `PackName` varchar(50) NOT NULL,
-  `PackType` varchar(20) NOT NULL,
-  `Savings` int(1) NOT NULL,
-  `Withdrawals` int(1) NOT NULL,
-  `MininumBalance` double NOT NULL,
-  `Interest` double NOT NULL,
-  `AppMode` varchar(20) NOT NULL,
-  `Computation` varchar(20) NOT NULL,
-  `Description` text NOT NULL,
-  `Date` date NOT NULL,
-  `Serial` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `investments`
---
-
-LOCK TABLES `investments` WRITE;
-/*!40000 ALTER TABLE `investments` DISABLE KEYS */;
-INSERT INTO `investments` VALUES ('89','Gow','Savings',1,1,0,0,'','Simple Interest','','2011-01-16',10003),('99','Joakes','Savings',1,1,0,0,'','Simple Interest','','2011-01-16',10003),('98','Orinary','Ordinary Susu',1,1,0,0,'','Simple Interest','','2011-01-16',10004);
-/*!40000 ALTER TABLE `investments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `logs`
---
-
-DROP TABLE IF EXISTS `logs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `logs` (
-  `ID` int(11) NOT NULL,
-  `LogDate` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `logs`
---
-
-LOCK TABLES `logs` WRITE;
-/*!40000 ALTER TABLE `logs` DISABLE KEYS */;
-INSERT INTO `logs` VALUES (1,'201102');
-/*!40000 ALTER TABLE `logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `modes`
---
-
-DROP TABLE IF EXISTS `modes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `modes` (
-  `ModeID` int(11) NOT NULL AUTO_INCREMENT,
-  `ModeName` varchar(30) NOT NULL,
-  `Number` int(11) NOT NULL,
-  PRIMARY KEY (`ModeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `modes`
---
-
-LOCK TABLES `modes` WRITE;
-/*!40000 ALTER TABLE `modes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `modes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `oac`
---
-
-DROP TABLE IF EXISTS `oac`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `oac` (
-  `Code` varchar(4) NOT NULL,
-  `Location` text NOT NULL,
-  PRIMARY KEY (`Code`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `oac`
---
-
-LOCK TABLES `oac` WRITE;
-/*!40000 ALTER TABLE `oac` DISABLE KEYS */;
-INSERT INTO `oac` VALUES ('01','Nungua'),('02','Teshie');
-/*!40000 ALTER TABLE `oac` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `staff`
---
-
-DROP TABLE IF EXISTS `staff`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `staff` (
-  `StaffID` varchar(30) NOT NULL,
-  `FirstName` varchar(30) NOT NULL,
-  `LastName` varchar(30) NOT NULL,
-  `Gender` varchar(10) NOT NULL,
-  `DOB` varchar(10) NOT NULL,
-  `Phone` varchar(30) NOT NULL,
-  `Address` text NOT NULL,
-  `Email` varchar(50) NOT NULL,
-  `Location` text NOT NULL,
-  `Department` varchar(50) NOT NULL,
-  `Position` varchar(50) NOT NULL,
-  `DateReg.` varchar(10) NOT NULL,
-  PRIMARY KEY (`StaffID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `staff`
---
-
-LOCK TABLES `staff` WRITE;
-/*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-INSERT INTO `staff` VALUES ('10007','Kofi','Jackson','Male','2010-03-15','9908309','P. O. Box 12\r\nOsu - Accra\r\nGhana.','joe@yahoo.com','Jokers Inn','Insurance','Lober','2010-03-26'),('10011','Korma','Daniel','Male','1986-03-12','2332179902','Box 23\r\nOsu-Accra\r\nGhana.','niicoark@yahoo.com','Kaneshie','Investment','Clerk','2010-07-11'),('10012','Marfo','Hanna','Female','2010-07-16','201','','','','Micro Finance','Nothing','2010-07-16'),('10013','Rachel','Adams','Female','2010-07-16','','','','','Investment','Head','2010-07-16');
-/*!40000 ALTER TABLE `staff` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
-  `StaffID` varchar(30) NOT NULL,
-  `FirstName` varchar(30) NOT NULL,
-  `LastName` varchar(30) NOT NULL,
-  `Username` varchar(30) NOT NULL,
-  `Password` varchar(30) NOT NULL,
-  `UserType` varchar(20) NOT NULL,
-  `UserPriv` varchar(60) NOT NULL,
-  `DateOfAcct.` varchar(10) NOT NULL,
-  PRIMARY KEY (`StaffID`,`Username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('100923','Benard','Smith','Admin','','Administrator','11112','2010-01-01'),('110107236','Hanna','same','Admin','Admin','Cashier','00000','2011-01-07');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Current Database: `petra_tracker_db`
---
-
-USE `petra_tracker_db`;
-
---
--- Final view structure for view `view_users`
---
-
-/*!50001 DROP TABLE IF EXISTS `view_users`*/;
-/*!50001 DROP VIEW IF EXISTS `view_users`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_users` AS select `tbl_users`.`Id` AS `ID`,concat(`tbl_users`.`first_name`,' ',`tbl_users`.`last_name`) AS `Name of User`,(select `tbl_roles`.`Name` from `tbl_roles` where (`tbl_users`.`role_id` = `tbl_roles`.`Id`)) AS `User Role`,`tbl_users`.`active` AS `Status` from `tbl_users` */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Current Database: `bmfdb`
---
-
-USE `bmfdb`;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2015-06-18 21:22:36
+USE [Petra_tracker]
+GO
+/****** Object:  Table [dbo].[Emails]    Script Date: 7/8/2015 5:19:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Emails](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[sent_to] [nvarchar](max) NULL,
+	[sent_to_id] [nvarchar](50) NULL,
+	[email_text] [ntext] NULL,
+	[email_type] [ntext] NULL,
+	[job_type] [nchar](10) NULL,
+	[job_id] [int] NULL,
+	[modified_by] [int] NULL,
+	[created_at] [datetime2](7) NOT NULL,
+	[updated_at] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_Emails] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Jobs]    Script Date: 7/8/2015 5:19:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Jobs](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[job_type] [nchar](30) NOT NULL,
+	[job_description] [nvarchar](max) NOT NULL,
+	[status] [nchar](30) NOT NULL,
+	[owner] [int] NULL,
+	[approved_by] [int] NULL,
+	[date_approved] [datetime2](7) NULL,
+	[modified_by] [int] NULL,
+	[created_at] [datetime2](7) NULL,
+	[updated_at] [datetime2](7) NULL,
+ CONSTRAINT [PK_Jobs] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Notifications]    Script Date: 7/8/2015 5:19:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Notifications](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[to_role_id] [int] NOT NULL,
+	[from_user_id] [int] NOT NULL,
+	[notification_type] [nchar](50) NOT NULL,
+	[job_type] [nchar](50) NOT NULL,
+	[job_id] [int] NOT NULL,
+	[last_sent] [datetime2](7) NOT NULL,
+	[times_sent] [int] NOT NULL,
+	[status] [nchar](10) NOT NULL,
+	[modified_by] [int] NOT NULL,
+	[created_at] [datetime2](7) NOT NULL,
+	[updated_at] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_Notifications] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Payments]    Script Date: 7/8/2015 5:19:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Payments](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[job_id] [int] NULL,
+	[transaction_ref_no] [nchar](20) NOT NULL,
+	[transaction_details] [text] NOT NULL,
+	[transaction_date] [date] NOT NULL,
+	[value_date] [date] NOT NULL,
+	[transaction_amount] [money] NOT NULL,
+	[subscription_value_date] [datetime2](7) NULL,
+	[subscription_amount] [money] NULL,
+	[company_code] [nchar](30) NULL,
+	[savings_booster] [bit] NULL,
+	[savings_booster_client_code] [nchar](30) NULL,
+	[deal_description] [nchar](222) NULL,
+	[deal_description_period] [nchar](30) NULL,
+	[status] [nchar](30) NOT NULL,
+	[identified_by] [int] NULL,
+	[date_identified] [datetime2](7) NULL,
+	[approved_by] [int] NULL,
+	[date_approved] [datetime2](7) NULL,
+	[comments] [text] NULL,
+	[owner] [int] NULL,
+	[modified_by] [int] NULL,
+	[created_at] [datetime2](7) NULL,
+	[updated_at] [datetime2](7) NULL,
+ CONSTRAINT [PK_Payment] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Roles]    Script Date: 7/8/2015 5:19:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Roles](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[role] [nvarchar](50) NOT NULL,
+	[description] [nvarchar](100) NOT NULL,
+	[modified_by] [int] NOT NULL,
+	[created_at] [datetime2](7) NULL CONSTRAINT [DF_Roles_created_at]  DEFAULT (getdate()),
+	[updated_at] [datetime2](7) NULL CONSTRAINT [DF_Roles_updated_at]  DEFAULT (getdate()),
+ CONSTRAINT [PK_Module] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Schedules]    Script Date: 7/8/2015 5:19:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Schedules](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[company_id] [nchar](50) NULL,
+	[company] [nvarchar](max) NOT NULL,
+	[company_email] [nvarchar](max) NULL,
+	[tier] [nvarchar](50) NOT NULL,
+	[contributiontype] [nvarchar](50) NOT NULL,
+	[month] [int] NOT NULL,
+	[year] [int] NOT NULL,
+	[validated] [bit] NOT NULL,
+	[validation_status] [nvarchar](50) NOT NULL,
+	[validation_valuetime] [datetime2](7) NULL,
+	[resolution_type] [nchar](10) NULL,
+	[resolution_info] [nvarchar](max) NULL,
+	[resolution_date] [datetime2](7) NULL,
+	[payment_id] [int] NULL,
+	[receipt_sent] [bit] NOT NULL,
+	[receipt_sent_date] [datetime2](7) NULL,
+	[file_downloaded] [bit] NOT NULL,
+	[file_downloaded_date] [datetime2](7) NULL,
+	[file_uploaded] [bit] NOT NULL,
+	[file_uploaded_date] [datetime2](7) NULL,
+	[email_last_sent] [datetime2](7) NULL,
+	[emails_sent] [int] NULL,
+	[processing] [bit] NOT NULL,
+	[workflow_status] [nvarchar](max) NULL,
+	[workflow_summary] [nvarchar](max) NULL,
+	[parent_id] [int] NULL,
+	[modified_by] [int] NOT NULL,
+	[created_at] [datetime2](7) NOT NULL,
+	[updated_at] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_Schedules] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Settings]    Script Date: 7/8/2015 5:19:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Settings](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[setting] [nvarchar](50) NOT NULL,
+	[value] [text] NOT NULL,
+	[modified_by] [int] NOT NULL,
+	[created_at] [datetime2](7) NOT NULL CONSTRAINT [DF_Settings_created_at]  DEFAULT (getdate()),
+	[updated_at] [datetime2](7) NOT NULL CONSTRAINT [DF_Settings_updated_at]  DEFAULT (getdate()),
+ CONSTRAINT [PK_Settings] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 7/8/2015 5:19:51 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Users](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[role_id] [int] NOT NULL,
+	[username] [varchar](50) NOT NULL,
+	[password] [char](60) NOT NULL,
+	[first_name] [nvarchar](50) NOT NULL,
+	[middle_name] [nvarchar](50) NULL,
+	[last_name] [nvarchar](50) NOT NULL,
+	[status] [bit] NOT NULL CONSTRAINT [DF_Users_status]  DEFAULT ((1)),
+	[theme] [nchar](10) NOT NULL CONSTRAINT [DF_Users_theme]  DEFAULT (N'BaseLight'),
+	[accent] [nchar](10) NOT NULL CONSTRAINT [DF_Users_accent]  DEFAULT (N'Blue'),
+	[first_login] [bit] NOT NULL CONSTRAINT [DF_Users_first_login]  DEFAULT ((1)),
+	[last_login] [datetime2](7) NOT NULL CONSTRAINT [DF_Users_last_login]  DEFAULT (getdate()),
+	[logged_in] [bit] NOT NULL CONSTRAINT [DF_Users_logged_in]  DEFAULT ((0)),
+	[modified_by] [int] NOT NULL,
+	[created_at] [datetime2](7) NOT NULL CONSTRAINT [DF_Users_created_at]  DEFAULT (getdate()),
+	[updated_at] [datetime2](7) NOT NULL CONSTRAINT [DF_Users_updated_at]  DEFAULT (getdate()),
+ CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+SET IDENTITY_INSERT [dbo].[Roles] ON 
+
+GO
+INSERT [dbo].[Roles] ([id], [role], [description], [modified_by], [created_at], [updated_at]) VALUES (1, N'Super User', N'Full access all features', 1, CAST(N'2015-06-20 15:04:53.2000000' AS DateTime2), CAST(N'2015-06-20 15:04:53.2000000' AS DateTime2))
+GO
+INSERT [dbo].[Roles] ([id], [role], [description], [modified_by], [created_at], [updated_at]) VALUES (2, N'Administrator', N'Create and edit users', 1, CAST(N'2015-06-20 15:05:10.2330000' AS DateTime2), CAST(N'2015-06-20 15:05:10.2330000' AS DateTime2))
+GO
+INSERT [dbo].[Roles] ([id], [role], [description], [modified_by], [created_at], [updated_at]) VALUES (3, N'Super Ops User', N'Access to parsing features and approval authority', 1, CAST(N'2015-06-20 15:05:28.0230000' AS DateTime2), CAST(N'2015-06-20 15:05:28.0230000' AS DateTime2))
+GO
+INSERT [dbo].[Roles] ([id], [role], [description], [modified_by], [created_at], [updated_at]) VALUES (4, N'Ops User', N'Access to parsing features', 1, CAST(N'2015-06-20 15:06:02.0070000' AS DateTime2), CAST(N'2015-06-20 15:06:02.0070000' AS DateTime2))
+GO
+INSERT [dbo].[Roles] ([id], [role], [description], [modified_by], [created_at], [updated_at]) VALUES (8, N'Reporter', N'Access to reports', 1, CAST(N'2015-06-22 09:55:04.8100000' AS DateTime2), CAST(N'2015-06-22 09:55:04.8100000' AS DateTime2))
+GO
+SET IDENTITY_INSERT [dbo].[Roles] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Settings] ON 
+
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (1, N'smtp_host', N'mail.cdhgroup.co', 1, CAST(N'2015-06-22 11:07:20.4000000' AS DateTime2), CAST(N'2015-06-22 11:07:20.4000000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (3, N'email_from', N'no-reply@petratrust.com', 1, CAST(N'2015-06-22 11:07:42.5170000' AS DateTime2), CAST(N'2015-06-22 11:07:42.5170000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (4, N'tmpl_newuser_email', N'Hello <name>,\n\n
+Welcome to the Petra Tracker. Your user credentials are below.\n
+You will be asked to reset your password on first login.\n\n
+Username: <username>\n
+Passwrod: <password>\n\n
+Sincerely,\n
+Petra Admin Team', 1, CAST(N'2015-06-22 11:12:28.9730000' AS DateTime2), CAST(N'2015-06-22 11:12:28.9730000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (5, N'email_admin', N'dhutchful@gmail.com', 1, CAST(N'2015-06-22 11:19:02.8600000' AS DateTime2), CAST(N'2015-06-22 11:19:02.8600000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (6, N'tmpl_resetpass_email', N'Hello Admin,\n\n
+<username> has requested a password reset.\n\n 
+Sincerely,\n
+Tracker System', 1, CAST(N'2015-06-22 11:21:34.6430000' AS DateTime2), CAST(N'2015-06-22 11:21:34.6430000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (7, N'time_schedulestatus_update', N'300', 1, CAST(N'2015-07-06 14:14:55.1770000' AS DateTime2), CAST(N'2015-07-06 14:14:55.1770000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (9, N'time_retry_validationrequest', N'24', 1, CAST(N'2015-07-06 14:32:19.2800000' AS DateTime2), CAST(N'2015-07-06 14:32:19.2800000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (10, N'time_retry_errorfix3rd', N'120', 1, CAST(N'2015-06-22 00:00:00.0000000' AS DateTime2), CAST(N'2015-07-06 15:03:01.1870000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (11, N'time_retry_errorfix2nd', N'72', 1, CAST(N'2015-07-06 15:03:23.0900000' AS DateTime2), CAST(N'2015-07-06 15:03:23.0900000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (17, N'time_retry_errorfix1st', N'48', 1, CAST(N'2015-06-10 00:00:00.0000000' AS DateTime2), CAST(N'2015-06-10 00:00:00.0000000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (18, N'time_retry_receiptsendrequest', N'24', 1, CAST(N'2015-07-06 17:29:28.4600000' AS DateTime2), CAST(N'2015-07-06 17:29:28.4600000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (19, N'time_retry_filedownloadrequest', N'24', 1, CAST(N'2015-07-06 18:07:58.5300000' AS DateTime2), CAST(N'2015-07-06 18:07:58.5300000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (20, N'time_retry_fileuploadrequest', N'24', 1, CAST(N'2015-07-06 18:14:31.5300000' AS DateTime2), CAST(N'2015-07-06 18:14:31.5300000' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (21, N'time_window_fileupload', N'36', 1, CAST(N'2015-07-06 18:15:44.2300000' AS DateTime2), CAST(N'2015-07-06 18:15:44.2300000' AS DateTime2))
+GO
+SET IDENTITY_INSERT [dbo].[Settings] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Users] ON 
+
+GO
+INSERT [dbo].[Users] ([id], [role_id], [username], [password], [first_name], [middle_name], [last_name], [status], [theme], [accent], [first_login], [last_login], [logged_in], [modified_by], [created_at], [updated_at]) VALUES (1, 1, N'dhutchful@gmail.com', N'$2a$10$vlSAWxC/nkK4o/2OtI26webllmHXACYatjg4/gyMkZw2at6VBd6Uu', N'David', NULL, N'Hutchful', 1, N'BaseLight ', N'Red       ', 0, CAST(N'2015-06-20 15:15:14.4370000' AS DateTime2), 1, 1, CAST(N'2015-06-20 15:15:14.4370000' AS DateTime2), CAST(N'0001-01-01 00:00:00.0000000' AS DateTime2))
+GO
+INSERT [dbo].[Users] ([id], [role_id], [username], [password], [first_name], [middle_name], [last_name], [status], [theme], [accent], [first_login], [last_login], [logged_in], [modified_by], [created_at], [updated_at]) VALUES (3, 1, N'niicoark27@gmail.com', N'$2a$10$fDZAWwNxYpx2fDTuFYIQKuy9RFsmOAAjyA.LcLHBei/nFj1BFmFSC', N'Nick', N'', N'A', 0, N'BaseLight ', N'Mauve     ', 0, CAST(N'2015-07-08 13:13:56.4523865' AS DateTime2), 0, 3, CAST(N'0001-01-01 00:00:00.0000000' AS DateTime2), CAST(N'2015-07-08 13:13:56.4713998' AS DateTime2))
+GO
+INSERT [dbo].[Users] ([id], [role_id], [username], [password], [first_name], [middle_name], [last_name], [status], [theme], [accent], [first_login], [last_login], [logged_in], [modified_by], [created_at], [updated_at]) VALUES (4, 3, N'superops@petratrust.com', N'$2a$10$19sMpgXX1wgrkhtWGtBUd.LeCHtgM8RKgmMtUahHyXhLAA9I8jl/W', N'Super', N'Ops', N'User', 0, N'BaseLight ', N'Teal      ', 0, CAST(N'2015-07-08 16:44:49.9569152' AS DateTime2), 0, 4, CAST(N'0001-01-01 00:00:00.0000000' AS DateTime2), CAST(N'2015-07-08 16:44:49.9569152' AS DateTime2))
+GO
+INSERT [dbo].[Users] ([id], [role_id], [username], [password], [first_name], [middle_name], [last_name], [status], [theme], [accent], [first_login], [last_login], [logged_in], [modified_by], [created_at], [updated_at]) VALUES (5, 4, N'opsuser@petratrust.com', N'$2a$10$0Eg5UkxJ9JwYLQoqXJVARepn/3WAB8iPyXYvgoPYyIV06kQmlr2W.', N'Ops', N'', N'User', 0, N'BaseLight ', N'Olive     ', 0, CAST(N'2015-07-08 17:11:58.7830359' AS DateTime2), 0, 5, CAST(N'0001-01-01 00:00:00.0000000' AS DateTime2), CAST(N'2015-07-08 17:11:58.7940462' AS DateTime2))
+GO
+INSERT [dbo].[Users] ([id], [role_id], [username], [password], [first_name], [middle_name], [last_name], [status], [theme], [accent], [first_login], [last_login], [logged_in], [modified_by], [created_at], [updated_at]) VALUES (8, 8, N'reporter@petratrust.com', N'$2a$10$0Eg5UkxJ9JwYLQoqXJVARepn/3WAB8iPyXYvgoPYyIV06kQmlr2W.', N'Reporter', N'', N'', 1, N'BaseDark  ', N'Green     ', 0, CAST(N'2015-07-03 19:13:34.1201367' AS DateTime2), 0, 8, CAST(N'2015-07-02 22:58:59.1734318' AS DateTime2), CAST(N'2015-07-03 19:13:34.1211372' AS DateTime2))
+GO
+SET IDENTITY_INSERT [dbo].[Users] OFF
+GO
+SET ANSI_PADDING ON
+
+GO
+/****** Object:  Index [Username_Users]    Script Date: 7/8/2015 5:19:51 PM ******/
+ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [Username_Users] UNIQUE NONCLUSTERED 
+(
+	[username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Emails] ADD  CONSTRAINT [DF_Emails_created_at]  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[Emails] ADD  CONSTRAINT [DF_Emails_updated_at]  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[Notifications] ADD  CONSTRAINT [DF_Notifications_last_sent]  DEFAULT (getdate()) FOR [last_sent]
+GO
+ALTER TABLE [dbo].[Notifications] ADD  CONSTRAINT [DF_Notifications_times_sent]  DEFAULT ((1)) FOR [times_sent]
+GO
+ALTER TABLE [dbo].[Notifications] ADD  CONSTRAINT [DF_Notifications_created_at]  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[Notifications] ADD  CONSTRAINT [DF_Notifications_updated_at]  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[Schedules] ADD  CONSTRAINT [DF_Schedules_contributiontype]  DEFAULT (N'REGULAR') FOR [contributiontype]
+GO
+ALTER TABLE [dbo].[Schedules] ADD  CONSTRAINT [DF_Schedules_validated]  DEFAULT ((0)) FOR [validated]
+GO
+ALTER TABLE [dbo].[Schedules] ADD  CONSTRAINT [DF_Schedules_validation_status]  DEFAULT (N'Not Validated') FOR [validation_status]
+GO
+ALTER TABLE [dbo].[Schedules] ADD  CONSTRAINT [DF_Schedules_receipt_sent]  DEFAULT ((0)) FOR [receipt_sent]
+GO
+ALTER TABLE [dbo].[Schedules] ADD  CONSTRAINT [DF_Schedules_file_downloaded]  DEFAULT ((0)) FOR [file_downloaded]
+GO
+ALTER TABLE [dbo].[Schedules] ADD  CONSTRAINT [DF_Schedules_file_uploaded]  DEFAULT ((0)) FOR [file_uploaded]
+GO
+ALTER TABLE [dbo].[Schedules] ADD  CONSTRAINT [DF_Schedules_email_last_sent]  DEFAULT (getdate()) FOR [email_last_sent]
+GO
+ALTER TABLE [dbo].[Schedules] ADD  CONSTRAINT [DF_Schedules_emails_sent]  DEFAULT ((0)) FOR [emails_sent]
+GO
+ALTER TABLE [dbo].[Schedules] ADD  CONSTRAINT [DF_Schedules_processing]  DEFAULT ((0)) FOR [processing]
+GO
+ALTER TABLE [dbo].[Schedules] ADD  CONSTRAINT [DF_Schedules_parent_id]  DEFAULT ((0)) FOR [parent_id]
+GO
+ALTER TABLE [dbo].[Emails]  WITH CHECK ADD  CONSTRAINT [FK_Emails_Users] FOREIGN KEY([modified_by])
+REFERENCES [dbo].[Users] ([id])
+GO
+ALTER TABLE [dbo].[Emails] CHECK CONSTRAINT [FK_Emails_Users]
+GO
+ALTER TABLE [dbo].[Jobs]  WITH CHECK ADD  CONSTRAINT [FK_Jobs_Users] FOREIGN KEY([owner])
+REFERENCES [dbo].[Users] ([id])
+GO
+ALTER TABLE [dbo].[Jobs] CHECK CONSTRAINT [FK_Jobs_Users]
+GO
+ALTER TABLE [dbo].[Notifications]  WITH CHECK ADD  CONSTRAINT [FK_Notifications_Roles] FOREIGN KEY([to_role_id])
+REFERENCES [dbo].[Roles] ([id])
+GO
+ALTER TABLE [dbo].[Notifications] CHECK CONSTRAINT [FK_Notifications_Roles]
+GO
+ALTER TABLE [dbo].[Notifications]  WITH CHECK ADD  CONSTRAINT [FK_Notifications_Users] FOREIGN KEY([from_user_id])
+REFERENCES [dbo].[Users] ([id])
+GO
+ALTER TABLE [dbo].[Notifications] CHECK CONSTRAINT [FK_Notifications_Users]
+GO
+ALTER TABLE [dbo].[Payments]  WITH NOCHECK ADD  CONSTRAINT [FK_Payments_Users_ApprovedBy] FOREIGN KEY([approved_by])
+REFERENCES [dbo].[Users] ([id])
+NOT FOR REPLICATION 
+GO
+ALTER TABLE [dbo].[Payments] NOCHECK CONSTRAINT [FK_Payments_Users_ApprovedBy]
+GO
+ALTER TABLE [dbo].[Payments]  WITH NOCHECK ADD  CONSTRAINT [FK_Payments_Users_Owner] FOREIGN KEY([owner])
+REFERENCES [dbo].[Users] ([id])
+NOT FOR REPLICATION 
+GO
+ALTER TABLE [dbo].[Payments] NOCHECK CONSTRAINT [FK_Payments_Users_Owner]
+GO
+ALTER TABLE [dbo].[Schedules]  WITH NOCHECK ADD  CONSTRAINT [FK_Schedules_Payments] FOREIGN KEY([payment_id])
+REFERENCES [dbo].[Payments] ([id])
+GO
+ALTER TABLE [dbo].[Schedules] NOCHECK CONSTRAINT [FK_Schedules_Payments]
+GO
+ALTER TABLE [dbo].[Schedules]  WITH CHECK ADD  CONSTRAINT [FK_Schedules_Users] FOREIGN KEY([modified_by])
+REFERENCES [dbo].[Users] ([id])
+GO
+ALTER TABLE [dbo].[Schedules] CHECK CONSTRAINT [FK_Schedules_Users]
+GO
+ALTER TABLE [dbo].[Settings]  WITH CHECK ADD  CONSTRAINT [FK_Settings_Modifier] FOREIGN KEY([modified_by])
+REFERENCES [dbo].[Users] ([id])
+GO
+ALTER TABLE [dbo].[Settings] CHECK CONSTRAINT [FK_Settings_Modifier]
+GO
+ALTER TABLE [dbo].[Users]  WITH CHECK ADD  CONSTRAINT [FK_Users_Roles] FOREIGN KEY([role_id])
+REFERENCES [dbo].[Roles] ([id])
+GO
+ALTER TABLE [dbo].[Users] CHECK CONSTRAINT [FK_Users_Roles]
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Tracks who last modified a setting' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Settings', @level2type=N'CONSTRAINT',@level2name=N'FK_Settings_Modifier'
+GO
