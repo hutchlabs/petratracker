@@ -165,6 +165,12 @@ namespace petratracker.Models
             }
         }
 
+        public static void MarkAsSeen(Notification item)
+        {
+            item.status = Constants.NF_STATUS_SEEN;
+            Save(item);
+        }
+
         #endregion
     }
 }

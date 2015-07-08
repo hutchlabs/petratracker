@@ -255,7 +255,7 @@ namespace petratracker.Models
             schedule.receipt_sent_date = DateTime.Now;
             schedule = EvaluatePaymentReceivedSchedule(schedule);
 
-            TrackerNotification.ResolveByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.JOB_TYPE_SCHEDULE, schedule.id);
+            TrackerNotification.ResolveByJob(Constants.NF_TYPE_SCHEDULE_RECEIPT_SEND_REQUEST, Constants.JOB_TYPE_SCHEDULE, schedule.id);
 
             return schedule;
         }
@@ -266,7 +266,7 @@ namespace petratracker.Models
             schedule.file_downloaded_date = DateTime.Now;
             schedule = EvaluatePaymentReceivedSchedule(schedule);
 
-            TrackerNotification.ResolveByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD, Constants.JOB_TYPE_SCHEDULE, schedule.id);
+            TrackerNotification.ResolveByJob(Constants.NF_TYPE_SCHEDULE_FILE_DOWNLOAD_REQUEST, Constants.JOB_TYPE_SCHEDULE, schedule.id);
 
             return schedule;
         }
@@ -301,9 +301,9 @@ namespace petratracker.Models
                         s.workflow_summary = "Schedule has been validated with no errors. Waiting for payments.";
                         
                         // Expire any pending validation requestions
-                        TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_VALIDATION, Constants.JOB_TYPE_SCHEDULE, s.id);
-                        TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_ERRORFIX, Constants.JOB_TYPE_SCHEDULE, s.id);
-                        TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_ERRORFIX_ESCALATION, Constants.JOB_TYPE_SCHEDULE, s.id);
+                        TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_VALIDATION_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
+                        TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
+                        TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_ERRORFIX_ESCALATION_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
                         
                         EvaluatePassedSchedule(s);
                     }
@@ -317,7 +317,7 @@ namespace petratracker.Models
                 else
                 {
                     // No: send reminders
-                    int times_sent = UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_VALIDATION, Constants.SETTINGS_TIME_VALIDATION_REQUEST_INTERVAL);
+                    int times_sent = UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_VALIDATION_REQUEST, Constants.SETTINGS_TIME_VALIDATION_REQUEST_INTERVAL);
                     s.workflow_summary = string.Format("Schedule is not validated. {0} notification requests sent.", times_sent);
                     s.workflow_status = Constants.WF_VALIDATION_NOTDONE_REMINDER;
                     s.processing = false;
@@ -328,7 +328,7 @@ namespace petratracker.Models
 
         private static void EvaluateReminderStatus(Schedule s)
         {
-            Notification nf = TrackerNotification.GetNotificationByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_ERRORFIX, 
+            Notification nf = TrackerNotification.GetNotificationByJob(Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST, 
                                                                        Constants.JOB_TYPE_SCHEDULE, 
                                                                        s.id);
 
@@ -347,9 +347,9 @@ namespace petratracker.Models
                         TrackerNotification.Save(nf);
 
                         // Send email and new reminder to super ops
-                        TrackerEmail.Add(s.User.username, s.company, s.validation_status, Constants.NF_TYPE_SCHEDULE_REQUEST_ERRORFIX, Constants.JOB_TYPE_SCHEDULE, s.id);
+                        TrackerEmail.Add(s.User.username, s.company, s.validation_status, Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
                         TrackerNotification.Add(Constants.ROLES_SUPER_OPS_USER, 
-                                                Constants.NF_TYPE_SCHEDULE_REQUEST_ERRORFIX_ESCALATION, 
+                                                Constants.NF_TYPE_SCHEDULE_ERRORFIX_ESCALATION_REQUEST, 
                                                 Constants.JOB_TYPE_SCHEDULE, s.id);
                         
                         s.emails_sent = 1;
@@ -384,7 +384,7 @@ namespace petratracker.Models
             else
             {
                 // 2.c Notification has not been sent, send one.
-                TrackerNotification.Add(Constants.ROLES_OPS_USER, Constants.NF_TYPE_SCHEDULE_REQUEST_ERRORFIX, Constants.JOB_TYPE_SCHEDULE, s.id);
+                TrackerNotification.Add(Constants.ROLES_OPS_USER, Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
                 s.workflow_summary = "1 reminder sent to Ops to alert company to fix errors: "+s.validation_status;  
             }
             
@@ -437,27 +437,27 @@ namespace petratracker.Models
             {
                 s.workflow_status = Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD;
                 s.workflow_summary = string.Format("Receipt sent {0}. No File downloaded and no File uploaded", s.receipt_sent_date.ToString());
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
+                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_FILE_DOWNLOAD_REQUEST, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
             }
             else if (!s.receipt_sent && s.file_downloaded && s.file_uploaded)
             {
                 s.workflow_status = Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD;
                 s.workflow_summary = string.Format("No Receipt sent. File downloaded {0} and File uploaded {1}", s.file_downloaded_date.ToString(), s.file_uploaded_date.ToString());
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
+                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_RECEIPT_SEND_REQUEST, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
             }
             else if (!s.receipt_sent && s.file_downloaded && !s.file_uploaded)
             {
                 s.workflow_status = Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD;
                 s.workflow_summary = string.Format("No Receipt sent. File downloaded {0} and no File uploaded", s.file_downloaded_date.ToString());
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
+                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_RECEIPT_SEND_REQUEST, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
                 s = EvaluateFileUploadNotificationStatus(s);
             }
             else if (!s.receipt_sent && !s.file_downloaded && !s.file_uploaded)
             {
                 s.workflow_status = Constants.WF_STATUS_PAYMENTS_RECEIVED;
                 s.workflow_summary = "Schedule linked to Payments. Waiting for Receipt to be sent and File download & uploaded";
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
-                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
+                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_RECEIPT_SEND_REQUEST, Constants.SETTINGS_TIME_RECEIPT_SEND_INTERVAL);
+                UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_FILE_DOWNLOAD_REQUEST, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
             }
             else
             {
@@ -498,7 +498,7 @@ namespace petratracker.Models
                 }
 
                 // Resolve old notifications
-                TrackerNotification.ResolveByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_UPLOAD, Constants.JOB_TYPE_SCHEDULE, s.id);
+                TrackerNotification.ResolveByJob(Constants.NF_TYPE_SCHEDULE_FILE_UPLOAD_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
             }
             else
             {
@@ -519,12 +519,12 @@ namespace petratracker.Models
                     }
 
                     // Expire old notifications and send a new one for the file download.
-                    TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_UPLOAD, Constants.JOB_TYPE_SCHEDULE, s.id);
-                    UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
+                    TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_FILE_UPLOAD_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
+                    UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_FILE_DOWNLOAD_REQUEST, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
                 }
                 else
                 {
-                    UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_REQUEST_FILE_UPLOAD, Constants.SETTINGS_TIME_FILE_UPLOAD_INTERVAL);
+                    UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_FILE_UPLOAD_REQUEST, Constants.SETTINGS_TIME_FILE_UPLOAD_INTERVAL);
                 }
             }
             return s;

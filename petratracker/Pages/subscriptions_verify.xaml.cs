@@ -15,6 +15,7 @@ using System.Data;
 
 using petratracker.Models;
 using MahApps.Metro.Controls;
+using petratracker.Utility;
 
 namespace petratracker.Pages
 {
@@ -371,7 +372,13 @@ namespace petratracker.Pages
 
                         if (MessageBox.Show(conf_str, "Confirm Identification", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
-                            if (update_payment("Identified")){ MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
+                            if (update_payment("Identified")){
+                                TrackerNotification.Add(Constants.ROLES_SUPER_OPS_USER,
+                                                        Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST,
+                                                        Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                                MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); 
+                                this.Close(); 
+                            }
                         }
                         else{ MessageBox.Show("No changes have been committed to this transaction."); }
                     }

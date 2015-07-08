@@ -220,7 +220,6 @@ namespace petratracker.Controls
 
             return activebuttons;
         }
-
    
         #endregion
     }

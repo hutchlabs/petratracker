@@ -193,16 +193,45 @@ namespace petratracker
         {
             var item = lv_notifications.SelectedItem as Notification;
 
-            if(item !=null)
+            TrackerNotification.MarkAsSeen(item);
+
+            string[] schStates = { Constants.NF_TYPE_SCHEDULE_VALIDATION_REQUEST,
+                                   Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST,
+                                   Constants.NF_TYPE_SCHEDULE_ERRORFIX_ESCALATION_REQUEST,
+                                   Constants.NF_TYPE_SCHEDULE_RECEIPT_SEND_REQUEST,
+                                   Constants.NF_TYPE_SCHEDULE_FILE_DOWNLOAD_REQUEST,
+                                   Constants.NF_TYPE_SCHEDULE_FILE_UPLOAD_REQUEST };
+
+            string[] subStates = { Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST };
+
+            if (item != null)
             {
-                SubscriptionsApproveReject frm = new SubscriptionsApproveReject(item.id);
-                frm.ShowDialog();         
-                //MessageBox.Show("Approve this noticifcation " + item.id);
+                object obj = this.FindName("surrogateFlyout");
+                Flyout mflyout = (Flyout)obj;
+                mflyout.ClosingFinished += notificationflyout_ClosingFinished;
+
+                if (schStates.Contains(item.notification_type.Trim()))
+                {
+                    mflyout.Content = new ScheduleView(item.job_id, true);
+                    ShowHideNotificationFlyout(false);
+                    mflyout.IsOpen = !mflyout.IsOpen;
+                }
+                else if (subStates.Contains(item.notification_type.Trim()))
+                {
+                    mflyout.Content = new verifySubscription(Constants.PAYMENT_STATUS_IDENTIFIED, item.job_id, true);
+                    ShowHideNotificationFlyout(false);
+                    mflyout.IsOpen = !mflyout.IsOpen;
+                }
             }
         }
 
-
-
+        private void notificationflyout_ClosingFinished(object sender, RoutedEventArgs e)
+        {
+            // reopen notification window and update
+            UpdateNotifications();
+            ShowHideNotificationFlyout(true);
+        }           
+    
         #endregion
 
         #region Private Helper Methods
@@ -246,6 +275,14 @@ namespace petratracker
             {
                 TrackerUser.SaveAppearance(SelectedTheme, SelectedAccent);
             }
+        }
+
+        private void ShowHideNotificationFlyout(bool val)
+        {
+            var flyout = this.notificationsFlyout as Flyout;
+            if (flyout == null)
+                return;
+            flyout.IsOpen = val;
         }
 
         #endregion

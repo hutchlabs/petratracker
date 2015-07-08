@@ -167,8 +167,8 @@
     <Compile Include="Models\TrackerNotification.cs" />
     <Compile Include="Models\TrackerSchedule.cs" />
     <Compile Include="Models\TrackerUser.cs" />
-    <Compile Include="Pages\subscriptions_approve.xaml.cs">
-      <DependentUpon>subscriptions_approve.xaml</DependentUpon>
+    <Compile Include="Pages\notifications_resolve.xaml.cs">
+      <DependentUpon>notifications_resolve.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\subscriptions_add.xaml.cs">
       <DependentUpon>subscriptions_add.xaml</DependentUpon>
@@ -262,7 +262,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\subscriptions_approve.xaml">
+    <Page Include="Pages\notifications_resolve.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

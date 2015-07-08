@@ -42,15 +42,17 @@ namespace petratracker.Utility
 
         // Notification status and types
         public const string NF_STATUS_NEW = "New";
+        public const string NF_STATUS_SEEN = "Seen";
         public const string NF_STATUS_RESOLVED = "Resolved";
         public const string NF_STATUS_EXPIRED = "Expired";
 
-        public const string NF_TYPE_SCHEDULE_REQUEST_VALIDATION = "Schedule Validation Request";
-        public const string NF_TYPE_SCHEDULE_REQUEST_ERRORFIX = "Schedule Error Fix Request";
-        public const string NF_TYPE_SCHEDULE_REQUEST_ERRORFIX_ESCALATION = "Escalation: Schedule Error Fix Request";
-        public const string NF_TYPE_SCHEDULE_REQUEST_RECEIPT_SEND = "Schedule Send Receipt Request";
-        public const string NF_TYPE_SCHEDULE_REQUEST_FILE_DOWNLOAD = "Schedule File Download Request";
-        public const string NF_TYPE_SCHEDULE_REQUEST_FILE_UPLOAD = "Schedule File Upload Request";
+        public const string NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST = "Subscription Approval Request";
+        public const string NF_TYPE_SCHEDULE_VALIDATION_REQUEST = "Schedule Validation Request";
+        public const string NF_TYPE_SCHEDULE_ERRORFIX_REQUEST = "Schedule Error Fix Request";
+        public const string NF_TYPE_SCHEDULE_ERRORFIX_ESCALATION_REQUEST = "Escalation: Schedule Error Fix Request";
+        public const string NF_TYPE_SCHEDULE_RECEIPT_SEND_REQUEST = "Schedule Send Receipt Request";
+        public const string NF_TYPE_SCHEDULE_FILE_DOWNLOAD_REQUEST = "Schedule File Download Request";
+        public const string NF_TYPE_SCHEDULE_FILE_UPLOAD_REQUEST = "Schedule File Upload Request";
 
         // Workflow Status
         public const string WF_VALIDATION_NOTDONE = "Not Validated";
