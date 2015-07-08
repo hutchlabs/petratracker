@@ -17,7 +17,7 @@
     GlowBrush="{DynamicResource AccentColorBrush}"
     NonActiveGlowBrush="Red"
     EnableDWMDropShadow="True" RightWindowCommandsOverlayBehavior="Flyouts" SaveWindowPosition="True" 
-    TitleCaps="False" Title="Petra Trust Tracker" Closing="MetroWindow_Closing">
+    TitleCaps="False" Title="Petra Trust Tracker" Closing="MetroWindow_Closing" Icon="Resources/images/icons/petrablk_icon.ico">
 
     <Window.Resources>
         <ResourceDictionary>
