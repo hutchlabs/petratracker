@@ -202,7 +202,8 @@ namespace petratracker
                                    Constants.NF_TYPE_SCHEDULE_FILE_DOWNLOAD_REQUEST,
                                    Constants.NF_TYPE_SCHEDULE_FILE_UPLOAD_REQUEST };
 
-            string[] subStates = { Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST };
+            string[] subStates = { Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST,
+                                   Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED };
 
             if (item != null)
             {
@@ -218,7 +219,10 @@ namespace petratracker
                 }
                 else if (subStates.Contains(item.notification_type.Trim()))
                 {
-                    mflyout.Content = new verifySubscription(Constants.PAYMENT_STATUS_IDENTIFIED, item.job_id, true);
+                    string s = (item.notification_type.Trim() == Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST)
+                        ? Constants.PAYMENT_STATUS_IDENTIFIED : Constants.PAYMENT_STATUS_REJECTED;
+                              
+                    mflyout.Content = new verifySubscription(s, item.job_id, true);
                     ShowHideNotificationFlyout(false);
                     mflyout.IsOpen = !mflyout.IsOpen;
                 }

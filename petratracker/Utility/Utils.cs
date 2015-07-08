@@ -47,6 +47,8 @@ namespace petratracker.Utility
         public const string NF_STATUS_EXPIRED = "Expired";
 
         public const string NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST = "Subscription Approval Request";
+        public const string NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED = "Subscription Approval Rejected";
+
         public const string NF_TYPE_SCHEDULE_VALIDATION_REQUEST = "Schedule Validation Request";
         public const string NF_TYPE_SCHEDULE_ERRORFIX_REQUEST = "Schedule Error Fix Request";
         public const string NF_TYPE_SCHEDULE_ERRORFIX_ESCALATION_REQUEST = "Escalation: Schedule Error Fix Request";

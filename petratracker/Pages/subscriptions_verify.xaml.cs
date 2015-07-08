@@ -88,9 +88,60 @@ namespace petratracker.Pages
             dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
             grpTransDetails.IsEnabled = false;
             cmb_period_year.ItemsSource = get_years(subscription.value_date.Year);
-            get_deal_desc_period(); 
-            
-                  
+            get_deal_desc_period();           
+        }
+
+        private void load_rejected_subscription()
+        {
+            var subscription = (from p in TrackerDB.Tracker.Payments
+                                where p.id == this.subID && p.status == Constants.PAYMENT_STATUS_REJECTED
+                                select p).Single();
+
+            //Load Transaction Details
+            txtTransRef.Text = subscription.transaction_ref_no.ToString();
+            txtTransDate.Text = subscription.transaction_date.ToString("dd-MMM-yyyy");
+            txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
+            txtTranAmount.Text = subscription.transaction_amount.ToString();
+            txtTransDetails.Text = subscription.transaction_details.ToString();
+            dtSubscriptionDate.SelectedDate = subscription.value_date;
+            dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
+            txtComments.Text = subscription.comments;
+            grpTransDetails.IsEnabled = false;
+
+            //Load Deal Details
+            cmb_period_month.Text = subscription.deal_description_period.Substring(0, 3);
+            cmb_period_year.Items.Add(subscription.deal_description_period.Substring(3));
+            cmb_period_year.SelectedIndex = 0;
+            txtDealDescription.Text = subscription.deal_description;
+            grpDealDetails.IsEnabled = false;
+
+            //Load Company Mapping
+            grpCompanyMapping.IsEnabled = false;
+            var companies = (from c in TrackerDB.Microgen.cclv_AllEntities
+                             where c.EntityKey == subscription.company_code
+                             select c);
+
+            foreach (cclv_AllEntity ini_comp in companies)
+            {
+                txtSearchCompany.Text = ini_comp.FullName;
+                txtCompanyCode.Text = ini_comp.EntityKey;
+            }
+
+            //Load Savings Booster
+            if (subscription.savings_booster_client_code != string.Empty)
+            {
+                chkSavingsBooster.IsChecked = true;
+
+                var clients = (from c in TrackerDB.Microgen.cclv_AllEntities
+                               where c.EntityKey == subscription.savings_booster_client_code
+                               select c);
+
+                foreach (cclv_AllEntity ini_client in clients)
+                {
+                    txtSearchClients.Text = ini_client.FullName;
+                    txtClientCode.Text = ini_client.EntityKey;
+                }
+            }
         }
 
         private void load_identified_subscription()
@@ -148,8 +199,6 @@ namespace petratracker.Pages
            //Set save button to Approve & cancel button to Reject
             btnSave.Content = "Approve";
             btnCancel.Content = "Reject";
-
-
         }
 
         private void load_approved_subscription()
@@ -270,7 +319,8 @@ namespace petratracker.Pages
             else if(subType == "Unidentified"){load_unidentified_subscription();}
             else if(subType == "Returned"){load_unidentified_subscription();}
             else if(subType == "Identified and Approved"){load_approved_subscription();}
-            else {MessageBox.Show("Transaction was not identiifed.","Invalid Id",MessageBoxButton.OK,MessageBoxImage.Exclamation);
+            else if (subType == Constants.PAYMENT_STATUS_REJECTED) { load_rejected_subscription(); }
+            else {MessageBox.Show("Transaction type unknown.","Invalid Id",MessageBoxButton.OK,MessageBoxImage.Exclamation);
                 this.Close();}        
         }
 
@@ -373,6 +423,9 @@ namespace petratracker.Pages
                         if (MessageBox.Show(conf_str, "Confirm Identification", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
                             if (update_payment("Identified")){
+                                // resolve any pending rejected tickets
+                                TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED,
+                                                                 Constants.JOB_TYPE_SUBSCRIPTION, subID);
                                 TrackerNotification.Add(Constants.ROLES_SUPER_OPS_USER,
                                                         Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST,
                                                         Constants.JOB_TYPE_SUBSCRIPTION, subID);
@@ -386,7 +439,9 @@ namespace petratracker.Pages
                     {
                         if (MessageBox.Show("This subscription would be flagged as identified and approved, please click Yes to proceed.", "Identified and Approved Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
-                            if (update_payment("Identified and Approved")) { MessageBox.Show("Payment has been flagged as approved.", "Approved", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
+                            if (update_payment("Identified and Approved")) {
+                                TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                                MessageBox.Show("Payment has been flagged as approved.", "Approved", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
                         }
                     }
                 }
@@ -416,7 +471,12 @@ namespace petratracker.Pages
                 }
                 else if (MessageBox.Show("This subscription would be flagged as rejected, please click Yes to proceed.", "Rejected Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    if (update_payment("Rejected")) { MessageBox.Show("Payment has been flagged as rejected.", "Rejected", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
+                    if (update_payment("Rejected")) {
+                        TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                        TrackerNotification.Add(Constants.ROLES_OPS_USER,
+                                                Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED,
+                                                Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                        MessageBox.Show("Payment has been flagged as rejected.", "Rejected", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
                 }
             }
             

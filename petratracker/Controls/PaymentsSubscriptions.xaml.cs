@@ -158,8 +158,6 @@ namespace petratracker.Controls
 
         #endregion
 
-    
-
         private void jobsflyout_ClosingFinished(object sender, RoutedEventArgs e)
         {
             UpdatePaymentJobs();

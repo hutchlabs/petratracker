@@ -58,17 +58,36 @@ namespace petratracker.Models
 
         public static IEnumerable<Payment> GetSubscriptions(int job_id, string sub_status="")
         {
-            string s = string.Format("Running Job {0} with status {1}", job_id, sub_status);
-
-            Console.Write(s);
-
-            if (sub_status != string.Empty)
+            if (TrackerUser.IsCurrentUserOps())
             {
-                return (from p in TrackerDB.Tracker.Payments where p.job_id == job_id && p.status.Trim() == sub_status select p);
+                return GetOpsUserSubscriptions(job_id, sub_status);
             }
             else
             {
-                return (from p in TrackerDB.Tracker.Payments where p.job_id == job_id select p);
+                if (sub_status != string.Empty)
+                {
+                    return (from p in TrackerDB.Tracker.Payments where p.job_id == job_id && p.status.Trim() == sub_status select p);
+                }
+                else
+                {
+                    return (from p in TrackerDB.Tracker.Payments where p.job_id == job_id select p);
+                }
+            }
+        }
+
+        public static IEnumerable<Payment> GetOpsUserSubscriptions(int job_id, string sub_status = "")
+        {
+            if (sub_status != string.Empty)
+            {
+                return (from p in TrackerDB.Tracker.Payments 
+                        where p.job_id == job_id && p.status.Trim() == sub_status && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
+                        select p);
+            }
+            else
+            {
+                return (from p in TrackerDB.Tracker.Payments
+                        where p.job_id == job_id && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED 
+                        select p);
             }
         }
 
