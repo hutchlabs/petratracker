@@ -215,7 +215,7 @@ namespace petratracker.Models
                 EvaluateScheduleWorkFlow(schedule);
             }
             var dueTime = TimeSpan.FromSeconds(60);
-            var interval = TimeSpan.FromSeconds(int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_SCHEDULE_UPDATE_INTERVAL)));
+            var interval = TimeSpan.FromSeconds(int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_UPDATE_SCHEDULES)));
             await Utils.DoPeriodicWorkAsync(new Func<bool>(UpdateScheduleWorkFlowStatus), dueTime, interval, CancellationToken.None);
         }
 
@@ -235,7 +235,12 @@ namespace petratracker.Models
         {
             DateTime newVT = CheckValidationTime(s.company_id, s.tier, s.contributiontypeid, s.month, s.year);
 
-            if (s.validation_valuetime == newVT) // Do data start revalidation;
+            int oldyear = ((DateTime)s.validation_valuetime).Year;
+            int oldmonth = ((DateTime)s.validation_valuetime).Month;
+            int oldday = ((DateTime)s.validation_valuetime).Day;
+            int oldhour = ((DateTime)s.validation_valuetime).Hour;
+
+            if (oldyear == newVT.Year && oldmonth == newVT.Month && oldday == newVT.Day && oldhour == newVT.Hour) // Do data start revalidation;
             {
                 EvaluateScheduleWorkFlow(s);
             }
@@ -256,9 +261,7 @@ namespace petratracker.Models
             schedule.receipt_sent = true;
             schedule.receipt_sent_date = DateTime.Now;
             schedule = EvaluatePaymentReceivedSchedule(schedule);
-
             TrackerNotification.ResolveByJob(Constants.NF_TYPE_SCHEDULE_RECEIPT_SEND_REQUEST, Constants.JOB_TYPE_SCHEDULE, schedule.id);
-
             return schedule;
         }
 
@@ -273,7 +276,6 @@ namespace petratracker.Models
             return schedule;
         }
       
-
         private static void EvaluateScheduleWorkFlow(Schedule s)
         {
             // Lock this schedule for now
@@ -338,13 +340,13 @@ namespace petratracker.Models
 
             if (nf != null)
             {
-                // 1.a Notification exists - 
+                // Notification exists 
                 DateTime now = DateTime.Now;
 
-                // 2.b.3 Let's go through the escalation process // TODO: replace super admin role
+                // Let's go through the escalation process 
                 if (now.Subtract(nf.created_at).Hours > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_3_REMINDER_WINDOW)))
                 {
-                    if (nf.times_sent == 3) // It's the 5th day, send email and esacalate
+                    if (nf.times_sent == 3) // It's the 5th day, escalate
                     {
                         // Expire old notification
                         nf.status = Constants.NF_STATUS_EXPIRED;
@@ -364,7 +366,7 @@ namespace petratracker.Models
                 }
                 else if (now.Subtract(nf.created_at).Hours > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_2_REMINDER_WINDOW)))
                 {
-                    if (nf.times_sent == 2) // It's the 3rd day, send email
+                    if (nf.times_sent == 2) // It's the 3rd day, send a remider
                     {
                         nf.times_sent += 1;
                         nf.last_sent = DateTime.Now;
@@ -375,7 +377,7 @@ namespace petratracker.Models
                 }
                 else if (now.Subtract(nf.created_at).Hours > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_1_REMINDER_WINDOW)))
                 {
-                    if (nf.times_sent == 1) // It's the 2nd day, send email
+                    if (nf.times_sent == 1) // It's the 2nd day, send a reminder
                     {                       
                         nf.times_sent += 1;
                         nf.last_sent = DateTime.Now;
@@ -387,7 +389,7 @@ namespace petratracker.Models
             }
             else
             {
-                // 2.c Notification has not been sent, send one.
+                // Notification has not been sent, send one.
                 TrackerNotification.Add(Constants.ROLES_OPS_USER, Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
                 s.workflow_summary = "1 reminder sent to Ops to alert company to fix errors: "+s.validation_status;  
             }
@@ -574,35 +576,11 @@ namespace petratracker.Models
         {
             try
             {
-                // Todo remove the total contirbutoin
                 Payment pm = TrackerPayment.GetSubscription(companyid, tier, month, year, ct);
                 return (pm != null) ? pm.id : 0;
 
             } catch(Exception e) {
                 return 0;
-
-                throw(e);
-            }
-        }
-
-        private static bool CheckValidation(string companyid, string tier, int ctid, int month, int year)
-        {
-            DateTime dealDate = new DateTime(year, month, 1);           
-            try
-            {
-                int fd = (from j in TrackerDB.PTAS.FundDeals
-                                where j.ContribType_ID == ctid &&
-                                      j.CompanyEntityId == companyid.Trim() &&
-                                      j.Tier == tier.Replace(" ","") &&
-                                      j.TotalContribution != 0 &&
-                                ((DateTime)j.DealDate).Date == dealDate.Date
-                          select j).Count();
-
-                return (fd > 0);
-            } 
-            catch(Exception) 
-            {
-                return false;
             }
         }
 
@@ -641,6 +619,27 @@ namespace petratracker.Models
             }
         }
 
+        private static bool CheckValidation(string companyid, string tier, int ctid, int month, int year)
+        {
+            DateTime dealDate = new DateTime(year, month, 1);
+            try
+            {
+                int fd = (from j in TrackerDB.PTAS.FundDeals
+                          where j.ContribType_ID == ctid &&
+                                j.CompanyEntityId == companyid.Trim() &&
+                                j.Tier == tier.Replace(" ", "") &&
+                                j.TotalContribution != 0 &&
+                          ((DateTime)j.DealDate).Date == dealDate.Date
+                          select j).Count();
+
+                return (fd > 0);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         private static DateTime CheckValidationTime(string companyid, string tier, int ctid, int month, int year)
         {
             DateTime dealDate = new DateTime(year, month, 1);
@@ -655,7 +654,9 @@ namespace petratracker.Models
                                 ((DateTime)j.DealDate).Date == dealDate.Date
                          select j).Single();
 
-               return (DateTime)fd.DealDate;
+               var fld = (from k in TrackerDB.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k.DateStamp).Min();
+
+               return (DateTime) fld;
             }
             catch (Exception)
             {

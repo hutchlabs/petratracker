@@ -113,11 +113,9 @@
     <Compile Include="Pages\users_add.xaml.cs">
       <DependentUpon>users_add.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utility\ActiveScript.cs" />
     <Compile Include="Utility\BCrypt.cs" />
     <Compile Include="Utility\LogUtil.cs" />
-    <Compile Include="Utility\NumToMonthConverter.cs" />
-    <Compile Include="Utility\StringToColorConverter.cs" />
+    <Compile Include="Utility\Converter.cs" />
     <Compile Include="Utility\Utils.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>

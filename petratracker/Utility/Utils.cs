@@ -101,7 +101,8 @@ namespace petratracker.Utility
         public const string SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL = "time_retry_filedownloadrequest";
         public const string SETTINGS_TIME_FILE_UPLOAD_INTERVAL = "time_retry_fileuploadrequest";
         public const string SETTINGS_TIME_FILE_UPLOAD_WINDOW = "time_window_fileupload";
-        public const string SETTINGS_TIME_SCHEDULE_UPDATE_INTERVAL = "time_schedulestatus_update";
+        public const string SETTINGS_TIME_UPDATE_SCHEDULES = "time_update_schedules";
+        public const string SETTINGS_TIME_UPDATE_NOTIFICATIONS = "time_update_notifications";
     }
 
     public class Utils

@@ -21,7 +21,7 @@ namespace petratracker.Utility
 
         static SendEmail()
         {
-            Setting smpthost = TrackerDB.Tracker.Settings.Single(s => s.setting1 == "smtp_host");
+            Setting smpthost = TrackerDB.Tracker.Settings.Single(s => s.setting1 == "email_smtp_host");
             Setting fromemail = TrackerDB.Tracker.Settings.Single(s => s.setting1 == "email_from");
             Setting adminemail = TrackerDB.Tracker.Settings.Single(s => s.setting1 == "email_admin");
 

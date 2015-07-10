@@ -139,12 +139,12 @@ namespace petratracker.Pages
                 }
                 else 
                 { 
-                _schedule.resolution_reminder2_date = dp_reportdate.SelectedDate;
+                    _schedule.resolution_reminder2_date = dp_reportdate.SelectedDate;
                 }
                 _schedule = TrackerSchedule.Save(_schedule);
                 
                 this.panelReport.Visibility = Visibility.Collapsed;
-                this.btn_reportreminder.Content = "Resolve Issue";
+                this.btn_reportreminder.Content = "Report Reminder";
 
                 load_schedule();
             }

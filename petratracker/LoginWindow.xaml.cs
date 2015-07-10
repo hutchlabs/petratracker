@@ -39,8 +39,8 @@ namespace petratracker
             string user = ((Button)sender).Content.ToString();
             if (user.Equals("Super Admin Login"))
             {
-                tbx_password.Password = "john";
-                tbx_username.Text = "niicoark27@gmail.com";
+                tbx_password.Password = "dogdog";
+                tbx_username.Text = "admin@petratrust.com";
             }
             else if (user.Equals("Super Ops User Login"))
             {
