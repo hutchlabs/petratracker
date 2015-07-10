@@ -117,7 +117,7 @@ namespace petratracker
 
             StartNotificationService();
 
-           // StartScheduleWorkflowService();
+            StartScheduleWorkflowService();
 
             this.lbl_name.Text = TrackerUser.GetCurrentUserTitle();
         }

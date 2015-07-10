@@ -25,6 +25,9 @@ namespace petratracker
             try
             {
                 Models.TrackerDB.Initialize();
+                (new ConfigWindow(true)).Show();
+
+                (new LoginWindow()).Show();
             }
             catch (Exceptions.TrackerDBNotSetupException)
             {
@@ -44,7 +47,6 @@ namespace petratracker
                 CloseWithoutSaving();
             }
 
-            (new LoginWindow()).Show();
         }
 
         #endregion

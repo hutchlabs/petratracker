@@ -51,9 +51,27 @@
         <DockPanel DockPanel.Dock="Left" Background="LightSteelBlue" LastChildFill="True" >
             <Label DockPanel.Dock="Top" Content="Actions" FontSize="20" HorizontalAlignment="Center" Margin="0,5,0,0"/>
             <StackPanel DockPanel.Dock="Right" Orientation="Vertical" Margin="30,10,30,30" HorizontalAlignment="Center">
+                <Button x:Name="btn_reportreminder" Content="Report Reminder" Click="ShowReportReminder" Width="156" Height="50" Margin="5,5,5,15" IsEnabled="false"/>
                 <Button x:Name="btn_resolveissue" Content="Resolve Issue" Click="ShowResolveIssue" Width="156" Height="50" Margin="5,5,5,15" IsEnabled="false"/>
                 <Button x:Name="btn_markreceiptsent" Content="Send Receipt" Click="btn_MarkReceiptSent" Width="156" Height="50" Margin="5,5,5,15" IsEnabled="false"/>
                 <Button x:Name="btn_markfiledownload" Content="Download File" Click="btn_MarkFileDownloaded" Width="156" Height="50" Margin="5,5,5,15" IsEnabled="false"/>
+            </StackPanel>
+        </DockPanel>
+
+        <DockPanel DockPanel.Dock="Left" Background="LightYellow" LastChildFill="True" x:Name="panelReport" Visibility="Collapsed">
+            <Label DockPanel.Dock="Top" Content="Report Reminder" FontSize="18" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+            <StackPanel DockPanel.Dock="Right" Orientation="Vertical" Margin="30,10,30,30" HorizontalAlignment="Center">
+
+                <Label x:Name="lbl_dofr1" Content="Date of first reminder" Visibility="Collapsed"/>
+                <Label x:Name="lbl_dofrv1" Content="date will go here" FontWeight="Bold" Visibility="Collapsed"/>
+
+                <Label x:Name="lbl_dofr2" Content="Date of second reminder" Visibility="Collapsed"/>
+                <Label x:Name="lbl_dofrv2" Content="date will go here" FontWeight="Bold" Visibility="Collapsed"/>
+                
+                <Label x:Name="lbl_reportdate" Content="Reminder Date" Margin="0,10,0,0" />
+                <DatePicker x:Name="dp_reportdate" />
+
+                <Button x:Name="btn_report" Content="Report" Click="btn_ReportReminder" Width="70" Height="40" Margin="0,20,0,0" />
             </StackPanel>
         </DockPanel>
 

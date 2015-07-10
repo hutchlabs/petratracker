@@ -76,9 +76,45 @@ namespace petratracker.Pages
 
         private void ShowResolveIssue(object sender, RoutedEventArgs e)
         {
-            this.panelResolution.Visibility = (this.panelResolution.Visibility == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
+            this.panelReport.Visibility = Visibility.Collapsed;
+
+            UpdateButtonStatus(_schedule.workflow_status, _schedule.receipt_sent, _schedule.file_downloaded);
+
             this.btn_resolveissue.Content = (this.panelResolution.Visibility == Visibility.Collapsed) ? "Resolve Issue" : "Resolving Issue";
             this.btn_resolveissue.IsEnabled = false;
+            this.panelResolution.Visibility = (this.panelResolution.Visibility == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void ShowReportReminder(object sender, RoutedEventArgs e)
+        {
+            this.panelResolution.Visibility = Visibility.Collapsed;
+
+            if (_schedule.resolution_reminder1_date != null)
+            {
+                this.lbl_dofr1.Visibility = Visibility.Visible;
+                this.lbl_dofrv1.Visibility = Visibility.Visible;
+                this.lbl_dofrv1.Content = _schedule.resolution_reminder1_date.ToString();
+            }
+
+            if (_schedule.resolution_reminder2_date != null)
+            {
+                this.lbl_dofr2.Visibility = Visibility.Visible;
+                this.lbl_dofrv2.Visibility = Visibility.Visible;
+                this.lbl_dofrv2.Content = _schedule.resolution_reminder2_date.ToString();
+            }
+
+            if (_schedule.resolution_reminder1_date != null && _schedule.resolution_reminder2_date!=null)
+            {
+                this.lbl_reportdate.Visibility = Visibility.Collapsed;
+                this.dp_reportdate.Visibility = Visibility.Collapsed;
+                this.btn_report.IsEnabled = false;
+            }
+         
+            UpdateButtonStatus(_schedule.workflow_status, _schedule.receipt_sent, _schedule.file_downloaded);
+
+            this.btn_reportreminder.IsEnabled = false;
+            this.btn_reportreminder.Content = (this.panelReport.Visibility == Visibility.Collapsed) ? "Report Reminder" : "Reporting Reminder";
+            this.panelReport.Visibility = (this.panelReport.Visibility == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void cbx_resolutiontype_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -86,6 +122,32 @@ namespace petratracker.Pages
             ComboBoxItem item = (ComboBoxItem) cbx_resolutiontype.SelectedItem;
             lbl_tn.Visibility = (item.Content.ToString().Equals("Microgen")) ? Visibility.Visible : Visibility.Collapsed;
             tb_resolutioninfo.Visibility = (item.Content.ToString().Equals("Microgen")) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void btn_ReportReminder(object sender, RoutedEventArgs e)
+        {
+            if (dp_reportdate.SelectedDate == null)
+            {
+                MessageBox.Show("Please select a date");
+                dp_reportdate.Focus();
+            }
+            else
+            {
+                if (_schedule.resolution_reminder1_date == null)
+                {
+                    _schedule.resolution_reminder1_date = dp_reportdate.SelectedDate;
+                }
+                else 
+                { 
+                _schedule.resolution_reminder2_date = dp_reportdate.SelectedDate;
+                }
+                _schedule = TrackerSchedule.Save(_schedule);
+                
+                this.panelReport.Visibility = Visibility.Collapsed;
+                this.btn_reportreminder.Content = "Resolve Issue";
+
+                load_schedule();
+            }
         }
 
         private void btn_ResolveIssue(object sender, RoutedEventArgs e)
@@ -139,7 +201,7 @@ namespace petratracker.Pages
         private void UpdateButtonStatus(string status, bool receipt_sent, bool file_downloaded)
         {
             string[] validResolveIssueStates = { Constants.WF_STATUS_ERROR_SSNIT, Constants.WF_STATUS_ERROR_NAME,  Constants.WF_STATUS_ERROR_SSNIT_NAME,
-                                                 Constants.WF_STATUS_ERROR_NEW_EMPLOYEE, Constants.WF_STATUS_ERROR_ALL, Constants.WF_STATUS_ERROR_ESCALATED};
+                                                 Constants.WF_STATUS_ERROR_ALL, Constants.WF_STATUS_ERROR_ESCALATED};
 
             string[] validReceiptStates = { Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD };
             
@@ -147,6 +209,7 @@ namespace petratracker.Pages
 
             if (validResolveIssueStates.Contains(status))
             {
+                this.btn_reportreminder.IsEnabled = true;
                 this.btn_resolveissue.IsEnabled = true;
                 this.btn_markfiledownload.IsEnabled = false;
                 this.btn_markreceiptsent.IsEnabled = false;
@@ -156,14 +219,20 @@ namespace petratracker.Pages
                 if (validReceiptStates.Contains(status))
                 {
                     this.btn_resolveissue.IsEnabled = false;
+                    this.btn_reportreminder.IsEnabled = false;
                     this.btn_markreceiptsent.IsEnabled = true;
                 }
                 if (validFiledownloadStates.Contains(status))
                 {
                     this.btn_resolveissue.IsEnabled = false;
+                    this.btn_reportreminder.IsEnabled = false;
                     this.btn_markfiledownload.IsEnabled = true;
                 }
 
+                if (_schedule.resolution_reminder1_date != null && _schedule.resolution_reminder2_date != null)
+                {
+                    this.btn_reportreminder.IsEnabled = false; this.btn_reportreminder.Content = "All Reminders Sent";
+                }
                 if (receipt_sent) { this.btn_markreceiptsent.IsEnabled = false; this.btn_markreceiptsent.Content = "Receipt Sent"; }
                 if (file_downloaded) { this.btn_markfiledownload.IsEnabled = false; this.btn_markfiledownload.Content = "File Downloaded"; }
             }

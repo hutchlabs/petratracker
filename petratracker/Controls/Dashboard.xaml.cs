@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace petratracker.Controls
 {
-    /// <summary>
-    /// Interaction logic for Dashboard.xaml
-    /// </summary>
     public partial class Dashboard : UserControl
     {
         public Dashboard()

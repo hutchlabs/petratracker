@@ -1,19 +1,10 @@
 ﻿using MahApps.Metro.Controls;
 using petratracker.Pages;
-using System;
-using System.Collections.Generic;
+using petratracker.Utility;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace petratracker.Controls
 {
@@ -21,8 +12,9 @@ namespace petratracker.Controls
     {
         #region Private Members
 
-        private readonly string[] _userFilterOptions = { "All", "Active", "Non-Active", "Online", "Offline" };
-
+        private readonly string[] _userFilterOptions = { Constants.STATUS_ALL, Constants.USER_STATUS_ACTIVE,
+                                                         Constants.USER_STATUS_NONACTIVE, Constants.USER_STATUS_ONLINE,
+                                                         Constants.USER_STATUS_OFFLINE};
         #endregion
 
         #region Public Properties
@@ -131,11 +123,11 @@ namespace petratracker.Controls
             string filter = (string)((SplitButton)UserListFilter).SelectedItem;
 
             // Get items
-            if (filter == "All") { viewUsers.ItemsSource = Models.TrackerUser.GetUsers(); }
-            if (filter == "Active") { viewUsers.ItemsSource = Models.TrackerUser.GetActiveUsers(); }
-            if (filter == "Non-Active") { viewUsers.ItemsSource = Models.TrackerUser.GetNonActiveUsers(); }
-            if (filter == "Online") { viewUsers.ItemsSource = Models.TrackerUser.GetOnlineUsers(); }
-            if (filter == "Offline") { viewUsers.ItemsSource = Models.TrackerUser.GetOfflineUsers(); }
+            if (filter == Constants.STATUS_ALL) { viewUsers.ItemsSource = Models.TrackerUser.GetUsers(); }
+            if (filter == Constants.USER_STATUS_ACTIVE) { viewUsers.ItemsSource = Models.TrackerUser.GetActiveUsers(); }
+            if (filter == Constants.USER_STATUS_NONACTIVE) { viewUsers.ItemsSource = Models.TrackerUser.GetNonActiveUsers(); }
+            if (filter == Constants.USER_STATUS_ONLINE) { viewUsers.ItemsSource = Models.TrackerUser.GetOnlineUsers(); }
+            if (filter == Constants.USER_STATUS_OFFLINE) { viewUsers.ItemsSource = Models.TrackerUser.GetOfflineUsers(); }
 
             lbl_userCount.Content = string.Format("{0} Users", viewUsers.Items.Count);
 

@@ -16,13 +16,15 @@ using petratracker.Models;
 using petratracker.Utility;
 using petratracker.Pages;
 using MahApps.Metro.Controls;
+using System.Threading;
 
 namespace petratracker.Controls
 {
     public partial class Schedules : UserControl
     {
         #region Private Members
-        
+
+        private CancellationTokenSource _stopGridUpgrade = new CancellationTokenSource();
         private readonly string[] _scheduleFilterOptions = { 
                                                              "All", 
                                                              Constants.WF_VALIDATION_NOTDONE,
@@ -30,10 +32,10 @@ namespace petratracker.Controls
                                                              Constants.WF_STATUS_ERROR_SSNIT,
                                                              Constants.WF_STATUS_ERROR_NAME,
                                                              Constants.WF_STATUS_ERROR_SSNIT_NAME,
-                                                             Constants.WF_STATUS_ERROR_NEW_EMPLOYEE,
                                                              Constants.WF_STATUS_ERROR_ALL,
                                                              Constants.WF_STATUS_ERROR_ESCALATED,
                                                              Constants.WF_STATUS_EXPIRED,
+                                                             Constants.WF_STATUS_PASSED_NEW_EMPLOYEE,
                                                              Constants.WF_STATUS_PAYMENTS_PENDING,
                                                              Constants.WF_STATUS_PAYMENTS_RECEIVED,
                                                              Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD,
@@ -69,7 +71,12 @@ namespace petratracker.Controls
         
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            UpdateGrid();
+            StartUpgradGridService();
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            _stopGridUpgrade.Cancel(false);
         }
 
         private void ScheduleListFilter_Click(object sender, RoutedEventArgs e)
@@ -166,7 +173,18 @@ namespace petratracker.Controls
 
         #region Private Methods
 
-        private void UpdateGrid()
+        private async void StartUpgradGridService()
+        {
+            var dueTime = TimeSpan.FromSeconds(0);
+            var interval = TimeSpan.FromSeconds(60);
+            try
+            {
+                await Utils.DoPeriodicWorkAsync(new Func<bool>(UpdateGrid), dueTime, interval, _stopGridUpgrade.Token);
+            }
+            catch (Exception) { }
+        }
+
+        private bool UpdateGrid()
         {
             string filter = (string)((SplitButton)ScheduleListFilter).SelectedItem;
 
@@ -187,6 +205,7 @@ namespace petratracker.Controls
                 ShowActionBarButtons();
                 viewSchedules.UnselectAll();
             }
+            return true;
         }
 
         private bool ShowActionBarButtons(string filter="")
@@ -222,5 +241,7 @@ namespace petratracker.Controls
         }
    
         #endregion
+
+     
     }
 }

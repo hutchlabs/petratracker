@@ -33,9 +33,10 @@
 
         <Label Grid.Row="1" Grid.Column="0" Margin="10" Content="Company" HorizontalAlignment="Right" VerticalAlignment="Top" />
         <ComboBox Grid.Row="1" Grid.Column="1" 
-                  Margin="10" x:Name="cbx_companies"   VerticalAlignment="Top" 
-                  ItemsSource="{Binding Companies}" DisplayMemberPath="_Value" SelectedValuePath="_Key" 
-                  SelectionChanged="cbx_companies_SelectionChanged" />
+                  x:Name="cbx_companies" IsEditable="True"  MaxDropDownHeight="125" Margin="10" 
+                  Style="{DynamicResource VirtualisedMetroComboBox}"
+                  Controls:TextBoxHelper.Watermark="Type or select company"
+                  ItemsSource="{Binding Companies}" DisplayMemberPath="_Value" SelectedValuePath="_Key" />
 
         <Label Grid.Row="2" Grid.Column="0" Content="Tier" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" />
         <ComboBox Grid.Row="2" Grid.Column="1" 

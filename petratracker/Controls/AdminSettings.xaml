@@ -4,31 +4,146 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Grid.Resources>
-            <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
-        </Grid.Resources>
-  
+             xmlns:Utility="clr-namespace:petratracker.Utility"
+             mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Utility:DecimalToIntConverter x:Key="decTointConv"/>
 
-        <TabControl Margin="0,10,10,0" x:Name="InnerSubTabControl" TabStripPlacement="Left">
-            <TabItem Header="View Settings" ToolTip="View Settings" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" Width="120">
-                <DockPanel LastChildFill="True" Margin="20" HorizontalAlignment="Left">
-                    <Label DockPanel.Dock="Top" Content="Settings" Style="{StaticResource DescriptionHeaderStyle}" />
-                    <DataGrid x:Name="viewSettings" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ColumnWidth="*"  Margin="0,10" AutoGeneratingColumn="viewSettings_AutoGeneratingColumn" MinWidth="600" />
-                </DockPanel>
-            </TabItem>
-            <TabItem Header="Add Setting" ToolTip="Add New Setting" Controls:ControlsHelper.HeaderFontSize="{StaticResource InnerTabFontSize}" Width="120" >
-                <Grid>
-                    <Label Content="Name of Setting" HorizontalAlignment="Left" Margin="38,30,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Value" HorizontalAlignment="Left" Margin="38,93,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="38,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="261"/>
-                    <TextBox x:Name="txtValue" HorizontalAlignment="Left" Height="65" Margin="38,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="261"/>
-                    <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="38,205,0,0" VerticalAlignment="Top" Width="98" Height="31" Click="btnSave_Click"/>
-                </Grid>
-            </TabItem>
-        </TabControl>
-  
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid RenderOptions.ClearTypeHint="Enabled" TextOptions.TextFormattingMode="Ideal">
+        <DockPanel LastChildFill="True"  HorizontalAlignment="Left" Margin="0,40,0,0">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label  Content="Settings" Style="{StaticResource ControlHeaderStyle}" Margin="0" />
+            </StackPanel>
+            
+            <WrapPanel>
+                <StackPanel Margin="0,40,40,40" Background="{DynamicResource AccentColorBrush}" Width="{StaticResource SettingsPanelWidth}" Height="{StaticResource SettingsPanelHeight}">
+                    <Label Content="Email" Foreground="WhiteSmoke" Style="{StaticResource ControlHeaderStyle}" Margin="10"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="labels" />
+                            <ColumnDefinition Width="210" />
+                            <ColumnDefinition Width="40" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Label   Grid.Row="1" Grid.Column="0" Margin="10" Content="SMTP Host" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Margin="10" x:Name="tb_emailsmpthost"   VerticalAlignment="Top"  />
+                        <Button  Grid.Row="1" Grid.Column="2"  Width="40" Height="40" ToolTip="SMTP Host " BorderBrush="{DynamicResource AccentColorBrush}" Style="{DynamicResource MetroCircleButtonStyle}">
+                            <Rectangle Width="10" Height="15" Fill="WhiteSmoke">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_question}" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+                        <Label Grid.Row="2" Grid.Column="0" Margin="10" Content="Relpy Email" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="10" x:Name="tb_emailfrom"   VerticalAlignment="Top"  />
+                        <Button  Grid.Row="2" Grid.Column="2"  Width="40" Height="40" ToolTip="Email address to use in response messages" BorderBrush="{DynamicResource AccentColorBrush}" Style="{DynamicResource MetroCircleButtonStyle}">
+                            <Rectangle Width="10" Height="15" Fill="WhiteSmoke">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_question}" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+                                             
+                        <Label Grid.Row="3" Grid.Column="0" Margin="10" Content="Admin Email" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                        <TextBox Grid.Row="3" Grid.Column="1" Margin="10" x:Name="tb_emailadmin"   VerticalAlignment="Top"  />
+                        <Button  Grid.Row="3" Grid.Column="2"  Width="40" Height="40" ToolTip="Email address to send emails to Petra Admin" BorderBrush="{DynamicResource AccentColorBrush}" Style="{DynamicResource MetroCircleButtonStyle}">
+                            <Rectangle Width="10" Height="15" Fill="WhiteSmoke">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_question}" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+                
+                <StackPanel Margin="0,40,40,40" Background="{DynamicResource AccentColorBrush}" Width="800" Height="{StaticResource SettingsPanelHeight}">
+                    <Label Content="Time" Foreground="WhiteSmoke" Style="{StaticResource ControlHeaderStyle}" Margin="10" />
+                    <StackPanel Orientation="Horizontal">                       
+                        <Grid Margin="20,10,20,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock  Grid.Row="0" Grid.Column="0" Text="How often should the Schedule processor run?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Controls:NumericUpDown Grid.Row="0" Grid.Column="1" Value="5"
+                                        x:Name="test"
+                                        IsReadOnly="{Binding ElementName=ReadOnlyCheck, Path=IsChecked, Mode=TwoWay}"
+                                        StringFormat="Every {0:N2} hours"
+                                        Maximum="100" />
+                            <TextBlock  Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top">
+                            <Run Text="{Binding Path=Value, ElementName=schProcSlider}" /><Run Text=" hours"/>
+                        </TextBlock>
+
+                        <TextBlock  Grid.Row="1" Grid.Column="0" Text="How often should a request for Schedule Validation be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                        <Slider     Grid.Row="1" Grid.Column="1" x:Name="schVRSlider" Minimum="0" Maximum="100" Value="20" LargeChange="24" SmallChange="1" Width="140" ValueChanged="timeSlider_ValueChanged" />
+                        <TextBlock  Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top"><Run Text="{Binding Value, ElementName=schVRSlider}" /><Run Text=" hours"/></TextBlock>
+
+                    </Grid>
+                      
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170" />
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50" />
+                                <RowDefinition Height="50" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock  Grid.Row="0" Grid.Column="0" Text="How often should the Schedule processor run?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <Slider     Grid.Row="0" Grid.Column="1" x:Name="scProcSlider" Minimum="0" Maximum="100" Value="20" LargeChange="24" SmallChange="1" Width="140" ValueChanged="timeSlider_ValueChanged" />
+                            <TextBlock  Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top"><Run Text="{Binding Value, ElementName=schProSlider}" /><Run Text=" hours"/></TextBlock>
+
+                            <TextBlock  Grid.Row="1" Grid.Column="0" Text="How often should a request for Schedule Validation be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                            <Slider     Grid.Row="1" Grid.Column="1" x:Name="scVRSlider" Minimum="0" Maximum="100" Value="20" LargeChange="24" SmallChange="1" Width="140" ValueChanged="timeSlider_ValueChanged" />
+                            <TextBlock  Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top"><Run Text="{Binding Value, ElementName=schVRSlider}" /><Run Text=" hours"/></TextBlock>
+
+                        </Grid>
+
+                    </StackPanel>
+                </StackPanel>
+
+            </WrapPanel>
+           
+        </DockPanel>
     </Grid>
 </UserControl>

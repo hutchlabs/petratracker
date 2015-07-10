@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Data.Sql;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace petratracker.Utility
 {
@@ -29,6 +32,12 @@ namespace petratracker.Utility
         public const string JOB_TYPE_SCHEDULE = "Schedule";
         public const string JOB_TYPE_SUBSCRIPTION = "Subscription";
 
+        // User status
+        public const string STATUS_ALL = "All";
+        public const string USER_STATUS_ACTIVE = "Active";
+        public const string USER_STATUS_NONACTIVE = "Non-Active";
+        public const string USER_STATUS_ONLINE = "Online";
+        public const string USER_STATUS_OFFLINE = "Offline";
 
         // Payments status
         public const string PAYMENT_STATUS_APPROVED = "Approved";
@@ -62,15 +71,16 @@ namespace petratracker.Utility
         public const string WF_VALIDATION_ERROR_SSNIT = "SSNIT Number Error";
         public const string WF_VALIDATION_ERROR_NAME = "Name Error";  
         public const string WF_VALIDATION_ERROR_SSNIT_NAME = "SSNIT Number & Name Errors"; 
-        public const string WF_VALIDATION_ERROR_NEW_EMPLOYEE = "New Employee"; 
         public const string WF_VALIDATION_ERROR_ALL = "New Employee & Errors";
         public const string WF_VALIDATION_ERROR_ESCALATED = "Issue Escalated";
         public const string WF_VALIDATION_PASSED = "Passed";
+        public const string WF_VALIDATION_NEW_EMPLOYEE = "New Employee"; 
+
+        public const string WF_STATUS_PASSED_NEW_EMPLOYEE = WF_VALIDATION_PASSED + ". " + WF_VALIDATION_NEW_EMPLOYEE;
         public const string WF_STATUS_ERROR_PREFIX = "Validated with Errors: ";
         public const string WF_STATUS_ERROR_SSNIT = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_SSNIT;
         public const string WF_STATUS_ERROR_NAME = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_NAME;
         public const string WF_STATUS_ERROR_SSNIT_NAME = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_SSNIT_NAME;
-        public const string WF_STATUS_ERROR_NEW_EMPLOYEE = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_NEW_EMPLOYEE;
         public const string WF_STATUS_ERROR_ALL = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_ALL;
         public const string WF_STATUS_ERROR_ESCALATED = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_ESCALATED;
         public const string WF_STATUS_PAYMENTS_PENDING = "Passed. Payment Pending";
@@ -81,7 +91,6 @@ namespace petratracker.Utility
         public const string WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD = "No Receipt Sent. File Downloaded. No Upload";
         public const string WF_STATUS_COMPLETED = "Completed";
         public const string WF_STATUS_EXPIRED = "Resolved and Expired";
-
 
         // Settings
         public const string SETTINGS_TIME_VALIDATION_REQUEST_INTERVAL = "time_retry_validationrequest";
@@ -114,6 +123,24 @@ namespace petratracker.Utility
                     await Task.Delay(interval, token);
             }
         }
+
+
+        public IEnumerable<ComboBoxPairs> GetSQLServers()
+        {
+            SqlDataSourceEnumerator sqldatasourceenumerator1 = SqlDataSourceEnumerator.Instance;
+            DataTable sources = sqldatasourceenumerator1.GetDataSources();
+
+            List<ComboBoxPairs> cbpc = new List<ComboBoxPairs>();
+
+            foreach (DataRow row in sources.Rows)
+            {
+                string server = string.Format("{0}\\{1}",row["ServerName"],row["InstanceName"]);
+                cbpc.Add(new ComboBoxPairs(server, server));
+            }
+
+            return cbpc;
+        }
+
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public static DataTable GetDataTable(string excelQL, string connectionString)

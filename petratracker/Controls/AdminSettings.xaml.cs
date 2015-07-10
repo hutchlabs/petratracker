@@ -14,7 +14,7 @@ namespace petratracker.Controls
             InitializeComponent();
             try
             {
-                viewSettings.ItemsSource = Models.TrackerSettings.GetSettings();
+               // viewSettings.ItemsSource = Models.TrackerSettings.GetSettings();
             }
             catch (Exception e)
             {
@@ -32,11 +32,11 @@ namespace petratracker.Controls
             {
                 try
                 {
-                    Models.TrackerSettings.Add(txtName.Text, txtValue.Text);
+                  /*  Models.TrackerSettings.Add(txtName.Text, txtValue.Text);
                     txtName.Text = "";
                     txtValue.Text = "";
                     viewSettings.ItemsSource = Models.TrackerSettings.GetSettings();
-                    InnerSubTabControl.SelectedIndex = 0;
+                    InnerSubTabControl.SelectedIndex = 0;*/
                 }
                 catch (Exception ex)
                 {
@@ -72,7 +72,7 @@ namespace petratracker.Controls
         private bool verify_entires()
         {
             bool cont = false;
-            if (txtName.Text != string.Empty)
+           /* if (txtName.Text != string.Empty)
             {
                 cont = true;
             }
@@ -81,10 +81,15 @@ namespace petratracker.Controls
                 MessageBox.Show("Please specify the name of the role", "New Role Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 txtName.Focus();
             }
-
+            */
             return cont;
         }
 
         #endregion
+
+        private void timeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+        }
     }
 }

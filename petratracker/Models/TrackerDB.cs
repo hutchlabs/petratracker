@@ -85,9 +85,16 @@ namespace petratracker.Models
         
         static TrackerDB()
         {
-            IsSetup = (Properties.Settings.Default.database_tracker != string.Empty &&
-                       Properties.Settings.Default.database_microgen != string.Empty &&
-                       Properties.Settings.Default.database_ptas != string.Empty);
+           /* Properties.Settings.Default.database_tracker = "Data Source=Petrasql;Initial Catalog=Petra_tracker;Integrated Security=True";
+            Properties.Settings.Default.database_microgen = "Data Source=Petrasql;Initial Catalog=Petra5;Integrated Security=True";
+            Properties.Settings.Default.database_ptas = "Data Source=Petrasql;Initial Catalog=PTASDB;Integrated Security=True";
+            Properties.Settings.Default.Save();
+            * */
+            
+
+            IsSetup = (Properties.Settings.Default.database_tracker != null &&
+                       Properties.Settings.Default.database_microgen != null &&
+                       Properties.Settings.Default.database_ptas != null);
         }
         
         #endregion
@@ -247,7 +254,7 @@ namespace petratracker.Models
         {
             try
             {
-                return (from c in  Microgen.cclv_AllEntities
+                return (from c in Microgen.cclv_AllEntities
                         where c.EntityTypeDesc == "Company" && c.FullName.ToLower() != "available" && c.FullName != "Available Company"
                         orderby c.FullName
                         select c);

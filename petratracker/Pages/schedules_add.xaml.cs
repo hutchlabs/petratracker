@@ -96,15 +96,21 @@ namespace petratracker.Pages
 
             if (cbx_schedules.IsEnabled)
             {
-                cbx_schedules.SelectedIndex = 0;
-            }
-        }
+                try
+                {
+                    string company_id = ((ComboBoxPairs)cbx_companies.SelectedItem)._Key;
+                    string tier = (cbx_tiers.SelectedIndex == -1) ? "" : cbx_tiers.SelectedValue.ToString();
+                    cbx_schedules.ItemsSource = TrackerSchedule.GetCBSchedules(company_id, tier);
+                }
+                catch (Exception)
+                {
+                }
+                finally
+                {
+                    cbx_schedules.SelectedIndex = 0;
+                }
 
-        private void cbx_companies_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string company_id = ((ComboBoxPairs)cbx_companies.SelectedItem)._Key;
-            string tier = (cbx_tiers.SelectedIndex==-1) ? "" : cbx_tiers.SelectedValue.ToString();
-            cbx_schedules.ItemsSource = TrackerSchedule.GetCBSchedules(company_id, tier);
+            }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -118,7 +124,8 @@ namespace petratracker.Pages
                                                 ((ComboBoxPairs)cbx_companies.SelectedItem)._Key,
                                                 cbx_tiers.SelectedValue.ToString(),
                                                 ((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Value,
-                                                cbx_month.SelectedValue.ToString(),
+                                                int.Parse(((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Key),
+                                               cbx_month.SelectedValue.ToString(),
                                                 ((ComboBoxPairs)cbx_year.SelectedItem)._Value,
                                                 parent_id);
                     if (_loadedInFlyout)

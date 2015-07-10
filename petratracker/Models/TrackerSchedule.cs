@@ -96,14 +96,15 @@ namespace petratracker.Models
                     select j);
         }
         
-        public static void Save(Schedule s)
+        public static Schedule Save(Schedule s)
         {
             //s.modified_by = TrackerUser.GetCurrentUser().id;
             s.updated_at = DateTime.Now;
             TrackerDB.Tracker.SubmitChanges();
+            return s;
         }
 
-        public static void AddSchedule(string company, string companyid, string tier, string ct, string month, string year, int parent_id)
+        public static void AddSchedule(string company, string companyid, string tier, string ct, int ctid, string month, string year, int parent_id)
         {
             try
             {
@@ -113,6 +114,7 @@ namespace petratracker.Models
                 s.company_email = TrackerDB.GetCompanyEmail(companyid) ;
                 s.tier = tier;
                 s.contributiontype = ct;
+                s.contributiontypeid = ctid;
                 s.month = int.Parse(month);
                 s.year = int.Parse(year);
                 s.validated = false;
@@ -231,7 +233,7 @@ namespace petratracker.Models
 
         public static Schedule ResolveScheduleIssue(Schedule s)
         {
-            DateTime newVT = CheckValidationTime(s.company_id, s.tier, s.contributiontype, s.month, s.year);
+            DateTime newVT = CheckValidationTime(s.company_id, s.tier, s.contributiontypeid, s.month, s.year);
 
             if (s.validation_valuetime == newVT) // Do data start revalidation;
             {
@@ -240,7 +242,7 @@ namespace petratracker.Models
             else
             {
                 // Add new schedule with similar details and retire the old one
-                AddSchedule(s.company, s.company_id, s.tier, s.contributiontype, s.month.ToString(), s.year.ToString(), s.id);
+                AddSchedule(s.company, s.company_id, s.tier, s.contributiontype, s.contributiontypeid, s.month.ToString(), s.year.ToString(), s.id);
                 s.workflow_status = Constants.WF_STATUS_EXPIRED;
                 s.workflow_summary = "Schedule issues resolved, but there was a new valuetime so a new schedule has been created.";
                 Save(s);
@@ -278,23 +280,25 @@ namespace petratracker.Models
             s.processing = true;
             Save(s);
 
-            if (s.validation_status == Constants.WF_VALIDATION_PASSED)
+            string[] passedStates = { Constants.WF_VALIDATION_PASSED, Constants.WF_STATUS_PASSED_NEW_EMPLOYEE };
+
+            if (passedStates.Contains(s.validation_status))
             {
                 EvaluatePassedSchedule(s);
             }
             else
             {
                 //  Is the Schedule Validated?
-                s.validated = CheckValidation(s.company_id, s.tier, s.contributiontype, s.month, s.year);
+                s.validated = CheckValidation(s.company_id, s.tier, s.contributiontypeid, s.month, s.year);
                 
                 if (s.validated)
                 {
-                    s.validation_valuetime = CheckValidationTime(s.company_id, s.tier, s.contributiontype, s.month, s.year);
+                    s.validation_valuetime = CheckValidationTime(s.company_id, s.tier, s.contributiontypeid, s.month, s.year);
 
-                    s.validation_status = CheckValidationStatus(s.company_id, s.tier, s.contributiontype, s.month, s.year);
+                    s.validation_status = CheckValidationStatus(s.company_id, s.tier, s.contributiontypeid, s.month, s.year);
 
                     //  Has Schedule has now passed?
-                    if (s.validation_status == Constants.WF_VALIDATION_PASSED)
+                    if (passedStates.Contains(s.validation_status))
                     {
                         // Yes
                         s.workflow_status = Constants.WF_STATUS_PAYMENTS_PENDING;
@@ -502,7 +506,7 @@ namespace petratracker.Models
             }
             else
             {
-                if (FileUploadWindowHasExpired(s.file_downloaded_date))
+                if (FileUploadWindowHasExpired((DateTime)s.file_downloaded_date))
                 {
                     s.file_downloaded = false;
                     s.file_downloaded_date = DateTime.Parse("0000-00-00 00:00:00");
@@ -568,20 +572,10 @@ namespace petratracker.Models
 
         private static int CheckPaymentStatus(string companyid, string tier, string ct, int month, int year)
         {
-            DateTime dealDate = new DateTime(year, month, 1);
-
             try
             {
-                var fd = (from j in TrackerDB.PTAS.FundDeals
-                          where j.ContribType_ID == int.Parse(ct.Trim()) &&
-                           j.CompanyEntityId == companyid.Trim() &&
-                           j.Tier == tier.Replace(" ", "") &&
-                           j.TotalContribution != 0 &&
-                           ((DateTime)j.DealDate).Date == dealDate.Date
-                          select j).Single();
-
-                Payment pm = TrackerPayment.GetSubscription(companyid, tier, fd.TotalContribution, dealDate);
-
+                // Todo remove the total contirbutoin
+                Payment pm = TrackerPayment.GetSubscription(companyid, tier, month, year, ct);
                 return (pm != null) ? pm.id : 0;
 
             } catch(Exception e) {
@@ -591,13 +585,13 @@ namespace petratracker.Models
             }
         }
 
-        private static bool CheckValidation(string companyid, string tier, string ct, int month, int year)
+        private static bool CheckValidation(string companyid, string tier, int ctid, int month, int year)
         {
             DateTime dealDate = new DateTime(year, month, 1);           
             try
             {
                 int fd = (from j in TrackerDB.PTAS.FundDeals
-                                where j.ContribType_ID == int.Parse(ct.Trim()) &&
+                                where j.ContribType_ID == ctid &&
                                       j.CompanyEntityId == companyid.Trim() &&
                                       j.Tier == tier.Replace(" ","") &&
                                       j.TotalContribution != 0 &&
@@ -647,14 +641,14 @@ namespace petratracker.Models
             }
         }
 
-        private static DateTime CheckValidationTime(string companyid, string tier, string ct, int month, int year)
+        private static DateTime CheckValidationTime(string companyid, string tier, int ctid, int month, int year)
         {
             DateTime dealDate = new DateTime(year, month, 1);
             try
             {
 
                var fd = (from j in TrackerDB.PTAS.FundDeals
-                          where j.ContribType_ID == int.Parse(ct.Trim()) &&
+                          where j.ContribType_ID == ctid &&
                                 j.CompanyEntityId == companyid.Trim() &&
                                 j.Tier == tier.Replace(" ", "") &&
                                 j.TotalContribution != 0 &&
@@ -669,7 +663,7 @@ namespace petratracker.Models
             }
         }
 
-        private static string CheckValidationStatus(string companyid, string tier, string ct, int month, int year)
+        private static string CheckValidationStatus(string companyid, string tier, int ct, int month, int year)
         {
             DateTime dealDate = new DateTime(year, month, 1);
             string status = Constants.WF_VALIDATION_NOTDONE;
@@ -677,7 +671,7 @@ namespace petratracker.Models
             try
             {
                 var fd = (from j in TrackerDB.PTAS.FundDeals
-                               where j.ContribType_ID == int.Parse(ct.Trim()) &&
+                               where j.ContribType_ID == ct &&
                                 j.CompanyEntityId == companyid.Trim() &&
                                 j.Tier == tier.Replace(" ", "") &&
                                 j.TotalContribution != 0 &&
@@ -694,7 +688,6 @@ namespace petratracker.Models
                 {
                     if (line.LineStatus.Contains("Employee not found"))
                     {
-                        passed = false;
                         newemp = true;
                     }
                     if (line.LineStatus.Contains("Error:SSNIT number") || line.LineStatus.Contains("Error:Staff ID"))
@@ -709,10 +702,11 @@ namespace petratracker.Models
                     }
                 }
 
-                if (passed) { status = Constants.WF_VALIDATION_PASSED; }
+                if (passed && newemp) { status = Constants.WF_STATUS_PASSED_NEW_EMPLOYEE; }
+                else if (passed) { status = Constants.WF_VALIDATION_PASSED; }
                 else if (newemp && (ssnit || name)) { status = Constants.WF_VALIDATION_ERROR_ALL;  }
                 else if (ssnit && name) { status = Constants.WF_VALIDATION_ERROR_SSNIT_NAME; }
-                else if (newemp) { status = Constants.WF_VALIDATION_ERROR_NEW_EMPLOYEE; }
+                else if (newemp) { status = Constants.WF_VALIDATION_NEW_EMPLOYEE; }
                 else if (ssnit) { status = Constants.WF_VALIDATION_ERROR_SSNIT; }
                 else if (name) { status = Constants.WF_VALIDATION_ERROR_NAME; }
                 else { status = Constants.WF_VALIDATION_NOTDONE; }

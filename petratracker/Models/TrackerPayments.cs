@@ -40,14 +40,14 @@ namespace petratracker.Models
 
         #region Public Helper Methods
 
-        public static Payment GetSubscription(string company_code, string tier, decimal? amount, DateTime dealDate)
+        public static Payment GetSubscription(string company_id, string tier, int month, int year, string ct)
         {
             try
             {
                 return (from p in TrackerDB.Tracker.Payments
-                        where p.company_code == company_code &&
-                              p.transaction_date == dealDate &&
-                              p.transaction_amount == amount
+                        where p.company_code == company_id &&
+                              p.deal_description_period == (month.ToString() + " " + year.ToString()) &&
+                              p.deal_description == ct
                         select p).Single();
             } 
             catch(Exception)
@@ -121,7 +121,7 @@ namespace petratracker.Models
                     objPayment.subscription_value_date = value_date;
                     objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
                     objPayment.subscription_amount = decimal.Parse(dr["Transaction Amount"].ToString());
-
+                    
                     objPayment.status = (dr["Dr / Cr Indicator"].ToString() == "Credit") ? "Unidentified" : "Returned";
                     objPayment.owner = TrackerUser.GetCurrentUser().id;
                     objPayment.created_at = DateTime.Now;
