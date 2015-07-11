@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [Petra_tracker]    Script Date: 7/10/2015 6:59:42 PM ******/
+/****** Object:  Database [Petra_tracker]    Script Date: 7/11/2015 12:56:02 PM ******/
 CREATE DATABASE [Petra_tracker]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -73,7 +73,7 @@ ALTER DATABASE [Petra_tracker] SET TARGET_RECOVERY_TIME = 0 SECONDS
 GO
 USE [Petra_tracker]
 GO
-/****** Object:  Table [dbo].[Emails]    Script Date: 7/10/2015 6:59:42 PM ******/
+/****** Object:  Table [dbo].[Emails]    Script Date: 7/11/2015 12:56:02 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -96,7 +96,7 @@ CREATE TABLE [dbo].[Emails](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Jobs]    Script Date: 7/10/2015 6:59:42 PM ******/
+/****** Object:  Table [dbo].[Jobs]    Script Date: 7/11/2015 12:56:02 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -119,7 +119,7 @@ CREATE TABLE [dbo].[Jobs](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Notifications]    Script Date: 7/10/2015 6:59:42 PM ******/
+/****** Object:  Table [dbo].[Notifications]    Script Date: 7/11/2015 12:56:02 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -144,7 +144,7 @@ CREATE TABLE [dbo].[Notifications](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Payments]    Script Date: 7/10/2015 6:59:42 PM ******/
+/****** Object:  Table [dbo].[Payments]    Script Date: 7/11/2015 12:56:02 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -181,7 +181,7 @@ CREATE TABLE [dbo].[Payments](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 7/10/2015 6:59:42 PM ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 7/11/2015 12:56:02 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -200,7 +200,7 @@ CREATE TABLE [dbo].[Roles](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Schedules]    Script Date: 7/10/2015 6:59:42 PM ******/
+/****** Object:  Table [dbo].[Schedules]    Script Date: 7/11/2015 12:56:02 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -220,7 +220,7 @@ CREATE TABLE [dbo].[Schedules](
 	[validation_valuetime] [datetime2](7) NULL,
 	[resolution_reminder1_date] [datetime2](7) NULL,
 	[resolution_reminder2_date] [datetime2](7) NULL,
-	[resolution_type] [nchar](10) NULL,
+	[resolution_type] [nvarchar](50) NULL,
 	[resolution_info] [nvarchar](max) NULL,
 	[resolution_date] [datetime2](7) NULL,
 	[payment_id] [int] NULL,
@@ -246,7 +246,7 @@ CREATE TABLE [dbo].[Schedules](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Settings]    Script Date: 7/10/2015 6:59:42 PM ******/
+/****** Object:  Table [dbo].[Settings]    Script Date: 7/11/2015 12:56:02 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -265,7 +265,7 @@ CREATE TABLE [dbo].[Settings](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 7/10/2015 6:59:42 PM ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 7/11/2015 12:56:02 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -316,51 +316,51 @@ GO
 SET IDENTITY_INSERT [dbo].[Settings] ON 
 
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (1, N'email_smtp_host', N'mail.cdhgroup.co', 1, CAST(N'2015-06-22 11:07:20.4000000' AS DateTime2), CAST(N'2015-06-22 11:07:20.4000000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (1, N'email_smtp_host', N'smtp.gmail.com', 1, CAST(N'2015-06-22 11:07:20.4000000' AS DateTime2), CAST(N'2015-06-22 11:07:20.4000000' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (3, N'email_from', N'no-reply@petratrust.com', 1, CAST(N'2015-06-22 11:07:42.5170000' AS DateTime2), CAST(N'2015-06-22 11:07:42.5170000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (3, N'email_from', N'no-reply@petratrust.com', 1, CAST(N'2015-06-22 11:07:42.5170000' AS DateTime2), CAST(N'2015-07-11 11:36:39.3300132' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (4, N'tmpl_newuser_email', N'Hello <name>,\n\n
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (4, N'permission_approveown', N'True', 1, CAST(N'2015-06-22 11:12:28.9730000' AS DateTime2), CAST(N'2015-07-11 12:44:57.0140056' AS DateTime2))
+GO
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (5, N'tmpl_newuser_email', N'Hello <name>,\n\n
 Welcome to the Petra Tracker. Your user credentials are below.\n
 You will be asked to reset your password on first login.\n\n
 Username: <username>\n
 Passwrod: <password>\n\n
 Sincerely,\n
-Petra Admin Team', 1, CAST(N'2015-06-22 11:12:28.9730000' AS DateTime2), CAST(N'2015-06-22 11:12:28.9730000' AS DateTime2))
-GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (5, N'email_admin', N'dhutchful@gmail.com', 1, CAST(N'2015-06-22 11:19:02.8600000' AS DateTime2), CAST(N'2015-06-22 11:19:02.8600000' AS DateTime2))
+Petra Admin Team', 1, CAST(N'2015-06-22 11:19:02.8600000' AS DateTime2), CAST(N'2015-06-22 11:19:02.8600000' AS DateTime2))
 GO
 INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (6, N'tmpl_resetpass_email', N'Hello Admin,\n\n
 <username> has requested a password reset.\n\n 
 Sincerely,\n
 Tracker System', 1, CAST(N'2015-06-22 11:21:34.6430000' AS DateTime2), CAST(N'2015-06-22 11:21:34.6430000' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (7, N'time_update_schedules', N'300', 1, CAST(N'2015-07-06 14:14:55.1770000' AS DateTime2), CAST(N'2015-07-06 14:14:55.1770000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (7, N'time_update_schedules', N'5', 1, CAST(N'2015-07-06 14:14:55.1770000' AS DateTime2), CAST(N'2015-07-11 12:40:44.8191699' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (9, N'time_retry_validationrequest', N'24', 1, CAST(N'2015-07-06 14:32:19.2800000' AS DateTime2), CAST(N'2015-07-06 14:32:19.2800000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (9, N'time_retry_validationrequest', N'24', 1, CAST(N'2015-07-06 14:32:19.2800000' AS DateTime2), CAST(N'2015-07-11 12:40:44.8245851' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (10, N'time_retry_errorfix3rd', N'120', 1, CAST(N'2015-06-22 00:00:00.0000000' AS DateTime2), CAST(N'2015-07-06 15:03:01.1870000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (10, N'time_retry_errorfix3rd', N'120', 1, CAST(N'2015-06-22 00:00:00.0000000' AS DateTime2), CAST(N'2015-07-11 12:40:44.8427153' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (11, N'time_retry_errorfix2nd', N'72', 1, CAST(N'2015-07-06 15:03:23.0900000' AS DateTime2), CAST(N'2015-07-06 15:03:23.0900000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (11, N'time_retry_errorfix2nd', N'72', 1, CAST(N'2015-07-06 15:03:23.0900000' AS DateTime2), CAST(N'2015-07-11 12:40:44.8369043' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (17, N'time_retry_errorfix1st', N'48', 1, CAST(N'2015-06-10 00:00:00.0000000' AS DateTime2), CAST(N'2015-06-10 00:00:00.0000000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (17, N'time_retry_errorfix1st', N'48', 1, CAST(N'2015-06-10 00:00:00.0000000' AS DateTime2), CAST(N'2015-07-11 12:40:44.8314632' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (18, N'time_retry_receiptsendrequest', N'24', 1, CAST(N'2015-07-06 17:29:28.4600000' AS DateTime2), CAST(N'2015-07-06 17:29:28.4600000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (18, N'time_retry_receiptsendrequest', N'24', 1, CAST(N'2015-07-06 17:29:28.4600000' AS DateTime2), CAST(N'2015-07-11 12:40:44.8697476' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (19, N'time_retry_filedownloadrequest', N'24', 1, CAST(N'2015-07-06 18:07:58.5300000' AS DateTime2), CAST(N'2015-07-06 18:07:58.5300000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (19, N'time_retry_filedownloadrequest', N'24', 1, CAST(N'2015-07-06 18:07:58.5300000' AS DateTime2), CAST(N'2015-07-11 12:40:44.8767591' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (20, N'time_retry_fileuploadrequest', N'24', 1, CAST(N'2015-07-06 18:14:31.5300000' AS DateTime2), CAST(N'2015-07-06 18:14:31.5300000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (20, N'time_retry_fileuploadrequest', N'24', 1, CAST(N'2015-07-06 18:14:31.5300000' AS DateTime2), CAST(N'2015-07-11 12:40:44.8819922' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (21, N'time_window_fileupload', N'36', 1, CAST(N'2015-07-06 18:15:44.2300000' AS DateTime2), CAST(N'2015-07-06 18:15:44.2300000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (21, N'time_window_fileupload', N'36', 1, CAST(N'2015-07-06 18:15:44.2300000' AS DateTime2), CAST(N'2015-07-11 12:40:44.8875667' AS DateTime2))
 GO
-INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (26, N'time_update_notifications', N'30', 1, CAST(N'2015-07-06 00:00:00.0000000' AS DateTime2), CAST(N'2015-07-06 00:00:00.0000000' AS DateTime2))
+INSERT [dbo].[Settings] ([id], [setting], [value], [modified_by], [created_at], [updated_at]) VALUES (26, N'time_update_notifications', N'1', 1, CAST(N'2015-07-06 00:00:00.0000000' AS DateTime2), CAST(N'2015-07-11 12:40:44.7957955' AS DateTime2))
 GO
 SET IDENTITY_INSERT [dbo].[Settings] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Users] ON 
 
 GO
-INSERT [dbo].[Users] ([id], [role_id], [username], [password], [first_name], [middle_name], [last_name], [status], [theme], [accent], [first_login], [last_login], [logged_in], [modified_by], [created_at], [updated_at]) VALUES (1, 1, N'admin@petratrust.com', N'$2a$10$0Eg5UkxJ9JwYLQoqXJVARepn/3WAB8iPyXYvgoPYyIV06kQmlr2W.', N'Super', NULL, N'Admin', 1, N'BaseLight ', N'Red       ', 0, CAST(N'2015-06-20 15:15:14.4370000' AS DateTime2), 1, 1, CAST(N'2015-06-20 15:15:14.4370000' AS DateTime2), CAST(N'0001-01-01 00:00:00.0000000' AS DateTime2))
+INSERT [dbo].[Users] ([id], [role_id], [username], [password], [first_name], [middle_name], [last_name], [status], [theme], [accent], [first_login], [last_login], [logged_in], [modified_by], [created_at], [updated_at]) VALUES (1, 1, N'admin@petratrust.com', N'$2a$10$0Eg5UkxJ9JwYLQoqXJVARepn/3WAB8iPyXYvgoPYyIV06kQmlr2W.', N'Super', NULL, N'Admin', 1, N'BaseLight ', N'Olive     ', 0, CAST(N'2015-07-11 12:45:25.9998752' AS DateTime2), 0, 1, CAST(N'2015-06-20 15:15:14.4370000' AS DateTime2), CAST(N'2015-07-11 12:45:26.0178875' AS DateTime2))
 GO
 INSERT [dbo].[Users] ([id], [role_id], [username], [password], [first_name], [middle_name], [last_name], [status], [theme], [accent], [first_login], [last_login], [logged_in], [modified_by], [created_at], [updated_at]) VALUES (3, 1, N'marlene@petratrust.com', N'$2a$10$0Eg5UkxJ9JwYLQoqXJVARepn/3WAB8iPyXYvgoPYyIV06kQmlr2W.', N'Emefa', N'', N'Baeta', 0, N'BaseLight ', N'Olive     ', 0, CAST(N'2015-07-10 13:32:26.3535159' AS DateTime2), 0, 3, CAST(N'0001-01-01 00:00:00.0000000' AS DateTime2), CAST(N'2015-07-10 13:32:26.3695308' AS DateTime2))
 GO
@@ -375,7 +375,7 @@ GO
 SET ANSI_PADDING ON
 
 GO
-/****** Object:  Index [Username_Users]    Script Date: 7/10/2015 6:59:42 PM ******/
+/****** Object:  Index [Username_Users]    Script Date: 7/11/2015 12:56:02 PM ******/
 ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [Username_Users] UNIQUE NONCLUSTERED 
 (
 	[username] ASC
