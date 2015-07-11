@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace petratracker
 {
-	public partial class MainWindow : MetroWindow, INotifyPropertyChanged
+    public partial class MainWindow : MetroWindow
 	{
         #region Private Members
 
@@ -103,6 +103,9 @@ namespace petratracker
                 RaisePropertyChanged("AnimateOnPositionChange");
             }
         }
+
+        public string Error { get { return string.Empty; } }
+
         #endregion
 
         #region Constructor
@@ -125,6 +128,23 @@ namespace petratracker
         #endregion
 
         #region Public Methods
+
+        public string this[string columnName]
+        {
+            get
+            {
+                /*
+                if (columnName == "TextNotEmptyProperty" && this.TextNotEmptyProperty == string.Empty)
+                {
+                    return "Field cannot be empty. Please enter a value";
+                }
+                if (columnName == "IntegerGreater10Property" && this.IntegerGreater10Property < 10)
+                {
+                    return "Number is not greater than 10!";
+                }*/
+                return null;
+            }
+        }
 
         public bool UpdateNotifications()
         {
@@ -248,7 +268,7 @@ namespace petratracker
         private async void StartNotificationService()
         {
             var dueTime = TimeSpan.FromSeconds(0);
-            var interval = TimeSpan.FromSeconds(30);
+            var interval = TimeSpan.FromMinutes(Double.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_INTERVAL_UPDATE_NOTIFICATIONS)));
             await Utils.DoPeriodicWorkAsync(new Func<bool>(UpdateNotifications),dueTime,interval,CancellationToken.None);
         }
 

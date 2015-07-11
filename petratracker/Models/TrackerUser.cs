@@ -12,7 +12,7 @@ namespace petratracker.Models
 
         private static Models.User _user;
 
-        private static readonly string[] _adminRoles = { "Super User", "Administrator" }; // TODO: pull from DB
+        private static readonly string[] _adminRoles = { Constants.ROLES_ADMINISTRATOR, Constants.ROLES_SUPER_USER }; 
 
         #endregion
 
@@ -63,18 +63,19 @@ namespace petratracker.Models
 
         public static string GetCurrentUserTitle()
         {
+            string v = "";
             try
             {
                 return String.Format("{0} {1} ({2})", CurrentUser.first_name,
                                                       CurrentUser.last_name,
                                                       CurrentUser.Role.role1);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                System.Windows.MessageBox.Show("User title not found");
-
-               throw;
+                LogUtil.LogError("TrackerUser", "GetCurrentUserTitle", ex);
             }
+         
+            return v;
         }
 
         public static bool IsCurrentUserAdmin()
@@ -85,8 +86,6 @@ namespace petratracker.Models
             } 
             catch(Exception)
             {
-                System.Windows.MessageBox.Show("Is admin");
-
                 throw;
             }
         }
@@ -95,7 +94,7 @@ namespace petratracker.Models
         {
             try
             {
-                return CurrentUser.Role.role1.Equals("Super User");
+                return CurrentUser.Role.role1.Equals(Constants.ROLES_SUPER_USER);
             }
             catch (Exception)
             {
@@ -107,7 +106,7 @@ namespace petratracker.Models
         {
             try
             {
-                return CurrentUser.Role.role1.Equals("Super Ops User");
+                return CurrentUser.Role.role1.Equals(Constants.ROLES_SUPER_OPS_USER);
             }
             catch (Exception)
             {
@@ -119,7 +118,7 @@ namespace petratracker.Models
         {
             try
             {
-                return CurrentUser.Role.role1.Equals("Ops User");
+                return CurrentUser.Role.role1.Equals(Constants.ROLES_OPS_USER);
             }
             catch (Exception)
             {
@@ -225,6 +224,14 @@ namespace petratracker.Models
         public static IEnumerable<User> GetOfflineUsers()
         {
             return (from u in TrackerDB.Tracker.Users where u.logged_in == false select u);
+        }
+
+        public static string GetAdminEmail()
+        {
+            var v = (from u in TrackerDB.Tracker.Users
+                     where u.Role.role1 == Constants.ROLES_ADMINISTRATOR
+                     select u).Single();
+            return v.username;
         }
 
         public static IEnumerable<Role> GetRoles()

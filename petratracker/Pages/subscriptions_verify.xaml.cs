@@ -203,8 +203,27 @@ namespace petratracker.Pages
             }
 
            //Set save button to Approve & cancel button to Reject
-            btnSave.Content = "Approve";
-            btnCancel.Content = "Reject";
+            if (CanApproveReject(subscription.owner)) 
+            { 
+                btnSave.Content = "Approve";
+                btnCancel.Content = "Reject";
+            } else {
+                btnSave.Content = "Can't approve your own request.";
+                btnCancel.Content = "Can't reject your own request.";
+                btnSave.IsEnabled = false;
+                btnCancel.IsEnabled = false;
+            }
+        }
+
+        private bool CanApproveReject(int? owner_id)
+        {
+            if (TrackerSettings.GetSetting(Constants.SETTINGS_PERM_APPROVE_OWN)=="True")
+                return true;
+
+            if (TrackerUser.GetCurrentUser().id != owner_id)
+                return true;
+
+            return false;
         }
 
         private void load_approved_subscription()
@@ -432,7 +451,7 @@ namespace petratracker.Pages
                                 // resolve any pending rejected tickets
                                 TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED,
                                                                  Constants.JOB_TYPE_SUBSCRIPTION, subID);
-                                TrackerNotification.Add(Constants.ROLES_SUPER_OPS_USER,
+                                TrackerNotification.Add(Constants.ROLES_SUPER_OPS_USER_ID,
                                                         Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST,
                                                         Constants.JOB_TYPE_SUBSCRIPTION, subID);
                                 MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); 
@@ -479,7 +498,7 @@ namespace petratracker.Pages
                 {
                     if (update_payment("Rejected")) {
                         TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
-                        TrackerNotification.Add(Constants.ROLES_OPS_USER,
+                        TrackerNotification.Add(Constants.ROLES_OPS_USER_ID,
                                                 Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED,
                                                 Constants.JOB_TYPE_SUBSCRIPTION, subID);
                         MessageBox.Show("Payment has been flagged as rejected.", "Rejected", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }

@@ -33,9 +33,22 @@ namespace petratracker.Models
             return x.value;
         }
 
+        public static void Save(Setting s)
+        {
+            s.modified_by = TrackerUser.GetCurrentUser().id;
+            s.updated_at = DateTime.Now;
+            TrackerDB.Tracker.SubmitChanges();
+        }
+
+        public static void Save(string setting, string newval)
+        {
+            var x = (from n in TrackerDB.Tracker.Settings where n.setting1 == setting select n).Single();
+            x.value = newval;
+            Save(x);
+        }
+
         public static void Add(string name, string value)
         {
-            //TODO: check for duplicate entry
             try
             {
                 Setting s = new Setting();
@@ -54,5 +67,6 @@ namespace petratracker.Models
         }
      
         #endregion
+
     }
 }

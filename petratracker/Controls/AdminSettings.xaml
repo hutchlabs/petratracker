@@ -5,14 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:Utility="clr-namespace:petratracker.Utility"
-             mc:Ignorable="d">
-    
+             mc:Ignorable="d" Loaded="UserControl_Loaded">
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <Utility:DecimalToIntConverter x:Key="decTointConv"/>
 
         </ResourceDictionary>
@@ -23,127 +23,183 @@
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Label  Content="Settings" Style="{StaticResource ControlHeaderStyle}" Margin="0" />
             </StackPanel>
-            
-            <WrapPanel>
-                <StackPanel Margin="0,40,40,40" Background="{DynamicResource AccentColorBrush}" Width="{StaticResource SettingsPanelWidth}" Height="{StaticResource SettingsPanelHeight}">
-                    <Label Content="Email" Foreground="WhiteSmoke" Style="{StaticResource ControlHeaderStyle}" Margin="10"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="labels" />
-                            <ColumnDefinition Width="210" />
-                            <ColumnDefinition Width="40" />
-                        </Grid.ColumnDefinitions>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <Label   Grid.Row="1" Grid.Column="0" Margin="10" Content="SMTP Host" HorizontalAlignment="Right" VerticalAlignment="Top" />
-                        <TextBox Grid.Row="1" Grid.Column="1" Margin="10" x:Name="tb_emailsmpthost"   VerticalAlignment="Top"  />
-                        <Button  Grid.Row="1" Grid.Column="2"  Width="40" Height="40" ToolTip="SMTP Host " BorderBrush="{DynamicResource AccentColorBrush}" Style="{DynamicResource MetroCircleButtonStyle}">
-                            <Rectangle Width="10" Height="15" Fill="WhiteSmoke">
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_question}" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
-                        </Button>
-
-                        <Label Grid.Row="2" Grid.Column="0" Margin="10" Content="Relpy Email" HorizontalAlignment="Right" VerticalAlignment="Top" />
-                        <TextBox Grid.Row="2" Grid.Column="1" Margin="10" x:Name="tb_emailfrom"   VerticalAlignment="Top"  />
-                        <Button  Grid.Row="2" Grid.Column="2"  Width="40" Height="40" ToolTip="Email address to use in response messages" BorderBrush="{DynamicResource AccentColorBrush}" Style="{DynamicResource MetroCircleButtonStyle}">
-                            <Rectangle Width="10" Height="15" Fill="WhiteSmoke">
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_question}" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
-                        </Button>
-                                             
-                        <Label Grid.Row="3" Grid.Column="0" Margin="10" Content="Admin Email" HorizontalAlignment="Right" VerticalAlignment="Top" />
-                        <TextBox Grid.Row="3" Grid.Column="1" Margin="10" x:Name="tb_emailadmin"   VerticalAlignment="Top"  />
-                        <Button  Grid.Row="3" Grid.Column="2"  Width="40" Height="40" ToolTip="Email address to send emails to Petra Admin" BorderBrush="{DynamicResource AccentColorBrush}" Style="{DynamicResource MetroCircleButtonStyle}">
-                            <Rectangle Width="10" Height="15" Fill="WhiteSmoke">
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_question}" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
-                        </Button>
-                    </Grid>
-                </StackPanel>
-                
-                <StackPanel Margin="0,40,40,40" Background="{DynamicResource AccentColorBrush}" Width="800" Height="{StaticResource SettingsPanelHeight}">
-                    <Label Content="Time" Foreground="WhiteSmoke" Style="{StaticResource ControlHeaderStyle}" Margin="10" />
-                    <StackPanel Orientation="Horizontal">                       
-                        <Grid Margin="20,10,20,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="170" />
-                            <ColumnDefinition Width="150" />
-                        </Grid.ColumnDefinitions>
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <TextBlock  Grid.Row="0" Grid.Column="0" Text="How often should the Schedule processor run?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <Controls:NumericUpDown Grid.Row="0" Grid.Column="1" Value="5"
-                                        x:Name="test"
-                                        IsReadOnly="{Binding ElementName=ReadOnlyCheck, Path=IsChecked, Mode=TwoWay}"
-                                        StringFormat="Every {0:N2} hours"
-                                        Maximum="100" />
-                            <TextBlock  Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top">
-                            <Run Text="{Binding Path=Value, ElementName=schProcSlider}" /><Run Text=" hours"/>
-                        </TextBlock>
-
-                        <TextBlock  Grid.Row="1" Grid.Column="0" Text="How often should a request for Schedule Validation be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                        <Slider     Grid.Row="1" Grid.Column="1" x:Name="schVRSlider" Minimum="0" Maximum="100" Value="20" LargeChange="24" SmallChange="1" Width="140" ValueChanged="timeSlider_ValueChanged" />
-                        <TextBlock  Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top"><Run Text="{Binding Value, ElementName=schVRSlider}" /><Run Text=" hours"/></TextBlock>
-
-                    </Grid>
-                      
-                        <Grid Margin="10">
+            <ScrollViewer>
+                <DockPanel HorizontalAlignment="Left" Margin="0">
+                    <StackPanel DockPanel.Dock="Top" Margin="0,15,20,10" VerticalAlignment="Top" Background="{DynamicResource AccentColorBrush}" Width="845" Height="312">
+                        <Label Content="Time" Foreground="WhiteSmoke" Style="{StaticResource ControlHeaderStyle}" Margin="10" />
+                        <Grid Margin="0,-5,20,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="170" />
-                                <ColumnDefinition Width="150" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="400" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="393"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0" Margin="20,-10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="220" />
+                                    <ColumnDefinition Width="180" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock  Grid.Row="0" Grid.Column="0" Text="How often should the Schedule processor run?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Margin="0,9" Width="215"/>
+                                <Controls:NumericUpDown Grid.Row="0" Grid.Column="1" Margin="10,12,20,12"
+                                    x:Name="time_interval_updateschedule"
+                                    Minimum="2" Maximum="120" Interval="0.5" 
+                                    StringFormat="Every {0:N1} mins"
+                                    ValueChanged="time_ValueChanged" Height="26" />
+
+                                <TextBlock  Grid.Row="1" Grid.Column="0" Text="How often should a request for Schedule Validation be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Margin="0,9" Width="215" />
+                                <Controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="10,12,20,12"
+                                    x:Name="time_interval_schedulevalidation"
+                                    Minimum="1" Maximum="120" Interval="1" 
+                                    StringFormat="Every {0} hours"
+                                    ValueChanged="time_ValueChanged" Height="26"  />
+
+                                <TextBlock  Grid.Row="2" Grid.Column="0" Text="When should the 1st reminder for a failed schedule be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Margin="0,9" Width="215" />
+                                <Controls:NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,12,20,12"
+                                    x:Name="time_error_fix1"
+                                    Minimum="1" Maximum="120" Interval="1" 
+                                    StringFormat="After {0} hours"
+                                    ValueChanged="time_ValueChanged" Height="26"  />
+
+                                <TextBlock  Grid.Row="3" Grid.Column="0" Text="When should the 2nd reminder for a failed schedule be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Margin="0,9" Width="215" />
+                                <Controls:NumericUpDown Grid.Row="3" Grid.Column="1" Margin="10,12,20,12"
+                                    x:Name="time_error_fix2"
+                                    Minimum="1" Maximum="120" Interval="1" 
+                                    StringFormat="After {0} hours"
+                                    ValueChanged="time_ValueChanged" Height="26"  />
+
+                                <TextBlock  Grid.Row="4" Grid.Column="0" Text="When should the escalation reminder for a failed schedule be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Height="48" Margin="0,1" Width="215" />
+                                <Controls:NumericUpDown Grid.Row="4" Grid.Column="1" Margin="10,4,20,20"
+                                    x:Name="time_error_fix3"
+                                    Minimum="1" Maximum="120" Interval="1" 
+                                    StringFormat="After {0} hours"
+                                    ValueChanged="time_ValueChanged" Height="26"  />
+                            </Grid>
+                            <Grid Grid.Column="2" Margin="15,-10,-19,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="223" />
+                                    <ColumnDefinition Width="177" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock  Grid.Row="0" Grid.Column="0" Text="How often should notifications be updated?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Margin="8,9,0,9" Width="200"/>
+                                <Controls:NumericUpDown Grid.Row="0" Grid.Column="1" Margin="10,12,0,12"
+                                    x:Name="time_interval_updatenotifications"
+                                    Minimum="0.5" Maximum="60" Interval="0.5" 
+                                    StringFormat="Every {0:N1} mins"
+                                    ValueChanged="time_ValueChanged" Height="26" />
+
+                                <TextBlock  Grid.Row="1" Grid.Column="0" Text="How often should a reminder to send Receipt email be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Margin="8,9,0,9" Width="218" Grid.ColumnSpan="2" />
+                                <Controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="10,12,0,12"
+                                    x:Name="time_interval_sendreceipt"
+                                    Minimum="1" Maximum="120" Interval="1" 
+                                    StringFormat="Every {0} hours"
+                                    ValueChanged="time_ValueChanged" Height="26"  />
+
+                                <TextBlock  Grid.Row="2" Grid.Column="0" Text="How often should a reminder to download file be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Margin="10,9,0,9" Width="198" />
+                                <Controls:NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,12,0,12"
+                                    x:Name="time_interval_download"
+                                    Minimum="1" Maximum="120" Interval="1" 
+                                    StringFormat="Every {0} hours"
+                                    ValueChanged="time_ValueChanged" Height="26"  />
+
+                                <TextBlock  Grid.Row="3" Grid.Column="0" Text="How often should a reminder to upload file be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Margin="10,9,0,9" Width="198" />
+                                <Controls:NumericUpDown Grid.Row="3" Grid.Column="1" Margin="10,12,0,12"
+                                    x:Name="time_interval_upload"
+                                    Minimum="1" Maximum="120" Interval="1" 
+                                    StringFormat="Every {0} hours"
+                                    ValueChanged="time_ValueChanged" Height="26"  />
+
+                                <TextBlock  Grid.Row="4" Grid.Column="0" Text="How long to reset file download status when file is not uploaded?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" Height="48" Margin="10,1,0,1" Width="198" />
+                                <Controls:NumericUpDown Grid.Row="4" Grid.Column="1" Margin="10,12,0,12"
+                                    x:Name="time_window_upload"
+                                    Minimum="1" Maximum="120" Interval="1" 
+                                    StringFormat="After {0} hours"
+                                    ValueChanged="time_ValueChanged" Height="26"  />
+
+                            </Grid>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel DockPanel.Dock="Left" Margin="0,0,0,0" Background="{DynamicResource AccentColorBrush}" VerticalAlignment="Top" Width="405" Height="165">
+                        <Label Content="Email" Foreground="WhiteSmoke" Style="{StaticResource ControlHeaderStyle}" Margin="10"/>
+                        <Grid  Margin="0,-10,20,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="labels" />
+                                <ColumnDefinition Width="250" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="50" />
-                                <RowDefinition Height="50" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Label   Grid.Row="0" Grid.Column="0" Margin="10" Content="SMTP Host" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="10" Style="{DynamicResource MetroButtonTextBox}" VerticalAlignment="Top"
+                                     x:Name="tb_emailsmtphost"   
+                                     Controls:TextBoxHelper.Watermark="SMTP Host"
+                                     Controls:TextBoxHelper.ButtonContent="s" ToolTip="Enter the SMTP Host address for sending emails"
+                                     Text="{Binding SMTPProperty, 
+                                                    ValidatesOnDataErrors=True,
+                                                    UpdateSourceTrigger=PropertyChanged,
+                                                    NotifyOnValidationError=True}"
+                                      LostFocus="email_LostFocus" />
+                            <Controls:ProgressRing x:Name="smtpring" Grid.Column="1" Height="10" Width="10" Margin="253,12,-22,14" Foreground="WhiteSmoke" IsActive="False" />
+
+                            <Label Grid.Row="1" Grid.Column="0" Margin="10" Content="Relpy Email" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Margin="10" x:Name="tb_emailfrom" Style="{DynamicResource MetroButtonTextBox}" VerticalAlignment="Top"  
+                                     Controls:TextBoxHelper.Watermark="Reply-to Email address"
+                                     Controls:TextBoxHelper.ButtonContent="s"
+                                     ToolTip="Enter the rely-to address to use in emails sent from the system"
+                                     Text="{Binding EmailProperty, 
+                                                    ValidatesOnDataErrors=True,
+                                                    UpdateSourceTrigger=PropertyChanged,
+                                                    NotifyOnValidationError=True}"
+                                     LostFocus="email_LostFocus" />
+
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel DockPanel.Dock="Left" Margin="0,0,0,0" Background="{DynamicResource AccentColorBrush}" VerticalAlignment="Top" Width="414" Height="165">
+                        <Label Content="Permissions" Foreground="WhiteSmoke" Style="{StaticResource ControlHeaderStyle}" Margin="10"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="labels" />
+                                <ColumnDefinition Width="210" />
+                                <ColumnDefinition Width="40" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock  Grid.Row="0" Grid.Column="0" Text="How often should the Schedule processor run?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <Slider     Grid.Row="0" Grid.Column="1" x:Name="scProcSlider" Minimum="0" Maximum="100" Value="20" LargeChange="24" SmallChange="1" Width="140" ValueChanged="timeSlider_ValueChanged" />
-                            <TextBlock  Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top"><Run Text="{Binding Value, ElementName=schProSlider}" /><Run Text=" hours"/></TextBlock>
-
-                            <TextBlock  Grid.Row="1" Grid.Column="0" Text="How often should a request for Schedule Validation be sent?" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                            <Slider     Grid.Row="1" Grid.Column="1" x:Name="scVRSlider" Minimum="0" Maximum="100" Value="20" LargeChange="24" SmallChange="1" Width="140" ValueChanged="timeSlider_ValueChanged" />
-                            <TextBlock  Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top"><Run Text="{Binding Value, ElementName=schVRSlider}" /><Run Text=" hours"/></TextBlock>
-
+                            <Label Grid.Row="1" Grid.Column="0" Margin="10" Content="Can users approve their own requests?" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            <Controls:ToggleSwitch Grid.Row="1" Grid.Column="1"  x:Name="sw_approveown" VerticalAlignment="Center"
+                                   IsChecked="True"
+                                   OnLabel="Yes"
+                                   OffLabel="No"
+                                   Margin="10,4,88,8" Checked="perm_Changed" Unchecked="perm_Changed"/>
                         </Grid>
-
                     </StackPanel>
-                </StackPanel>
-
-            </WrapPanel>
-           
+                </DockPanel>
+            </ScrollViewer>
         </DockPanel>
     </Grid>
 </UserControl>

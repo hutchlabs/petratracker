@@ -141,7 +141,7 @@ namespace petratracker.Pages
                 { 
                     _schedule.resolution_reminder2_date = dp_reportdate.SelectedDate;
                 }
-                _schedule = TrackerSchedule.Save(_schedule);
+                _schedule = TrackerSchedule.EvaluateReminderStatus(_schedule);
                 
                 this.panelReport.Visibility = Visibility.Collapsed;
                 this.btn_reportreminder.Content = "Report Reminder";

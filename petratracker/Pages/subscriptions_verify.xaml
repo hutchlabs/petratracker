@@ -137,7 +137,6 @@
                 <TextBox HorizontalAlignment="Left" x:Name="txtTransDetails" Height="90" Margin="0,0,0,-54" TextWrapping="Wrap" IsReadOnly="True" VerticalAlignment="Top" Width="255" Grid.Column="1" Grid.Row="4"/>
             </Grid>
         </GroupBox>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="-63,94,0,-120" VerticalAlignment="Top" Height="26" Width="38" Grid.Row="1"/>
         <Button x:Name="btnSave" Content="Save"  HorizontalAlignment="Left" Margin="809,567,0,0" VerticalAlignment="Top" Width="135" Height="37" Click="btnSave_Click" RenderTransformOrigin="0.04,-0.3"  FontSize="12" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}"/>
         <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="950,567,0,0" VerticalAlignment="Top" Width="109" Height="37" RenderTransformOrigin="0.04,-0.3"  FontSize="12" Foreground="#FF162C66" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" FontFamily="Segoe UI Semibold" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Style="{DynamicResource MetroButton}" Click="btnCancel_Click"/>
         <Label x:Name="lblSubscriptionType" Content="Subscription" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold"/>

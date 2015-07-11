@@ -9,38 +9,16 @@ using System.Windows.Controls;
 
 namespace petratracker.Pages
 {
-    public partial class AddSchedule : UserControl, INotifyPropertyChanged
+    public partial class AddSchedule : UserControl
     {
         #region Private Members
 
         private readonly string[] _tiers = { "Tier 2", "Tier 3", "Tier 4" };
         private bool _loadedInFlyout = false;
-        private string _textNotEmptyProperty;
-
-        #endregion
-
-        #region Public Members
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
         #region Public Properties
-
-        public string TextNotEmptyProperty
-        {
-            get { return this._textNotEmptyProperty; }
-            set
-            {
-                if (Equals(value, _textNotEmptyProperty))
-                {
-                    return;
-                }
-
-                _textNotEmptyProperty = value;
-                RaisePropertyChanged("TextNotEmptyProperty");
-            }
-        }
 
         public string[] Tiers
         {
@@ -81,14 +59,6 @@ namespace petratracker.Pages
         #endregion
 
         #region Event Handlers
-
-        protected virtual void RaisePropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
 
         private void chx_reval_Checked(object sender, RoutedEventArgs e)
         {
@@ -176,18 +146,6 @@ namespace petratracker.Pages
             Flyout flyout = (Flyout)obj;
             flyout.Content = null;
             flyout.IsOpen = !flyout.IsOpen;
-        }
-
-        public string this[string columnName]
-        {
-            get
-            {
-                if (columnName == "TextNotEmptyProperty" && this.TextNotEmptyProperty.Equals(string.Empty))
-                {
-                    return "Field cannot be empty. Please enter a value";
-                }
-                return null;
-            }
         }
 
         #endregion

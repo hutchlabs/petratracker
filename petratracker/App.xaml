@@ -40,7 +40,7 @@
 
             <SolidColorBrush x:Key="SettingsPanelBackground">#FF2D2D30</SolidColorBrush>
             <System:Double x:Key="SettingsPanelWidth">400</System:Double>
-            <System:Double x:Key="SettingsPanelHeight">350</System:Double>
+            <System:Double x:Key="SettingsPanelHeight">370</System:Double>
 
 
             <System:Double x:Key="MainTabFontSize">30</System:Double>

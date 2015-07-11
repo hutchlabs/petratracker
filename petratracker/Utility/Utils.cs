@@ -25,8 +25,14 @@ namespace petratracker.Utility
     public static class Constants
     {
         // Role ids
-        public const int ROLES_OPS_USER = 4;
-        public const int ROLES_SUPER_OPS_USER = 3;
+        public const string ROLES_OPS_USER = "Ops User";
+        public const string ROLES_SUPER_OPS_USER = "Super Ops User";
+        public const string ROLES_SUPER_USER = "Super User";
+        public const string ROLES_ADMINISTRATOR = "Administrator";
+
+
+        public const int ROLES_OPS_USER_ID = 4;
+        public const int ROLES_SUPER_OPS_USER_ID = 3;
  
         // Job types for Jobs table
         public const string JOB_TYPE_SCHEDULE = "Schedule";
@@ -93,16 +99,19 @@ namespace petratracker.Utility
         public const string WF_STATUS_EXPIRED = "Resolved and Expired";
 
         // Settings
-        public const string SETTINGS_TIME_VALIDATION_REQUEST_INTERVAL = "time_retry_validationrequest";
+        public const string SETTINGS_EMAIL_FROM = "email_from";
+        public const string SETTINGS_EMAIL_SMTP_HOST = "email_smtp_host";
+        public const string SETTINGS_PERM_APPROVE_OWN = "permission_approveown";
         public const string SETTINGS_TIME_ERRORFIX_1_REMINDER_WINDOW = "time_retry_errorfix1st";
         public const string SETTINGS_TIME_ERRORFIX_2_REMINDER_WINDOW = "time_retry_errorfix2nd";
         public const string SETTINGS_TIME_ERRORFIX_3_REMINDER_WINDOW = "time_retry_errorfix3rd";
-        public const string SETTINGS_TIME_RECEIPT_SEND_INTERVAL = "time_retry_receiptsendrequest";
         public const string SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL = "time_retry_filedownloadrequest";
         public const string SETTINGS_TIME_FILE_UPLOAD_INTERVAL = "time_retry_fileuploadrequest";
         public const string SETTINGS_TIME_FILE_UPLOAD_WINDOW = "time_window_fileupload";
-        public const string SETTINGS_TIME_UPDATE_SCHEDULES = "time_update_schedules";
-        public const string SETTINGS_TIME_UPDATE_NOTIFICATIONS = "time_update_notifications";
+        public const string SETTINGS_TIME_INTERVAL_SEND_RECEIPT = "time_retry_receiptsendrequest";
+        public const string SETTINGS_TIME_INTERVAL_VALIDATION_REQUEST = "time_retry_validationrequest";
+        public const string SETTINGS_TIME_INTERVAL_UPDATE_SCHEDULES = "time_update_schedules";
+        public const string SETTINGS_TIME_INTERVAL_UPDATE_NOTIFICATIONS = "time_update_notifications";
     }
 
     public class Utils
