@@ -103,22 +103,13 @@ namespace petratracker.Models
                 int ini_inc = 1;
                 foreach (DataRow dr in dt.Rows)
                 {
-                    //string trans_date_str = dr["Transaction Date"].ToString();
-                    //string value_date_str = dr["Value Date"].ToString();
-                    //char [] charSeparators = new char[] { '/' };
-                    //string[] value_date_res = value_date_str.Split(charSeparators);
-                    //string[] trans_date_res = trans_date_str.Split(charSeparators);
-
-                    //double in_value_date = (DateTime)dr["Value Date"];
-                    //double in_trans_date = (DateTime)dr["Transaction Date"];
+                   
 
                     // Insert new payment
                     Payment objPayment = new Payment();                 
                     objPayment.job_id = jobId;
                     objPayment.tier = tier;
                     objPayment.transaction_details = dr["Transaction Details"].ToString();
-                    //DateTime trans_date = new DateTime(int.Parse(trans_date_res[2]), int.Parse(trans_date_res[1]), int.Parse(trans_date_res[0]));
-                    //DateTime value_date = new DateTime(int.Parse(value_date_res[2]), int.Parse(value_date_res[1]), int.Parse(value_date_res[0]));
                     objPayment.transaction_date = (DateTime)dr["Transaction Date"];
                     objPayment.value_date = (DateTime)dr["Value Date"];
                     objPayment.subscription_value_date = (DateTime)dr["Transaction Date"];
@@ -205,7 +196,7 @@ namespace petratracker.Models
                                            spr.RoleTypeID == 1003 &&
                                            prs.RoleTypeID == 1005 &&
                                            owr.RoleTypeID == 2 &&
-                                           (new [] { "1012", "1004", "1007" }).Contains(ef.PurposeID.ToString())
+                                           (new [] { "1012", "1004", "1007" , "1016"}).Contains(ef.PurposeID.ToString())
                                          select new
                                          {
                                              CM = cm.EntityKey,
@@ -220,39 +211,7 @@ namespace petratracker.Models
                                 {
                                     FundCode = HC.FD,
                                     FundHolderCode = HC.HC,
-                                    HolderAccDesig = string.Empty,
-                                    TransTypeDesc = "Issue",
-                                    TransDirection = "In",
-                                    ProductCode = "Long Term Savings",
-                                    WrapperCode = string.Empty,
-                                    TransReference = "",//get from
-                                    TransUnitsGrp1 = 0,
-                                    TransUnitsGrp2 = string.Empty,
-                                    NAVPrice = 0,
-                                    QuotedPrice = 0,
-                                    DealingPrice = 0,
-                                    DealCcyCode = "GHC",
-                                    DealCcyPayAmnt = 0,
-                                    DealCcyDealAmnt = 0,
-                                    PayCcyCode = "GHC",
-                                    PayCcyPayAmnt = 0,
-                                    PayCcyDealAmnt = 0,
-                                    ExchangeRate = 1,
-                                    DealDate = "",//get date
-                                    ValueDate = "", //get date
-                                    BookDate = "",//get date
-                                    PriceDate = "",//get date
-                                    FEFRate = 0,
-                                    FEFDealCcy = 0,
-                                    FEFPayCcy = 0,
-                                    DiscRate = 0,
-                                    DiscDealCcy =0,
-                                    DiscPayCcy = 0,
-                                    ExitFeeRate = 0,
-                                    ExitFeeDealCcy = 0,
-                                    ExitFeePayCcy = 0,
-                                    SettlementBasis = "N",
-                                    DealBasis = "A"
+                                   
                                 };
 
                 foreach(var data in download_data)
