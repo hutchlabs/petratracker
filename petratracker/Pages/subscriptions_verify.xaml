@@ -46,7 +46,7 @@
                     <ComboBoxItem Content="December" Tag="Dec" />
                 </ComboBox>
                 <ComboBox x:Name="cmb_period_year"   HorizontalAlignment="Right" VerticalAlignment="Center" Width="106" Grid.Column="1" Margin="0,0,21,5"/>
-                <ComboBox x:Name="cbxDealDescription" IsEditable="False"  MaxDropDownHeight="125" Margin="10,8,0,0" Grid.Column="1" Grid.Row="2"
+                <ComboBox x:Name="cbxDealDescription" IsEditable="False"  SelectedIndex="0" MaxDropDownHeight="125" Margin="10,8,0,0" Grid.Column="1" Grid.Row="2"
                           Style="{DynamicResource VirtualisedMetroComboBox}" Width="255"
                           Controls:TextBoxHelper.Watermark="Select deal description" VerticalAlignment="Top"  HorizontalAlignment="Left"
                           ItemsSource="{Binding ContributionTypes}" DisplayMemberPath="_Value" SelectedValuePath="_Key" />

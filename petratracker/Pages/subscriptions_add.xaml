@@ -3,8 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      mc:Ignorable="d">
-    
+      mc:Ignorable="d" Height="536.418">
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -13,10 +13,10 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <DockPanel LastChildFill="True" Margin="30,80,30,30" HorizontalAlignment="Center">
+    <DockPanel LastChildFill="True" Margin="30,80,30,55" HorizontalAlignment="Center">
 
-        <Grid HorizontalAlignment="Left" Height="340" Margin="0,0,0,0" VerticalAlignment="Top" >
-            
+        <Grid HorizontalAlignment="Left" Height="423" Margin="0,0,0,0" VerticalAlignment="Top" >
+
             <Label Content="Deal Type" HorizontalAlignment="Left" Margin="44,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
             <ComboBox x:Name="cmbDealType" SelectedIndex="0" HorizontalAlignment="Left" Margin="44,43,0,0" VerticalAlignment="Top" Width="320" Height="30" FontSize="14">
                 <ComboBoxItem Content="Subscription"/>
@@ -25,13 +25,20 @@
             <Label Content="Upload Description" HorizontalAlignment="Left" Margin="44,91,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
             <TextBox x:Name="txtDealDescription" HorizontalAlignment="Left"  Height="33" Margin="44,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="320"  UseLayoutRounding="true" FontSize="14"/>
 
-            <Label Content="File Location" HorizontalAlignment="Left" Margin="44,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
-            <TextBox x:Name="txtfileLocation" HorizontalAlignment="Left"  Height="33" Margin="44,211,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="226"  UseLayoutRounding="true" FontSize="8"/>
-            <Button x:Name="btnBrowse" Content="Browse " HorizontalAlignment="Left" Margin="280,210,0,0" VerticalAlignment="Top" Width="85" Click="btnBrowse_Click" Height="33" FontWeight="Normal" FontFamily="Segoe UI"/>
+            <Label Content="File Location" HorizontalAlignment="Left" Margin="44,246,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
+            <TextBox x:Name="txtfileLocation" HorizontalAlignment="Left"  Height="33" Margin="43,283,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="226"  UseLayoutRounding="true" FontSize="8"/>
+            <Button x:Name="btnBrowse" Content="Browse " HorizontalAlignment="Left" Margin="279,282,0,0" VerticalAlignment="Top" Width="85" Click="btnBrowse_Click" Height="33" FontWeight="Normal" FontFamily="Segoe UI"/>
 
-  
-            <Button x:Name="btnCancel" Content="Cancel"  HorizontalAlignment="Left"  VerticalAlignment="Top" Width="83" Click="btnCancel_Click" Margin="47,286,0,0" />
-            <Button x:Name="btnUploadFile" Content="Upload File" HorizontalAlignment="Left" Margin="210,285,0,0" VerticalAlignment="Top" Width="152" Click="btnUploadFile_Click" RenderTransformOrigin="0.04,-0.3"  FontSize="12" FontFamily="Segoe UI" Height="32" FontWeight="Normal"/>
+
+            <Button x:Name="btnCancel" Content="Cancel"  HorizontalAlignment="Left"  VerticalAlignment="Top" Width="83" Click="btnCancel_Click" Margin="43,358,0,0" />
+            <Button x:Name="btnUploadFile" Content="Upload File" HorizontalAlignment="Left" Margin="202,355,0,0" VerticalAlignment="Top" Width="152" Click="btnUploadFile_Click" RenderTransformOrigin="0.04,-0.3"  FontSize="12" FontFamily="Segoe UI" Height="32" FontWeight="Normal"/>
+            <ComboBox 
+            	x:Name="cmb_tier" Margin="44,204,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="129" >
+                <Label Content="Tier 2"/>
+                <Label Content="Tier 3"/>
+                <Label Content="Tier 4"/>
+            </ComboBox>
+            <Label Content="Tier" HorizontalAlignment="Left" Margin="44,170,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.666,1.691" FontSize="14"/>
         </Grid>
     </DockPanel>
 </UserControl>

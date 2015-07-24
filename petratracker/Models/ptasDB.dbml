@@ -58,4 +58,22 @@
       <Association Name="ScheduleStatus_FundDeal" Member="FundDeals" ThisKey="ScheduleStatusID" OtherKey="ScheduleStatusID" Type="FundDeal" />
     </Type>
   </Table>
+  <Table Name="dbo.Payments" Member="Payments">
+    <Type Name="Payment">
+      <Column Name="PaymentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="InsertedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ContributionDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="ValueDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="TransactionDetail" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TransactionAmount" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="DRCRFlag" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="TransactionReference" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="RETURNED" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="CompanyName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="CompanyCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PaymentStatusID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ActionUserID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Tier" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>

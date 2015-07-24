@@ -5,8 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"            
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" Width="1170.732" Loaded="UserControl_Loaded">
     <Grid>
-        <Label Content="Coming Soon" />
+        <DockPanel LastChildFill="True"  HorizontalAlignment="Left" Margin="0,40,0,0">
+
+
+
+
+        </DockPanel>
+        <StackPanel HorizontalAlignment="Left" Height="270" Margin="11,13,0,0" VerticalAlignment="Top" Width="308">
+            <TreeView x:Name="treeReportsMenu" Height="270" VerticalAlignment="Top"/>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left" Height="41" Margin="324,13,0,0" VerticalAlignment="Top" Width="837">
+            <Grid Height="38">
+                <ComboBox HorizontalAlignment="Left" Margin="96,2,0,0" VerticalAlignment="Top" Width="120"/>
+            </Grid>
+        </StackPanel>
+        <Label Content="Report Type" HorizontalAlignment="Left" Margin="333,13,0,0" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

@@ -19,6 +19,7 @@
       <Column Name="TeamDesc" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Description" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="ManagingEntityID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="EntityContact_cclv_AllEntity" Member="EntityContact" ThisKey="EntityID" OtherKey="EntityID" Type="EntityContact" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Association" Member="Associations">
@@ -45,6 +46,8 @@
       <Column Name="PortfolioID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Association_Association" Member="Associations" ThisKey="AssociationID" OtherKey="ParentID" Type="Association" />
       <Association Name="Association_Association" Member="Association1" ThisKey="ParentID" OtherKey="AssociationID" Type="Association" IsForeignKey="true" />
+      <Association Name="Entity_Association" Member="Entity" ThisKey="SourceEntityID" OtherKey="EntityID" Type="Entity" IsForeignKey="true" />
+      <Association Name="Entity_Association1" Member="Entity1" ThisKey="TargetEntityID" OtherKey="EntityID" Type="Entity" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.fndDeal" Member="fndDeals">
@@ -141,6 +144,125 @@
       <Column Name="FundHolderPlanID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="fndDeal_fndDeal" Member="fndDeals" ThisKey="DealID" OtherKey="CancellingDealID" Type="fndDeal" />
       <Association Name="fndDeal_fndDeal" Member="fndDeal1" ThisKey="CancellingDealID" OtherKey="DealID" Type="fndDeal" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EntityContact" Member="EntityContacts">
+    <Type Name="EntityContact">
+      <Column Name="ContactID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="EntityID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ContactName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TelephoneNo" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="MobileNo" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="FacsimileNo" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="OnlineAccess" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="AddToFavourite" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DialingCodeTel" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DialingCodeMobile" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DialingCodeFax" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Extension" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Association Name="EntityContact_cclv_AllEntity" Member="cclv_AllEntities" ThisKey="EntityID" OtherKey="EntityID" Type="cclv_AllEntity" />
+      <Association Name="Entity_EntityContact" Member="Entity" ThisKey="EntityID" OtherKey="EntityID" Type="Entity" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Entity" Member="Entities">
+    <Type Name="Entity">
+      <Column Name="EntityID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="EntityTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EntitySubTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EntityKey" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="StatusID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RiskLevel" Type="System.Char" DbType="Char(1) NOT NULL" CanBeNull="false" />
+      <Column Name="RiskScore" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Warning" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="CreatedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="AmendedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AmendedBy" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="TS" Type="System.Data.Linq.Binary" DbType="rowversion" CanBeNull="true" IsVersion="true" />
+      <Column Name="BaseCurrencyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="YearEndDay" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="YearEndMonth" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="IsManagingEntity" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ManagingEntityID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NoOfASignatories" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NoOfBSignatories" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NoOfCSignatories" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PEPorHPI" Type="System.String" DbType="Char(3)" CanBeNull="true" />
+      <Column Name="ComplianceVerified" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ExternallyBooksKept" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Entity_Association" Member="Associations" ThisKey="EntityID" OtherKey="SourceEntityID" Type="Association" />
+      <Association Name="Entity_Association1" Member="Associations1" ThisKey="EntityID" OtherKey="TargetEntityID" Type="Association" />
+      <Association Name="Entity_EntityContact" Member="EntityContacts" ThisKey="EntityID" OtherKey="EntityID" Type="EntityContact" />
+      <Association Name="Entity_Entity" Member="Entities" ThisKey="EntityID" OtherKey="ManagingEntityID" Type="Entity" />
+      <Association Name="Entity_EntityClient" Member="EntityClient" ThisKey="EntityID" OtherKey="EntityID" Type="EntityClient" Cardinality="One" />
+      <Association Name="Entity_Entity" Member="Entity1" ThisKey="ManagingEntityID" OtherKey="EntityID" Type="Entity" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EntityClient" Member="EntityClients">
+    <Type Name="EntityClient">
+      <Column Name="EntityID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ShortName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="FullName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="JurisdictionID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FormationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TeamID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ChargeableFlag" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="AdvaloremFlag" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="AdvaloremPercent" Type="System.Decimal" DbType="SmallMoney" CanBeNull="true" />
+      <Column Name="AdvaloremAmount" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="NextFeeBillingDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LastFeeBillingDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BillingFrequency" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
+      <Column Name="BillingLedger" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="MinFeesFlag" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="MinFeesAmount" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="FixedFeeFlag" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="FixedFeeAmount" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="FeeDetailsID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OpenedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="OpenedBy" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="AccountsDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TakeOnDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ClosedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ClosedBy" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="RegisteredCompanyNum" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="QuorumShareholders" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="QuorumDirectors" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurposeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FoundationCharterID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RegulationsFlag" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="RegulationID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DeedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DeedNameID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BillingInfo" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="TypeOfReturn" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ReturnSendDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ReturnReminderDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ReturnFiledDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TaxStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PerpetuityDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PerpetuityPeriod" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ProperLawID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProperLawDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BankNameID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SortCode" Type="System.String" DbType="VarChar(6)" CanBeNull="true" />
+      <Column Name="BIC" Type="System.String" DbType="VarChar(11)" CanBeNull="true" />
+      <Column Name="ABANumber" Type="System.String" DbType="VarChar(9)" CanBeNull="true" />
+      <Column Name="LocalCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AnnualReturnDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AssociatedEntityID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Entity_EntityClient" Member="Entity" ThisKey="EntityID" OtherKey="EntityID" Type="Entity" IsForeignKey="true" />
+      <Association Name="Purpose_EntityClient" Member="Purpose" ThisKey="PurposeID" OtherKey="PurposeID" Type="Purpose" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Purpose" Member="Purposes">
+    <Type Name="Purpose">
+      <Column Name="PurposeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="StatusFlag" Type="System.Char" DbType="Char(1) NOT NULL" CanBeNull="false" />
+      <Column Name="TS" Type="System.Data.Linq.Binary" DbType="rowversion" CanBeNull="true" IsVersion="true" />
+      <Association Name="Purpose_EntityClient" Member="EntityClients" ThisKey="PurposeID" OtherKey="PurposeID" Type="EntityClient" />
     </Type>
   </Table>
 </Database>

@@ -18,7 +18,7 @@
     <Grid>
         <DockPanel LastChildFill="True"  HorizontalAlignment="Left" Margin="0,40,0,0">
           
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Height="51">
                 <Label  Content="Subscriptions" Style="{StaticResource ControlHeaderStyle}" Margin="0" />
             </StackPanel>
             
@@ -45,11 +45,19 @@
                     <StackPanel x:Name="jobs_actionBar" Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
                         <Button x:Name="btn_approveJobs" Content="Approve" Visibility="Collapsed" Click="btn_approveJobs_Click" Width="Auto" Height="30"  ToolTip="Approve selected payments" Margin="10,0,0,0"/>
                     </StackPanel>
+                    
 
                     <Button x:Name="btn_showAddSubscription" Click="btn_showAddSubscription_Click" Width="40" Height="40" Margin="20,0,0,0" ToolTip="Add" Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                    <Button x:Name="btn_Download_Payments"  Width="40" Height="40" Margin="20,0,0,0" ToolTip="Download" Style="{DynamicResource MetroCircleButtonStyle}" Click="btn_Download_Payments_Click">
+                        <Rectangle Width="10" Height="10" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_download}" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
@@ -63,7 +71,9 @@
                       ItemsSource="{Binding}" PreviewMouseDoubleClick="viewJobs_PreviewMouseDoubleClick"
                       SelectionChanged="viewJobs_SelectionChanged">
                     <DataGrid.Columns>
+                        
                         <DataGridTextColumn Header="Description" Width="150" Binding="{Binding job_description}" />
+                        <DataGridTextColumn Header="Tier" Width="80" Binding="{Binding tier}" />
                         <DataGridTextColumn Header="Status" Width="80" Binding="{Binding status}" />
                         <DataGridTemplateColumn Width="100" Header="Owner">
                             <DataGridTemplateColumn.CellTemplate>
@@ -114,8 +124,9 @@
                       SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
                       IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
                       ItemsSource="{Binding}" PreviewMouseDoubleClick="viewSubs_PreviewMouseDoubleClick" SelectionChanged="viewSubs_SelectionChanged">
-            <DataGrid.Columns>
+                <DataGrid.Columns>
                     <DataGridTextColumn Header="Status" Width="75" Binding="{Binding status}" />
+                    <DataGridTextColumn Header="Value Date" Width="75"  Binding="{Binding value_date, StringFormat=\{0:dd-MMM-yyyy\}}" />
                     <DataGridTextColumn Header="Trans Ref. no" Width="100" Binding="{Binding transaction_ref_no}" />
                     <DataGridTextColumn Header="Tran. Details" Width="200" Binding="{Binding transaction_details}" />
                     <DataGridTextColumn Header="Company Code" Width="Auto" Binding="{Binding company_code}" />

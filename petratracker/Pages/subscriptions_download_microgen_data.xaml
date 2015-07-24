@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="petratracker.Pages.subscriptions_download_microgen_data"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d"
+	 Width="825" Height="482"  Initialized="UserControl_Initialized">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Margin="0,0,10,0">
+        <ComboBox 
+    		x:Name="cmb_tier" Margin="176,102,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="112" >
+            <Label Content="Tier 2"/>
+            <Label Content="Tier 3"/>
+            <Label Content="Tier 4"/>
+        </ComboBox>
+        <DatePicker x:Name="dtValueDate" HorizontalAlignment="Left" Margin="11,102,0,0" VerticalAlignment="Top" Width="160"/>
+        <Label Content="Value Date" HorizontalAlignment="Left" Margin="11,71,0,0" VerticalAlignment="Top" Width="107"/>
+        <Label Content="Tier" HorizontalAlignment="Left" Margin="176,71,0,0" VerticalAlignment="Top" Width="107"/>
+        <Label Content="Download Subscriptions" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" FontSize="20" FontWeight="Bold"/>
+        <Button x:Name="btnDownload" Content="Download Data" HorizontalAlignment="Left" Margin="662,102,0,0" VerticalAlignment="Top" Width="149" Click="btnDownload_Click" Height="26"/>
+        <Button x:Name="btnGetData" Content="GET DATA" HorizontalAlignment="Left" Margin="302,102,0,0" VerticalAlignment="Top" Width="114" Height="28" Click="btnGetData_Click"/>
+        <DataGrid x:Name="viewSubs" RenderOptions.ClearTypeHint="Enabled"
+                      
+                      MinWidth="600"  Margin="6,144,4,23" 
+                      SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
+                      IsReadOnly="True" AutoGenerateColumns="True" CanUserAddRows="True" CanUserDeleteRows="True"
+                      ItemsSource="{Binding}">
+
+        </DataGrid>
+
+    </Grid>
+</UserControl>

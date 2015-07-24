@@ -277,5 +277,21 @@ namespace petratracker.Controls
 
       #endregion
 
+        private void btn_Download_Payments_Click(object sender, RoutedEventArgs e)
+        {
+            Window parentWindow = Window.GetWindow(this);
+            object obj = parentWindow.FindName("surrogateFlyout");
+            Flyout flyout = (Flyout)obj;
+
+            flyout.ClosingFinished += jobsflyout_ClosingFinished;
+            flyout.Content = new subscriptions_download_microgen_data(true);
+            flyout.IsOpen = !flyout.IsOpen;
+        }
+
+        private void btnExport_Click(object sender, RoutedEventArgs e)
+        {
+            ExportToText.doExport(ExportToText.GetDataTableFromDGV(viewSubs));
+        }
+
     }
 }

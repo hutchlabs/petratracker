@@ -50,7 +50,7 @@ namespace petratracker.Pages
 
         private void btnUploadFile_Click(object sender, RoutedEventArgs e)
         {
-            if (TrackerPayment.read_microgen_data(_dlg.FileName, cmbDealType.Text, txtDealDescription.Text))
+            if (TrackerPayment.read_microgen_data(_dlg.FileName, cmbDealType.Text, txtDealDescription.Text,cmb_tier.Text))
              {
                  MessageBox.Show("File upload Successfully", "Upload Complete", MessageBoxButton.OK, MessageBoxImage.Information);
                  

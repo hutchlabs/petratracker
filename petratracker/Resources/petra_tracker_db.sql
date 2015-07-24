@@ -1,76 +1,6 @@
-USE [master]
+CREATE DATABASE  [Petra_tracker]
 GO
-/****** Object:  Database [Petra_tracker]    Script Date: 7/11/2015 12:56:02 PM ******/
-CREATE DATABASE [Petra_tracker]
- CONTAINMENT = NONE
- ON  PRIMARY 
-( NAME = N'Petra_tracker', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL11.SQLEXPRESS\MSSQL\DATA\Petra_tracker.mdf' , SIZE = 4096KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
- LOG ON 
-( NAME = N'Petra_tracker_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL11.SQLEXPRESS\MSSQL\DATA\Petra_tracker_log.ldf' , SIZE = 1280KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
-GO
-ALTER DATABASE [Petra_tracker] SET COMPATIBILITY_LEVEL = 110
-GO
-IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
-begin
-EXEC [Petra_tracker].[dbo].[sp_fulltext_database] @action = 'enable'
-end
-GO
-ALTER DATABASE [Petra_tracker] SET ANSI_NULL_DEFAULT OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET ANSI_NULLS OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET ANSI_PADDING OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET ANSI_WARNINGS OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET ARITHABORT OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET AUTO_CLOSE OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET AUTO_SHRINK OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET AUTO_UPDATE_STATISTICS ON 
-GO
-ALTER DATABASE [Petra_tracker] SET CURSOR_CLOSE_ON_COMMIT OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET CURSOR_DEFAULT  GLOBAL 
-GO
-ALTER DATABASE [Petra_tracker] SET CONCAT_NULL_YIELDS_NULL OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET NUMERIC_ROUNDABORT OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET QUOTED_IDENTIFIER OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET RECURSIVE_TRIGGERS OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET  DISABLE_BROKER 
-GO
-ALTER DATABASE [Petra_tracker] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET DATE_CORRELATION_OPTIMIZATION OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET TRUSTWORTHY OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET ALLOW_SNAPSHOT_ISOLATION OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET PARAMETERIZATION SIMPLE 
-GO
-ALTER DATABASE [Petra_tracker] SET READ_COMMITTED_SNAPSHOT OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET HONOR_BROKER_PRIORITY OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET RECOVERY SIMPLE 
-GO
-ALTER DATABASE [Petra_tracker] SET  MULTI_USER 
-GO
-ALTER DATABASE [Petra_tracker] SET PAGE_VERIFY CHECKSUM  
-GO
-ALTER DATABASE [Petra_tracker] SET DB_CHAINING OFF 
-GO
-ALTER DATABASE [Petra_tracker] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
-GO
-ALTER DATABASE [Petra_tracker] SET TARGET_RECOVERY_TIME = 0 SECONDS 
-GO
+
 USE [Petra_tracker]
 GO
 /****** Object:  Table [dbo].[Emails]    Script Date: 7/11/2015 12:56:02 PM ******/
@@ -103,9 +33,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Jobs](
 	[id] [int] IDENTITY(1,1) NOT NULL,
-	[job_type] [nvarchar](50) NOT NULL,
-	[job_description] [nvarchar](max) NOT NULL,
-	[status] [nvarchar](50) NOT NULL,
+	[job_type] [varchar](50) NOT NULL,
+	[tier] [varchar](10) NOT NULL,
+	[job_description] [varchar](max) NOT NULL,
+	[status] [varchar](50) NOT NULL,
 	[owner] [int] NULL,
 	[approved_by] [int] NULL,
 	[date_approved] [datetime2](7) NULL,
@@ -152,7 +83,8 @@ GO
 CREATE TABLE [dbo].[Payments](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[job_id] [int] NULL,
-	[transaction_ref_no] [nvarchar](50) NOT NULL,
+	[transaction_ref_no] [varchar](50) NOT NULL,
+	[tier] [varchar](10) NOT NULL,
 	[transaction_details] [text] NOT NULL,
 	[transaction_date] [date] NOT NULL,
 	[value_date] [date] NOT NULL,

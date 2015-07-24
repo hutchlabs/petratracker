@@ -23,12 +23,13 @@ namespace petratracker.Models
 
         #region Public Jobs Methods
 
-        public static int Add(string job_type, string deal_description)
+        public static int Add(string job_type, string deal_description, string tier)
         {
             try
             {
                 Job j = new Job();
                 j.job_type = job_type;
+                j.tier = tier;
                 j.job_description = deal_description;
                 j.status = Constants.PAYMENT_STATUS_INPROGRESS;
                 j.owner = TrackerUser.GetCurrentUser().id;

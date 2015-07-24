@@ -349,7 +349,7 @@ namespace petratracker.Pages
                 this.Close();}        
         }
 
-        private bool update_payment(string verifyType)
+        private bool update_payment(string verifyType, bool saveToPTas)
         {
             try
             {
@@ -396,9 +396,13 @@ namespace petratracker.Pages
                         p.updated_at = DateTime.Today;
                         p.modified_by = TrackerUser.GetCurrentUser().id;                      
                     }
+
+                    //Save payment to PTas
+                    if (saveToPTas) { TrackerPayment.push_payment_to_PTAS(p.transaction_ref_no); }
                 }
 
                 TrackerDB.Tracker.SubmitChanges();
+                
                 
             }
             catch(Exception updateError)
@@ -447,7 +451,7 @@ namespace petratracker.Pages
 
                         if (MessageBox.Show(conf_str, "Confirm Identification", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
-                            if (update_payment("Identified")){
+                            if (update_payment("Identified",false)){
                                 // resolve any pending rejected tickets
                                 TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED,
                                                                  Constants.JOB_TYPE_SUBSCRIPTION, subID);
@@ -464,7 +468,9 @@ namespace petratracker.Pages
                     {
                         if (MessageBox.Show("This subscription would be flagged as identified and approved, please click Yes to proceed.", "Identified and Approved Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
-                            if (update_payment("Identified and Approved")) {
+                            if (update_payment("Identified and Approved",true)) {
+                                
+                                
                                 TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
                                 MessageBox.Show("Payment has been flagged as approved.", "Approved", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
                         }
@@ -474,7 +480,7 @@ namespace petratracker.Pages
                 {
                     if (MessageBox.Show("This subscription would be flagged as returned, please click Yes to proceed.", "Returened Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        if (update_payment("Returned")){MessageBox.Show("Payment has been flagged as returned.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); this.Close();}
+                        if (update_payment("Returned",false)){MessageBox.Show("Payment has been flagged as returned.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); this.Close();}
                     }
                 }
             }
@@ -496,7 +502,7 @@ namespace petratracker.Pages
                 }
                 else if (MessageBox.Show("This subscription would be flagged as rejected, please click Yes to proceed.", "Rejected Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    if (update_payment("Rejected")) {
+                    if (update_payment("Rejected",false)) {
                         TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
                         TrackerNotification.Add(Constants.ROLES_OPS_USER_ID,
                                                 Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED,
@@ -509,7 +515,7 @@ namespace petratracker.Pages
 
         private void btnReturned_Click(object sender, RoutedEventArgs e)
         {
-            if (update_payment("Returned"))
+            if (update_payment("Returned",false))
             {
                 MessageBox.Show("Payment has been flagged as Returned.", "Returned", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
