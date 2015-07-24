@@ -37,7 +37,7 @@ namespace petratracker.Models
 
                 if (filePath.FileName != String.Empty)
                 { 
-                    File.WriteAllText(filePath.FileName, stringBuilder.ToString());
+                    File.WriteAllText(filePath.FileName+".txt", stringBuilder.ToString());
                     MessageBox.Show("Export complete.","Done",MessageBoxButton.OK,MessageBoxImage.Information);
                     return true; 
                 }
