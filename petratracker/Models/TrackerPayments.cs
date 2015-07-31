@@ -44,9 +44,10 @@ namespace petratracker.Models
         {
             try
             {
+                string m = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
                 return (from p in TrackerDB.Tracker.PPayments
                         where p.company_code == company_id &&
-                              p.deal_description_period == (month.ToString() + " " + year.ToString()) &&
+                              p.deal_description_period == (m + " " + year.ToString()) &&
                               p.deal_description == ct
                         select p).Single();
             } 

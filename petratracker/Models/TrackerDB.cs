@@ -250,6 +250,23 @@ namespace petratracker.Models
             }
         }
 
+        public static string GetCompanyCode(string company_id)
+        {
+            try
+            {
+                var u = (from c in Microgen.cclv_AllEntities
+                        where c.EntityTypeDesc == "Company" && c.FullName.ToLower() != "available" && c.FullName != "Available Company"
+                             && c.EntityID == int.Parse(company_id) 
+                        orderby c.FullName
+                        select c).Single();
+                return u.EntityKey;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public static IEnumerable<cclv_AllEntity> GetCompanies()
         {
             try

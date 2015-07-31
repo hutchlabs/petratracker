@@ -188,7 +188,7 @@ namespace petratracker.Pages
         private void load_schedule()
         {
             this.lbl_company.Content = _schedule.company;
-            this.lbl_month.Content = string.Format("Contribution for {0}, {1}", CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(_schedule.month), _schedule.year);
+            this.lbl_month.Content = string.Format("GHC {0} for {1}, {2}", _schedule.amount, CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(_schedule.month), _schedule.year);
             this.lbl_owner.Content = string.Format("Owner: {0} {1}", _schedule.User.first_name, _schedule.User.last_name);
             this.lbl_tier.Content = _schedule.tier;
             this.lbl_status.Content = _schedule.workflow_status;

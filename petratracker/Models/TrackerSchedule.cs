@@ -567,11 +567,12 @@ namespace petratracker.Models
             return numNotifications;
         }
 
-        private static int CheckPaymentStatus(string companyid, string tier, string ct, int month, int year)
+        private static int CheckPaymentStatus(string company_id, string tier, string ct, int month, int year)
         {
             try
             {
-                PPayment pm = TrackerPayment.GetSubscription(companyid, tier, month, year, ct);
+                company_id = TrackerDB.GetCompanyCode(company_id);
+                PPayment pm = TrackerPayment.GetSubscription(company_id, tier, month, year, ct);
                 return (pm != null) ? pm.id : 0;
 
             } catch(Exception) {
