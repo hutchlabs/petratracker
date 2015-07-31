@@ -38,7 +38,8 @@ namespace petratracker.Pages
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
             _dlg.DefaultExt = ".xls";
-            _dlg.Filter = "Text documents (.xls)|*.xls";
+            _dlg.Filter = "Excel files |*.xlsx;*.xls";
+            _dlg.Title = "Please select the payments file to process";
 
             Nullable<bool> result = _dlg.ShowDialog();
 

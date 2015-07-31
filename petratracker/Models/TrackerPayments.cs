@@ -116,6 +116,7 @@ namespace petratracker.Models
                     objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
                     objPayment.subscription_amount = decimal.Parse(dr["Transaction Amount"].ToString());
                     objPayment.transaction_ref_no = get_trans_ref_code((DateTime)dr["Value Date"], tier);
+
                     objPayment.status = (dr["Dr / Cr Indicator"].ToString() == "Credit") ? "Unidentified" : "Returned";
                     objPayment.owner = TrackerUser.GetCurrentUser().id;
                     objPayment.created_at = DateTime.Now;
