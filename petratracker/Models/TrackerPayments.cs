@@ -56,6 +56,25 @@ namespace petratracker.Models
             }
         }
 
+        public static IEnumerable<PPayment> GetAllSubscriptions(string sub_status = "", bool showAll = false)
+        {
+            if (TrackerUser.IsCurrentUserOps())
+            {
+                return GetAllOpsUserSubscriptions(sub_status);
+            }
+            else
+            {
+                if (sub_status != string.Empty)
+                {
+                    return (from p in TrackerDB.Tracker.PPayments where p.status.Trim() == sub_status select p);
+                }
+                else
+                {
+                    return (from p in TrackerDB.Tracker.PPayments select p);
+                }
+            }
+        }
+
         public static IEnumerable<PPayment> GetSubscriptions(int job_id, string sub_status="",bool showAll=false)
         {
             if (TrackerUser.IsCurrentUserOps())
@@ -72,6 +91,22 @@ namespace petratracker.Models
                 {
                     return (from p in TrackerDB.Tracker.PPayments where p.job_id == job_id select p);
                 }
+            }
+        }
+
+        public static IEnumerable<PPayment> GetAllOpsUserSubscriptions(string sub_status = "")
+        {
+            if (sub_status != string.Empty)
+            {
+                return (from p in TrackerDB.Tracker.PPayments
+                        where p.status.Trim() == sub_status && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
+                        select p);
+            }
+            else
+            {
+                return (from p in TrackerDB.Tracker.PPayments
+                        where p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
+                        select p);
             }
         }
 
@@ -223,7 +258,23 @@ namespace petratracker.Models
 
                 return res;
         }
-       
+
+        public static void Approve(PPayment payment)
+        {
+            payment.status = Constants.PAYMENT_STATUS_IDENTIFIED_APPROVED;
+            payment.updated_at = DateTime.Now;
+            TrackerDB.Tracker.SubmitChanges();
+        }
+
+
+        public static void Reject(PPayment payment)
+        {
+            payment.status = Constants.PAYMENT_STATUS_REJECTED;
+            payment.updated_at = DateTime.Now;
+            TrackerDB.Tracker.SubmitChanges();
+        }
+
+
 
         #endregion
 
