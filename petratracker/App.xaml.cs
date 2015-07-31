@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -20,6 +22,17 @@ namespace petratracker
 
         public App()
         {
+            //CultureInfo culture;
+            //NumberFormatInfo nfi = (NumberFormatInfo)NumberFormatInfo.CurrentInfo.Clone();
+            //culture = CultureInfo.CurrentCulture;
+            //nfi.CurrencySymbol = "GHC";
+            //culture.NumberFormat = (NumberFormatInfo) nfi.Clone() ;
+            //Thread.CurrentThread.CurrentCulture = culture;
+
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+            typeof(FrameworkElement),
+            new FrameworkPropertyMetadata(System.Windows.Markup.XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag)));
+
             Utility.LogUtil.LogInfo("App", "Constructor", "Starting up");
 
             try

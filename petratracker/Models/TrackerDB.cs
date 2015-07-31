@@ -85,7 +85,7 @@ namespace petratracker.Models
         
         static TrackerDB()
         {
-           /* Properties.Settings.Default.database_tracker = "Data Source=Petrasql;Initial Catalog=Petra_tracker;Integrated Security=True";
+           /* Properties.Settings.Default.database_tracker = "Data Source=Petrasql;Initial Catalog=PetraERP;Integrated Security=True";
             Properties.Settings.Default.database_microgen = "Data Source=Petrasql;Initial Catalog=Petra5;Integrated Security=True";
             Properties.Settings.Default.database_ptas = "Data Source=Petrasql;Initial Catalog=PTASDB;Integrated Security=True";
             Properties.Settings.Default.Save();
@@ -133,7 +133,7 @@ namespace petratracker.Models
 
             try
             { 
-                String tconStr = "Data Source=" + datasource + ";Initial Catalog=Petra_tracker;Integrated Security=True";
+                String tconStr = "Data Source=" + datasource + ";Initial Catalog=PetraERP;Integrated Security=True";
                 String pconStr = "Data Source=" + datasource + ";Initial Catalog=Petra5;Integrated Security=True";
                 String ptasStr = "Data Source=" + datasource + ";Initial Catalog=PTASDB;Integrated Security=True";
 

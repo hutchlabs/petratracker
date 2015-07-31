@@ -98,13 +98,13 @@ namespace petratracker.Models
         
         public static Schedule Save(Schedule s)
         {
-            s.modified_by = TrackerUser.GetCurrentUser().id;
+            //s.modified_by = TrackerUser.GetCurrentUser().id;
             s.updated_at = DateTime.Now;
             TrackerDB.Tracker.SubmitChanges();
             return s;
         }
 
-        public static void AddSchedule(string company, string companyid, string tier, string ct, int ctid, string month, string year, int parent_id)
+        public static void AddSchedule(string company, string companyid, string tier, string ct, int ctid, string month, string year, double amount, int parent_id)
         {
             try
             {
@@ -113,6 +113,7 @@ namespace petratracker.Models
                 s.company_id = companyid;
                 s.company_email = TrackerDB.GetCompanyEmail(companyid) ;
                 s.tier = tier;
+                s.amount = Decimal.Parse(amount.ToString());
                 s.contributiontype = ct;
                 s.contributiontypeid = ctid;
                 s.month = int.Parse(month);
@@ -247,7 +248,7 @@ namespace petratracker.Models
             else
             {
                 // Add new schedule with similar details and retire the old one
-                AddSchedule(s.company, s.company_id, s.tier, s.contributiontype, s.contributiontypeid, s.month.ToString(), s.year.ToString(), s.id);
+                AddSchedule(s.company, s.company_id, s.tier, s.contributiontype, s.contributiontypeid, s.month.ToString(), s.year.ToString(), Double.Parse(s.amount.ToString()), s.id);
                 s.workflow_status = Constants.WF_STATUS_EXPIRED;
                 s.workflow_summary = "Schedule issues resolved, but there was a new valuetime so a new schedule has been created.";
                 Save(s);
@@ -475,7 +476,7 @@ namespace petratracker.Models
             bool fileuploaded = false;
             try
             {
-                fileuploaded = CheckFileUploaded(s.company, s.company_id, s.tier, s.month, s.year, s.Payment.transaction_amount);
+                fileuploaded = CheckFileUploaded(s.company, s.company_id, s.tier, s.month, s.year, s.PPayment.transaction_amount);
             }
             catch(Exception)
             {
@@ -570,7 +571,7 @@ namespace petratracker.Models
         {
             try
             {
-                Payment pm = TrackerPayment.GetSubscription(companyid, tier, month, year, ct);
+                PPayment pm = TrackerPayment.GetSubscription(companyid, tier, month, year, ct);
                 return (pm != null) ? pm.id : 0;
 
             } catch(Exception) {

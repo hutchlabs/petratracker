@@ -40,11 +40,11 @@ namespace petratracker.Models
 
         #region Public Helper Methods
 
-        public static Payment GetSubscription(string company_id, string tier, int month, int year, string ct)
+        public static PPayment GetSubscription(string company_id, string tier, int month, int year, string ct)
         {
             try
             {
-                return (from p in TrackerDB.Tracker.Payments
+                return (from p in TrackerDB.Tracker.PPayments
                         where p.company_code == company_id &&
                               p.deal_description_period == (month.ToString() + " " + year.ToString()) &&
                               p.deal_description == ct
@@ -56,7 +56,7 @@ namespace petratracker.Models
             }
         }
 
-        public static IEnumerable<Payment> GetSubscriptions(int job_id, string sub_status="",bool showAll=false)
+        public static IEnumerable<PPayment> GetSubscriptions(int job_id, string sub_status="",bool showAll=false)
         {
             if (TrackerUser.IsCurrentUserOps())
             {
@@ -66,26 +66,26 @@ namespace petratracker.Models
             {
                 if (sub_status != string.Empty)
                 {
-                    return (from p in TrackerDB.Tracker.Payments where p.job_id == job_id && p.status.Trim() == sub_status select p);
+                    return (from p in TrackerDB.Tracker.PPayments where p.job_id == job_id && p.status.Trim() == sub_status select p);
                 }
                 else
                 {
-                    return (from p in TrackerDB.Tracker.Payments where p.job_id == job_id select p);
+                    return (from p in TrackerDB.Tracker.PPayments where p.job_id == job_id select p);
                 }
             }
         }
 
-        public static IEnumerable<Payment> GetOpsUserSubscriptions(int job_id, string sub_status = "")
+        public static IEnumerable<PPayment> GetOpsUserSubscriptions(int job_id, string sub_status = "")
         {
             if (sub_status != string.Empty)
             {
-                return (from p in TrackerDB.Tracker.Payments 
+                return (from p in TrackerDB.Tracker.PPayments 
                         where p.job_id == job_id && p.status.Trim() == sub_status && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
                         select p);
             }
             else
             {
-                return (from p in TrackerDB.Tracker.Payments
+                return (from p in TrackerDB.Tracker.PPayments
                         where p.job_id == job_id && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED 
                         select p);
             }
@@ -106,7 +106,7 @@ namespace petratracker.Models
                    
 
                     // Insert new payment
-                    Payment objPayment = new Payment();                 
+                    PPayment objPayment = new PPayment();                 
                     objPayment.job_id = jobId;
                     objPayment.tier = tier;
                     objPayment.transaction_details = dr["Transaction Details"].ToString();
@@ -120,7 +120,7 @@ namespace petratracker.Models
                     objPayment.owner = TrackerUser.GetCurrentUser().id;
                     objPayment.created_at = DateTime.Now;
                     objPayment.updated_at = DateTime.Now;
-                    TrackerDB.Tracker.Payments.InsertOnSubmit(objPayment);
+                    TrackerDB.Tracker.PPayments.InsertOnSubmit(objPayment);
                     TrackerDB.Tracker.SubmitChanges();
                     ini_inc++;
                 }
@@ -139,11 +139,11 @@ namespace petratracker.Models
 
             try
             {
-                var subscription = (from p in TrackerDB.Tracker.Payments
+                var subscription = (from p in TrackerDB.Tracker.PPayments
                                     where p.transaction_ref_no == payment_ref_no
                                     select p).Single();
 
-                PTasPayment objPayment = new PTasPayment();
+                Payment objPayment = new Payment();
                 objPayment.InsertedDate = DateTime.Now;
                 objPayment.ContributionDate = subscription.subscription_value_date;
                 objPayment.ValueDate = subscription.value_date;
@@ -277,7 +277,7 @@ namespace petratracker.Models
 
         private static int get_seqence_no(DateTime valueDate)
         {
-            IEnumerable<Payment> seq = (from p in TrackerDB.Tracker.Payments where p.value_date == valueDate select p );
+            IEnumerable<PPayment> seq = (from p in TrackerDB.Tracker.PPayments where p.value_date == valueDate select p );
             return seq.Count();
         }
         

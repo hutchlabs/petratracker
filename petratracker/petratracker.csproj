@@ -98,9 +98,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Microsoft.Expression.Interactions" />
-    <Reference Include="WPFToolkit">
-      <HintPath>..\..\ExportToExcel\ExportToExcel\bin\Debug\WPFToolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -115,10 +112,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\MicroGenExportDataView.cs" />
-    <Compile Include="Models\ptasDB.cs">
-      <DependentUpon>ptasDB.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Models\TrackerDB.cs">
+      <DependentUpon>trackerDB.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\trackerDB1.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
       <DependentUpon>trackerDB.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\TrackerReports.cs" />
@@ -192,11 +191,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ptasDB.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\trackerDB.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>trackerDB.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\TrackerPayments.cs" />
     <Compile Include="Models\TrackerNotification.cs" />
@@ -277,8 +271,8 @@
     </None>
     <None Include="Models\trackerDB.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>trackerDB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>trackerDB1.designer.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -81,7 +81,7 @@ namespace petratracker.Pages
 
         private void load_unidentified_subscription()
         {
-            var subscription = (from p in TrackerDB.Tracker.Payments
+            var subscription = (from p in TrackerDB.Tracker.PPayments
                                  where p.id == this.subID && p.status != "Identified"
                                  select p).Single();
 
@@ -99,7 +99,7 @@ namespace petratracker.Pages
 
         private void load_rejected_subscription()
         {
-            var subscription = (from p in TrackerDB.Tracker.Payments
+            var subscription = (from p in TrackerDB.Tracker.PPayments
                                 where p.id == this.subID && p.status == Constants.PAYMENT_STATUS_REJECTED
                                 select p).Single();
 
@@ -152,7 +152,7 @@ namespace petratracker.Pages
 
         private void load_identified_subscription()
         {
-            var subscription = (from p in TrackerDB.Tracker.Payments
+            var subscription = (from p in TrackerDB.Tracker.PPayments
                                 where p.id == this.subID && p.status == "Identified"
                                 select p).Single();
 
@@ -228,7 +228,7 @@ namespace petratracker.Pages
 
         private void load_approved_subscription()
         {
-            var subscription = (from p in TrackerDB.Tracker.Payments
+            var subscription = (from p in TrackerDB.Tracker.PPayments
                                 where p.id == this.subID && p.status == "Identified and Approved"
                                 select p).Single();
 
@@ -353,11 +353,11 @@ namespace petratracker.Pages
         {
             try
             {
-                var subscription = from p in TrackerDB.Tracker.Payments
+                var subscription = from p in TrackerDB.Tracker.PPayments
                                    where p.id == this.subID && p.status != verifyType
                                    select p;
 
-                foreach (Payment p in subscription)
+                foreach (PPayment p in subscription)
                 {
                     if (verifyType == "Identified")
                     {

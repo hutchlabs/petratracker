@@ -79,6 +79,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Company" Width="200" Binding="{Binding company}" />
                     <DataGridTextColumn Header="Tier" Width="55" Binding="{Binding tier}" />
+                    <DataGridTextColumn Header="Amount" Width="105" Binding="{Binding amount, StringFormat=C}" />
                     <DataGridTextColumn Header="Contribution Type" Width="150" Binding="{Binding contributiontype}" />
                     <DataGridTemplateColumn Header="Period" Width="80">
                         <DataGridTemplateColumn.CellTemplate>

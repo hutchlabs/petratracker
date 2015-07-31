@@ -58,14 +58,14 @@ namespace petratracker.Pages
         {
             try
             {
-                 var subscription = from p in TrackerDB.Tracker.Payments
+                 var subscription = from p in TrackerDB.Tracker.PPayments
                                    where p.value_date == dtValueDate.SelectedDate.Value && p.tier == cmb_tier.Text
                                    select p;
 
 
                  rep.Clear();
 
-                 foreach (Payment p in subscription)
+                 foreach (PPayment p in subscription)
                  {
                  
                      string [] codes = TrackerPayment.get_microgen_data(p.company_code, p.tier);

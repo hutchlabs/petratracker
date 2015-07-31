@@ -60,7 +60,7 @@ namespace petratracker.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            UpdatePaymentJobs();
+            //UpdatePaymentJobs();
             UpdateSubscriptions();
         }
 
@@ -136,7 +136,7 @@ namespace petratracker.Controls
      
         private void viewSubs_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Payment p = (Payment) viewSubs.SelectedItem;
+            PPayment p = (PPayment) viewSubs.SelectedItem;
 
             Window parentWindow = Window.GetWindow(this);
             object obj = parentWindow.FindName("surrogateFlyout");
@@ -151,7 +151,7 @@ namespace petratracker.Controls
         {
             if (viewSubs.SelectedItem != null)
             {
-                Payment p = viewSubs.SelectedItem as Payment;
+                PPayment p = viewSubs.SelectedItem as PPayment;
                 ShowSubsActionBarButtons(p.status.Trim());
             }
         }

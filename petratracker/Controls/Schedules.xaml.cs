@@ -100,15 +100,22 @@ namespace petratracker.Controls
 
         private void viewSchedules_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Schedule j = viewSchedules.SelectedItem as Schedule;
+            try
+            {
+                Schedule j = viewSchedules.SelectedItem as Schedule;
 
-            Window parentWindow = Window.GetWindow(this);
-            object obj = parentWindow.FindName("surrogateFlyout");
-            Flyout flyout = (Flyout)obj;
+                Window parentWindow = Window.GetWindow(this);
+                object obj = parentWindow.FindName("surrogateFlyout");
+                Flyout flyout = (Flyout)obj;
 
-            flyout.ClosingFinished += flyout_ClosingFinished;
-            flyout.Content = new ScheduleView(j.id, true);
-            flyout.IsOpen = !flyout.IsOpen;
+                flyout.ClosingFinished += flyout_ClosingFinished;
+                flyout.Content = new ScheduleView(j.id, true);
+                flyout.IsOpen = !flyout.IsOpen;
+            }
+            catch
+            {
+
+            }
         }
 
         private void btn_groupMarkReceiptSent_Click(object sender, RoutedEventArgs e)

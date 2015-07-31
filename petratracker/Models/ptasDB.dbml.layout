@@ -20,7 +20,7 @@
         <elementListCompartment Id="1567be88-fa7e-439a-9380-8e5bba93324d" absoluteBounds="0.51500000000000012, 2.835, 1.9700000000000002, 5.0569254557291661" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(3.375 : 3.17870198567708); (2.5 : 3.17870198567708)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(3.375 : 3.17870198567708); (2.5 : 3.17870198567708)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/PTASDataContext/FundDeal/FundDeal_FundDealLine" />
       <nodes>
         <classShapeMoniker Id="551ac2ce-3acc-4724-b625-ec0e9cdbf2e0" />
@@ -40,10 +40,10 @@
         <classShapeMoniker Id="551ac2ce-3acc-4724-b625-ec0e9cdbf2e0" />
       </nodes>
     </associationConnector>
-    <classShape Id="95d93a35-4671-4ff5-ab3d-b7148fe5ac7b" absoluteBounds="5.25, 4.375, 2, 3.5016097005208326">
+    <classShape Id="95d93a35-4671-4ff5-ab3d-b7148fe5ac7b" absoluteBounds="3.875, 4.375, 2, 3.5016097005208326">
       <DataClassMoniker Name="/PTASDataContext/Payment" />
       <nestedChildShapes>
-        <elementListCompartment Id="1142d848-91e1-414e-89d8-7e24b5ec5f55" absoluteBounds="5.265, 4.835, 1.9700000000000002, 2.941609700520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="1142d848-91e1-414e-89d8-7e24b5ec5f55" absoluteBounds="3.8899999999999997, 4.835, 1.9700000000000002, 2.941609700520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>
