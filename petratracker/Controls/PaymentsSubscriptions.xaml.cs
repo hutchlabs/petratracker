@@ -13,6 +13,8 @@ namespace petratracker.Controls
     {
         #region Private Members 
 
+        private int _activeJobId;
+
         private readonly string[] _jobsOptions = { "All", Constants.PAYMENT_STATUS_APPROVED, Constants.PAYMENT_STATUS_INPROGRESS }; 
 
         private readonly string[] _opsUserOptions   = { "All", Constants.PAYMENT_STATUS_UNIDENTIFIED,
@@ -60,7 +62,7 @@ namespace petratracker.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            //UpdatePaymentJobs();
+            UpdatePaymentJobs();
             UpdateSubscriptions();
         }
 
@@ -86,6 +88,7 @@ namespace petratracker.Controls
             if (viewJobs.SelectedItem != null)
             {
                 Job j = viewJobs.SelectedItem as Job;
+                _activeJobId = j.id;
                 ShowJobsActionBarButtons(j.status.Trim());
             }
         }
@@ -138,6 +141,8 @@ namespace petratracker.Controls
         {
             PPayment p = (PPayment) viewSubs.SelectedItem;
 
+            _activeJobId = (int) p.job_id;
+
             Window parentWindow = Window.GetWindow(this);
             object obj = parentWindow.FindName("surrogateFlyout");
             Flyout flyout = (Flyout)obj;
@@ -165,7 +170,7 @@ namespace petratracker.Controls
 
         private void subsflyout_ClosingFinished(object sender, RoutedEventArgs e)
         {
-            UpdateSubscriptions();
+            UpdateSubscriptions(true);
         }
          
         #endregion
@@ -196,7 +201,7 @@ namespace petratracker.Controls
             }
         }
 
-        private void UpdateSubscriptions()
+        private void UpdateSubscriptions(bool useActiveId=false)
         {
             Job job = (Job)viewJobs.SelectedItem;
 
@@ -205,8 +210,10 @@ namespace petratracker.Controls
                 string filter = (string)((SplitButton)SubsListFilter).SelectedItem;
                 filter = (filter == null) ? "" : filter;
 
-                if (filter == "All") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id); }
-                else { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id, filter); }
+                int id = (useActiveId) ? _activeJobId : job.id;
+
+                if (filter == "All") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(id); }
+                else { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(id, filter); }
 
                 /*
                 viewSubs.Columns[0].Visibility = System.Windows.Visibility.Hidden;
