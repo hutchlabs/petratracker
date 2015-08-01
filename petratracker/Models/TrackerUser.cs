@@ -45,14 +45,14 @@ namespace petratracker.Models
                 if (!CheckPassword(password))
                 {
                     CurrentUser = null;
-                    throw new Exceptions.TrackerUserInvalidPasswordException("Password Error");
+                    throw new Exceptions.TrackerUserInvalidPasswordException("Invalid password");
                 }
             }
             catch (Exception ex)
             {
                 CurrentUser = null;
                 LogUtil.LogError("TrackerUser","SetCurrentUser",ex);
-                throw new Exceptions.TrackerUserNotFoundException("Username not found: "+ex.Message);
+                throw new Exceptions.TrackerUserNotFoundException("User not found: "+ex.Message);
             }
         }
 
@@ -138,13 +138,21 @@ namespace petratracker.Models
             }
         }
 
-        public static bool FirstLogin()
+        public static bool FirstLogin(string username=null)
         {
             try
             {
-                return CurrentUser.first_login;     
+                if (username == null)
+                {
+                    return CurrentUser.first_login;
+                } 
+                else
+                {
+                    var x = Database.Tracker.Users.Single(u => u.username == username);
+                    return x.first_login;
+                }
             }
-            catch(Exception e)
+            catch(Exception e)  
             {
                 return false;
                 throw e;
@@ -164,15 +172,15 @@ namespace petratracker.Models
             }
         }
 
-        internal static void UpdateCurrentUserPassword(string p)
+        internal static void UpdateUserPassword(string username, string p)
         {
             try
             {
+                var x = Database.Tracker.Users.Single(u => u.username == username);
                 var newpassword = BCrypt.HashPassword(p, BCrypt.GenerateSalt());
-                CurrentUser.password = newpassword;
-                CurrentUser.first_login = false;
-                CurrentUser.modified_by = CurrentUser.id;
-                CurrentUser.updated_at = DateTime.Now;
+                x.password = newpassword;
+                x.first_login = false;
+                x.updated_at = DateTime.Now;
                 Database.Tracker.SubmitChanges();
             }
             catch (Exception)

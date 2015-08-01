@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Sql;
 using System.Linq;
+using System.Reflection;
+using System.Deployment.Application;
+using System.Resources;
+using System.Collections;
+using System.Windows;
 
 namespace petratracker.Models
 {
@@ -15,6 +20,12 @@ namespace petratracker.Models
         private static Models.TrackerDataContext _tracker;
         private static Models.MicrogenDataContext _microgen;
         private static Models.PTASDataContext _ptas;
+        private enum CompareValue
+        {
+            EQUAL = 0,
+            LESS,
+            MORE
+        };
 
         #endregion
 
@@ -25,6 +36,16 @@ namespace petratracker.Models
             get { return _isSetup; }
             set { _isSetup = value; }
         }
+
+        public static string CurrentVersion
+        {
+            get
+            {
+                return ApplicationDeployment.IsNetworkDeployed
+                       ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString()
+                       : Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+        } 
 
         public static Models.TrackerDataContext Tracker
         {
@@ -95,8 +116,6 @@ namespace petratracker.Models
 
         #region Public Methods
 
-        #region Connection Methods
-
         public static void Initialize()
         {
             if (IsSetup)
@@ -106,11 +125,21 @@ namespace petratracker.Models
                     Tracker = new Models.TrackerDataContext(petratracker.Properties.Settings.Default.database_tracker);
                     Microgen = new Models.MicrogenDataContext(petratracker.Properties.Settings.Default.database_microgen);
                     PTAS = new Models.PTASDataContext(petratracker.Properties.Settings.Default.database_ptas);
+                    UpdateDatabase();
                 }
                 catch (Exception ex)
                 {
-                    Utility.LogUtil.LogError("Database", "Initialize", ex);
-                    throw new Exceptions.TrackerDBConnectionException(ex.Message);
+                    if (Tracker.DatabaseExists())
+                    {
+                        Utility.LogUtil.LogError("Database", "Initialize", ex);
+                        throw new Exceptions.TrackerDBConnectionException(ex.Message);
+                    }
+                    else 
+                    {
+                        Exceptions.TrackerDBNotSetupException exe = new Exceptions.TrackerDBNotSetupException("Database parameters not stored in System settings.");
+                        Utility.LogUtil.LogError("Database", "Initialize", exe);
+                        throw exe;
+                    }
                 }
             }
             else
@@ -127,21 +156,21 @@ namespace petratracker.Models
 
             try
             {
-                String tconStr = "Data Source=" + datasource + ";Initial Catalog=Petra_tracker;Integrated Security=True";
+                String tconStr = "Data Source=" + datasource + ";Initial Catalog=Petra_tracker1;Integrated Security=True";
                 String pconStr = "Data Source=" + datasource + ";Initial Catalog=Petra5;Integrated Security=True";
                 String ptasStr = "Data Source=" + datasource + ";Initial Catalog=PTASDB;Integrated Security=True";
 
-                TrackerDataContext tdc = new TrackerDataContext(tconStr);
-                MicrogenDataContext mdc = new MicrogenDataContext(pconStr);
-                PTASDataContext pdc = new PTASDataContext(ptasStr);
+                Tracker = new TrackerDataContext(tconStr);
+                Microgen = new MicrogenDataContext(pconStr);
+                PTAS = new PTASDataContext(ptasStr);
 
                 bool t = false;
                 bool m = false;
                 bool p = false;
 
-                t = tdc.DatabaseExists();
-                m = mdc.DatabaseExists();
-                p = pdc.DatabaseExists();
+                t = Tracker.DatabaseExists();
+                m = Microgen.DatabaseExists();
+                p = PTAS.DatabaseExists();
 
                 if (m && t && p)
                 {
@@ -152,7 +181,7 @@ namespace petratracker.Models
 
                     IsSetup = true;
 
-                    Initialize();
+                    UpdateDatabase();
 
                     success = true;
                 }
@@ -177,7 +206,18 @@ namespace petratracker.Models
                     }
                     else if (!t)
                     {
-                        throw new Exceptions.TrackerDBConnectionException("Connection to Petra_Tracker database failed.");
+                        try
+                        {
+                            // Create tracker DB and try again
+                            Tracker.CreateDatabase();
+                            RunSql("setup.sql");
+                            UpdateDatabase();
+                            return Setup(datasource);
+                        }
+                        catch(Exception ex)
+                        {
+                            throw ex;
+                        }                   
                     }
                     else if (!m)
                     {
@@ -202,9 +242,10 @@ namespace petratracker.Models
             {
                 throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                LogUtil.LogError("Database", "Setup", ex);
+                throw ex;
             }
 
             return success;
@@ -278,6 +319,76 @@ namespace petratracker.Models
         }
 
         #endregion
+
+        #region Private Methods for managing DB versioning
+        
+        private static void UpdateDatabase()
+        {
+            string[] changes = GetResourcesUnder("Resources/db/changes");
+         
+            var dbVersion = (from u in Tracker.Settings where u.setting1 == "app_version" select u).Single();
+       
+            if (CompareVersions(dbVersion.value, Database.CurrentVersion)==CompareValue.LESS)
+            {
+                foreach (string changefile in changes)
+                {
+                    if (CompareVersions(changefile.Replace(".sql",""), dbVersion.value) == CompareValue.MORE)
+                    {
+                        string logmsg = string.Format("Updating database from version {0} to {1}", dbVersion.value, changefile.Replace(".sql", ""));
+                        Utility.LogUtil.LogInfo("Database", "UpdateDatabase", logmsg);
+                        RunSql("changes/" + changefile);
+                        dbVersion = (from u in Tracker.Settings where u.setting1 == "app_version" select u).Single();
+                    }
+                }
+            }
+            else if (CompareVersions(dbVersion.value, Database.CurrentVersion) == CompareValue.MORE)
+            {
+                // throw an error as this an old version of the application.
+                Exceptions.TrackerDBNotSetupException ex = new Exceptions.TrackerDBNotSetupException("The database available is for a newer version of this application. Please upgrade the application or restore the older version of the database.");
+                Utility.LogUtil.LogError("Database", "UpdateDatabase", ex);
+                throw ex;
+            }      
+        }
+
+        private static CompareValue CompareVersions(string v1, string v2)
+        {
+            int ver1 = int.Parse(v1.Replace(".",""));
+            int ver2 = int.Parse(v2.Replace(".",""));
+            return (ver1 == ver2) ? CompareValue.EQUAL : ((ver1 < ver2) ? CompareValue.LESS : CompareValue.MORE);
+        }
+
+        private static void RunSql(string file)
+        {
+            Uri uri = new Uri("pack://application:,,,/Resources/db/"+file, UriKind.RelativeOrAbsolute);
+
+            var streamResourceInfo = Application.GetResourceStream(uri);
+
+            using (var stream = streamResourceInfo.Stream)
+            {
+                System.IO.StreamReader r = new System.IO.StreamReader(stream);
+                string sql = r.ReadToEnd();
+                sql += "\n\nSELECT * FROM Petra_tracker1.dbo.Settings";
+                Tracker.ExecuteQuery<Models.Setting>(sql);
+            }
+        }
+
+        private static string[] GetResourcesUnder(string folder)
+        {
+            folder = folder.ToLower() + "/";
+
+            var assembly = Assembly.GetCallingAssembly();
+            var resourcesName = assembly.GetName().Name + ".g.resources";
+            var stream = assembly.GetManifestResourceStream(resourcesName);
+            var resourceReader = new ResourceReader(stream);
+            var resources =
+                from p in resourceReader.OfType<DictionaryEntry>()
+                let theme = (string)p.Key
+                where theme.StartsWith(folder)
+                orderby theme.Substring(folder.Length)
+                select theme.Substring(folder.Length);
+
+            return resources.ToArray();
+        }
 
         #endregion
     }

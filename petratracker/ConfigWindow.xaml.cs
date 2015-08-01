@@ -11,6 +11,7 @@ namespace petratracker
     {
         #region Private Members
 
+        private App _app;
         private bool _exitToLoginWindow = false;
 
         #endregion
@@ -27,16 +28,22 @@ namespace petratracker
 
         #region Constructor
 
-        public ConfigWindow(bool showLogin=false)
+        public ConfigWindow(App app, bool showLogin=false)
         {
             this.DataContext = this;
             InitializeComponent();
+            _app = app;
             _exitToLoginWindow = showLogin;
         }
 
         #endregion
 
         #region Event Handlers
+
+        private void frmDatabaseConnection_Loaded(object sender, RoutedEventArgs e)
+        {
+            cbx_TrackerDataSource.SelectedIndex = 0;
+        }
 
         private void btnTrackerTestConnection_Click(object sender, RoutedEventArgs e)
         {
@@ -48,11 +55,11 @@ namespace petratracker
                 {
                     spinner.IsActive = false;
 
-                    MessageBox.Show("Connection to databases were successful.", "Connection Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                    //MessageBox.Show("Connection to databases were successful.", "Connection Successful", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     if (_exitToLoginWindow)
                     {
-                        (new LoginWindow()).Show();
+                        (new LoginWindow(_app)).Show();
                     }
                     this.Close();
                 }

@@ -10,11 +10,17 @@ namespace petratracker
     {
         #region Private Members
 
-        private bool _saveOnExit = true;
+        private bool _saveOnExit = false;
 
         #endregion
 
         #region Public Properties
+
+        public bool SaveOnExit
+        {
+            get { return _saveOnExit;  }
+            set { _saveOnExit = value;  }
+        }
 
         #endregion
 
@@ -27,13 +33,11 @@ namespace petratracker
             try
             {
                 Models.Database.Initialize();
-                //(new ConfigWindow(true)).Show();
-
-                (new LoginWindow()).Show();
+                (new LoginWindow(this)).Show();
             }
             catch (Exceptions.TrackerDBNotSetupException)
             {
-                (new ConfigWindow(true)).Show();
+                (new ConfigWindow(this,true)).Show();
             }
             catch (Exceptions.TrackerDBConnectionException e)
             {
@@ -48,7 +52,6 @@ namespace petratracker
                 "Startup Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 CloseWithoutSaving();
             }
-
         }
 
         #endregion
