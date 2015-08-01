@@ -273,7 +273,7 @@ namespace petratracker.Controls
             if (filter == "All") { viewSubs.ItemsSource = TrackerPayment.GetAllSubscriptions(); }
             else { viewSubs.ItemsSource = TrackerPayment.GetAllSubscriptions(filter); }
 
-            lbl_subsCount.Content = string.Format("{0} Subscriptions", viewSubs.Items.Count);
+            lbl_subsCount.Content = string.Format("{0} Subscriptions for all jobs", viewSubs.Items.Count);
 
             if (this.chx_subsfilter.IsChecked == true)
             {
@@ -295,19 +295,25 @@ namespace petratracker.Controls
             }
             else
             {
-                Job job = (Job)viewJobs.SelectedItem;
+                Job job;
+                if (useActiveId)
+                {
+                    job = TrackerJobs.GetJob(_activeJobId);
+                }
+                else
+                {
+                    job = (Job)viewJobs.SelectedItem;
+                }
 
                 if (job != null)
                 {
                     string filter = (string)((SplitButton)SubsListFilter).SelectedItem;
                     filter = (filter == null) ? "" : filter;
 
-                    int id = (useActiveId) ? _activeJobId : job.id;
+                    if (filter == "All") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id); }
+                    else { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id, filter); }
 
-                    if (filter == "All") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(id); }
-                    else { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(id, filter); }
-
-                    lbl_subsCount.Content = string.Format("{0} Subscriptions", viewSubs.Items.Count);
+                    lbl_subsCount.Content = string.Format("{0} Subscriptions for {1}", viewSubs.Items.Count, job.job_description);
 
                     if (this.chx_subsfilter.IsChecked == true)
                     {

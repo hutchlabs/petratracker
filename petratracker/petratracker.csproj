@@ -105,6 +105,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Exceptions\TrackerException.cs" />
+    <Compile Include="Models\Database.cs" />
     <Compile Include="Models\ExportToExcel.cs" />
     <Compile Include="Models\ExportToText.cs" />
     <Compile Include="Models\MicroGenExportData.cs" />
@@ -112,9 +113,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\MicroGenExportDataView.cs" />
-    <Compile Include="Models\TrackerDB.cs">
-      <DependentUpon>trackerDB.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Models\trackerDB1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -29,12 +29,12 @@ namespace petratracker.Models
 
         public static Schedule GetSchedule(int id)
         {
-           return (from j in TrackerDB.Tracker.Schedules where j.id == id select j).Single();
+           return (from j in Database.Tracker.Schedules where j.id == id select j).Single();
         }
 
         public static IEnumerable<Schedule> GetSchedules()
         {
-            return (from j in TrackerDB.Tracker.Schedules orderby j.created_at descending select j);
+            return (from j in Database.Tracker.Schedules orderby j.created_at descending select j);
         }
 
         public static IEnumerable<ComboBoxPairs> GetCBSchedules(string company_id="", string tier="")
@@ -46,11 +46,11 @@ namespace petratracker.Models
 
                 if (company_id == string.Empty)
                 {
-                    sc = (from j in TrackerDB.Tracker.Schedules orderby j.created_at descending select j);
+                    sc = (from j in Database.Tracker.Schedules orderby j.created_at descending select j);
                 }
                 else
                 {
-                    sc = (from j in TrackerDB.Tracker.Schedules where (j.company_id == company_id) orderby j.created_at descending select j);
+                    sc = (from j in Database.Tracker.Schedules where (j.company_id == company_id) orderby j.created_at descending select j);
                 }
                 
                 foreach (var s in sc)
@@ -82,12 +82,12 @@ namespace petratracker.Models
 
         public static IEnumerable<Schedule> GetScheduleByStatus(string status)
         {
-            return (from j in TrackerDB.Tracker.Schedules where j.workflow_status==status orderby j.created_at descending select j);
+            return (from j in Database.Tracker.Schedules where j.workflow_status==status orderby j.created_at descending select j);
         }
 
         public static IEnumerable<Schedule> GetSchedulesForProcessing()
         {
-            return (from j in TrackerDB.Tracker.Schedules
+            return (from j in Database.Tracker.Schedules
                     where j.processing == false && 
                           j.workflow_status != Constants.WF_STATUS_COMPLETED && 
                           j.workflow_status != Constants.WF_STATUS_ERROR_ESCALATED  &&
@@ -100,7 +100,7 @@ namespace petratracker.Models
         {
             //s.modified_by = TrackerUser.GetCurrentUser().id;
             s.updated_at = DateTime.Now;
-            TrackerDB.Tracker.SubmitChanges();
+            Database.Tracker.SubmitChanges();
             return s;
         }
 
@@ -111,7 +111,7 @@ namespace petratracker.Models
                 Schedule s = new Schedule();
                 s.company = company;
                 s.company_id = companyid;
-                s.company_email = TrackerDB.GetCompanyEmail(companyid) ;
+                s.company_email = Database.GetCompanyEmail(companyid) ;
                 s.tier = tier;
                 s.amount = Decimal.Parse(amount.ToString());
                 s.contributiontype = ct;
@@ -130,8 +130,8 @@ namespace petratracker.Models
                 s.modified_by = TrackerUser.GetCurrentUser().id;
                 s.created_at = DateTime.Now;
                 s.updated_at = DateTime.Now;
-                TrackerDB.Tracker.Schedules.InsertOnSubmit(s);
-                TrackerDB.Tracker.SubmitChanges();
+                Database.Tracker.Schedules.InsertOnSubmit(s);
+                Database.Tracker.SubmitChanges();
                 InitiateScheduleWorkFlow(s);
             }
             catch (Exception)
@@ -163,7 +163,7 @@ namespace petratracker.Models
         {
             try
             {
-                var companies = TrackerDB.GetCompanies();
+                var companies = Database.GetCompanies();
                 List<ComboBoxPairs> cbpc = new List<ComboBoxPairs>();
 
                 foreach (var c in companies)
@@ -187,12 +187,12 @@ namespace petratracker.Models
 
             if (company == string.Empty)
             {
-                cts = (from j in TrackerDB.PTAS.ContributionTypes select j);
+                cts = (from j in Database.PTAS.ContributionTypes select j);
             }
             else
             {
-                cts = (from j in TrackerDB.PTAS.ContributionTypes
-                       join f in TrackerDB.PTAS.FundDeals on j.ContribTypeID equals f.ContribType_ID
+                cts = (from j in Database.PTAS.ContributionTypes
+                       join f in Database.PTAS.FundDeals on j.ContribTypeID equals f.ContribType_ID
                        where f.CompanyEntityId == company
                        select j);
             }
@@ -571,7 +571,7 @@ namespace petratracker.Models
         {
             try
             {
-                company_id = TrackerDB.GetCompanyCode(company_id);
+                company_id = Database.GetCompanyCode(company_id);
                 PPayment pm = TrackerPayment.GetSubscription(company_id, tier, month, year, ct);
                 return (pm != null) ? pm.id : 0;
 
@@ -588,10 +588,10 @@ namespace petratracker.Models
 
             try
             {
-                var fd = from a in TrackerDB.Microgen.Associations
-                         join ae2 in TrackerDB.Microgen.cclv_AllEntities on a.TargetEntityID equals ae2.EntityID
-                         join ae3 in TrackerDB.Microgen.cclv_AllEntities on a.SourceEntityID equals ae3.EntityID
-                         join d in TrackerDB.Microgen.fndDeals on ae3.EntityID equals d.EntityFundID
+                var fd = from a in Database.Microgen.Associations
+                         join ae2 in Database.Microgen.cclv_AllEntities on a.TargetEntityID equals ae2.EntityID
+                         join ae3 in Database.Microgen.cclv_AllEntities on a.SourceEntityID equals ae3.EntityID
+                         join d in Database.Microgen.fndDeals on ae3.EntityID equals d.EntityFundID
                          where (a.RoleTypeID == 1003) &&
                                (ae3.FullName == fundName) &&
                                (ae2.EntityKey == companyid.Trim()) &&
@@ -620,7 +620,7 @@ namespace petratracker.Models
             DateTime dealDate = new DateTime(year, month, 1);
             try
             {
-                int fd = (from j in TrackerDB.PTAS.FundDeals
+                int fd = (from j in Database.PTAS.FundDeals
                           where j.ContribType_ID == ctid &&
                                 j.CompanyEntityId == companyid.Trim() &&
                                 j.Tier == tier.Replace(" ", "") &&
@@ -642,7 +642,7 @@ namespace petratracker.Models
             try
             {
 
-               var fd = (from j in TrackerDB.PTAS.FundDeals
+               var fd = (from j in Database.PTAS.FundDeals
                           where j.ContribType_ID == ctid &&
                                 j.CompanyEntityId == companyid.Trim() &&
                                 j.Tier == tier.Replace(" ", "") &&
@@ -650,7 +650,7 @@ namespace petratracker.Models
                                 ((DateTime)j.DealDate).Date == dealDate.Date
                          select j).Single();
 
-               var fld = (from k in TrackerDB.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k.DateStamp).Min();
+               var fld = (from k in Database.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k.DateStamp).Min();
 
                return (DateTime) fld;
             }
@@ -667,7 +667,7 @@ namespace petratracker.Models
 
             try
             {
-                var fd = (from j in TrackerDB.PTAS.FundDeals
+                var fd = (from j in Database.PTAS.FundDeals
                                where j.ContribType_ID == ct &&
                                 j.CompanyEntityId == companyid.Trim() &&
                                 j.Tier == tier.Replace(" ", "") &&
@@ -675,7 +675,7 @@ namespace petratracker.Models
                                 ((DateTime)j.DealDate).Date == dealDate.Date
                                 select j).Single();
 
-                var fld = (from k in TrackerDB.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k);
+                var fld = (from k in Database.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k);
 
                 bool passed = true;
                 bool newemp = false;

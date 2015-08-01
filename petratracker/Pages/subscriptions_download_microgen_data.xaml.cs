@@ -58,7 +58,7 @@ namespace petratracker.Pages
         {
             try
             {
-                 var subscription = from p in TrackerDB.Tracker.PPayments
+                 var subscription = from p in Database.Tracker.PPayments
                                    where p.value_date == dtValueDate.SelectedDate.Value && p.tier == cmb_tier.Text
                                    select p;
 
@@ -106,8 +106,6 @@ namespace petratracker.Pages
         }
 
         #endregion
-
-       
 
     }
 }

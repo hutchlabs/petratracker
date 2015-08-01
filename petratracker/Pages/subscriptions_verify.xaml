@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
          Height="668.045" Width="1128.406" Loaded="Window_Loaded">
-    
+
     <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Height="624" Width="1115" Margin="0,30,0,0" Background="WhiteSmoke">
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -18,7 +18,7 @@
             <Grid HorizontalAlignment="Left" Height="146" Margin="10,10,0,0" VerticalAlignment="Top" Width="435">
                 <Grid.RowDefinitions>
 
-                    <RowDefinition Height="35" />
+                    <RowDefinition Height="70" />
                     <RowDefinition Height="35" />
                     <RowDefinition Height="70" />
 
@@ -31,6 +31,10 @@
                 <Label Content="Deal Description :" HorizontalAlignment="Left" Margin="2,7,0,0" VerticalAlignment="Top" Height="26" Width="103" Grid.Row="2" RenderTransformOrigin="0.495,2.538"/>
                 <Label Content="Subcription Value Date :" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="138" RenderTransformOrigin="4.522,7.538" Grid.Row="1" Margin="2,6,0,0" Grid.RowSpan="2"/>
                 <DatePicker x:Name="dtSubscriptionDate"  HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Width="255" Height="26" SelectedDateFormat="Long" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"/>
+                
+                <TextBox x:Name="txt_desc_period" HorizontalAlignment="Left" Height="73" Grid.Column="1" Margin="10,8,8,8"
+                         TextWrapping="Wrap" VerticalAlignment="Top" Width="255" Grid.Row="0" />
+                <!--
                 <ComboBox x:Name="cmb_period_month" HorizontalAlignment="Left" VerticalAlignment="Center" Width="140" SelectedValuePath="Tag" Grid.Column="1" Margin="10,0,0,5" >
                     <ComboBoxItem Content="January" Tag="Jan" />
                     <ComboBoxItem Content="February" Tag="Feb" />
@@ -46,6 +50,7 @@
                     <ComboBoxItem Content="December" Tag="Dec" />
                 </ComboBox>
                 <ComboBox x:Name="cmb_period_year"   HorizontalAlignment="Right" VerticalAlignment="Center" Width="106" Grid.Column="1" Margin="0,0,21,5"/>
+                -->
                 <ComboBox x:Name="cbxDealDescription" IsEditable="False"  SelectedIndex="0" MaxDropDownHeight="125" Margin="10,8,0,0" Grid.Column="1" Grid.Row="2"
                           Style="{DynamicResource VirtualisedMetroComboBox}" Width="255"
                           Controls:TextBoxHelper.Watermark="Select deal description" VerticalAlignment="Top"  HorizontalAlignment="Left"

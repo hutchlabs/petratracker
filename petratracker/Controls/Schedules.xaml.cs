@@ -71,7 +71,7 @@ namespace petratracker.Controls
         
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            StartUpgradGridService();
+            StartUpgradeGridService();
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
@@ -180,7 +180,7 @@ namespace petratracker.Controls
 
         #region Private Methods
 
-        private async void StartUpgradGridService()
+        private async void StartUpgradeGridService()
         {
             var dueTime = TimeSpan.FromSeconds(0);
             var interval = TimeSpan.FromSeconds(60);

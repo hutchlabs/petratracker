@@ -22,23 +22,12 @@ namespace petratracker
 
         public App()
         {
-            //CultureInfo culture;
-            //NumberFormatInfo nfi = (NumberFormatInfo)NumberFormatInfo.CurrentInfo.Clone();
-            //culture = CultureInfo.CurrentCulture;
-            //nfi.CurrencySymbol = "GHC";
-            //culture.NumberFormat = (NumberFormatInfo) nfi.Clone() ;
-            //Thread.CurrentThread.CurrentCulture = culture;
-
-            FrameworkElement.LanguageProperty.OverrideMetadata(
-            typeof(FrameworkElement),
-            new FrameworkPropertyMetadata(System.Windows.Markup.XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag)));
-
             Utility.LogUtil.LogInfo("App", "Constructor", "Starting up");
 
             try
             {
-                Models.TrackerDB.Initialize();
-                (new ConfigWindow(true)).Show();
+                Models.Database.Initialize();
+                //(new ConfigWindow(true)).Show();
 
                 (new LoginWindow()).Show();
             }
@@ -87,7 +76,7 @@ namespace petratracker
                     Models.TrackerUser.CurrentUser.logged_in = false;
                     Models.TrackerUser.CurrentUser.last_login = DateTime.Now;
                     Models.TrackerUser.CurrentUser.updated_at = DateTime.Now;
-                    Models.TrackerDB.Tracker.SubmitChanges();
+                    Models.Database.Tracker.SubmitChanges();
                 }
                 catch (Exception ex)
                 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.Sql;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
@@ -116,6 +117,11 @@ namespace petratracker.Utility
 
     public class Utils
     {
+        public static string GetMonthName(int month)
+        {
+            return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
+        }
+
         public static async Task DoPeriodicWorkAsync(Delegate todoTask, TimeSpan dueTime, TimeSpan interval, CancellationToken token)
         {
             // Initial wait time before we begin the periodic loop.
@@ -135,21 +141,6 @@ namespace petratracker.Utility
         }
 
 
-        public IEnumerable<ComboBoxPairs> GetSQLServers()
-        {
-            SqlDataSourceEnumerator sqldatasourceenumerator1 = SqlDataSourceEnumerator.Instance;
-            DataTable sources = sqldatasourceenumerator1.GetDataSources();
-
-            List<ComboBoxPairs> cbpc = new List<ComboBoxPairs>();
-
-            foreach (DataRow row in sources.Rows)
-            {
-                string server = string.Format("{0}\\{1}",row["ServerName"],row["InstanceName"]);
-                cbpc.Add(new ComboBoxPairs(server, server));
-            }
-
-            return cbpc;
-        }
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]

@@ -58,16 +58,5 @@ namespace petratracker.Properties {
                 this["database_ptas"] = value;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated Security=T" +
-            "rue")]
-        public string Petra_trackerConnectionString {
-            get {
-                return ((string)(this["Petra_trackerConnectionString"]));
-            }
-        }
     }
 }
