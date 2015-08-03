@@ -163,6 +163,20 @@ namespace petratracker.Controls
             }
         }
 
+        private void btn_groupDelete_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult rs = MessageBox.Show("Are you want to delete the selected schedules?", "Schedules Update", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (rs == MessageBoxResult.Yes)
+            {
+                foreach (var item in viewSchedules.SelectedItems)
+                {
+                        TrackerSchedule.DeleteSchedule((Schedule)item);
+                }
+                UpdateGrid();
+            }
+        }
+
         private void btn_showAddSchedule_Click(object sender, RoutedEventArgs e)
         {
             Window parentWindow = Window.GetWindow(this);
@@ -222,10 +236,17 @@ namespace petratracker.Controls
         {
             bool activebuttons = false;
 
+            btn_groupDelete.Visibility = Visibility.Collapsed;
             btn_groupMarkReceiptSent.Visibility = Visibility.Collapsed;
             btn_groupMarkFileDownload.Visibility = Visibility.Collapsed;
 
-             if (filter=="All" || filter == Constants.WF_STATUS_PAYMENTS_RECEIVED || filter==Constants.WF_STATUS_PAYMENTS_LINKED)
+            if (TrackerUser.IsCurrentUserSuperParser())
+            {
+                btn_groupDelete.Visibility = Visibility.Visible;
+                activebuttons = true;
+            }
+
+            if (filter=="All" || filter == Constants.WF_STATUS_PAYMENTS_RECEIVED || filter==Constants.WF_STATUS_PAYMENTS_LINKED)
             {
                 btn_groupMarkReceiptSent.Visibility = Visibility.Visible;
                 btn_groupMarkFileDownload.Visibility = Visibility.Visible;

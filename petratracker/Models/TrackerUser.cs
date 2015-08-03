@@ -126,6 +126,18 @@ namespace petratracker.Models
             }
         }
 
+        public static bool IsCurrentUserSuperParser()
+        {
+            try
+            {
+                return (IsCurrentUserAdmin() || IsCurrentUserSuperOps());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+   
         public static bool IsCurrentUserParser()
         {
             try

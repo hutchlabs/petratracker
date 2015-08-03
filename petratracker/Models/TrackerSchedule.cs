@@ -127,6 +127,12 @@ namespace petratracker.Models
             Save(s);
         }
 
+        public static void DeleteSchedule(Schedule s)
+        {
+            Database.Tracker.Schedules.DeleteOnSubmit(s);
+            Database.Tracker.SubmitChanges(); 
+        }
+
         public static void AddSchedule(string company, string companyid, string tier, string ct, int ctid, string month, string year, double amount, int parent_id)
         {
             try
@@ -150,7 +156,6 @@ namespace petratracker.Models
                 s.validation_status = Constants.WF_VALIDATION_NOTDONE;               
                 s.file_downloaded = false;
                 s.file_uploaded = false;
-                //s.payment_id = 0;
                 s.receipt_sent = false;
                 s.workflow_status = Constants.WF_VALIDATION_NOTDONE;
                 s.workflow_summary = "Processing of this schedule has not begun";
@@ -663,7 +668,6 @@ namespace petratracker.Models
                 return false;
             }
         }
-
 
         private static decimal? GetTotalContribution(string companyid, string tier, int ctid, int month, int year)
         {
