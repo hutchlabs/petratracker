@@ -37,6 +37,7 @@ namespace petratracker.Controls
                                                              Constants.WF_STATUS_EXPIRED,
                                                              Constants.WF_STATUS_PASSED_NEW_EMPLOYEE,
                                                              Constants.WF_STATUS_PAYMENTS_PENDING,
+                                                             Constants.WF_STATUS_PAYMENTS_LINKED,
                                                              Constants.WF_STATUS_PAYMENTS_RECEIVED,
                                                              Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD,
                                                              Constants.WF_STATUS_RF_SENT_DOWNLOAD_NOUPLOAD,
@@ -121,6 +122,7 @@ namespace petratracker.Controls
         private void btn_groupMarkReceiptSent_Click(object sender, RoutedEventArgs e)
         {
             string[] validReceiptStates = {  Constants.WF_STATUS_PAYMENTS_RECEIVED,
+                                             Constants.WF_STATUS_PAYMENTS_LINKED,
                                              Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD,
                                              Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD,
                                           };
@@ -142,6 +144,7 @@ namespace petratracker.Controls
         private void btn_groupMarkFileDownload_Click(object sender, RoutedEventArgs e)
         {
             string[] validFiledownloadStates = { Constants.WF_STATUS_PAYMENTS_RECEIVED,
+                                                 Constants.WF_STATUS_PAYMENTS_LINKED,
                                                  Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD
                                                 };
 
@@ -222,7 +225,7 @@ namespace petratracker.Controls
             btn_groupMarkReceiptSent.Visibility = Visibility.Collapsed;
             btn_groupMarkFileDownload.Visibility = Visibility.Collapsed;
 
-             if (filter=="All" || filter == Constants.WF_STATUS_PAYMENTS_RECEIVED)
+             if (filter=="All" || filter == Constants.WF_STATUS_PAYMENTS_RECEIVED || filter==Constants.WF_STATUS_PAYMENTS_LINKED)
             {
                 btn_groupMarkReceiptSent.Visibility = Visibility.Visible;
                 btn_groupMarkFileDownload.Visibility = Visibility.Visible;

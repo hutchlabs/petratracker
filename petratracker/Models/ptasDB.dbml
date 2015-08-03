@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="PTASDB" Class="PTASDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=ELMINA\SQLEXPRESS;Initial Catalog=PTASDB;Integrated Security=True" SettingsObjectName="petratracker.Properties.Settings" SettingsPropertyName="PTASDBConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.ContributionTypes" Member="ContributionTypes">
     <Type Name="ContributionType">
       <Column Name="ContribTypeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -18,6 +19,7 @@
       <Column Name="ContribType_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Tier" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Association Name="FundDeal_FundDealLine" Member="FundDealLines" ThisKey="FundDealID" OtherKey="FundDealID" Type="FundDealLine" />
+      <Association Name="FundDeal_PaymentScheduleLink" Member="PaymentScheduleLinks" ThisKey="FundDealID" OtherKey="FundDealID" Type="PaymentScheduleLink" />
       <Association Name="ScheduleStatus_FundDeal" Member="ScheduleStatus" ThisKey="ScheduleStatusID" OtherKey="ScheduleStatusID" Type="ScheduleStatus" IsForeignKey="true" />
     </Type>
   </Table>
@@ -74,6 +76,19 @@
       <Column Name="PaymentStatusID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ActionUserID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Tier" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Association Name="Payment_PaymentScheduleLink" Member="PaymentScheduleLinks" ThisKey="PaymentID" OtherKey="PaymentID" Type="PaymentScheduleLink" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PaymentScheduleLink" Member="PaymentScheduleLinks">
+    <Type Name="PaymentScheduleLink">
+      <Column Name="PaymentScheduleLinkID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PaymentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FundDealID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InsertedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ActionUserID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PaymentScheduleIDLinkID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="FundDeal_PaymentScheduleLink" Member="FundDeal" ThisKey="FundDealID" OtherKey="FundDealID" Type="FundDeal" IsForeignKey="true" />
+      <Association Name="Payment_PaymentScheduleLink" Member="Payment" ThisKey="PaymentID" OtherKey="PaymentID" Type="Payment" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

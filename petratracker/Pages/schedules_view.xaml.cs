@@ -203,9 +203,9 @@ namespace petratracker.Pages
             string[] validResolveIssueStates = { Constants.WF_STATUS_ERROR_SSNIT, Constants.WF_STATUS_ERROR_NAME,  Constants.WF_STATUS_ERROR_SSNIT_NAME,
                                                  Constants.WF_STATUS_ERROR_ALL, Constants.WF_STATUS_ERROR_ESCALATED};
 
-            string[] validReceiptStates = { Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD };
+            string[] validReceiptStates = { Constants.WF_STATUS_PAYMENTS_LINKED, Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD };
             
-            string[] validFiledownloadStates = { Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD };
+            string[] validFiledownloadStates = { Constants.WF_STATUS_PAYMENTS_LINKED, Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD };
 
             if (validResolveIssueStates.Contains(status))
             {

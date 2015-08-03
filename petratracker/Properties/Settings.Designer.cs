@@ -58,5 +58,15 @@ namespace petratracker.Properties {
                 this["database_ptas"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=PTASDB;Integrated Security=True")]
+        public string PTASDBConnectionString {
+            get {
+                return ((string)(this["PTASDBConnectionString"]));
+            }
+        }
     }
 }

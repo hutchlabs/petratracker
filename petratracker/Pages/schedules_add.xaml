@@ -44,13 +44,15 @@
                   x:Name="cbx_tiers" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top"  
                   ItemsSource="{Binding Tiers}" />
 
+        <!--
         <Label Grid.Row="3" Grid.Column="0" Content="Amount" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" />
         <Controls:NumericUpDown Grid.Row="3" Grid.Column="1" Margin="10,10,0,0" 
                 x:Name="tb_amount" HorizontalAlignment="Left" VerticalAlignment="Top"
                 Minimum="0"  Interval="0.5" Value="0"
                 StringFormat="GHC {0:N2}"
                 Height="26" />
-
+        -->
+        
         <Label Grid.Row="4" Grid.Column="0" Content="Contribution Type" Margin="10"  HorizontalAlignment="Right" VerticalAlignment="Top"/>
         <ComboBox Grid.Row="4" Grid.Column="1" 
                   x:Name="cbx_contributiontype" IsEditable="True"  MaxDropDownHeight="125" Margin="10" 

@@ -81,8 +81,9 @@ namespace petratracker.Utility
         public const string WF_VALIDATION_ERROR_ALL = "New Employee & Errors";
         public const string WF_VALIDATION_ERROR_ESCALATED = "Issue Escalated";
         public const string WF_VALIDATION_PASSED = "Passed";
-        public const string WF_VALIDATION_NEW_EMPLOYEE = "New Employee"; 
+        public const string WF_VALIDATION_NEW_EMPLOYEE = "New Employee";
 
+        public const string WF_STATUS_INACTIVE = "Inactive";
         public const string WF_STATUS_PASSED_NEW_EMPLOYEE = WF_VALIDATION_PASSED + ". " + WF_VALIDATION_NEW_EMPLOYEE;
         public const string WF_STATUS_ERROR_PREFIX = "Validated with Errors: ";
         public const string WF_STATUS_ERROR_SSNIT = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_SSNIT;
@@ -91,6 +92,7 @@ namespace petratracker.Utility
         public const string WF_STATUS_ERROR_ALL = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_ALL;
         public const string WF_STATUS_ERROR_ESCALATED = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_ESCALATED;
         public const string WF_STATUS_PAYMENTS_PENDING = "Passed. Payment Pending";
+        public const string WF_STATUS_PAYMENTS_LINKED = "Payment Linked. No Receipt. No Download. No Upload";
         public const string WF_STATUS_PAYMENTS_RECEIVED = "Payment Received. No Receipt. No Download. No Upload";
         public const string WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD = "Receipt Sent. No Download. No Upload";
         public const string WF_STATUS_RF_SENT_DOWNLOAD_NOUPLOAD = "Receipt Sent. File Downloaded. No Upload";

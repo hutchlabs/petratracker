@@ -45,7 +45,16 @@ namespace petratracker.Models
     partial void InsertPayment(Payment instance);
     partial void UpdatePayment(Payment instance);
     partial void DeletePayment(Payment instance);
+    partial void InsertPaymentScheduleLink(PaymentScheduleLink instance);
+    partial void UpdatePaymentScheduleLink(PaymentScheduleLink instance);
+    partial void DeletePaymentScheduleLink(PaymentScheduleLink instance);
     #endregion
+		
+		public PTASDataContext() : 
+				base(global::petratracker.Properties.Settings.Default.PTASDBConnectionString, mappingSource)
+		{
+			OnCreated();
+		}
 		
 		public PTASDataContext(string connection) : 
 				base(connection, mappingSource)
@@ -108,6 +117,14 @@ namespace petratracker.Models
 			get
 			{
 				return this.GetTable<Payment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<PaymentScheduleLink> PaymentScheduleLinks
+		{
+			get
+			{
+				return this.GetTable<PaymentScheduleLink>();
 			}
 		}
 	}
@@ -226,6 +243,8 @@ namespace petratracker.Models
 		
 		private EntitySet<FundDealLine> _FundDealLines;
 		
+		private EntitySet<PaymentScheduleLink> _PaymentScheduleLinks;
+		
 		private EntityRef<ScheduleStatus> _ScheduleStatus;
 		
     #region Extensibility Method Definitions
@@ -257,6 +276,7 @@ namespace petratracker.Models
 		public FundDeal()
 		{
 			this._FundDealLines = new EntitySet<FundDealLine>(new Action<FundDealLine>(this.attach_FundDealLines), new Action<FundDealLine>(this.detach_FundDealLines));
+			this._PaymentScheduleLinks = new EntitySet<PaymentScheduleLink>(new Action<PaymentScheduleLink>(this.attach_PaymentScheduleLinks), new Action<PaymentScheduleLink>(this.detach_PaymentScheduleLinks));
 			this._ScheduleStatus = default(EntityRef<ScheduleStatus>);
 			OnCreated();
 		}
@@ -478,6 +498,19 @@ namespace petratracker.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FundDeal_PaymentScheduleLink", Storage="_PaymentScheduleLinks", ThisKey="FundDealID", OtherKey="FundDealID")]
+		public EntitySet<PaymentScheduleLink> PaymentScheduleLinks
+		{
+			get
+			{
+				return this._PaymentScheduleLinks;
+			}
+			set
+			{
+				this._PaymentScheduleLinks.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ScheduleStatus_FundDeal", Storage="_ScheduleStatus", ThisKey="ScheduleStatusID", OtherKey="ScheduleStatusID", IsForeignKey=true)]
 		public ScheduleStatus ScheduleStatus
 		{
@@ -539,6 +572,18 @@ namespace petratracker.Models
 		}
 		
 		private void detach_FundDealLines(FundDealLine entity)
+		{
+			this.SendPropertyChanging();
+			entity.FundDeal = null;
+		}
+		
+		private void attach_PaymentScheduleLinks(PaymentScheduleLink entity)
+		{
+			this.SendPropertyChanging();
+			entity.FundDeal = this;
+		}
+		
+		private void detach_PaymentScheduleLinks(PaymentScheduleLink entity)
 		{
 			this.SendPropertyChanging();
 			entity.FundDeal = null;
@@ -1372,6 +1417,8 @@ namespace petratracker.Models
 		
 		private string _Tier;
 		
+		private EntitySet<PaymentScheduleLink> _PaymentScheduleLinks;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1408,6 +1455,7 @@ namespace petratracker.Models
 		
 		public Payment()
 		{
+			this._PaymentScheduleLinks = new EntitySet<PaymentScheduleLink>(new Action<PaymentScheduleLink>(this.attach_PaymentScheduleLinks), new Action<PaymentScheduleLink>(this.detach_PaymentScheduleLinks));
 			OnCreated();
 		}
 		
@@ -1687,6 +1735,295 @@ namespace petratracker.Models
 					this._Tier = value;
 					this.SendPropertyChanged("Tier");
 					this.OnTierChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_PaymentScheduleLink", Storage="_PaymentScheduleLinks", ThisKey="PaymentID", OtherKey="PaymentID")]
+		public EntitySet<PaymentScheduleLink> PaymentScheduleLinks
+		{
+			get
+			{
+				return this._PaymentScheduleLinks;
+			}
+			set
+			{
+				this._PaymentScheduleLinks.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_PaymentScheduleLinks(PaymentScheduleLink entity)
+		{
+			this.SendPropertyChanging();
+			entity.Payment = this;
+		}
+		
+		private void detach_PaymentScheduleLinks(PaymentScheduleLink entity)
+		{
+			this.SendPropertyChanging();
+			entity.Payment = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PaymentScheduleLink")]
+	public partial class PaymentScheduleLink : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _PaymentScheduleLinkID;
+		
+		private System.Nullable<int> _PaymentID;
+		
+		private System.Nullable<int> _FundDealID;
+		
+		private System.Nullable<System.DateTime> _InsertedDate;
+		
+		private System.Nullable<int> _ActionUserID;
+		
+		private System.Nullable<int> _PaymentScheduleIDLinkID;
+		
+		private EntityRef<FundDeal> _FundDeal;
+		
+		private EntityRef<Payment> _Payment;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnPaymentScheduleLinkIDChanging(int value);
+    partial void OnPaymentScheduleLinkIDChanged();
+    partial void OnPaymentIDChanging(System.Nullable<int> value);
+    partial void OnPaymentIDChanged();
+    partial void OnFundDealIDChanging(System.Nullable<int> value);
+    partial void OnFundDealIDChanged();
+    partial void OnInsertedDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnInsertedDateChanged();
+    partial void OnActionUserIDChanging(System.Nullable<int> value);
+    partial void OnActionUserIDChanged();
+    partial void OnPaymentScheduleIDLinkIDChanging(System.Nullable<int> value);
+    partial void OnPaymentScheduleIDLinkIDChanged();
+    #endregion
+		
+		public PaymentScheduleLink()
+		{
+			this._FundDeal = default(EntityRef<FundDeal>);
+			this._Payment = default(EntityRef<Payment>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentScheduleLinkID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int PaymentScheduleLinkID
+		{
+			get
+			{
+				return this._PaymentScheduleLinkID;
+			}
+			set
+			{
+				if ((this._PaymentScheduleLinkID != value))
+				{
+					this.OnPaymentScheduleLinkIDChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentScheduleLinkID = value;
+					this.SendPropertyChanged("PaymentScheduleLinkID");
+					this.OnPaymentScheduleLinkIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentID", DbType="Int")]
+		public System.Nullable<int> PaymentID
+		{
+			get
+			{
+				return this._PaymentID;
+			}
+			set
+			{
+				if ((this._PaymentID != value))
+				{
+					if (this._Payment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnPaymentIDChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentID = value;
+					this.SendPropertyChanged("PaymentID");
+					this.OnPaymentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FundDealID", DbType="Int")]
+		public System.Nullable<int> FundDealID
+		{
+			get
+			{
+				return this._FundDealID;
+			}
+			set
+			{
+				if ((this._FundDealID != value))
+				{
+					if (this._FundDeal.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnFundDealIDChanging(value);
+					this.SendPropertyChanging();
+					this._FundDealID = value;
+					this.SendPropertyChanged("FundDealID");
+					this.OnFundDealIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsertedDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> InsertedDate
+		{
+			get
+			{
+				return this._InsertedDate;
+			}
+			set
+			{
+				if ((this._InsertedDate != value))
+				{
+					this.OnInsertedDateChanging(value);
+					this.SendPropertyChanging();
+					this._InsertedDate = value;
+					this.SendPropertyChanged("InsertedDate");
+					this.OnInsertedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActionUserID", DbType="Int")]
+		public System.Nullable<int> ActionUserID
+		{
+			get
+			{
+				return this._ActionUserID;
+			}
+			set
+			{
+				if ((this._ActionUserID != value))
+				{
+					this.OnActionUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._ActionUserID = value;
+					this.SendPropertyChanged("ActionUserID");
+					this.OnActionUserIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentScheduleIDLinkID", DbType="Int")]
+		public System.Nullable<int> PaymentScheduleIDLinkID
+		{
+			get
+			{
+				return this._PaymentScheduleIDLinkID;
+			}
+			set
+			{
+				if ((this._PaymentScheduleIDLinkID != value))
+				{
+					this.OnPaymentScheduleIDLinkIDChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentScheduleIDLinkID = value;
+					this.SendPropertyChanged("PaymentScheduleIDLinkID");
+					this.OnPaymentScheduleIDLinkIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FundDeal_PaymentScheduleLink", Storage="_FundDeal", ThisKey="FundDealID", OtherKey="FundDealID", IsForeignKey=true)]
+		public FundDeal FundDeal
+		{
+			get
+			{
+				return this._FundDeal.Entity;
+			}
+			set
+			{
+				FundDeal previousValue = this._FundDeal.Entity;
+				if (((previousValue != value) 
+							|| (this._FundDeal.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._FundDeal.Entity = null;
+						previousValue.PaymentScheduleLinks.Remove(this);
+					}
+					this._FundDeal.Entity = value;
+					if ((value != null))
+					{
+						value.PaymentScheduleLinks.Add(this);
+						this._FundDealID = value.FundDealID;
+					}
+					else
+					{
+						this._FundDealID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("FundDeal");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_PaymentScheduleLink", Storage="_Payment", ThisKey="PaymentID", OtherKey="PaymentID", IsForeignKey=true)]
+		public Payment Payment
+		{
+			get
+			{
+				return this._Payment.Entity;
+			}
+			set
+			{
+				Payment previousValue = this._Payment.Entity;
+				if (((previousValue != value) 
+							|| (this._Payment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Payment.Entity = null;
+						previousValue.PaymentScheduleLinks.Remove(this);
+					}
+					this._Payment.Entity = value;
+					if ((value != null))
+					{
+						value.PaymentScheduleLinks.Add(this);
+						this._PaymentID = value.PaymentID;
+					}
+					else
+					{
+						this._PaymentID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Payment");
 				}
 			}
 		}

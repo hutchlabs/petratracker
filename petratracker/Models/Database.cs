@@ -367,7 +367,7 @@ namespace petratracker.Models
             {
                 System.IO.StreamReader r = new System.IO.StreamReader(stream);
                 string sql = r.ReadToEnd();
-                sql += "\n\nSELECT * FROM Petra_tracker1.dbo.Settings";
+                sql += "\n\nSELECT * FROM Petra_tracker.dbo.Settings";
                 Tracker.ExecuteQuery<Models.Setting>(sql);
             }
         }

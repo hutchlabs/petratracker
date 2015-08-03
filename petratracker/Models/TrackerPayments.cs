@@ -40,15 +40,62 @@ namespace petratracker.Models
         #endregion     
 
         #region Public Helper Methods
+        private static string GetMonth(int month)
+        {
+            string name = "";
+            switch (month)
+            {
+                case 1: name= "January"; break;
+                case 2: name= "February"; break;
+                case 3: name= "March"; break;
+                case 4: name= "April"; break;
+                case 5: name= "May"; break;
+                case 6: name= "June"; break;
+                case 7: name= "July"; break;
+                case 8: name= "August"; break;
+                case 9: name= "September"; break;
+                case 10: name= "October"; break;
+                case 11: name= "November"; break;
+                case 12: name= "December"; break;
+            }
+
+            return name;
+        }
+
+        public static bool IsLinkedSubscription(string company_id, string tier, int month, int year, int ctid)
+        {
+            try
+            {
+                DateTime dealDate = new DateTime(year, month, 1);
+
+                var fd = (from p in Database.PTAS.PaymentScheduleLinks
+                          join f in Database.PTAS.FundDeals on p.FundDealID equals f.FundDealID
+                          where f.CompanyEntityKey == company_id
+                                && f.ContribType_ID == ctid
+                                && f.Tier == tier.Replace(" ", "")
+                                && f.TotalContribution != 0
+                                && ((DateTime)f.DealDate).Date == dealDate.Date
+                          select p).Count();
+                return (fd > 0) ? true : false;
+            }
+            catch (Exception ex)
+            {
+                LogUtil.LogError("TrackerPayments", "IsLinkedSubscription", ex);
+                return false;
+            }
+        }
 
         public static PPayment GetSubscription(string company_id, string tier, int month, int year, string ct)
         {
             try
             {
                 string m = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
-                string period = String.Format("%{0} {1}%",month, year.ToString());
+                //string m = GetMonth(month);
+                string period = String.Format("%{0} {1}%",m, year.ToString());
+                //LogUtil.LogInfo("TrackerPayments", "GetSubscription", "Checking " + period);
                 return (from p in Database.Tracker.PPayments
                         where p.company_code == company_id &&
+                              p.tier == tier &&
                               SqlMethods.Like(p.deal_description_period, period) &&
                               p.deal_description == ct
                         select p).Single();
@@ -148,7 +195,7 @@ namespace petratracker.Models
                     objPayment.job_id = jobId;
                     objPayment.tier = tier;
                     objPayment.transaction_details = dr["Transaction Details"].ToString();
-                    objPayment.transaction_date = (DateTime)dr["Transaction Date"];
+                    objPayment.transaction_date =  (DateTime)dr["Transaction Date"];
                     objPayment.value_date = (DateTime)dr["Value Date"];
                     objPayment.subscription_value_date = (DateTime)dr["Transaction Date"];
                     objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
