@@ -128,6 +128,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Status" Width="75" Binding="{Binding status}" />
                     <DataGridTextColumn Header="Value Date" Width="75"  Binding="{Binding value_date, StringFormat=\{0:dd-MMM-yyyy\}}" />
+                    <DataGridTextColumn Header="Description Period" Width="100" Binding="{Binding deal_description_period}" />
                     <DataGridTextColumn Header="Trans Ref. no" Width="100" Binding="{Binding transaction_ref_no}" />
                     <DataGridTextColumn Header="Tran. Details" Width="200" Binding="{Binding transaction_details}" />
                     <DataGridTextColumn Header="Company Code" Width="Auto" Binding="{Binding company_code}" />
