@@ -1,6 +1,7 @@
 # petratracker
 A payments and schedules workflow tracker
 
+This is a new comment
 #Changes to the payments table
 Schedules might not function properly if there are any references to payment deal description details because we have seperated the deal description details from the payments table. Please reference deal description details in 'PDeal_Descriptions' table. 
 

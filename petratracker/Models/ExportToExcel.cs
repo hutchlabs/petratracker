@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+<<<<<<< HEAD
 using System.Linq;
 using System.Text;
+=======
+using System.Reflection;
+>>>>>>> origin/developer
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+<<<<<<< HEAD
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -15,6 +18,9 @@ using Microsoft.Office.Interop.Excel;
 using System.Reflection;
 //using Microsoft.Windows.Controls;
 using System.ComponentModel;
+=======
+using Excel = Microsoft.Office.Interop.Excel;
+>>>>>>> origin/developer
 
 namespace petratracker.Models
 {
@@ -50,7 +56,7 @@ namespace petratracker.Models
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show("Error while generating Excel report");
             }
