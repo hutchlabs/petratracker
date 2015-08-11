@@ -54,7 +54,7 @@
                         </Rectangle>
                     </Button>
                     -->
-
+                    <Button x:Name="btn_groupDelete" Content="Delete" Visibility="Collapsed" Click="btn_groupDelete_Click"  Width="Auto" Height="30"  ToolTip="Delete selected schedules" Margin="10,0,0,0"/>
                     <Button x:Name="btn_groupMarkReceiptSent" Content="Mark all as Receipt Sent" Visibility="Collapsed" Click="btn_groupMarkReceiptSent_Click" Width="Auto" Height="30"  ToolTip="Mark Receipt as sent for selected schedules" Margin="10,0,0,0"/>
                     <Button x:Name="btn_groupMarkFileDownload" Content="Mark all as File Downloaded" Visibility="Collapsed" Click="btn_groupMarkFileDownload_Click" Width="Auto" Height="30"  ToolTip="Mark File as downloaded for selected schedules" Margin="5,0,0,0" />
 
@@ -79,6 +79,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Company" Width="200" Binding="{Binding company}" />
                     <DataGridTextColumn Header="Tier" Width="55" Binding="{Binding tier}" />
+                    <DataGridTextColumn Header="Amount" Width="105" Binding="{Binding amount, StringFormat='{}{0:#,#.00} GHC'}" />
                     <DataGridTextColumn Header="Contribution Type" Width="150" Binding="{Binding contributiontype}" />
                     <DataGridTemplateColumn Header="Period" Width="80">
                         <DataGridTemplateColumn.CellTemplate>

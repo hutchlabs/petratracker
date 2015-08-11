@@ -37,6 +37,7 @@ namespace petratracker.Controls
                                                              Constants.WF_STATUS_EXPIRED,
                                                              Constants.WF_STATUS_PASSED_NEW_EMPLOYEE,
                                                              Constants.WF_STATUS_PAYMENTS_PENDING,
+                                                             Constants.WF_STATUS_PAYMENTS_LINKED,
                                                              Constants.WF_STATUS_PAYMENTS_RECEIVED,
                                                              Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD,
                                                              Constants.WF_STATUS_RF_SENT_DOWNLOAD_NOUPLOAD,
@@ -71,7 +72,7 @@ namespace petratracker.Controls
         
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            StartUpgradGridService();
+            StartUpgradeGridService();
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
@@ -100,20 +101,28 @@ namespace petratracker.Controls
 
         private void viewSchedules_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Schedule j = viewSchedules.SelectedItem as Schedule;
+            try
+            {
+                Schedule j = viewSchedules.SelectedItem as Schedule;
 
-            Window parentWindow = Window.GetWindow(this);
-            object obj = parentWindow.FindName("surrogateFlyout");
-            Flyout flyout = (Flyout)obj;
+                Window parentWindow = Window.GetWindow(this);
+                object obj = parentWindow.FindName("surrogateFlyout");
+                Flyout flyout = (Flyout)obj;
 
-            flyout.ClosingFinished += flyout_ClosingFinished;
-            flyout.Content = new ScheduleView(j.id, true);
-            flyout.IsOpen = !flyout.IsOpen;
+                flyout.ClosingFinished += flyout_ClosingFinished;
+                flyout.Content = new ScheduleView(j.id, true);
+                flyout.IsOpen = !flyout.IsOpen;
+            }
+            catch
+            {
+
+            }
         }
 
         private void btn_groupMarkReceiptSent_Click(object sender, RoutedEventArgs e)
         {
             string[] validReceiptStates = {  Constants.WF_STATUS_PAYMENTS_RECEIVED,
+                                             Constants.WF_STATUS_PAYMENTS_LINKED,
                                              Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD,
                                              Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD,
                                           };
@@ -135,6 +144,7 @@ namespace petratracker.Controls
         private void btn_groupMarkFileDownload_Click(object sender, RoutedEventArgs e)
         {
             string[] validFiledownloadStates = { Constants.WF_STATUS_PAYMENTS_RECEIVED,
+                                                 Constants.WF_STATUS_PAYMENTS_LINKED,
                                                  Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD
                                                 };
 
@@ -148,6 +158,20 @@ namespace petratracker.Controls
                     {
                         TrackerSchedule.MarkFileDownloaded((Schedule)item);
                     }
+                }
+                UpdateGrid();
+            }
+        }
+
+        private void btn_groupDelete_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult rs = MessageBox.Show("Are you want to delete the selected schedules?", "Schedules Update", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (rs == MessageBoxResult.Yes)
+            {
+                foreach (var item in viewSchedules.SelectedItems)
+                {
+                        TrackerSchedule.DeleteSchedule((Schedule)item);
                 }
                 UpdateGrid();
             }
@@ -173,7 +197,7 @@ namespace petratracker.Controls
 
         #region Private Methods
 
-        private async void StartUpgradGridService()
+        private async void StartUpgradeGridService()
         {
             var dueTime = TimeSpan.FromSeconds(0);
             var interval = TimeSpan.FromSeconds(60);
@@ -212,10 +236,17 @@ namespace petratracker.Controls
         {
             bool activebuttons = false;
 
+            btn_groupDelete.Visibility = Visibility.Collapsed;
             btn_groupMarkReceiptSent.Visibility = Visibility.Collapsed;
             btn_groupMarkFileDownload.Visibility = Visibility.Collapsed;
 
-             if (filter=="All" || filter == Constants.WF_STATUS_PAYMENTS_RECEIVED)
+            if (TrackerUser.IsCurrentUserSuperParser())
+            {
+                btn_groupDelete.Visibility = Visibility.Visible;
+                activebuttons = true;
+            }
+
+            if (filter=="All" || filter == Constants.WF_STATUS_PAYMENTS_RECEIVED || filter==Constants.WF_STATUS_PAYMENTS_LINKED)
             {
                 btn_groupMarkReceiptSent.Visibility = Visibility.Visible;
                 btn_groupMarkFileDownload.Visibility = Visibility.Visible;

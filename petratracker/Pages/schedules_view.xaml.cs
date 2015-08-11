@@ -188,7 +188,7 @@ namespace petratracker.Pages
         private void load_schedule()
         {
             this.lbl_company.Content = _schedule.company;
-            this.lbl_month.Content = string.Format("Contribution for {0}, {1}", CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(_schedule.month), _schedule.year);
+            this.lbl_month.Content = string.Format("GHC {0} for {1}, {2}", _schedule.amount, CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(_schedule.month), _schedule.year);
             this.lbl_owner.Content = string.Format("Owner: {0} {1}", _schedule.User.first_name, _schedule.User.last_name);
             this.lbl_tier.Content = _schedule.tier;
             this.lbl_status.Content = _schedule.workflow_status;
@@ -203,9 +203,9 @@ namespace petratracker.Pages
             string[] validResolveIssueStates = { Constants.WF_STATUS_ERROR_SSNIT, Constants.WF_STATUS_ERROR_NAME,  Constants.WF_STATUS_ERROR_SSNIT_NAME,
                                                  Constants.WF_STATUS_ERROR_ALL, Constants.WF_STATUS_ERROR_ESCALATED};
 
-            string[] validReceiptStates = { Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD };
+            string[] validReceiptStates = { Constants.WF_STATUS_PAYMENTS_LINKED, Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD };
             
-            string[] validFiledownloadStates = { Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD };
+            string[] validFiledownloadStates = { Constants.WF_STATUS_PAYMENTS_LINKED, Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD };
 
             if (validResolveIssueStates.Contains(status))
             {

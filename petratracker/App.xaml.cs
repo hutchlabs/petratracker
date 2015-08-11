@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -8,11 +10,17 @@ namespace petratracker
     {
         #region Private Members
 
-        private bool _saveOnExit = true;
+        private bool _saveOnExit = false;
 
         #endregion
 
         #region Public Properties
+
+        public bool SaveOnExit
+        {
+            get { return _saveOnExit;  }
+            set { _saveOnExit = value;  }
+        }
 
         #endregion
 
@@ -24,14 +32,12 @@ namespace petratracker
 
             try
             {
-                Models.TrackerDB.Initialize();
-                (new ConfigWindow(true)).Show();
-
-                (new LoginWindow()).Show();
+                Models.Database.Initialize();
+                (new LoginWindow(this)).Show();
             }
             catch (Exceptions.TrackerDBNotSetupException)
             {
-                (new ConfigWindow(true)).Show();
+                (new ConfigWindow(this,true)).Show();
             }
             catch (Exceptions.TrackerDBConnectionException e)
             {
@@ -46,7 +52,6 @@ namespace petratracker
                 "Startup Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 CloseWithoutSaving();
             }
-
         }
 
         #endregion
@@ -74,7 +79,7 @@ namespace petratracker
                     Models.TrackerUser.CurrentUser.logged_in = false;
                     Models.TrackerUser.CurrentUser.last_login = DateTime.Now;
                     Models.TrackerUser.CurrentUser.updated_at = DateTime.Now;
-                    Models.TrackerDB.Tracker.SubmitChanges();
+                    Models.Database.Tracker.SubmitChanges();
                 }
                 catch (Exception ex)
                 {

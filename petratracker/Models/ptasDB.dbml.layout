@@ -40,11 +40,31 @@
         <classShapeMoniker Id="551ac2ce-3acc-4724-b625-ec0e9cdbf2e0" />
       </nodes>
     </associationConnector>
-    <classShape Id="95d93a35-4671-4ff5-ab3d-b7148fe5ac7b" absoluteBounds="5.25, 4.375, 2, 3.5016097005208326">
+    <classShape Id="95d93a35-4671-4ff5-ab3d-b7148fe5ac7b" absoluteBounds="3.875, 4.375, 2, 3.5016097005208326">
       <DataClassMoniker Name="/PTASDataContext/Payment" />
       <nestedChildShapes>
-        <elementListCompartment Id="1142d848-91e1-414e-89d8-7e24b5ec5f55" absoluteBounds="5.265, 4.835, 1.9700000000000002, 2.941609700520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="1142d848-91e1-414e-89d8-7e24b5ec5f55" absoluteBounds="3.8899999999999997, 4.835, 1.9700000000000002, 2.941609700520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="2d40332a-7a60-4d0d-a4c0-e5f98f4fbd82" absoluteBounds="6.75, 5, 2, 1.9631982421875">
+      <DataClassMoniker Name="/PTASDataContext/PaymentScheduleLink" />
+      <nestedChildShapes>
+        <elementListCompartment Id="9b840acd-50c6-40c6-99b7-afb8007e8197" absoluteBounds="6.765, 5.46, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.375 : 2.61620198567708); (6.5 : 2.61620198567708); (6.5 : 3.31899251302083); (7.75 : 3.31899251302083); (7.75 : 5)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/PTASDataContext/FundDeal/FundDeal_PaymentScheduleLink" />
+      <nodes>
+        <classShapeMoniker Id="551ac2ce-3acc-4724-b625-ec0e9cdbf2e0" />
+        <classShapeMoniker Id="2d40332a-7a60-4d0d-a4c0-e5f98f4fbd82" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.875 : 5.98159912109375); (6.75 : 5.98159912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/PTASDataContext/Payment/Payment_PaymentScheduleLink" />
+      <nodes>
+        <classShapeMoniker Id="95d93a35-4671-4ff5-ab3d-b7148fe5ac7b" />
+        <classShapeMoniker Id="2d40332a-7a60-4d0d-a4c0-e5f98f4fbd82" />
+      </nodes>
+    </associationConnector>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

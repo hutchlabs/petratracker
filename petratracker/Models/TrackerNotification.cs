@@ -19,7 +19,7 @@ namespace petratracker.Models
 
         public static IEnumerable<Notification> GetNotifications()
         {
-            return (from n in TrackerDB.Tracker.Notifications
+            return (from n in Database.Tracker.Notifications
                     where (n.status != Constants.NF_STATUS_EXPIRED && n.status != Constants.NF_STATUS_RESOLVED) && 
                           (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                     orderby n.times_sent descending, n.updated_at descending, n.status descending 
@@ -30,7 +30,7 @@ namespace petratracker.Models
         {
             try
             {
-                return (from n in TrackerDB.Tracker.Notifications
+                return (from n in Database.Tracker.Notifications
                         where (n.status != Constants.NF_STATUS_EXPIRED && n.status != Constants.NF_STATUS_RESOLVED) &&
                               (n.notification_type == notification_type) &&
                               (n.job_id == job_id) && (n.job_type==job_type)
@@ -46,7 +46,7 @@ namespace petratracker.Models
         {
             try
             {
-                var nf =  (from n in TrackerDB.Tracker.Notifications
+                var nf =  (from n in Database.Tracker.Notifications
                            where (n.status != Constants.NF_STATUS_EXPIRED && n.status != Constants.NF_STATUS_RESOLVED) && 
                                  (n.notification_type == notification_type) &&
                                  (n.job_id == job_id) && (n.job_type == job_type)
@@ -63,7 +63,7 @@ namespace petratracker.Models
         {
             try
             {
-                var nf = (from n in TrackerDB.Tracker.Notifications
+                var nf = (from n in Database.Tracker.Notifications
                           where (n.status != Constants.NF_STATUS_EXPIRED) && 
                                 (n.status != Constants.NF_STATUS_RESOLVED) && 
                                 (n.notification_type == notification_type) &&
@@ -79,12 +79,12 @@ namespace petratracker.Models
      
         public static string GetNotificationStatus()
         {
-            var total_notifications = (from n in TrackerDB.Tracker.Notifications
+            var total_notifications = (from n in Database.Tracker.Notifications
                                        where (n.status != Constants.NF_STATUS_EXPIRED) && 
                                              (n.status != Constants.NF_STATUS_RESOLVED) && 
                                              (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                                        select n).Count();
-            var new_notifications = (from n in TrackerDB.Tracker.Notifications
+            var new_notifications = (from n in Database.Tracker.Notifications
                                      where (n.to_role_id == TrackerUser.GetCurrentUser().role_id) && (n.status == Constants.NF_STATUS_NEW)
                                      select n
                                     ).Count();
@@ -105,12 +105,12 @@ namespace petratracker.Models
 
         public static object GetNotificationToolTip()
         {
-            var total_notifications = (from n in TrackerDB.Tracker.Notifications
+            var total_notifications = (from n in Database.Tracker.Notifications
                                        where (n.status != Constants.NF_STATUS_EXPIRED) &&
                                              (n.status != Constants.NF_STATUS_RESOLVED) && 
                                              (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                                        select n).Count();
-            var new_notifications = (from n in TrackerDB.Tracker.Notifications
+            var new_notifications = (from n in Database.Tracker.Notifications
                                      where (n.to_role_id == TrackerUser.GetCurrentUser().role_id) && (n.status == Constants.NF_STATUS_NEW)
                                      select n
                                     ).Count();
@@ -133,7 +133,7 @@ namespace petratracker.Models
             {
                 nf.modified_by = TrackerUser.GetCurrentUser().id;
                 nf.updated_at = DateTime.Now;
-                TrackerDB.Tracker.SubmitChanges();
+                Database.Tracker.SubmitChanges();
             } catch(Exception)
             {
                 throw;
@@ -156,8 +156,8 @@ namespace petratracker.Models
                 n.modified_by = TrackerUser.GetCurrentUser().id;
                 n.created_at = DateTime.Now;
                 n.updated_at = DateTime.Now;
-                TrackerDB.Tracker.Notifications.InsertOnSubmit(n);
-                TrackerDB.Tracker.SubmitChanges();
+                Database.Tracker.Notifications.InsertOnSubmit(n);
+                Database.Tracker.SubmitChanges();
             }
             catch (Exception)
             {

@@ -25,7 +25,7 @@ namespace petratracker.Models
        
         public static IEnumerable<Email> GetEmails()
         {
-            return (from n in TrackerDB.Tracker.Emails
+            return (from n in Database.Tracker.Emails
                     orderby n.created_at descending, n.updated_at descending
                     select n);
         }
@@ -34,7 +34,7 @@ namespace petratracker.Models
         {
             try
             {
-                return (from n in TrackerDB.Tracker.Emails
+                return (from n in Database.Tracker.Emails
                         where  (n.email_type == email_type) &&
                         (n.job_id == job_id) && (n.job_type == job_type)
                         orderby n.created_at ascending
@@ -60,8 +60,8 @@ namespace petratracker.Models
                 em.modified_by = TrackerUser.GetCurrentUser().id;
                 em.created_at = DateTime.Now;
                 em.updated_at = DateTime.Now;
-                TrackerDB.Tracker.Emails.InsertOnSubmit(em);
-                TrackerDB.Tracker.SubmitChanges();
+                Database.Tracker.Emails.InsertOnSubmit(em);
+                Database.Tracker.SubmitChanges();
 
                 SendEmail.sendFixErrorMail(addr, em.email_text);
             } 

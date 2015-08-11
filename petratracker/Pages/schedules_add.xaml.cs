@@ -90,14 +90,28 @@ namespace petratracker.Pages
                 if (valid_entries())
                 {
                     int parent_id = (chx_reval.IsChecked == true) ? int.Parse(((ComboBoxPairs)cbx_schedules.SelectedItem)._Key) : 0;
+
+                    if (parent_id == 0)
+                    {
+                        if (TrackerSchedule.ScheduleExists(((ComboBoxPairs)cbx_companies.SelectedItem)._Value,
+                                                          cbx_tiers.SelectedValue.ToString(),
+                                                          ((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Value,
+                                                         cbx_month.SelectedValue.ToString(),
+                                                          ((ComboBoxPairs)cbx_year.SelectedItem)._Value))
+                        {
+                            MessageBox.Show("Could not create schedule as one exists already.", "Duplicate Schedule Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+                    }
                     TrackerSchedule.AddSchedule(((ComboBoxPairs)cbx_companies.SelectedItem)._Value,
-                                                ((ComboBoxPairs)cbx_companies.SelectedItem)._Key,
-                                                cbx_tiers.SelectedValue.ToString(),
-                                                ((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Value,
-                                                int.Parse(((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Key),
-                                               cbx_month.SelectedValue.ToString(),
-                                                ((ComboBoxPairs)cbx_year.SelectedItem)._Value,
-                                                parent_id);
+                                            ((ComboBoxPairs)cbx_companies.SelectedItem)._Key,
+                                            cbx_tiers.SelectedValue.ToString(),
+                                            ((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Value,
+                                            int.Parse(((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Key),
+                                            cbx_month.SelectedValue.ToString(),
+                                            ((ComboBoxPairs)cbx_year.SelectedItem)._Value,
+                                            0, //(double)tb_amount.Value,
+                                            parent_id);
                     if (_loadedInFlyout)
                         close_flyout();
                 }

@@ -35,8 +35,8 @@ namespace petratracker.Models
                 j.owner = TrackerUser.GetCurrentUser().id;
                 j.created_at = DateTime.Now;
                 j.updated_at = DateTime.Now;
-                TrackerDB.Tracker.Jobs.InsertOnSubmit(j);
-                TrackerDB.Tracker.SubmitChanges();
+                Database.Tracker.Jobs.InsertOnSubmit(j);
+                Database.Tracker.SubmitChanges();
 
                 return j.id;
             }
@@ -46,21 +46,27 @@ namespace petratracker.Models
             }
         }
 
+        public static Job GetJob(int jobid)
+        {
+            return (from j in Database.Tracker.Jobs where j.id==jobid select j).Single();
+
+        }
+
         public static IEnumerable<Job> GetJobs(string type="", string status="")
         {
             if (type == string.Empty && status == string.Empty)
             {
-                return (from j in TrackerDB.Tracker.Jobs orderby j.created_at descending select j);
+                return (from j in Database.Tracker.Jobs orderby j.created_at descending select j);
             }
             else
             {
                 if (status == string.Empty)
                 {
-                    return (from j in TrackerDB.Tracker.Jobs where j.job_type == type orderby j.created_at descending select j);
+                    return (from j in Database.Tracker.Jobs where j.job_type == type orderby j.created_at descending select j);
                 }
                 else
                 {
-                    return (from j in TrackerDB.Tracker.Jobs where j.job_type == type && j.status==status orderby j.created_at descending select j);
+                    return (from j in Database.Tracker.Jobs where j.job_type == type && j.status==status orderby j.created_at descending select j);
                 }
             }
         }
@@ -69,9 +75,11 @@ namespace petratracker.Models
         {
             job.status = Constants.PAYMENT_STATUS_APPROVED;
             job.updated_at = DateTime.Now;
-            TrackerDB.Tracker.SubmitChanges();
+            Database.Tracker.SubmitChanges();
         }
 
         #endregion
+
+
     }
 }

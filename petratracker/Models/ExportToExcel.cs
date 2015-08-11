@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,33 +11,29 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Excel = Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Excel;
 using System.Reflection;
-using tool = Microsoft.Windows.Controls;
+//using Microsoft.Windows.Controls;
 using System.ComponentModel;
-
 
 namespace petratracker.Models
 {
-    public class ExportToExcel<T, U>
-        where T : class
-        where U : List<T>
+    public class ExportToExcel<T>
     {
         public List<T> dataToPrint;
         // Excel object references.
-        private Excel.Application _excelApp = null;
-        private Excel.Workbooks _books = null;
-        private Excel._Workbook _book = null;
-        private Excel.Sheets _sheets = null;
-        private Excel._Worksheet _sheet = null;
-        private Excel.Range _range = null;
-        private Excel.Font _font = null;
+        private Microsoft.Office.Interop.Excel.Application excelApp = null;
+        private Workbooks books = null;
+        private Workbook book = null;
+        private Sheets sheets = null;
+        private Worksheet sheet = null;
+        private Range range = null;
+        private Font font = null;
         // Optional argument variable
-        private object _optionalValue = Missing.Value;
+        private object optionalValue = Missing.Value;
 
-        /// <summary>
+
         /// Generate report and sub functions
-        /// </summary>
         public void GenerateReport()
         {
             try
@@ -64,32 +56,25 @@ namespace petratracker.Models
             }
             finally
             {
-                ReleaseObject(_sheet);
-                ReleaseObject(_sheets);
-                ReleaseObject(_book);
-                ReleaseObject(_books);
-                ReleaseObject(_excelApp);
+                ReleaseObject(sheet);
+                ReleaseObject(sheets);
+                ReleaseObject(book);
+                ReleaseObject(books);
+                ReleaseObject(excelApp);
             }
         }
-        /// <summary>
-        /// Make MS Excel application visible
-        /// </summary>
+        /// Make Microsoft Excel application visible
         private void OpenReport()
         {
-            _excelApp.Visible = true;
+            excelApp.Visible = true;
         }
-        /// <summary>
         /// Populate the Excel sheet
-        /// </summary>
         private void FillSheet()
         {
             object[] header = CreateHeader();
             WriteData(header);
         }
-        /// <summary>
         /// Write data into the Excel sheet
-        /// </summary>
-        /// <param name="header"></param>
         private void WriteData(object[] header)
         {
             object[,] objData = new object[dataToPrint.Count, header.Length];
@@ -99,29 +84,22 @@ namespace petratracker.Models
                 var item = dataToPrint[j];
                 for (int i = 0; i < header.Length; i++)
                 {
-                    var y = typeof(T).InvokeMember(header[i].ToString(), BindingFlags.GetProperty, null, item, null);
+                    var y = typeof(T).InvokeMember
+            (header[i].ToString(), BindingFlags.GetProperty, null, item, null);
                     objData[j, i] = (y == null) ? "" : y.ToString();
                 }
             }
             AddExcelRows("A2", dataToPrint.Count, header.Length, objData);
             AutoFitColumns("A1", dataToPrint.Count + 1, header.Length);
         }
-        /// <summary>
         /// Method to make columns auto fit according to data
-        /// </summary>
-        /// <param name="startRange"></param>
-        /// <param name="rowCount"></param>
-        /// <param name="colCount"></param>
         private void AutoFitColumns(string startRange, int rowCount, int colCount)
         {
-            _range = _sheet.get_Range(startRange, _optionalValue);
-            _range = _range.get_Resize(rowCount, colCount);
-            _range.Columns.AutoFit();
+            range = sheet.get_Range(startRange, optionalValue);
+            range = range.get_Resize(rowCount, colCount);
+            range.Columns.AutoFit();
         }
-        /// <summary>
         /// Create header from the properties
-        /// </summary>
-        /// <returns></returns>
         private object[] CreateHeader()
         {
             PropertyInfo[] headerInfo = typeof(T).GetProperties();
@@ -140,42 +118,31 @@ namespace petratracker.Models
 
             return headerToAdd;
         }
-        /// <summary>
         /// Set Header style as bold
-        /// </summary>
         private void SetHeaderStyle()
         {
-            _font = _range.Font;
-            _font.Bold = true;
+            font = range.Font;
+            font.Bold = true;
         }
-        /// <summary>
         /// Method to add an excel rows
-        /// </summary>
-        /// <param name="startRange"></param>
-        /// <param name="rowCount"></param>
-        /// <param name="colCount"></param>
-        /// <param name="values"></param>
         private void AddExcelRows(string startRange, int rowCount, int colCount, object values)
         {
-            _range = _sheet.get_Range(startRange, _optionalValue);
-            _range = _range.get_Resize(rowCount, colCount);
-            _range.set_Value(_optionalValue, values);
+            range = sheet.get_Range(startRange, optionalValue);
+            range = range.get_Resize(rowCount, colCount);
+            range.set_Value(optionalValue, values);
         }
-        /// <summary>
-        /// Create Excel applicaiton parameters instances
-        /// </summary>
+
+        /// Create Excel application parameters instances
         private void CreateExcelRef()
         {
-            _excelApp = new Excel.Application();
-            _books = (Excel.Workbooks)_excelApp.Workbooks;
-            _book = (Excel._Workbook)(_books.Add(_optionalValue));
-            _sheets = (Excel.Sheets)_book.Worksheets;
-            _sheet = (Excel._Worksheet)(_sheets.get_Item(1));
+            excelApp = new Microsoft.Office.Interop.Excel.Application();
+            books = (Workbooks)excelApp.Workbooks;
+            book = (Workbook)(books.Add(optionalValue));
+            sheets = (Sheets)book.Worksheets;
+            sheet = (Worksheet)(sheets.get_Item(1));
         }
-        /// <summary>
+
         /// Release unused COM objects
-        /// </summary>
-        /// <param name="obj"></param>
         private void ReleaseObject(object obj)
         {
             try

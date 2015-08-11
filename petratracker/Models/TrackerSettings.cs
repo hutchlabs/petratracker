@@ -24,12 +24,12 @@ namespace petratracker.Models
 
         public static IEnumerable<Setting> GetSettings()
         {
-            return (from n in TrackerDB.Tracker.Settings orderby n.setting1 descending select n);
+            return (from n in Database.Tracker.Settings orderby n.setting1 descending select n);
         }
 
         public static string GetSetting(string setting)
         {
-            var x = (from n in TrackerDB.Tracker.Settings where n.setting1==setting select n).Single();
+            var x = (from n in Database.Tracker.Settings where n.setting1==setting select n).Single();
             return x.value;
         }
 
@@ -37,12 +37,12 @@ namespace petratracker.Models
         {
             s.modified_by = TrackerUser.GetCurrentUser().id;
             s.updated_at = DateTime.Now;
-            TrackerDB.Tracker.SubmitChanges();
+            Database.Tracker.SubmitChanges();
         }
 
         public static void Save(string setting, string newval)
         {
-            var x = (from n in TrackerDB.Tracker.Settings where n.setting1 == setting select n).Single();
+            var x = (from n in Database.Tracker.Settings where n.setting1 == setting select n).Single();
             x.value = newval;
             Save(x);
         }
@@ -57,8 +57,8 @@ namespace petratracker.Models
                 s.modified_by = TrackerUser.GetCurrentUser().id;
                 s.created_at = DateTime.Now;
                 s.updated_at = DateTime.Now;
-                TrackerDB.Tracker.Settings.InsertOnSubmit(s);
-                TrackerDB.Tracker.SubmitChanges();
+                Database.Tracker.Settings.InsertOnSubmit(s);
+                Database.Tracker.SubmitChanges();
             }
             catch (Exception)
             {

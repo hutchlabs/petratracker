@@ -23,33 +23,6 @@ namespace petratracker.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        public string Petra_trackerConnectionString {
-            get {
-                return ((string)(this["Petra_trackerConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        public string Petra5ConnectionString {
-            get {
-                return ((string)(this["Petra5ConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        public string PTASDBConnectionString {
-            get {
-                return ((string)(this["PTASDBConnectionString"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -89,10 +62,21 @@ namespace petratracker.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=NICHOLASARKFEA4\\SQLEXPRESS;Integrated Security=True")]
-        public string DataSourceConnectionString {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=PTASDB;Integrated Security=True")]
+        public string PTASDBConnectionString {
             get {
-                return ((string)(this["DataSourceConnectionString"]));
+                return ((string)(this["PTASDBConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=NICHOLASARKFEA4\\SQLEXPRESS;Initial Catalog=Petra_tracker;Integrated S" +
+            "ecurity=True")]
+        public string Petra_trackerConnectionString {
+            get {
+                return ((string)(this["Petra_trackerConnectionString"]));
             }
         }
     }

@@ -29,12 +29,14 @@ namespace petratracker.Models
 
         public static Schedule GetSchedule(int id)
         {
-           return (from j in TrackerDB.Tracker.Schedules where j.id == id select j).Single();
+           return (from j in Database.Tracker.Schedules where j.id == id select j).Single();
         }
 
         public static IEnumerable<Schedule> GetSchedules()
         {
-            return (from j in TrackerDB.Tracker.Schedules orderby j.created_at descending select j);
+            return (from j in Database.Tracker.Schedules 
+                    where j.workflow_status != Constants.WF_STATUS_INACTIVE
+                    orderby j.created_at descending select j);
         }
 
         public static IEnumerable<ComboBoxPairs> GetCBSchedules(string company_id="", string tier="")
@@ -46,11 +48,11 @@ namespace petratracker.Models
 
                 if (company_id == string.Empty)
                 {
-                    sc = (from j in TrackerDB.Tracker.Schedules orderby j.created_at descending select j);
+                    sc = (from j in Database.Tracker.Schedules where j.workflow_status != Constants.WF_STATUS_INACTIVE orderby j.created_at descending select j);
                 }
                 else
                 {
-                    sc = (from j in TrackerDB.Tracker.Schedules where (j.company_id == company_id) orderby j.created_at descending select j);
+                    sc = (from j in Database.Tracker.Schedules where (j.company_id == company_id) && j.workflow_status != Constants.WF_STATUS_INACTIVE orderby j.created_at descending select j);
                 }
                 
                 foreach (var s in sc)
@@ -82,13 +84,14 @@ namespace petratracker.Models
 
         public static IEnumerable<Schedule> GetScheduleByStatus(string status)
         {
-            return (from j in TrackerDB.Tracker.Schedules where j.workflow_status==status orderby j.created_at descending select j);
+            return (from j in Database.Tracker.Schedules where j.workflow_status==status orderby j.created_at descending select j);
         }
 
         public static IEnumerable<Schedule> GetSchedulesForProcessing()
         {
-            return (from j in TrackerDB.Tracker.Schedules
+            return (from j in Database.Tracker.Schedules
                     where j.processing == false && 
+                          j.workflow_status != Constants.WF_STATUS_INACTIVE &&
                           j.workflow_status != Constants.WF_STATUS_COMPLETED && 
                           j.workflow_status != Constants.WF_STATUS_ERROR_ESCALATED  &&
                           j.workflow_status != Constants.WF_STATUS_EXPIRED
@@ -98,21 +101,53 @@ namespace petratracker.Models
         
         public static Schedule Save(Schedule s)
         {
-            s.modified_by = TrackerUser.GetCurrentUser().id;
+            //s.modified_by = TrackerUser.GetCurrentUser().id;
             s.updated_at = DateTime.Now;
-            TrackerDB.Tracker.SubmitChanges();
+            Database.Tracker.SubmitChanges();
             return s;
         }
 
-        public static void AddSchedule(string company, string companyid, string tier, string ct, int ctid, string month, string year, int parent_id)
+        public static bool ScheduleExists(string company, string tier, string ct, string month, string year)
+        {
+            int c = (from s in Database.Tracker.Schedules
+                      where s.company == company &&
+                            s.contributiontype == ct &&
+                            s.tier == tier &&
+                            s.month == int.Parse(month) &&
+                            s.year == int.Parse(year)
+                      select s).Count();
+
+            return (c > 0) ? true : false;
+        }
+
+        private static void DeactivateSchedule(int id)
+        {
+            Schedule s = GetSchedule(id);
+            s.workflow_status = Constants.WF_STATUS_INACTIVE;
+            Save(s);
+        }
+
+        public static void DeleteSchedule(Schedule s)
+        {
+            Database.Tracker.Schedules.DeleteOnSubmit(s);
+            Database.Tracker.SubmitChanges(); 
+        }
+
+        public static void AddSchedule(string company, string companyid, string tier, string ct, int ctid, string month, string year, double amount, int parent_id)
         {
             try
             {
+                if (parent_id != 0)
+                {
+                    DeactivateSchedule(parent_id);
+                }
+
                 Schedule s = new Schedule();
                 s.company = company;
                 s.company_id = companyid;
-                s.company_email = TrackerDB.GetCompanyEmail(companyid) ;
+                s.company_email = Database.GetCompanyEmail(companyid) ;
                 s.tier = tier;
+                s.amount = Decimal.Parse(amount.ToString());
                 s.contributiontype = ct;
                 s.contributiontypeid = ctid;
                 s.month = int.Parse(month);
@@ -121,7 +156,6 @@ namespace petratracker.Models
                 s.validation_status = Constants.WF_VALIDATION_NOTDONE;               
                 s.file_downloaded = false;
                 s.file_uploaded = false;
-                s.payment_id = 0;
                 s.receipt_sent = false;
                 s.workflow_status = Constants.WF_VALIDATION_NOTDONE;
                 s.workflow_summary = "Processing of this schedule has not begun";
@@ -129,8 +163,8 @@ namespace petratracker.Models
                 s.modified_by = TrackerUser.GetCurrentUser().id;
                 s.created_at = DateTime.Now;
                 s.updated_at = DateTime.Now;
-                TrackerDB.Tracker.Schedules.InsertOnSubmit(s);
-                TrackerDB.Tracker.SubmitChanges();
+                Database.Tracker.Schedules.InsertOnSubmit(s);
+                Database.Tracker.SubmitChanges();
                 InitiateScheduleWorkFlow(s);
             }
             catch (Exception)
@@ -162,7 +196,7 @@ namespace petratracker.Models
         {
             try
             {
-                var companies = TrackerDB.GetCompanies();
+                var companies = Database.GetCompanies();
                 List<ComboBoxPairs> cbpc = new List<ComboBoxPairs>();
 
                 foreach (var c in companies)
@@ -186,12 +220,12 @@ namespace petratracker.Models
 
             if (company == string.Empty)
             {
-                cts = (from j in TrackerDB.PTAS.ContributionTypes select j);
+                cts = (from j in Database.PTAS.ContributionTypes select j);
             }
             else
             {
-                cts = (from j in TrackerDB.PTAS.ContributionTypes
-                       join f in TrackerDB.PTAS.FundDeals on j.ContribTypeID equals f.ContribType_ID
+                cts = (from j in Database.PTAS.ContributionTypes
+                       join f in Database.PTAS.FundDeals on j.ContribTypeID equals f.ContribType_ID
                        where f.CompanyEntityId == company
                        select j);
             }
@@ -247,7 +281,7 @@ namespace petratracker.Models
             else
             {
                 // Add new schedule with similar details and retire the old one
-                AddSchedule(s.company, s.company_id, s.tier, s.contributiontype, s.contributiontypeid, s.month.ToString(), s.year.ToString(), s.id);
+                AddSchedule(s.company, s.company_id, s.tier, s.contributiontype, s.contributiontypeid, s.month.ToString(), s.year.ToString(), Double.Parse(s.amount.ToString()), s.id);
                 s.workflow_status = Constants.WF_STATUS_EXPIRED;
                 s.workflow_summary = "Schedule issues resolved, but there was a new valuetime so a new schedule has been created.";
                 Save(s);
@@ -295,6 +329,8 @@ namespace petratracker.Models
                 
                 if (s.validated)
                 {
+                    s.amount = (decimal) GetTotalContribution(s.company_id, s.tier, s.contributiontypeid, s.month, s.year);
+
                     s.validation_valuetime = CheckValidationTime(s.company_id, s.tier, s.contributiontypeid, s.month, s.year);
 
                     s.validation_status = CheckValidationStatus(s.company_id, s.tier, s.contributiontypeid, s.month, s.year);
@@ -394,11 +430,11 @@ namespace petratracker.Models
 
         private static void EvaluatePassedSchedule(Schedule s)
         {
-            if (s.payment_id == 0)
+            if (s.payment_id == 0 || s.payment_id == null)
             {
                 // Check payments
-                int i = CheckPaymentStatus(s.company_id, s.tier, s.contributiontype, s.month, s.year);
-                if (i == 0)
+                Tuple<int,string>  status = CheckPaymentStatus(s.company_id, s.tier, s.contributiontype, s.month, s.year, s.contributiontypeid);
+                if (status.Item1 == 0)
                 {
                     // No payments found. Will check later
                     s.processing = false;
@@ -406,7 +442,9 @@ namespace petratracker.Models
                 }
                 else
                 {
-                    s.workflow_status = Constants.WF_STATUS_PAYMENTS_RECEIVED;
+                    s.payment_id = status.Item1;
+                    s = Save(s);
+                    s.workflow_status = (status.Item2=="Linked") ?  Constants.WF_STATUS_PAYMENTS_LINKED : Constants.WF_STATUS_PAYMENTS_RECEIVED;
                     s.workflow_summary = "Schedule linked to Payments. Waiting for Receipt to be sent and File download & uploaded";
                     EvaluatePaymentReceivedSchedule(s);
                 }
@@ -454,7 +492,8 @@ namespace petratracker.Models
             }
             else if (!s.receipt_sent && !s.file_downloaded && !s.file_uploaded)
             {
-                s.workflow_status = Constants.WF_STATUS_PAYMENTS_RECEIVED;
+                Tuple<int, string> status = CheckPaymentStatus(s.company_id, s.tier, s.contributiontype, s.month, s.year, s.contributiontypeid);
+                s.workflow_status = (status.Item2=="Linked") ? Constants.WF_STATUS_PAYMENTS_LINKED: Constants.WF_STATUS_PAYMENTS_RECEIVED;
                 s.workflow_summary = "Schedule linked to Payments. Waiting for Receipt to be sent and File download & uploaded";
                 UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_RECEIPT_SEND_REQUEST, Constants.SETTINGS_TIME_INTERVAL_SEND_RECEIPT);
                 UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_FILE_DOWNLOAD_REQUEST, Constants.SETTINGS_TIME_FILE_DOWNLOAD_INTERVAL);
@@ -475,10 +514,11 @@ namespace petratracker.Models
             bool fileuploaded = false;
             try
             {
-                fileuploaded = CheckFileUploaded(s.company, s.company_id, s.tier, s.month, s.year, s.Payment.transaction_amount);
+                fileuploaded = CheckFileUploaded(s.company, s.company_id, s.tier, s.PPayment.value_date, s.PPayment.transaction_amount);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                LogUtil.LogError("TrackerSchedule","EvaluateFileUploadNotificationStatus",ex);
             }
 
             if (fileuploaded)
@@ -514,7 +554,8 @@ namespace petratracker.Models
                     }
                     else
                     {
-                        s.workflow_status = Constants.WF_STATUS_PAYMENTS_RECEIVED;
+                        Tuple<int, string> status = CheckPaymentStatus(s.company_id, s.tier, s.contributiontype, s.month, s.year, s.contributiontypeid);
+                        s.workflow_status = (status.Item2 == "Linked") ? Constants.WF_STATUS_PAYMENTS_LINKED : Constants.WF_STATUS_PAYMENTS_RECEIVED;
                         s.workflow_summary = "Schedule linked to Payments. Waiting for Receipt to be sent and File download & uploaded";
                     }
 
@@ -566,50 +607,86 @@ namespace petratracker.Models
             return numNotifications;
         }
 
-        private static int CheckPaymentStatus(string companyid, string tier, string ct, int month, int year)
+        private static Tuple<int, string> CheckPaymentStatus(string company_id, string tier, string ct, int month, int year, int ctid)
         {
             try
             {
-                Payment pm = TrackerPayment.GetSubscription(companyid, tier, month, year, ct);
-                return (pm != null) ? pm.id : 0;
+                company_id = Database.GetCompanyCode(company_id);
+                string type = "None";
+
+                PPayment pm = TrackerPayment.GetSubscription(company_id, tier, month, year, ct);
+
+                if (pm != null)
+                {
+                    type = (TrackerPayment.IsLinkedSubscription(company_id, tier, month, year, ctid)) ? "Linked" : "Received";
+                }
+            
+                return (pm != null) ? Tuple.Create(pm.id, type) : Tuple.Create(0, type);
 
             } catch(Exception) {
-                return 0;
+                return Tuple.Create(0,"None");
             }
         }
 
-        private static bool CheckFileUploaded(string company, string companyid, string tier, int month, int year, decimal? amount)
-        {
-            DateTime dealDate = new DateTime(year, month, 1);
-            
-            string fundName = company + tier;
-
+        private static bool CheckFileUploaded(string company, string companyid, string tier, DateTime valueDate, decimal? amount)
+        {            
+            //LogUtil.LogInfo("TrackerSchedule","CheckFileUploaded","Checking file upload for "+company+ " "+tier+" for value date "+valueDate.ToString());
+       
             try
             {
-                var fd = from a in TrackerDB.Microgen.Associations
-                         join ae2 in TrackerDB.Microgen.cclv_AllEntities on a.TargetEntityID equals ae2.EntityID
-                         join ae3 in TrackerDB.Microgen.cclv_AllEntities on a.SourceEntityID equals ae3.EntityID
-                         join d in TrackerDB.Microgen.fndDeals on ae3.EntityID equals d.EntityFundID
-                         where (a.RoleTypeID == 1003) &&
-                               (ae3.FullName == fundName) &&
-                               (ae2.EntityKey == companyid.Trim()) &&
-                               (((DateTime)d.DealingDate).Date == dealDate.Date)
-                         group d by new { d.DealingDate } into s
+                var fd = from a in Database.Microgen.Associations
+                         join ae2 in Database.Microgen.cclv_AllEntities on a.TargetEntityID equals ae2.EntityID
+                         join ec in Database.Microgen.EntityClients on a.SourceEntityID equals ec.EntityID
+                         join d in Database.Microgen.fndDeals on ec.EntityID equals d.EntityFundID
+                         join p in Database.Microgen.Purposes on ec.PurposeID equals p.PurposeID 
+                         where (a.RoleTypeID == 1003) 
+                               && (ae2.EntityID == int.Parse(companyid.Trim())) 
+                               && d.DealTypeID == 4 && (d.DealStatusID == 2 || d.DealStatusID==3) && d.CancellingDealID == null 
+                               && p.Description.Substring(0, 6).Equals(tier) 
+                               && (((DateTime)d.DealingDate).Date == valueDate.Date)
+                         group new {d, p} by new { d.DealingDate, p.Description } into s                     
                          select new
                          {
+                             Tier = s.Key.Description.Substring(0,6),
                              DealDate = s.Key.DealingDate,
-                             TotalAmount = s.Sum(y => y.PaymentAmountDealCcy),
+                             TotalAmount = s.Sum(y => y.d.PaymentAmountDealCcy),
                          };
                 foreach(var f in fd)
                 {
-                    if (f.TotalAmount == amount)
+                    string m = string.Format("Checking against {0} on {1} for {2}", f.Tier, f.DealDate, f.TotalAmount);
+
+                    //LogUtil.LogInfo("TrackerSchedule", "CheckFileUpload", m);
+
+                    if (f.TotalAmount == amount && f.Tier==tier)
                         return true;
                 }
                 return false;
             }
+            catch (Exception ex)
+            {
+                LogUtil.LogError("TrackerSchedule", "CheckFileUploaded", ex);
+                return false;
+            }
+        }
+
+        private static decimal? GetTotalContribution(string companyid, string tier, int ctid, int month, int year)
+        {
+            DateTime dealDate = new DateTime(year, month, 1);
+            try
+            {
+                 FundDeal fd = (from j in Database.PTAS.FundDeals
+                          where j.ContribType_ID == ctid &&
+                                j.CompanyEntityId == companyid.Trim() &&
+                                j.Tier == tier.Replace(" ", "") &&
+                                j.TotalContribution != 0 &&
+                          ((DateTime)j.DealDate).Date == dealDate.Date
+                          select j).Single();
+
+                 return fd.TotalContribution;
+            }
             catch (Exception)
             {
-                return false;
+                return 0;
             }
         }
 
@@ -618,7 +695,7 @@ namespace petratracker.Models
             DateTime dealDate = new DateTime(year, month, 1);
             try
             {
-                int fd = (from j in TrackerDB.PTAS.FundDeals
+                int fd = (from j in Database.PTAS.FundDeals
                           where j.ContribType_ID == ctid &&
                                 j.CompanyEntityId == companyid.Trim() &&
                                 j.Tier == tier.Replace(" ", "") &&
@@ -640,7 +717,7 @@ namespace petratracker.Models
             try
             {
 
-               var fd = (from j in TrackerDB.PTAS.FundDeals
+               var fd = (from j in Database.PTAS.FundDeals
                           where j.ContribType_ID == ctid &&
                                 j.CompanyEntityId == companyid.Trim() &&
                                 j.Tier == tier.Replace(" ", "") &&
@@ -648,7 +725,7 @@ namespace petratracker.Models
                                 ((DateTime)j.DealDate).Date == dealDate.Date
                          select j).Single();
 
-               var fld = (from k in TrackerDB.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k.DateStamp).Min();
+               var fld = (from k in Database.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k.DateStamp).Min();
 
                return (DateTime) fld;
             }
@@ -665,7 +742,7 @@ namespace petratracker.Models
 
             try
             {
-                var fd = (from j in TrackerDB.PTAS.FundDeals
+                var fd = (from j in Database.PTAS.FundDeals
                                where j.ContribType_ID == ct &&
                                 j.CompanyEntityId == companyid.Trim() &&
                                 j.Tier == tier.Replace(" ", "") &&
@@ -673,7 +750,7 @@ namespace petratracker.Models
                                 ((DateTime)j.DealDate).Date == dealDate.Date
                                 select j).Single();
 
-                var fld = (from k in TrackerDB.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k);
+                var fld = (from k in Database.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k);
 
                 bool passed = true;
                 bool newemp = false;

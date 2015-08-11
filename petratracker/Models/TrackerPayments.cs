@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Globalization;
 
 using petratracker.Utility;
+using System.Data.Linq.SqlClient;
 
 namespace petratracker.Models
 {
@@ -39,14 +40,63 @@ namespace petratracker.Models
         #endregion     
 
         #region Public Helper Methods
+        private static string GetMonth(int month)
+        {
+            string name = "";
+            switch (month)
+            {
+                case 1: name= "January"; break;
+                case 2: name= "February"; break;
+                case 3: name= "March"; break;
+                case 4: name= "April"; break;
+                case 5: name= "May"; break;
+                case 6: name= "June"; break;
+                case 7: name= "July"; break;
+                case 8: name= "August"; break;
+                case 9: name= "September"; break;
+                case 10: name= "October"; break;
+                case 11: name= "November"; break;
+                case 12: name= "December"; break;
+            }
 
-        public static Payment GetSubscription(string company_id, string tier, int month, int year, string ct)
+            return name;
+        }
+
+        public static bool IsLinkedSubscription(string company_id, string tier, int month, int year, int ctid)
         {
             try
             {
-                return (from p in TrackerDB.Tracker.Payments
+                DateTime dealDate = new DateTime(year, month, 1);
+
+                var fd = (from p in Database.PTAS.PaymentScheduleLinks
+                          join f in Database.PTAS.FundDeals on p.FundDealID equals f.FundDealID
+                          where f.CompanyEntityKey == company_id
+                                && f.ContribType_ID == ctid
+                                && f.Tier == tier.Replace(" ", "")
+                                && f.TotalContribution != 0
+                                && ((DateTime)f.DealDate).Date == dealDate.Date
+                          select p).Count();
+                return (fd > 0) ? true : false;
+            }
+            catch (Exception ex)
+            {
+                LogUtil.LogError("TrackerPayments", "IsLinkedSubscription", ex);
+                return false;
+            }
+        }
+
+        public static PPayment GetSubscription(string company_id, string tier, int month, int year, string ct)
+        {
+            try
+            {
+                string m = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
+                //string m = GetMonth(month);
+                string period = String.Format("%{0} {1}%",m, year.ToString());
+                //LogUtil.LogInfo("TrackerPayments", "GetSubscription", "Checking " + period);
+                return (from p in Database.Tracker.PPayments
                         where p.company_code == company_id &&
-                              p.deal_description_period == (month.ToString() + " " + year.ToString()) &&
+                              p.tier == tier &&
+                              SqlMethods.Like(p.deal_description_period, period) &&
                               p.deal_description == ct
                         select p).Single();
             } 
@@ -56,7 +106,40 @@ namespace petratracker.Models
             }
         }
 
-        public static IEnumerable<Payment> GetSubscriptions(int job_id, string sub_status="",bool showAll=false)
+        public static IEnumerable<PPayment> GetAllSubscriptions(string sub_status = "", bool showAll = false)
+        {
+            if (TrackerUser.IsCurrentUserOps())
+            {
+                return GetAllOpsUserSubscriptions(sub_status);
+            }
+            else
+            {
+                if (sub_status != string.Empty)
+                {
+                    return (from p in Database.Tracker.PPayments where p.status.Trim() == sub_status select p);
+                }
+                else
+                {
+                    return (from p in Database.Tracker.PPayments select p);
+                }
+            }
+        }
+
+        public static IEnumerable<TrackerPaymentDealDescriptions> GetPaymentDealDescriptions(int payment_id)
+        {
+
+            if (payment_id > 0)
+            {
+                return (from pdd in Database.Tracker.PDealDescriptions where pdd.payment_id == payment_id select new TrackerPaymentDealDescriptions() { id = pdd.id, month = GetMonth(pdd.month), year = pdd.year.ToString(), contribution_type = pdd.contribution_type  });
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public static IEnumerable<PPayment> GetSubscriptions(int job_id, string sub_status="",bool showAll=false)
         {
             if (TrackerUser.IsCurrentUserOps())
             {
@@ -66,26 +149,42 @@ namespace petratracker.Models
             {
                 if (sub_status != string.Empty)
                 {
-                    return (from p in TrackerDB.Tracker.Payments where p.job_id == job_id && p.status.Trim() == sub_status select p);
+                    return (from p in Database.Tracker.PPayments where p.job_id == job_id && p.status.Trim() == sub_status select p);
                 }
                 else
                 {
-                    return (from p in TrackerDB.Tracker.Payments where p.job_id == job_id select p);
+                    return (from p in Database.Tracker.PPayments where p.job_id == job_id select p);
                 }
             }
         }
 
-        public static IEnumerable<Payment> GetOpsUserSubscriptions(int job_id, string sub_status = "")
+        public static IEnumerable<PPayment> GetAllOpsUserSubscriptions(string sub_status = "")
         {
             if (sub_status != string.Empty)
             {
-                return (from p in TrackerDB.Tracker.Payments 
+                return (from p in Database.Tracker.PPayments
+                        where p.status.Trim() == sub_status && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
+                        select p);
+            }
+            else
+            {
+                return (from p in Database.Tracker.PPayments
+                        where p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
+                        select p);
+            }
+        }
+
+        public static IEnumerable<PPayment> GetOpsUserSubscriptions(int job_id, string sub_status = "")
+        {
+            if (sub_status != string.Empty)
+            {
+                return (from p in Database.Tracker.PPayments 
                         where p.job_id == job_id && p.status.Trim() == sub_status && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
                         select p);
             }
             else
             {
-                return (from p in TrackerDB.Tracker.Payments
+                return (from p in Database.Tracker.PPayments
                         where p.job_id == job_id && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED 
                         select p);
             }
@@ -106,22 +205,23 @@ namespace petratracker.Models
                    
 
                     // Insert new payment
-                    Payment objPayment = new Payment();                 
+                    PPayment objPayment = new PPayment();                 
                     objPayment.job_id = jobId;
                     objPayment.tier = tier;
                     objPayment.transaction_details = dr["Transaction Details"].ToString();
-                    objPayment.transaction_date = (DateTime)dr["Transaction Date"];
+                    objPayment.transaction_date =  (DateTime)dr["Transaction Date"];
                     objPayment.value_date = (DateTime)dr["Value Date"];
                     objPayment.subscription_value_date = (DateTime)dr["Transaction Date"];
                     objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
                     objPayment.subscription_amount = decimal.Parse(dr["Transaction Amount"].ToString());
                     objPayment.transaction_ref_no = get_trans_ref_code((DateTime)dr["Value Date"], tier);
+
                     objPayment.status = (dr["Dr / Cr Indicator"].ToString() == "Credit") ? "Unidentified" : "Returned";
                     objPayment.owner = TrackerUser.GetCurrentUser().id;
                     objPayment.created_at = DateTime.Now;
                     objPayment.updated_at = DateTime.Now;
-                    TrackerDB.Tracker.Payments.InsertOnSubmit(objPayment);
-                    TrackerDB.Tracker.SubmitChanges();
+                    Database.Tracker.PPayments.InsertOnSubmit(objPayment);
+                    Database.Tracker.SubmitChanges();
                     ini_inc++;
                 }
 
@@ -139,11 +239,11 @@ namespace petratracker.Models
 
             try
             {
-                var subscription = (from p in TrackerDB.Tracker.Payments
+                var subscription = (from p in Database.Tracker.PPayments
                                     where p.transaction_ref_no == payment_ref_no
                                     select p).Single();
 
-                PTasPayment objPayment = new PTasPayment();
+                Payment objPayment = new Payment();
                 objPayment.InsertedDate = DateTime.Now;
                 objPayment.ContributionDate = subscription.subscription_value_date;
                 objPayment.ValueDate = subscription.value_date;
@@ -157,8 +257,8 @@ namespace petratracker.Models
                 objPayment.PaymentID = 1;
                 objPayment.ActionUserID = 36; //Declare ActionUserID as constant
                 objPayment.Tier = subscription.tier.Replace(" ",string.Empty);
-                TrackerDB.PTAS.Payments.InsertOnSubmit(objPayment);            
-                TrackerDB.PTAS.SubmitChanges();
+                Database.PTAS.Payments.InsertOnSubmit(objPayment);            
+                Database.PTAS.SubmitChanges();
                 return true;
             
             }
@@ -183,14 +283,14 @@ namespace petratracker.Models
 
             var download_data = from HC in
                                     (
-                                        (from cm in TrackerDB.Microgen.Entities
-                                         join spr in TrackerDB.Microgen.Associations on new { SourceEntityID = cm.EntityID } equals new { SourceEntityID = spr.SourceEntityID }
-                                         join owr in TrackerDB.Microgen.Associations on new { SourceEntityID = spr.TargetEntityID } equals new { SourceEntityID = owr.SourceEntityID }
-                                         join hc in TrackerDB.Microgen.Entities on new { EntityID = spr.TargetEntityID } equals new { EntityID = hc.EntityID }
-                                         join ef in TrackerDB.Microgen.EntityClients on new { EntityID = owr.TargetEntityID } equals new { EntityID = ef.EntityID }
-                                         join prs in TrackerDB.Microgen.Associations on new { TargetEntityID = ef.EntityID } equals new { TargetEntityID = prs.TargetEntityID }
-                                         join fd in TrackerDB.Microgen.Entities on new { EntityID = prs.SourceEntityID } equals new { EntityID = fd.EntityID }
-                                         join p in TrackerDB.Microgen.Purposes on new { PurposeID = Convert.ToInt32(ef.PurposeID) } equals new { PurposeID = p.PurposeID }
+                                        (from cm in Database.Microgen.Entities
+                                         join spr in Database.Microgen.Associations on new { SourceEntityID = cm.EntityID } equals new { SourceEntityID = spr.SourceEntityID }
+                                         join owr in Database.Microgen.Associations on new { SourceEntityID = spr.TargetEntityID } equals new { SourceEntityID = owr.SourceEntityID }
+                                         join hc in Database.Microgen.Entities on new { EntityID = spr.TargetEntityID } equals new { EntityID = hc.EntityID }
+                                         join ef in Database.Microgen.EntityClients on new { EntityID = owr.TargetEntityID } equals new { EntityID = ef.EntityID }
+                                         join prs in Database.Microgen.Associations on new { TargetEntityID = ef.EntityID } equals new { TargetEntityID = prs.TargetEntityID }
+                                         join fd in Database.Microgen.Entities on new { EntityID = prs.SourceEntityID } equals new { EntityID = fd.EntityID }
+                                         join p in Database.Microgen.Purposes on new { PurposeID = Convert.ToInt32(ef.PurposeID) } equals new { PurposeID = p.PurposeID }
                                          where
                                            hc.EntityTypeID == 1002 &&
                                            spr.RoleTypeID == 1003 &&
@@ -222,7 +322,23 @@ namespace petratracker.Models
 
                 return res;
         }
-       
+
+        public static void Approve(PPayment payment)
+        {
+            payment.status = Constants.PAYMENT_STATUS_IDENTIFIED_APPROVED;
+            payment.updated_at = DateTime.Now;
+            Database.Tracker.SubmitChanges();
+        }
+
+
+        public static void Reject(PPayment payment)
+        {
+            payment.status = Constants.PAYMENT_STATUS_REJECTED;
+            payment.updated_at = DateTime.Now;
+            Database.Tracker.SubmitChanges();
+        }
+
+
 
         #endregion
 
@@ -232,7 +348,7 @@ namespace petratracker.Models
         private static string get_company_name(string company_code)
         {
             string comp_name = string.Empty;
-            var companies = (from c in TrackerDB.Microgen.cclv_AllEntities
+            var companies = (from c in Database.Microgen.cclv_AllEntities
                              where c.EntityKey == company_code
                              select c);
 
@@ -248,7 +364,7 @@ namespace petratracker.Models
         private static string get_company_email(string company_code)
         {
             string comp_email = string.Empty;
-            var companies = (from c in TrackerDB.Microgen.EntityContacts
+            var companies = (from c in Database.Microgen.EntityContacts
                              where c.EntityID == get_company_id(company_code)
                              select c);
 
@@ -263,7 +379,7 @@ namespace petratracker.Models
         private static int get_company_id(string company_code)
         {
             int comp_id = 0;
-            var companies = (from c in TrackerDB.Microgen.cclv_AllEntities
+            var companies = (from c in Database.Microgen.cclv_AllEntities
                              where c.EntityKey == company_code
                              select c);
 
@@ -277,7 +393,7 @@ namespace petratracker.Models
 
         private static int get_seqence_no(DateTime valueDate)
         {
-            IEnumerable<Payment> seq = (from p in TrackerDB.Tracker.Payments where p.value_date == valueDate select p );
+            IEnumerable<PPayment> seq = (from p in Database.Tracker.PPayments where p.value_date == valueDate select p );
             return seq.Count();
         }
         

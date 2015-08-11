@@ -10,11 +10,14 @@ namespace petratracker
 {
     public partial class LoginWindow : MetroWindow
     {
+        private App _app;
+
         #region Constructor 
         
-        public LoginWindow()
+        public LoginWindow(App app)
         {
             InitializeComponent();
+            _app = app;
         }
 
         #endregion
@@ -100,16 +103,20 @@ namespace petratracker
             {
                 try
                 {
-                    TrackerUser.SetCurrentUser(tbx_username.Text, tbx_password.Password);
-
-                    if (TrackerUser.FirstLogin())
+                    if (TrackerUser.FirstLogin(tbx_username.Text))
                     {
-                        changePassword();
+                        changePassword(tbx_username.Text);
                     }
-                    else
-                    {
+                    else 
+                    {   
+                        TrackerUser.SetCurrentUser(tbx_username.Text, tbx_password.Password);
+
+                        _app.SaveOnExit = true;
+                        
                         MainWindow mw = new MainWindow();
+                        
                         mw.Show();
+                        
                         this.Close();
                     }
                 }
@@ -124,21 +131,21 @@ namespace petratracker
             }
         }
 
-        private async void changePassword()
+        private async void changePassword(string username)
         {
             LoginDialogData result = await this.ShowLoginAsync("Change Password"
                                                                , "This is your first login. Please change your password"
                                                                , new LoginDialogSettings
                                                                {
                                                                    ColorScheme = this.MetroDialogOptions.ColorScheme,
-                                                                   InitialUsername = TrackerUser.GetCurrentUser().username,
+                                                                   InitialUsername = username,
                                                                    AffirmativeButtonText = "Change Password"
                                                                    //, EnablePasswordPreview = true 
                                                                });
             if (result == null)
             {
                 MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", "You need to change  your password");
-                changePassword();
+                changePassword(username);
             }
             else
             {
@@ -148,7 +155,7 @@ namespace petratracker
                     string err = "";
                     try
                     {
-                        TrackerUser.UpdateCurrentUserPassword(result.Password);
+                        TrackerUser.UpdateUserPassword(username, result.Password);
                         success = true;
                     }
                     catch (Exception ex)
@@ -159,6 +166,10 @@ namespace petratracker
                     if (success)
                     {
                         MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", "Password Updated!");
+
+                        TrackerUser.SetCurrentUser(username, result.Password);
+
+                        _app.SaveOnExit = true;
                         MainWindow mw = new MainWindow();
                         mw.Show();
                         this.Close();
@@ -166,13 +177,13 @@ namespace petratracker
                     else
                     {
                         MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", err);
-                        this.changePassword();
+                        this.changePassword(username);
                     }
                 }
                 else
                 {
                     MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", "Password is too short!");
-                    this.changePassword();
+                    this.changePassword(username);
                 }
             }
         }

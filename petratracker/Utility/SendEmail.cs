@@ -26,8 +26,8 @@ namespace petratracker.Utility
 
         static SendEmail()
         {
-            Setting smpthost = TrackerDB.Tracker.Settings.Single(s => s.setting1 == Constants.SETTINGS_EMAIL_SMTP_HOST);
-            Setting fromemail = TrackerDB.Tracker.Settings.Single(s => s.setting1 == Constants.SETTINGS_EMAIL_FROM);
+            Setting smpthost = Database.Tracker.Settings.Single(s => s.setting1 == Constants.SETTINGS_EMAIL_SMTP_HOST);
+            Setting fromemail = Database.Tracker.Settings.Single(s => s.setting1 == Constants.SETTINGS_EMAIL_FROM);
 
             _smtp = new System.Net.Mail.SmtpClient(smpthost.value);
             _from = new System.Net.Mail.MailAddress(fromemail.value);
@@ -60,7 +60,7 @@ namespace petratracker.Utility
 
         public static bool sendNewUserMail(string name, string email, string password)
         {
-            Setting tmpl = TrackerDB.Tracker.Settings.Single(s => s.setting1 == "tmpl_newuser_email");
+            Setting tmpl = Database.Tracker.Settings.Single(s => s.setting1 == "tmpl_newuser_email");
 
             string msg = tmpl.value;
             msg.Replace("<username>", email);
@@ -80,7 +80,7 @@ namespace petratracker.Utility
         
         public static bool sendResetPasswordMail(string email)
         {
-            Setting tmpl = TrackerDB.Tracker.Settings.Single(s => s.setting1 == "tmpl_resetpass_email");
+            Setting tmpl = Database.Tracker.Settings.Single(s => s.setting1 == "tmpl_resetpass_email");
 
             string adminEmail = TrackerUser.GetAdminEmail();
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.Sql;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
@@ -80,8 +81,9 @@ namespace petratracker.Utility
         public const string WF_VALIDATION_ERROR_ALL = "New Employee & Errors";
         public const string WF_VALIDATION_ERROR_ESCALATED = "Issue Escalated";
         public const string WF_VALIDATION_PASSED = "Passed";
-        public const string WF_VALIDATION_NEW_EMPLOYEE = "New Employee"; 
+        public const string WF_VALIDATION_NEW_EMPLOYEE = "New Employee";
 
+        public const string WF_STATUS_INACTIVE = "Inactive";
         public const string WF_STATUS_PASSED_NEW_EMPLOYEE = WF_VALIDATION_PASSED + ". " + WF_VALIDATION_NEW_EMPLOYEE;
         public const string WF_STATUS_ERROR_PREFIX = "Validated with Errors: ";
         public const string WF_STATUS_ERROR_SSNIT = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_SSNIT;
@@ -90,6 +92,7 @@ namespace petratracker.Utility
         public const string WF_STATUS_ERROR_ALL = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_ALL;
         public const string WF_STATUS_ERROR_ESCALATED = WF_STATUS_ERROR_PREFIX + WF_VALIDATION_ERROR_ESCALATED;
         public const string WF_STATUS_PAYMENTS_PENDING = "Passed. Payment Pending";
+        public const string WF_STATUS_PAYMENTS_LINKED = "Payment Linked. No Receipt. No Download. No Upload";
         public const string WF_STATUS_PAYMENTS_RECEIVED = "Payment Received. No Receipt. No Download. No Upload";
         public const string WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD = "Receipt Sent. No Download. No Upload";
         public const string WF_STATUS_RF_SENT_DOWNLOAD_NOUPLOAD = "Receipt Sent. File Downloaded. No Upload";
@@ -116,6 +119,11 @@ namespace petratracker.Utility
 
     public class Utils
     {
+        public static string GetMonthName(int month)
+        {
+            return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
+        }
+
         public static async Task DoPeriodicWorkAsync(Delegate todoTask, TimeSpan dueTime, TimeSpan interval, CancellationToken token)
         {
             // Initial wait time before we begin the periodic loop.
@@ -135,21 +143,6 @@ namespace petratracker.Utility
         }
 
 
-        public IEnumerable<ComboBoxPairs> GetSQLServers()
-        {
-            SqlDataSourceEnumerator sqldatasourceenumerator1 = SqlDataSourceEnumerator.Instance;
-            DataTable sources = sqldatasourceenumerator1.GetDataSources();
-
-            List<ComboBoxPairs> cbpc = new List<ComboBoxPairs>();
-
-            foreach (DataRow row in sources.Rows)
-            {
-                string server = string.Format("{0}\\{1}",row["ServerName"],row["InstanceName"]);
-                cbpc.Add(new ComboBoxPairs(server, server));
-            }
-
-            return cbpc;
-        }
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]

@@ -41,7 +41,6 @@ namespace petratracker.Pages
             lblSubscriptionType.Content = (object)subscription_status;
         }
 
-
         private string [] get_years(int start_year)
         { 
             string [] ini_year = new string[3];
@@ -57,11 +56,16 @@ namespace petratracker.Pages
         {
             try
             {
+                string newval = "";
+                string altval = "";
+                string rtnval = "";
+                //string oldval = txt_desc_period.Text;
+
                 if (chkSavingsBooster.IsChecked == true)
                 {
                     grpSavingsBooster.IsEnabled = true;
-                    cmb_period_year.SelectedIndex = 1;
-                    cmb_period_month.SelectedIndex = dtSubscriptionDate.SelectedDate.Value.Month - 1;
+                    //newval = string.Format("{0} {1}", Utils.GetMonthName(dtSubscriptionDate.SelectedDate.Value.Month - 1), dtSubscriptionDate.SelectedDate.Value.Year);
+                    //altval = string.Format("{0} {1}", Utils.GetMonthName(dtSubscriptionDate.SelectedDate.Value.AddMonths(-1).Month - 1), dtSubscriptionDate.SelectedDate.Value.Year);
                 }
                 else if (chkSavingsBooster.IsChecked != true)
                 {
@@ -69,9 +73,19 @@ namespace petratracker.Pages
                     txtSearchClients.Text = string.Empty;
                     cmbClient.SelectedIndex = -1;
                     txtClientCode.Text = string.Empty;
-                    cmb_period_year.SelectedIndex = 1;
-                    cmb_period_month.SelectedIndex = dtSubscriptionDate.SelectedDate.Value.AddMonths(-1).Month - 1;
+                    //newval = string.Format("{0} {1}", Utils.GetMonthName(dtSubscriptionDate.SelectedDate.Value.AddMonths(-1).Month - 1), dtSubscriptionDate.SelectedDate.Value.Year);
+                    //altval = string.Format("{0} {1}", Utils.GetMonthName(dtSubscriptionDate.SelectedDate.Value.Month - 1), dtSubscriptionDate.SelectedDate.Value.Year);
                 }
+
+                //string[] vals = oldval.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                //foreach(string item in vals)
+                //{
+                //    if (!item.Trim().Equals(altval))
+                //    {
+                //        rtnval += (rtnval.Length == 0) ? item.Trim() : ", " + item.Trim();
+                //    }
+                //}
+                //txt_desc_period.Text = rtnval + ((rtnval.Length!=0)  ? ", " : "") + newval;
             }
             catch(Exception dealError)
             {
@@ -81,7 +95,7 @@ namespace petratracker.Pages
 
         private void load_unidentified_subscription()
         {
-            var subscription = (from p in TrackerDB.Tracker.Payments
+            var subscription = (from p in Database.Tracker.PPayments
                                  where p.id == this.subID && p.status != "Identified"
                                  select p).Single();
 
@@ -90,16 +104,17 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
-            dtSubscriptionDate.SelectedDate = subscription.value_date;
-            dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
+            //dtSubscriptionDate.SelectedDate = subscription.value_date;
+            //txt_desc_period.Text = subscription.deal_description_period;
+            //dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
             grpTransDetails.IsEnabled = false;
-            cmb_period_year.ItemsSource = get_years(subscription.value_date.Year);
+            subID = subscription.id;
             get_deal_desc_period();           
         }
 
         private void load_rejected_subscription()
         {
-            var subscription = (from p in TrackerDB.Tracker.Payments
+            var subscription = (from p in Database.Tracker.PPayments
                                 where p.id == this.subID && p.status == Constants.PAYMENT_STATUS_REJECTED
                                 select p).Single();
 
@@ -109,21 +124,19 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
-            dtSubscriptionDate.SelectedDate = subscription.value_date;
-            dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
+            //dtSubscriptionDate.SelectedDate = subscription.value_date;
+            //dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
             txtComments.Text = subscription.comments;
             grpTransDetails.IsEnabled = false;
-
+            subID = subscription.id;
             //Load Deal Details
-            cmb_period_month.Text = subscription.deal_description_period.Substring(0, 3);
-            cmb_period_year.Items.Add(subscription.deal_description_period.Substring(3));
-            cmb_period_year.SelectedIndex = 0;
-            cbxDealDescription.SelectedValue = subscription.deal_description;
-            grpDealDetails.IsEnabled = false;
+            //txt_desc_period.Text = subscription.deal_description_period;
+            //cbxDealDescription.SelectedValue = subscription.deal_description;
+            //grpDealDetails.IsEnabled = false;
 
             //Load Company Mapping
             grpCompanyMapping.IsEnabled = false;
-            var companies = (from c in TrackerDB.Microgen.cclv_AllEntities
+            var companies = (from c in Database.Microgen.cclv_AllEntities
                              where c.EntityKey == subscription.company_code
                              select c);
 
@@ -138,7 +151,7 @@ namespace petratracker.Pages
             {
                 chkSavingsBooster.IsChecked = true;
 
-                var clients = (from c in TrackerDB.Microgen.cclv_AllEntities
+                var clients = (from c in Database.Microgen.cclv_AllEntities
                                where c.EntityKey == subscription.savings_booster_client_code
                                select c);
 
@@ -152,7 +165,7 @@ namespace petratracker.Pages
 
         private void load_identified_subscription()
         {
-            var subscription = (from p in TrackerDB.Tracker.Payments
+            var subscription = (from p in Database.Tracker.PPayments
                                 where p.id == this.subID && p.status == "Identified"
                                 select p).Single();
 
@@ -162,21 +175,19 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
-            dtSubscriptionDate.SelectedDate = subscription.value_date;
-            dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
+            //dtSubscriptionDate.SelectedDate = subscription.value_date;
+            //dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
             txtComments.Text = subscription.comments;
             grpTransDetails.IsEnabled = false;
-
+            subID = subscription.id;
             //Load Deal Details
-            cmb_period_month.Text = subscription.deal_description_period.Substring(0,3);
-            cmb_period_year.Items.Add(subscription.deal_description_period.Substring(3));
-            cmb_period_year.SelectedIndex = 0;
-            cbxDealDescription.SelectedValue = subscription.deal_description;
-            grpDealDetails.IsEnabled = false;
+            //txt_desc_period.Text = subscription.deal_description_period;
+            //cbxDealDescription.SelectedValue = subscription.deal_description;
+            //grpDealDetails.IsEnabled = false;
 
             //Load Company Mapping
             grpCompanyMapping.IsEnabled = false;
-            var companies = (from c in TrackerDB.Microgen.cclv_AllEntities
+            var companies = (from c in Database.Microgen.cclv_AllEntities
                              where c.EntityKey == subscription.company_code
                              select c);
 
@@ -191,7 +202,7 @@ namespace petratracker.Pages
             {
                 chkSavingsBooster.IsChecked = true;
 
-                var clients = (from c in TrackerDB.Microgen.cclv_AllEntities
+                var clients = (from c in Database.Microgen.cclv_AllEntities
                                  where c.EntityKey == subscription.savings_booster_client_code
                                  select c);
 
@@ -228,7 +239,7 @@ namespace petratracker.Pages
 
         private void load_approved_subscription()
         {
-            var subscription = (from p in TrackerDB.Tracker.Payments
+            var subscription = (from p in Database.Tracker.PPayments
                                 where p.id == this.subID && p.status == "Identified and Approved"
                                 select p).Single();
 
@@ -238,21 +249,20 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
-            dtSubscriptionDate.SelectedDate = subscription.value_date;
-            dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
+            //dtSubscriptionDate.SelectedDate = subscription.value_date;
+            //dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
             txtComments.Text = subscription.comments;
             grpTransDetails.IsEnabled = false;
+            subID = subscription.id;
 
             //Load Deal Details
-            cmb_period_month.Text = subscription.deal_description_period.Substring(0, 3);
-            cmb_period_year.Items.Add(subscription.deal_description_period.Substring(3));
-            cmb_period_year.SelectedIndex = 0;
-            cbxDealDescription.SelectedValue = subscription.deal_description;
-            grpDealDetails.IsEnabled = false;
+            //txt_desc_period.Text = subscription.deal_description_period;
+            //cbxDealDescription.SelectedValue = subscription.deal_description;
+            //grpDealDetails.IsEnabled = false;
             grpCompanyMapping.IsEnabled = false;
 
             //Load Company Mapping
-            var companies = (from c in TrackerDB.Microgen.cclv_AllEntities
+            var companies = (from c in Database.Microgen.cclv_AllEntities
                              where c.EntityKey == subscription.company_code
                              select c);
 
@@ -267,7 +277,7 @@ namespace petratracker.Pages
             {
                 chkSavingsBooster.IsChecked = true;
 
-                var clients = (from c in TrackerDB.Microgen.cclv_AllEntities
+                var clients = (from c in Database.Microgen.cclv_AllEntities
                                where c.EntityKey == subscription.savings_booster_client_code
                                select c);
 
@@ -289,7 +299,7 @@ namespace petratracker.Pages
             {  
                 cmbCompanies.Items.Clear();       
      
-                var companies = (from c in TrackerDB.Microgen.cclv_AllEntities
+                var companies = (from c in Database.Microgen.cclv_AllEntities
 
                                  where c.FullName.Contains(txtSearchCompany.Text) && c.EntityTypeDesc == "Company"
                                  
@@ -313,7 +323,7 @@ namespace petratracker.Pages
             {
                 cmbClient.Items.Clear();
 
-                var clients = (from c in TrackerDB.Microgen.cclv_AllEntities
+                var clients = (from c in Database.Microgen.cclv_AllEntities
 
                                where c.FullName.Contains(txtSearchClients.Text) && c.EntityKey.Contains("HI")
 
@@ -340,32 +350,38 @@ namespace petratracker.Pages
             cmbClient.DisplayMemberPath = "Key";
             cmbClient.SelectedValuePath = "Value";
 
-            if(subType == "Identified"){load_identified_subscription(); }
-            else if(subType == "Unidentified"){load_unidentified_subscription();}
-            else if(subType == "Returned"){load_unidentified_subscription();}
-            else if(subType == "Identified and Approved"){load_approved_subscription();}
+            load_payment_deal_descriptions();
+
+            if(subType == Constants.PAYMENT_STATUS_IDENTIFIED){load_identified_subscription(); }
+            else if(subType == Constants.PAYMENT_STATUS_UNIDENTIFIED){load_unidentified_subscription(); }
+            else if (subType == Constants.PAYMENT_STATUS_RETURNED) { load_unidentified_subscription(); }
+            else if (subType == Constants.PAYMENT_STATUS_IDENTIFIED_APPROVED) { load_approved_subscription(); }
             else if (subType == Constants.PAYMENT_STATUS_REJECTED) { load_rejected_subscription(); }
-            else {MessageBox.Show("Transaction type unknown.","Invalid Id",MessageBoxButton.OK,MessageBoxImage.Exclamation);
-                this.Close();}        
+            else
+            {
+                MessageBox.Show("Transaction type unknown.", "Invalid Id", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                this.Close();
+            }        
         }
 
         private bool update_payment(string verifyType, bool saveToPTas)
         {
             try
             {
-                var subscription = from p in TrackerDB.Tracker.Payments
+                var subscription = from p in Database.Tracker.PPayments
                                    where p.id == this.subID && p.status != verifyType
                                    select p;
 
-                foreach (Payment p in subscription)
+                foreach (PPayment p in subscription)
                 {
                     if (verifyType == "Identified")
                     {
                         p.company_code = txtCompanyCode.Text;
+                        p.company_name = cmbCompanies.Text;
                         p.savings_booster = chkSavingsBooster.IsChecked;
                         p.savings_booster_client_code = txtClientCode.Text;
-                        p.deal_description_period = cmb_period_month.SelectedValue.ToString() + " " + cmb_period_year.SelectedValue.ToString();
-                        p.deal_description = ((ComboBoxPairs)cbxDealDescription.SelectedItem)._Value;
+                        //p.deal_description_period = txt_desc_period.Text;
+                        //p.deal_description = ((ComboBoxPairs)cbxDealDescription.SelectedItem)._Value;
                         p.identified_by = TrackerUser.GetCurrentUser().id;
                         p.modified_by = TrackerUser.GetCurrentUser().id;
                         p.date_identified = DateTime.Today;
@@ -401,7 +417,7 @@ namespace petratracker.Pages
                     if (saveToPTas) { TrackerPayment.push_payment_to_PTAS(p.transaction_ref_no); }
                 }
 
-                TrackerDB.Tracker.SubmitChanges();
+                Database.Tracker.SubmitChanges();
                 
                 
             }
@@ -443,8 +459,8 @@ namespace petratracker.Pages
                         conf_str += "Transaction Date : "+txtTransDate.Text+"\n";
                         conf_str += "Subscription/Value Date : "+txtValueDate.Text+"\n";
                         conf_str += "Amount : " + txtTranAmount.Text + "\n";
-                        conf_str += "Deal Description Period : "+ cmb_period_month.SelectedValue.ToString()+" "+cmb_period_year.SelectedItem.ToString()+"\n";
-                        conf_str += "Deal Description : "+ ((ComboBoxPairs)cbxDealDescription.SelectedItem)._Value+"\n";
+                        //conf_str += "Deal Description Period : "+ txt_desc_period.Text+"\n";
+                        //conf_str += "Deal Description : "+ ((ComboBoxPairs)cbxDealDescription.SelectedItem)._Value+"\n";
                         conf_str += "Identified Company : " + cmbCompanies.Text + "\n";
                         conf_str += "Savings Booster Customer : "+ cmbClient.Text +"\n\n";
                         conf_str += "Please click Yes to commit changes to this transaction.";
@@ -599,6 +615,34 @@ namespace petratracker.Pages
             Flyout flyout = (Flyout)obj;
             flyout.Content = null;
             flyout.IsOpen = !flyout.IsOpen;
+        }
+
+        private void load_payment_deal_descriptions()
+        {
+            dgPaymentDealDescriptions.ItemsSource = TrackerPayment.GetPaymentDealDescriptions(subID);
+        }
+
+        private void btn_add_Click(object sender, RoutedEventArgs e)
+        {
+            payment_deal_description deal = new payment_deal_description(subID,false);
+            deal.ShowDialog();
+            load_payment_deal_descriptions();
+        }
+
+        private void dgPaymentDealDescriptions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+        }
+
+        private void dgPaymentDealDescriptions_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (dgPaymentDealDescriptions.SelectedItem != null)
+            {
+
+                TrackerPaymentDealDescriptions p = (TrackerPaymentDealDescriptions)dgPaymentDealDescriptions.SelectedItem;
+                payment_deal_description openEdit = new payment_deal_description((int)p.id, true);
+                openEdit.ShowDialog();
+            }
         }
 
 

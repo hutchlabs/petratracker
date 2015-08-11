@@ -1,6 +1,8 @@
 ﻿using MahApps.Metro.Controls;
 using petratracker.Models;
+using petratracker.Utility;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace petratracker
@@ -9,15 +11,28 @@ namespace petratracker
     {
         #region Private Members
 
+        private App _app;
         private bool _exitToLoginWindow = false;
+
+        #endregion
+        
+        #region Public Properties
+
+        public IEnumerable<ComboBoxPairs> Servers
+        {
+            private set { ; }
+            get { return Database.GetSQLServers(); }
+        }
 
         #endregion
 
         #region Constructor
 
-        public ConfigWindow(bool showLogin=false)
+        public ConfigWindow(App app, bool showLogin=false)
         {
+            this.DataContext = this;
             InitializeComponent();
+            _app = app;
             _exitToLoginWindow = showLogin;
         }
 
@@ -27,62 +42,38 @@ namespace petratracker
 
         private void frmDatabaseConnection_Loaded(object sender, RoutedEventArgs e)
         {
-            txtTrackerDataSource.Text = TrackerDB.GetConnectionString();
+            cbx_TrackerDataSource.SelectedIndex = 0;
         }
 
         private void btnTrackerTestConnection_Click(object sender, RoutedEventArgs e)
         {
-            if (validate_tracker_entries())
-            {
-                spinner.IsActive = true;
+            spinner.IsActive = true;
 
-                try
+            try
+            {
+                if (Database.Setup(((ComboBoxPairs)cbx_TrackerDataSource.SelectedItem)._Key))
                 {
-                    if (TrackerDB.Setup(txtTrackerDataSource.Text))
+                    spinner.IsActive = false;
+
+                    //MessageBox.Show("Connection to databases were successful.", "Connection Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    if (_exitToLoginWindow)
                     {
-                        spinner.IsActive = false;
-
-                        MessageBox.Show("Connection to databases were successful.", "Connection Successful", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                        if (_exitToLoginWindow)
-                        {
-                            (new LoginWindow()).Show();
-                        }
-                        this.Close();
+                        (new LoginWindow(_app)).Show();
                     }
+                    this.Close();
                 }
-                catch (Exceptions.TrackerDBConnectionException ex)
-                {
-                    spinner.IsActive = false;
-                    MessageBox.Show(ex.Message, "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                catch(Exception ex)
-                {
-                    spinner.IsActive = false;
-                     MessageBox.Show("Database setup error: " + ex.GetBaseException().ToString(), "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }       
-        }
-
-        #endregion
-
-        #region Private Helper Methods
-
-        private bool validate_tracker_entries()
-        {
-            bool valid = false;
-
-            if (txtTrackerDataSource.Text == string.Empty)
-            {
-                MessageBox.Show("Please specify the Database server name.");
-                txtTrackerDataSource.Focus();
             }
-            else
+            catch (Exceptions.TrackerDBConnectionException ex)
             {
-                valid = true;
+                spinner.IsActive = false;
+                MessageBox.Show(ex.Message, "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            return valid;
+            catch(Exception ex)
+            {
+                spinner.IsActive = false;
+                MessageBox.Show("Database setup error: " + ex.GetBaseException().ToString(), "Error in connection", MessageBoxButton.OK, MessageBoxImage.Error);
+            }                 
         }
 
         #endregion

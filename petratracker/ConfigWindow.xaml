@@ -1,26 +1,35 @@
 ﻿<Controls:MetroWindow x:Name="frmDatabaseConnection" x:Class="petratracker.ConfigWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Initial Setup" Height="212.836" Width="470" 
+        Title="Database Setup" Width="300" Height="120"
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         GlowBrush="Red"
-        EnableDWMDropShadow="True"
-        Loaded="frmDatabaseConnection_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
-    <Grid Height="184" VerticalAlignment="Top" Margin="0,0,0,0">
+        EnableDWMDropShadow="True" Icon="Resources/images/icons/petrablk_icon.ico"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="frmDatabaseConnection_Loaded">
+
+    <Grid VerticalAlignment="Top" Margin="0,0,0,0">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="71*"/>
-            <RowDefinition Height="209*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <GroupBox x:Name="groupTraker" Header="Database Setup" HorizontalAlignment="Left" Margin="17,24,0,0" VerticalAlignment="Top" Width="429" Grid.RowSpan="2" Height="129"/>
 
-        <Grid HorizontalAlignment="Left" Height="106" Margin="29,47,0,0" VerticalAlignment="Top" Width="387" Grid.RowSpan="2">
-            <Label Content="Server Name" HorizontalAlignment="Left" Margin="38,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.471,-1.024"/>
-            <TextBox x:Name="txtTrackerDataSource" HorizontalAlignment="Left" Height="23" Margin="138,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="95*"/>
+            <ColumnDefinition Width="199*"/>
+        </Grid.ColumnDefinitions>
 
-            <Button x:Name="btnTrackerTestConnection" Content="Connect" HorizontalAlignment="Left" Margin="138,70,0,0" VerticalAlignment="Top" Width="119" Click="btnTrackerTestConnection_Click"/>
-            <Controls:ProgressRing x:Name="spinner"  Width="32" Height="32" Margin="277,64,78,10" IsActive="False" />
-        </Grid>
+        <Label Grid.Row="0" Grid.Column="0" Content="Server Name" HorizontalAlignment="Right" VerticalAlignment="Center" Height="26" Width="78" />
+        <ComboBox Grid.Row="0" Grid.Column="1" 
+                  x:Name="cbx_TrackerDataSource" IsEditable="False" Margin="10" 
+                  Style="{DynamicResource VirtualisedMetroComboBox}"
+                  Controls:TextBoxHelper.Watermark="Type or select Database source"
+                  ItemsSource="{Binding Servers}" DisplayMemberPath="_Value" SelectedValuePath="_Key" />
+
+        <Button Grid.Row="1" Grid.Column="1" x:Name="btnTrackerTestConnection" Content="Connect" HorizontalAlignment="Left" 
+                 VerticalAlignment="Top" Width="119" Click="btnTrackerTestConnection_Click" Margin="10,10,0,0" Height="25" />
+        <Controls:ProgressRing x:Name="spinner"  Width="32" Height="32" Margin="130,0,0,0" IsActive="False" 
+                               Grid.Row="1" Grid.Column="1" />
 
     </Grid>
 </Controls:MetroWindow>

@@ -27,6 +27,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Add Schedule" Style="{StaticResource FlyoutHeaderStyle}" HorizontalAlignment="Center" />
@@ -43,15 +44,24 @@
                   x:Name="cbx_tiers" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top"  
                   ItemsSource="{Binding Tiers}" />
 
-        <Label Grid.Row="3" Grid.Column="0" Content="Contribution Type" Margin="10"  HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <ComboBox Grid.Row="3" Grid.Column="1" 
+        <!--
+        <Label Grid.Row="3" Grid.Column="0" Content="Amount" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        <Controls:NumericUpDown Grid.Row="3" Grid.Column="1" Margin="10,10,0,0" 
+                x:Name="tb_amount" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Minimum="0"  Interval="0.5" Value="0"
+                StringFormat="GHC {0:N2}"
+                Height="26" />
+        -->
+        
+        <Label Grid.Row="4" Grid.Column="0" Content="Contribution Type" Margin="10"  HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <ComboBox Grid.Row="4" Grid.Column="1" 
                   x:Name="cbx_contributiontype" IsEditable="True"  MaxDropDownHeight="125" Margin="10" 
                   Style="{DynamicResource VirtualisedMetroComboBox}"
                   Controls:TextBoxHelper.Watermark="Type or select contribution type"
                   ItemsSource="{Binding ContributionTypes}" DisplayMemberPath="_Value" SelectedValuePath="_Key" />
 
-        <Label Grid.Row="4" Grid.Column="0" Content="Month" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" />
-        <ComboBox Grid.Row="4" Grid.Column="1" x:Name="cbx_month" HorizontalAlignment="Left"  Margin="10" VerticalAlignment="Center" Width="Auto" SelectedValuePath="Tag">
+        <Label Grid.Row="5" Grid.Column="0" Content="Month" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" />
+        <ComboBox Grid.Row="5" Grid.Column="1" x:Name="cbx_month" HorizontalAlignment="Left"  Margin="10" VerticalAlignment="Center" Width="Auto" SelectedValuePath="Tag">
             <ComboBoxItem Content="January" Tag="1" />
             <ComboBoxItem Content="February" Tag="2" />
             <ComboBoxItem Content="March" Tag="3" />
@@ -65,17 +75,17 @@
             <ComboBoxItem Content="November" Tag="11" />
             <ComboBoxItem Content="December" Tag="12" />
         </ComboBox>
-        <ComboBox Grid.Row="4" Grid.Column="1" 
+        <ComboBox Grid.Row="5" Grid.Column="1" 
                   x:Name="cbx_year" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10" Width="Auto"
                   ItemsSource="{Binding Years}" DisplayMemberPath="_Value" SelectedValuePath="_Key"  />
 
-        <CheckBox Grid.Row="5" Grid.Column="0" x:Name="chx_reval" HorizontalAlignment="Right" VerticalAlignment="Center"   Margin="10" Content="Revalidation? Pick Original Schedule" Checked="chx_reval_Checked" Unchecked="chx_reval_Checked"/>
-        <ComboBox Grid.Row="5" Grid.Column="1" 
+        <CheckBox Grid.Row="6" Grid.Column="0" x:Name="chx_reval" HorizontalAlignment="Right" VerticalAlignment="Center"   Margin="10" Content="Revalidation? Pick Original Schedule" Checked="chx_reval_Checked" Unchecked="chx_reval_Checked"/>
+        <ComboBox Grid.Row="6" Grid.Column="1" 
                   x:Name="cbx_schedules" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"  
                   IsSynchronizedWithCurrentItem="True" IsEnabled="False" 
                   ItemsSource="{Binding}" DisplayMemberPath="_Value" SelectedValuePath="_Key"  />
 
-        <Button Grid.Row="6" Grid.Column="1" x:Name="btnCancel" Content="Cancel" Margin="0,20,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="83" Click="btnCancel_Click" />
-        <Button Grid.Row="6" Grid.Column="1"  x:Name="btnSave" Content="Save" Margin="0,20,0,0" HorizontalAlignment="Right"  VerticalAlignment="Top" Width="83" Click="btnSave_Click" />
+        <Button Grid.Row="7" Grid.Column="1" x:Name="btnCancel" Content="Cancel" Margin="0,20,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="83" Click="btnCancel_Click" />
+        <Button Grid.Row="7" Grid.Column="1"  x:Name="btnSave" Content="Save" Margin="0,20,0,0" HorizontalAlignment="Right"  VerticalAlignment="Top" Width="83" Click="btnSave_Click" />
     </Grid>
 </UserControl>

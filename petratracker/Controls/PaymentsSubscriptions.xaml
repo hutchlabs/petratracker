@@ -42,11 +42,12 @@
 
                     <Label x:Name="lbl_jobsCount" Content="0 Payments" FontFamily="Segoe WP Semibold" FontSize="14" Foreground="Black" Margin="10,0,0,0" VerticalAlignment="Center"/>
 
+                    <!--
                     <StackPanel x:Name="jobs_actionBar" Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
                         <Button x:Name="btn_approveJobs" Content="Approve" Visibility="Collapsed" Click="btn_approveJobs_Click" Width="Auto" Height="30"  ToolTip="Approve selected payments" Margin="10,0,0,0"/>
                     </StackPanel>
+                    -->
                     
-
                     <Button x:Name="btn_showAddSubscription" Click="btn_showAddSubscription_Click" Width="40" Height="40" Margin="20,0,0,0" ToolTip="Add" Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                             <Rectangle.OpacityMask>
@@ -74,7 +75,7 @@
                         
                         <DataGridTextColumn Header="Description" Width="150" Binding="{Binding job_description}" />
                         <DataGridTextColumn Header="Tier" Width="80" Binding="{Binding tier}" />
-                        <DataGridTextColumn Header="Status" Width="80" Binding="{Binding status}" />
+                        <!--<DataGridTextColumn Header="Status" Width="80" Binding="{Binding status}" />-->
                         <DataGridTemplateColumn Width="100" Header="Owner">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -110,12 +111,12 @@
                 </Controls:SplitButton>
 
                 <Label x:Name="lbl_subsCount" Content="0 Subscriptions Items" FontFamily="Segoe WP Semibold" FontSize="14" Foreground="{DynamicResource AccentColorBrush}" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                <!--
-                <StackPanel x:Name="actionBar" Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
-                    <Button x:Name="btn_groupMarkReceiptSent" Content="Mark all as Receipt Sent" Visibility="Collapsed" Click="btn_groupMarkReceiptSent_Click" Width="Auto" Height="30"  ToolTip="Mark Receipt as sent for selected schedules" Margin="10,0,0,0"/>
-                    <Button x:Name="btn_groupMarkFileDownload" Content="Mark all as File Downloaded" Visibility="Collapsed" Click="btn_groupMarkFileDownload_Click" Width="Auto" Height="30"  ToolTip="Mark File as downloaded for selected schedules" Margin="5,0,0,0" />
+               
+                <StackPanel x:Name="subs_actionBar" Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
+                    <Button x:Name="btn_approveSubs" Content="Approve" Visibility="Collapsed" Click="btn_approveSubs_Click" Width="Auto" Height="30"  ToolTip="Approve selected subscriptions" Margin="10,0,0,0"/>
+                    <Button x:Name="btn_rejectSubs" Content="Reject" Visibility="Collapsed" Click="btn_rejectSubs_Click" Width="Auto" Height="30"  ToolTip="Reject selected subscriptions" Margin="10,0,0,0"/>
                 </StackPanel>
-                  -->
+                
             </StackPanel>
 
             <DataGrid x:Name="viewSubs" RenderOptions.ClearTypeHint="Enabled"
@@ -127,6 +128,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Status" Width="75" Binding="{Binding status}" />
                     <DataGridTextColumn Header="Value Date" Width="75"  Binding="{Binding value_date, StringFormat=\{0:dd-MMM-yyyy\}}" />
+                    <DataGridTextColumn Header="Description Period" Width="100" Binding="{Binding deal_description_period}" />
                     <DataGridTextColumn Header="Trans Ref. no" Width="100" Binding="{Binding transaction_ref_no}" />
                     <DataGridTextColumn Header="Tran. Details" Width="200" Binding="{Binding transaction_details}" />
                     <DataGridTextColumn Header="Company Code" Width="Auto" Binding="{Binding company_code}" />
