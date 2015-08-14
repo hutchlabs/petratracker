@@ -126,14 +126,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>trackerDB.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\TrackerPaymentDealDescriptions.cs" />
     <Compile Include="Models\TrackerReports.cs" />
+    <Compile Include="Models\TrackerReportTransRefType.cs" />
     <Compile Include="Models\TrackerReportType.cs" />
     <Compile Include="Models\TrackerReportTypeDataTable.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\TrackerReportTypeView.cs" />
+    <Compile Include="Models\Tracker_Report_Payment_Schedule_Status.cs" />
+    <Compile Include="Models\Tracker_Report_Schedules_Pending.cs" />
+    <Compile Include="Models\Tracker_Report_Schedule_Status.cs" />
+    <Compile Include="Models\Tracker_Report_Slack_Days.cs" />
+    <Compile Include="Pages\payment_deal_description.xaml.cs">
+      <DependentUpon>payment_deal_description.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\schedules_add.xaml.cs">
       <DependentUpon>schedules_add.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\selectCompany.xaml.cs">
+      <DependentUpon>selectCompany.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\subscriptions_download_microgen_data.xaml.cs">
       <DependentUpon>subscriptions_download_microgen_data.xaml</DependentUpon>
@@ -286,9 +298,17 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Resource Include="Resources\Entypo.ttf" />
+    <Page Include="Pages\payment_deal_description.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\schedules_add.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\selectCompany.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\subscriptions_download_microgen_data.xaml">
       <SubType>Designer</SubType>

@@ -48,6 +48,9 @@ namespace petratracker.Models
     partial void InsertUser(User instance);
     partial void UpdateUser(User instance);
     partial void DeleteUser(User instance);
+    partial void InsertPDealDescription(PDealDescription instance);
+    partial void UpdatePDealDescription(PDealDescription instance);
+    partial void DeletePDealDescription(PDealDescription instance);
     partial void InsertSchedule(Schedule instance);
     partial void UpdateSchedule(Schedule instance);
     partial void DeleteSchedule(Schedule instance);
@@ -125,6 +128,14 @@ namespace petratracker.Models
 			get
 			{
 				return this.GetTable<User>();
+			}
+		}
+		
+		public System.Data.Linq.Table<PDealDescription> PDealDescriptions
+		{
+			get
+			{
+				return this.GetTable<PDealDescription>();
 			}
 		}
 		
@@ -1722,6 +1733,8 @@ namespace petratracker.Models
 		
 		private EntitySet<Notification> _Notifications;
 		
+		private EntitySet<PDealDescription> _PDealDescriptions;
+		
 		private EntitySet<Schedule> _Schedules;
 		
 		private EntitySet<PPayment> _PPayments;
@@ -1774,6 +1787,7 @@ namespace petratracker.Models
 			this._Settings = new EntitySet<Setting>(new Action<Setting>(this.attach_Settings), new Action<Setting>(this.detach_Settings));
 			this._Jobs = new EntitySet<Job>(new Action<Job>(this.attach_Jobs), new Action<Job>(this.detach_Jobs));
 			this._Notifications = new EntitySet<Notification>(new Action<Notification>(this.attach_Notifications), new Action<Notification>(this.detach_Notifications));
+			this._PDealDescriptions = new EntitySet<PDealDescription>(new Action<PDealDescription>(this.attach_PDealDescriptions), new Action<PDealDescription>(this.detach_PDealDescriptions));
 			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
 			this._PPayments = new EntitySet<PPayment>(new Action<PPayment>(this.attach_PPayments), new Action<PPayment>(this.detach_PPayments));
 			this._PPayments1 = new EntitySet<PPayment>(new Action<PPayment>(this.attach_PPayments1), new Action<PPayment>(this.detach_PPayments1));
@@ -2157,6 +2171,19 @@ namespace petratracker.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_PDealDescription", Storage="_PDealDescriptions", ThisKey="id", OtherKey="owner")]
+		public EntitySet<PDealDescription> PDealDescriptions
+		{
+			get
+			{
+				return this._PDealDescriptions;
+			}
+			set
+			{
+				this._PDealDescriptions.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_Schedules", ThisKey="id", OtherKey="modified_by")]
 		public EntitySet<Schedule> Schedules
 		{
@@ -2298,6 +2325,18 @@ namespace petratracker.Models
 			entity.User = null;
 		}
 		
+		private void attach_PDealDescriptions(PDealDescription entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_PDealDescriptions(PDealDescription entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
 		private void attach_Schedules(Schedule entity)
 		{
 			this.SendPropertyChanging();
@@ -2332,6 +2371,366 @@ namespace petratracker.Models
 		{
 			this.SendPropertyChanging();
 			entity.User1 = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PDealDescriptions")]
+	public partial class PDealDescription : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id;
+		
+		private int _payment_id;
+		
+		private int _month;
+		
+		private int _year;
+		
+		private int _contribution_type_id;
+		
+		private string _contribution_type;
+		
+		private System.Nullable<int> _owner;
+		
+		private System.Nullable<int> _modified_by;
+		
+		private System.Nullable<System.DateTime> _created_at;
+		
+		private System.Nullable<System.DateTime> _updated_at;
+		
+		private EntityRef<User> _User;
+		
+		private EntityRef<PPayment> _PPayment;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void Onpayment_idChanging(int value);
+    partial void Onpayment_idChanged();
+    partial void OnmonthChanging(int value);
+    partial void OnmonthChanged();
+    partial void OnyearChanging(int value);
+    partial void OnyearChanged();
+    partial void Oncontribution_type_idChanging(int value);
+    partial void Oncontribution_type_idChanged();
+    partial void Oncontribution_typeChanging(string value);
+    partial void Oncontribution_typeChanged();
+    partial void OnownerChanging(System.Nullable<int> value);
+    partial void OnownerChanged();
+    partial void Onmodified_byChanging(System.Nullable<int> value);
+    partial void Onmodified_byChanged();
+    partial void Oncreated_atChanging(System.Nullable<System.DateTime> value);
+    partial void Oncreated_atChanged();
+    partial void Onupdated_atChanging(System.Nullable<System.DateTime> value);
+    partial void Onupdated_atChanged();
+    #endregion
+		
+		public PDealDescription()
+		{
+			this._User = default(EntityRef<User>);
+			this._PPayment = default(EntityRef<PPayment>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_payment_id", DbType="Int NOT NULL")]
+		public int payment_id
+		{
+			get
+			{
+				return this._payment_id;
+			}
+			set
+			{
+				if ((this._payment_id != value))
+				{
+					if (this._PPayment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onpayment_idChanging(value);
+					this.SendPropertyChanging();
+					this._payment_id = value;
+					this.SendPropertyChanged("payment_id");
+					this.Onpayment_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_month", DbType="Int NOT NULL")]
+		public int month
+		{
+			get
+			{
+				return this._month;
+			}
+			set
+			{
+				if ((this._month != value))
+				{
+					this.OnmonthChanging(value);
+					this.SendPropertyChanging();
+					this._month = value;
+					this.SendPropertyChanged("month");
+					this.OnmonthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_year", DbType="Int NOT NULL")]
+		public int year
+		{
+			get
+			{
+				return this._year;
+			}
+			set
+			{
+				if ((this._year != value))
+				{
+					this.OnyearChanging(value);
+					this.SendPropertyChanging();
+					this._year = value;
+					this.SendPropertyChanged("year");
+					this.OnyearChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contribution_type_id", DbType="Int NOT NULL")]
+		public int contribution_type_id
+		{
+			get
+			{
+				return this._contribution_type_id;
+			}
+			set
+			{
+				if ((this._contribution_type_id != value))
+				{
+					this.Oncontribution_type_idChanging(value);
+					this.SendPropertyChanging();
+					this._contribution_type_id = value;
+					this.SendPropertyChanged("contribution_type_id");
+					this.Oncontribution_type_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contribution_type", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string contribution_type
+		{
+			get
+			{
+				return this._contribution_type;
+			}
+			set
+			{
+				if ((this._contribution_type != value))
+				{
+					this.Oncontribution_typeChanging(value);
+					this.SendPropertyChanging();
+					this._contribution_type = value;
+					this.SendPropertyChanged("contribution_type");
+					this.Oncontribution_typeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_owner", DbType="Int")]
+		public System.Nullable<int> owner
+		{
+			get
+			{
+				return this._owner;
+			}
+			set
+			{
+				if ((this._owner != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnownerChanging(value);
+					this.SendPropertyChanging();
+					this._owner = value;
+					this.SendPropertyChanged("owner");
+					this.OnownerChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_modified_by", DbType="Int")]
+		public System.Nullable<int> modified_by
+		{
+			get
+			{
+				return this._modified_by;
+			}
+			set
+			{
+				if ((this._modified_by != value))
+				{
+					this.Onmodified_byChanging(value);
+					this.SendPropertyChanging();
+					this._modified_by = value;
+					this.SendPropertyChanged("modified_by");
+					this.Onmodified_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_at", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> created_at
+		{
+			get
+			{
+				return this._created_at;
+			}
+			set
+			{
+				if ((this._created_at != value))
+				{
+					this.Oncreated_atChanging(value);
+					this.SendPropertyChanging();
+					this._created_at = value;
+					this.SendPropertyChanged("created_at");
+					this.Oncreated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_at", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> updated_at
+		{
+			get
+			{
+				return this._updated_at;
+			}
+			set
+			{
+				if ((this._updated_at != value))
+				{
+					this.Onupdated_atChanging(value);
+					this.SendPropertyChanging();
+					this._updated_at = value;
+					this.SendPropertyChanged("updated_at");
+					this.Onupdated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_PDealDescription", Storage="_User", ThisKey="owner", OtherKey="id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.PDealDescriptions.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.PDealDescriptions.Add(this);
+						this._owner = value.id;
+					}
+					else
+					{
+						this._owner = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PPayment_PDealDescription", Storage="_PPayment", ThisKey="payment_id", OtherKey="id", IsForeignKey=true)]
+		public PPayment PPayment
+		{
+			get
+			{
+				return this._PPayment.Entity;
+			}
+			set
+			{
+				PPayment previousValue = this._PPayment.Entity;
+				if (((previousValue != value) 
+							|| (this._PPayment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._PPayment.Entity = null;
+						previousValue.PDealDescriptions.Remove(this);
+					}
+					this._PPayment.Entity = value;
+					if ((value != null))
+					{
+						value.PDealDescriptions.Add(this);
+						this._payment_id = value.id;
+					}
+					else
+					{
+						this._payment_id = default(int);
+					}
+					this.SendPropertyChanged("PPayment");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 	
@@ -2409,6 +2808,8 @@ namespace petratracker.Models
 		
 		private System.DateTime _updated_at;
 		
+		private System.Nullable<int> _ptas_fund_deal_id;
+		
 		private EntityRef<User> _User;
 		
 		private EntityRef<PPayment> _PPayment;
@@ -2485,6 +2886,8 @@ namespace petratracker.Models
     partial void Oncreated_atChanged();
     partial void Onupdated_atChanging(System.DateTime value);
     partial void Onupdated_atChanged();
+    partial void Onptas_fund_deal_idChanging(System.Nullable<int> value);
+    partial void Onptas_fund_deal_idChanged();
     #endregion
 		
 		public Schedule()
@@ -3182,6 +3585,26 @@ namespace petratracker.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ptas_fund_deal_id", DbType="Int")]
+		public System.Nullable<int> ptas_fund_deal_id
+		{
+			get
+			{
+				return this._ptas_fund_deal_id;
+			}
+			set
+			{
+				if ((this._ptas_fund_deal_id != value))
+				{
+					this.Onptas_fund_deal_idChanging(value);
+					this.SendPropertyChanging();
+					this._ptas_fund_deal_id = value;
+					this.SendPropertyChanged("ptas_fund_deal_id");
+					this.Onptas_fund_deal_idChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_User", ThisKey="modified_by", OtherKey="id", IsForeignKey=true)]
 		public User User
 		{
@@ -3299,6 +3722,10 @@ namespace petratracker.Models
 		
 		private string _company_code;
 		
+		private string _company_name;
+		
+		private System.Nullable<int> _company_id;
+		
 		private System.Nullable<bool> _savings_booster;
 		
 		private string _savings_booster_client_code;
@@ -3326,6 +3753,8 @@ namespace petratracker.Models
 		private System.Nullable<System.DateTime> _created_at;
 		
 		private System.Nullable<System.DateTime> _updated_at;
+		
+		private EntitySet<PDealDescription> _PDealDescriptions;
 		
 		private EntitySet<Schedule> _Schedules;
 		
@@ -3359,6 +3788,10 @@ namespace petratracker.Models
     partial void Onsubscription_amountChanged();
     partial void Oncompany_codeChanging(string value);
     partial void Oncompany_codeChanged();
+    partial void Oncompany_nameChanging(string value);
+    partial void Oncompany_nameChanged();
+    partial void Oncompany_idChanging(System.Nullable<int> value);
+    partial void Oncompany_idChanged();
     partial void Onsavings_boosterChanging(System.Nullable<bool> value);
     partial void Onsavings_boosterChanged();
     partial void Onsavings_booster_client_codeChanging(string value);
@@ -3391,6 +3824,7 @@ namespace petratracker.Models
 		
 		public PPayment()
 		{
+			this._PDealDescriptions = new EntitySet<PDealDescription>(new Action<PDealDescription>(this.attach_PDealDescriptions), new Action<PDealDescription>(this.detach_PDealDescriptions));
 			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
 			this._User = default(EntityRef<User>);
 			this._User1 = default(EntityRef<User>);
@@ -3613,6 +4047,46 @@ namespace petratracker.Models
 					this._company_code = value;
 					this.SendPropertyChanged("company_code");
 					this.Oncompany_codeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company_name", DbType="NVarChar(200)")]
+		public string company_name
+		{
+			get
+			{
+				return this._company_name;
+			}
+			set
+			{
+				if ((this._company_name != value))
+				{
+					this.Oncompany_nameChanging(value);
+					this.SendPropertyChanging();
+					this._company_name = value;
+					this.SendPropertyChanged("company_name");
+					this.Oncompany_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company_id", DbType="Int")]
+		public System.Nullable<int> company_id
+		{
+			get
+			{
+				return this._company_id;
+			}
+			set
+			{
+				if ((this._company_id != value))
+				{
+					this.Oncompany_idChanging(value);
+					this.SendPropertyChanging();
+					this._company_id = value;
+					this.SendPropertyChanged("company_id");
+					this.Oncompany_idChanged();
 				}
 			}
 		}
@@ -3905,6 +4379,19 @@ namespace petratracker.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PPayment_PDealDescription", Storage="_PDealDescriptions", ThisKey="id", OtherKey="payment_id")]
+		public EntitySet<PDealDescription> PDealDescriptions
+		{
+			get
+			{
+				return this._PDealDescriptions;
+			}
+			set
+			{
+				this._PDealDescriptions.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PPayment_Schedule", Storage="_Schedules", ThisKey="id", OtherKey="payment_id")]
 		public EntitySet<Schedule> Schedules
 		{
@@ -4004,6 +4491,18 @@ namespace petratracker.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_PDealDescriptions(PDealDescription entity)
+		{
+			this.SendPropertyChanging();
+			entity.PPayment = this;
+		}
+		
+		private void detach_PDealDescriptions(PDealDescription entity)
+		{
+			this.SendPropertyChanging();
+			entity.PPayment = null;
 		}
 		
 		private void attach_Schedules(Schedule entity)

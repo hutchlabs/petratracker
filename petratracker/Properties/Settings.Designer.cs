@@ -64,7 +64,6 @@ namespace petratracker.Properties {
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ELMINA\\SQLEXPRESS;Initial Catalog=PTASDB;Integrated Security=True")]
         public string PTASDBConnectionString {
-<<<<<<< HEAD
             get {
                 return ((string)(this["PTASDBConnectionString"]));
             }
@@ -78,10 +77,6 @@ namespace petratracker.Properties {
         public string Petra_trackerConnectionString {
             get {
                 return ((string)(this["Petra_trackerConnectionString"]));
-=======
-            get {
-                return ((string)(this["PTASDBConnectionString"]));
->>>>>>> origin/developer
             }
         }
     }

@@ -58,17 +58,10 @@ namespace petratracker.Models
                 case 11: name= "November"; break;
                 case 12: name= "December"; break;
             }
-<<<<<<< HEAD
 
             return name;
         }
 
-=======
-
-            return name;
-        }
-
->>>>>>> origin/developer
         public static bool IsLinkedSubscription(string company_id, string tier, int month, int year, int ctid)
         {
             try
@@ -132,7 +125,6 @@ namespace petratracker.Models
             }
         }
 
-<<<<<<< HEAD
         public static IEnumerable<TrackerPaymentDealDescriptions> GetPaymentDealDescriptions(int payment_id)
         {
 
@@ -147,8 +139,6 @@ namespace petratracker.Models
 
         }
 
-=======
->>>>>>> origin/developer
         public static IEnumerable<PPayment> GetSubscriptions(int job_id, string sub_status="",bool showAll=false)
         {
             if (TrackerUser.IsCurrentUserOps())
@@ -169,7 +159,6 @@ namespace petratracker.Models
         }
 
         public static IEnumerable<PPayment> GetAllOpsUserSubscriptions(string sub_status = "")
-<<<<<<< HEAD
         {
             if (sub_status != string.Empty)
             {
@@ -189,27 +178,6 @@ namespace petratracker.Models
         {
             if (sub_status != string.Empty)
             {
-=======
-        {
-            if (sub_status != string.Empty)
-            {
-                return (from p in Database.Tracker.PPayments
-                        where p.status.Trim() == sub_status && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
-                        select p);
-            }
-            else
-            {
-                return (from p in Database.Tracker.PPayments
-                        where p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
-                        select p);
-            }
-        }
-
-        public static IEnumerable<PPayment> GetOpsUserSubscriptions(int job_id, string sub_status = "")
-        {
-            if (sub_status != string.Empty)
-            {
->>>>>>> origin/developer
                 return (from p in Database.Tracker.PPayments 
                         where p.job_id == job_id && p.status.Trim() == sub_status && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
                         select p);
