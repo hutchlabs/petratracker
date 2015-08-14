@@ -160,6 +160,7 @@ namespace petratracker.Models
                 s.workflow_status = Constants.WF_VALIDATION_NOTDONE;
                 s.workflow_summary = "Processing of this schedule has not begun";
                 s.parent_id = parent_id;
+                s.ptas_fund_deal_id = GetFundDealId(companyid, tier, ctid, int.Parse(month), int.Parse(year));
                 s.modified_by = TrackerUser.GetCurrentUser().id;
                 s.created_at = DateTime.Now;
                 s.updated_at = DateTime.Now;
@@ -689,6 +690,28 @@ namespace petratracker.Models
                 return 0;
             }
         }
+
+        private static int GetFundDealId(string companyid, string tier, int ctid, int month, int year)
+        {
+            DateTime dealDate = new DateTime(year, month, 1);
+            try
+            {
+                FundDeal fd = (from j in Database.PTAS.FundDeals
+                               where j.ContribType_ID == ctid &&
+                                     j.CompanyEntityId == companyid.Trim() &&
+                                     j.Tier == tier.Replace(" ", "") &&
+                                     j.TotalContribution != 0 &&
+                               ((DateTime)j.DealDate).Date == dealDate.Date
+                               select j).Single();
+
+                return fd.FundDealID;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
 
         private static bool CheckValidation(string companyid, string tier, int ctid, int month, int year)
         {

@@ -110,7 +110,7 @@ namespace petratracker.Pages
                                             int.Parse(((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Key),
                                             cbx_month.SelectedValue.ToString(),
                                             ((ComboBoxPairs)cbx_year.SelectedItem)._Value,
-                                            0, //(double)tb_amount.Value,
+                                            0, 
                                             parent_id);
                     if (_loadedInFlyout)
                         close_flyout();
