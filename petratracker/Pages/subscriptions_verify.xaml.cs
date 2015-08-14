@@ -56,18 +56,9 @@ namespace petratracker.Pages
         {
             try
             {
-                //string newval = "";
-                //string altval = "";
-                //string rtnval = "";
-
-                //string oldval = txt_desc_period.Text;
-
                 if (chkSavingsBooster.IsChecked == true)
                 {
                     grpSavingsBooster.IsEnabled = true;
-                    //newval = string.Format("{0} {1}", Utils.GetMonthName(dtSubscriptionDate.SelectedDate.Value.Month - 1), dtSubscriptionDate.SelectedDate.Value.Year);
-                    //altval = string.Format("{0} {1}", Utils.GetMonthName(dtSubscriptionDate.SelectedDate.Value.AddMonths(-1).Month - 1), dtSubscriptionDate.SelectedDate.Value.Year);
-
                 }
                 else if (chkSavingsBooster.IsChecked != true)
                 {
@@ -75,19 +66,7 @@ namespace petratracker.Pages
                     txtSearchClients.Text = string.Empty;
                     cmbClient.SelectedIndex = -1;
                     txtClientCode.Text = string.Empty;
-                    //newval = string.Format("{0} {1}", Utils.GetMonthName(dtSubscriptionDate.SelectedDate.Value.AddMonths(-1).Month - 1), dtSubscriptionDate.SelectedDate.Value.Year);
-                    //altval = string.Format("{0} {1}", Utils.GetMonthName(dtSubscriptionDate.SelectedDate.Value.Month - 1), dtSubscriptionDate.SelectedDate.Value.Year);
                 }
-
-                //string[] vals = oldval.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                //foreach(string item in vals)
-                //{
-                //    if (!item.Trim().Equals(altval))
-                //    {
-                //        rtnval += (rtnval.Length == 0) ? item.Trim() : ", " + item.Trim();
-                //    }
-                //}
-                //txt_desc_period.Text = rtnval + ((rtnval.Length!=0)  ? ", " : "") + newval;
             }
             catch(Exception dealError)
             {
@@ -106,9 +85,6 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
-            //dtSubscriptionDate.SelectedDate = subscription.value_date;
-            //txt_desc_period.Text = subscription.deal_description_period;
-            //dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
             grpTransDetails.IsEnabled = false;
             subID = subscription.id;
             get_deal_desc_period();           
@@ -126,17 +102,9 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
-            //dtSubscriptionDate.SelectedDate = subscription.value_date;
-            //dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
             txtComments.Text = subscription.comments;
             grpTransDetails.IsEnabled = false;
             subID = subscription.id;
-
-            //Load Deal Details
-
-            //txt_desc_period.Text = subscription.deal_description_period;
-            //cbxDealDescription.SelectedValue = subscription.deal_description;
-            //grpDealDetails.IsEnabled = false;
 
             //Load Company Mapping
             grpCompanyMapping.IsEnabled = false;
@@ -179,17 +147,9 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
-            //dtSubscriptionDate.SelectedDate = subscription.value_date;
-            //dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
             txtComments.Text = subscription.comments;
             grpTransDetails.IsEnabled = false;
             subID = subscription.id;
-            //Load Deal Details
-
-            //txt_desc_period.Text = subscription.deal_description_period;
-            //cbxDealDescription.SelectedValue = subscription.deal_description;
-            //grpDealDetails.IsEnabled = false;
-
 
             //Load Company Mapping
             grpCompanyMapping.IsEnabled = false;
@@ -255,18 +215,9 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
-            //dtSubscriptionDate.SelectedDate = subscription.value_date;
-            //dtSubscriptionDate.SelectedDate.Value.ToString("dd-MMM-yyyy");
             txtComments.Text = subscription.comments;
             grpTransDetails.IsEnabled = false;
             subID = subscription.id;
-
-            //Load Deal Details
-
-            //txt_desc_period.Text = subscription.deal_description_period;
-            //cbxDealDescription.SelectedValue = subscription.deal_description;
-            //grpDealDetails.IsEnabled = false;
-
             grpCompanyMapping.IsEnabled = false;
 
             //Load Company Mapping
@@ -388,10 +339,6 @@ namespace petratracker.Pages
                         p.company_name = cmbCompanies.Text;
                         p.savings_booster = chkSavingsBooster.IsChecked;
                         p.savings_booster_client_code = txtClientCode.Text;
-
-                        //p.deal_description_period = txt_desc_period.Text;
-                        //p.deal_description = ((ComboBoxPairs)cbxDealDescription.SelectedItem)._Value;
-
                         p.identified_by = TrackerUser.GetCurrentUser().id;
                         p.modified_by = TrackerUser.GetCurrentUser().id;
                         p.date_identified = DateTime.Today;
@@ -469,10 +416,6 @@ namespace petratracker.Pages
                         conf_str += "Transaction Date : "+txtTransDate.Text+"\n";
                         conf_str += "Subscription/Value Date : "+txtValueDate.Text+"\n";
                         conf_str += "Amount : " + txtTranAmount.Text + "\n";
-
-                        //conf_str += "Deal Description Period : "+ txt_desc_period.Text+"\n";
-                        //conf_str += "Deal Description : "+ ((ComboBoxPairs)cbxDealDescription.SelectedItem)._Value+"\n";
-
                         conf_str += "Identified Company : " + cmbCompanies.Text + "\n";
                         conf_str += "Savings Booster Customer : "+ cmbClient.Text +"\n\n";
                         conf_str += "Please click Yes to commit changes to this transaction.";
@@ -650,7 +593,6 @@ namespace petratracker.Pages
         {
             if (dgPaymentDealDescriptions.SelectedItem != null)
             {
-
                 TrackerPaymentDealDescriptions p = (TrackerPaymentDealDescriptions)dgPaymentDealDescriptions.SelectedItem;
                 payment_deal_description openEdit = new payment_deal_description((int)p.id, true);
                 openEdit.ShowDialog();

@@ -114,10 +114,17 @@
                         </Rectangle.OpacityMask>
                     </Rectangle>
                 </Button>
-                <Label Content="Payment Deal Descriptions" Margin="6,8,282,7" FontWeight="Bold"/>
+                <Label Content="PAYMENT DEAL DESCRIPTIONS" Margin="6,8,282,7" Foreground="White"/>
             </Grid>
         </StackPanel>
-        <DataGrid x:Name="dgPaymentDealDescriptions" HorizontalContentAlignment="Stretch" ColumnWidth="*" SelectionUnit="FullRow"  IsReadOnly="True"  HorizontalAlignment="Left" Margin="10,400,0,0" VerticalAlignment="Top" Width="464" Height="157" SelectionChanged="dgPaymentDealDescriptions_SelectionChanged" PreviewMouseDoubleClick="dgPaymentDealDescriptions_PreviewMouseDoubleClick"/>
-
+        <DataGrid x:Name="dgPaymentDealDescriptions" HorizontalContentAlignment="Stretch" ColumnWidth="*" SelectionUnit="FullRow"  IsReadOnly="True"  HorizontalAlignment="Left" Margin="10,400,0,0" VerticalAlignment="Top" Width="464" Height="157" 
+                  SelectionChanged="dgPaymentDealDescriptions_SelectionChanged" PreviewMouseDoubleClick="dgPaymentDealDescriptions_PreviewMouseDoubleClick"
+                  AutoGenerateColumns="False" ItemsSource="{Binding}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Month" Width="77" Binding="{Binding month}" />
+                <DataGridTextColumn Header="Year" Width="55" Binding="{Binding year}" />
+                <DataGridTextColumn Header="Contribution Type" Width="250" Binding="{Binding contribution_type}" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>
