@@ -26,8 +26,6 @@ namespace petratracker.Models
 {
     class TrackerReports
     {
-
-
         #region private variables
         MicroGenExportDataTable rep = new MicroGenExportDataTable();  
         #endregion
@@ -289,14 +287,64 @@ namespace petratracker.Models
         }
 
 
-        public static IEnumerable<TrackerReportTransRefType> get_RM_Company_Update()
+        public static IEnumerable<TrackerReport_RMReport> get_RM_Report()
         {
             try
             {
-                Pages.selectCompany openSelectCompany = new Pages.selectCompany();
-                bool? result = openSelectCompany.ShowDialog();
-                if (result ?? false) { }
+                string rm_report_sql = @"SELECT isnull(s.company, p.company_code) Company_Name
+	                                             , isnull(s.company_id, p.company_code) Company_ID
+	                                             , isnull(p.company_code, s.company_id) Company_Code
+	                                             , isnull(s.tier, p.tier) Tier
+	                                             , isnull(p.deal_description_period, CONCAT(s.month,' ',s.year)) Contributionperiod
+	                                             , isnull(s.contributiontype, p.deal_description) contributiontype
+	                                             , isnull(p.value_date, '') Payment_Date
+	                                             , isnull(p.transaction_amount, 0) Payment_Amount
+	                                             , isnull(s.validation_status, 'No Schedule') Validation_Status
+	                                             , Isnull((case when s.validation_status like '%passed%' 
+	                                                            then '' else (case when s.resolution_reminder2_date Is null 
+	                                                                               then (case when s.resolution_reminder1_date is null 
+						                                                                      then '' 
+	                                                                                          else s.resolution_reminder1_date end) 
+					                                                               else s.resolution_reminder2_date end) end), '') Last_Reminder
+	                                             , c.Description Client_Category
+                                              FROM (SELECT * FROM [Petra_tracker].[dbo].[PPayments] WHERE status = 'Identified and approved') p
+                                              FULL JOIN (SELECT s.*, e.EntityKey FROM [Petra_tracker].[dbo].[Schedules] s
+                                                           JOIN Petra5.dbo.Entity e ON CONVERT(nvarchar, e.EntityID) = s.company_id) s ON s.entitykey = p.company_code 
+                                              LEFT JOIN	(SELECT r.EntityID, rt.Description FROM Petra5.dbo.EntityRoles r
+			                                               JOIN  Petra5.dbo.RoleType rt ON rt.RoleTypeID = r.RoleTypeID
+			                                              WHERE r.RoleTypeID = 10) c ON CONVERT(nvarchar, c.EntityID) = s.company_id";
+                return Database.Tracker.ExecuteQuery<TrackerReport_RMReport>(rm_report_sql);
+
+            }
+            catch(Exception)
+            {
                 return null;
+            }
+        }
+
+        public static IEnumerable<TrackerReport_CompanyUpdate> get_RM_Company_Update()
+        {
+            try
+            {
+                string rm_update_sql = @"SELECT upd.CompanyName as Company, upd.Tier
+                                                , upd.PaymentID, upd.Cont_Date as Contribution_Date, upd.Value_Date
+                                                , upd.Cont_Month Contribution_Month, upd.Validation_Status, ISNULL(cat.Description, 'Red') Client_Category
+                                           FROM (SELECT ISNULL(p.company_id, s.company_id) CompanyID
+	                                                    , ISNULL(p.company_name, s.company) CompanyName
+	                                                    , ISNULL(p.tier, s.tier) Tier
+	                                                    , ISNULL(p.id, 0) PaymentID
+	                                                    , isnull(p.value_date, '') Cont_Date
+	                                                    , isnull(p.value_date, '') Value_Date
+	                                                    , ISNULL(s.month + s.year, '') Cont_Month
+	                                                    , ISNULL(s.validation_status, 'No Schedule') Validation_Status
+	                                              FROM [Petra_tracker].[dbo].[PPayments] p
+	                                              FULL JOIN [Petra_tracker].[dbo].[Schedules] s on s.payment_id = p.id) upd
+                                        LEFT JOIN (SELECT er.EntityID, rt.Description 
+                                                      FROM [Petra5].[dbo].[EntityRoles] er
+                                                      JOIN [Petra5].[dbo].[RoleType] rt ON rt.RoleTypeID = er.RoleTypeID
+                                                     WHERE rt.RoleTypeID in (1019, 1020, 1021)) cat ON cat.EntityID = upd.CompanyID";
+
+                return Database.Tracker.ExecuteQuery<TrackerReport_CompanyUpdate>(rm_update_sql);
             }
             catch (Exception)
             {
@@ -354,5 +402,136 @@ namespace petratracker.Models
         #endregion
 
 
+
+        internal static IEnumerable<TrackerReport_ExpectedPayment> get_ExpectedPayment()
+        {
+            try
+            {
+                string expected_payment_sql = @"select 'Expected_Payments' Description,
+                                                (
+                                                select COUNT(id) num
+                                                from [Petra_tracker].[dbo].[PPayments] p
+                                                where value_date between '' and '' -- 1st and last dates of previous month
+                                                and tier = 'Tier 2' --select tier
+                                                )
+                                                +
+                                                (
+                                                select COUNT(companyid) num 
+                                                from (select Companyid, CompanyKey, tier, CreatedOn from
+                                                (select cm.EntityKey CompanyKey, cm.EntityID Companyid, left(p.Description, 6) Tier, cm.CreatedOn
+                                                from [Petra5].[dbo].[Entity] cm
+                                                join [Petra5].[dbo].[Association] sp on sp.SourceEntityID = cm.EntityID
+                                                join [Petra5].[dbo].[EntityClient] ec on ec.EntityID = sp.TargetEntityID
+                                                join [Petra5].[dbo].[Entityfund] ef on ef.EntityFundID = ec.EntityID
+                                                join [Petra5].[dbo].[Purpose] p on p.PurposeID = ec.PurposeID
+                                                where sp.RoleTypeID = 1003
+                                                and cm.EntityTypeID = 2) sp
+                                                group by Companyid, CompanyKey, tier, CreatedOn) tb
+                                                where CreatedOn between '2015-05-01' and '2015-05-31' -- 1st and last dates of previous month
+                                                and tier = 'Tier 2' --select tier
+                                                ) Number
+                                                union
+                                                select 'Actual_Payments',
+                                                (
+                                                select COUNT(id) num
+                                                from [Petra_tracker].[dbo].[PPayments] p
+                                                where value_date between '' and '' -- 1st and last dates of current month
+                                                and tier = 'Tier 2' --select tier
+                                                )";
+                return Database.Tracker.ExecuteQuery<TrackerReport_ExpectedPayment>(expected_payment_sql);
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+        }
+
+        internal static IEnumerable<TrackerReport_DealDescriptionMatch> get_DealDescriptionMatch()
+        {
+            try
+            {
+                string ddm_sql = @"select tracker_descs.company_code CompanyCode, tracker_descs.company_id CompanyID, tracker_descs.tier Tier
+                                   , tracker_descs.value_date ValueDate
+                                   , tracker_descs.dealdesc TrackerDealDesc
+	                               , mic_desc.DealDesc MiscDealDesc
+                            from
+                            (
+                                select p.company_code, p.company_id, p.tier, p.value_date, 
+                                      (CONVERT(nvarchar,pd.month) + CONVERT(nvarchar,pd.year) + (case when pd.contribution_type not like '%backpay%' then 'B' else '' end)) dealdesc 
+                                  from [Petra_tracker].[dbo].[PPayments] p
+                                  join [Petra_tracker].[dbo].[PDealDescriptions] pd on p.id = pd.payment_id
+                            ) tracker_descs
+                            left join
+                            (
+                                select CompanyKey, Companyid, Tier, ValueDate, DealDesc from
+                                (select et.EntityKey CompanyKey, et.EntityID Companyid, left(P.Description, 6) Tier
+                                , ef.FieldValue ValueDate, fd.Explanation DealDesc
+                                from [Petra5].[dbo].[EntityField] ef
+                                join [Petra5].[dbo].[FieldDef] fd on ef.FieldId = fd.FieldId
+                                join [Petra5].[dbo].[Association] asn on asn.TargetEntityID = ef.EntityID
+                                join [Petra5].[dbo].[Entity] et on asn.SourceEntityID = et.EntityID
+                                join [Petra5].[dbo].[EntityClient] ec on ef.EntityID = ec.EntityID
+                                join [Petra5].[dbo].[Purpose] p on p.PurposeID = ec.PurposeID
+                                where fd.GroupId = 1049
+                                and asn.RoleTypeID = 1003
+                                and asn.ParentID is not null) tb
+                                group by CompanyKey, Companyid, Tier, ValueDate, DealDesc
+                            ) mic_desc on mic_desc.ValueDate = tracker_descs.value_date 
+                            and mic_desc.DealDesc = tracker_descs.dealdesc
+                            and mic_desc.ValueDate = CONVERT(nvarchar, tracker_descs.value_date)";
+
+                return Database.Tracker.ExecuteQuery<TrackerReport_DealDescriptionMatch>(ddm_sql);
+            } 
+            catch(Exception)
+            {
+                return null;
+            }
+        }
     }
+
+    #region Report Models
+
+    class TrackerReport_ExpectedPayment
+    {
+        public string Description { get; set; }
+        public int Number { get; set; }
+    }
+
+    class TrackerReport_DealDescriptionMatch
+    {
+        public string CompanyCode { get; set; } 
+        public string CompanyId { get; set; }
+        public string Tier { get; set; }
+        public DateTime ValueDate { get; set; }
+        public string TrackerDealDesc { get; set; }
+        public string MiscDealDesc {get; set; }
+    }
+    
+    class TrackerReport_RMReport
+    {
+        public string Company_ID { get; set; }
+        public string Company_Name { get; set; }
+	    public string Company_Code { get; set; }
+	    public string Tier { get; set; }
+	    public string Contributionperiod { get; set; }
+	    public string contributiontype { get; set; }
+	    public DateTime Payment_Date { get; set; }
+	    public decimal? Payment_Amount { get; set; }
+	    public string Validation_Status { get; set; }
+	    public DateTime Last_Reminder { get; set; }
+        public string Client_Category { get; set; }
+    }
+    class TrackerReport_CompanyUpdate
+    {
+        public string Company { get; set; }
+        public string Tier { get; set; }
+        public Int32 PaymentID { get; set; }
+        public DateTime Contribution_Date { get; set; }
+        public DateTime Value_Date { get; set; }
+        public int Contribution_Month { get; set; }
+        public string Validation_Status { get; set; }
+        public string Client_Category { get; set; }
+    }
+    
+    #endregion
 }

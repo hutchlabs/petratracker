@@ -1,4 +1,4 @@
-﻿USE [Petra_tracker1]
+﻿USE [Petra_tracker]
 
 SET ANSI_PADDING OFF
 

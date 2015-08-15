@@ -31,7 +31,7 @@
                     <Button x:Name="btn_Query" Margin="590,0,257,-3" Width="40" Height="40" ToolTip="Query" Style="{DynamicResource MetroCircleButtonStyle}" Click="btn_Query_Click" >
                         <Rectangle Width="10" Height="10" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                             <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_check}" />
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>

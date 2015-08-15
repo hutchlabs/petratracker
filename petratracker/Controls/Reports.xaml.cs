@@ -1,4 +1,5 @@
-﻿using System;
+﻿using petratracker.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +28,10 @@ namespace petratracker.Controls
 
         #region reports menus
 
-        private string[] main_menu_items = new string[7] { "Payment-Schedule Status", "Slack Days", "Schedules Status", "Schedules Pending", "Summary data on clients", "Transref match", "RM Company update" };
+        private string[] main_menu_items = new string[9] { "Payment-Schedule Status", "Slack Days", 
+                                                           "Schedules Status", "Schedules Pending", "Summary data on clients", 
+                                                           "Transref match", "RM Company update","Expected Payment",
+                                                           "Deal Description Match" };
 
         private string[] sub_menus_1 = { "Overpayment", "Underpayment", "No schedule", "Schedule available" };
         private string[] sub_menus_2 = { "Receipts sent", "Validation", "Files downloaded", "Files loaded", "Reminders sent", "Ticket resolution", "Revalidation" };
@@ -35,17 +39,22 @@ namespace petratracker.Controls
         private string[] sub_menus_4 = { "Schedules to be validated", "Files to be downloaded", "Receipts to be sent", "Payments not linked to schedules" };
         private string[] sub_menus_5 = { "Missing payments", "Missing schedules", "Incomplete schedules" };
         private string[] sub_menus_6 = { "Transref match"};
-        private string[] sub_menus_7 = { "RM Company update" };
-
-       
+        private string[] sub_menus_7 = { "RM Report", "RM Company update" };
+        private string[] sub_menus_8 = { "Expected Payment" };
+        private string[] sub_menus_9 = { "Deal Description Match" };
+        
 
         private void load_query_sub_menus(string[] sub_menus)
         {
             cmbQuery.Items.Clear();
-            foreach (string sub_menu_item in sub_menus)
+            foreach (string sub_menu_item in sub_menus.OrderBy(f=>f.ToLower()).ToList())
             {
                 cmbQuery.Items.Add(new ComboBoxItem() { Content = sub_menu_item });
             }
+
+            cmbQuery.SelectedIndex = 0;
+
+            loadReport();
         }
 
         private void load_query_menus(string menuContent)
@@ -57,7 +66,8 @@ namespace petratracker.Controls
             else if ((string)menuContent == "Summary data on clients") { load_query_sub_menus(sub_menus_5); }
             else if ((string)menuContent == "Transref match") { load_query_sub_menus(sub_menus_6); }
             else if ((string)menuContent == "RM Company update") { load_query_sub_menus(sub_menus_7); }
-
+            else if ((string)menuContent == "Expected Payment") { load_query_sub_menus(sub_menus_8);  }
+            else if ((string)menuContent == "Deal Description Match") { load_query_sub_menus(sub_menus_9);  }
         }
 
 
@@ -67,11 +77,12 @@ namespace petratracker.Controls
    
             cmbReportType.Items.Clear();
 
-            foreach (string menu_item in main_menu_items)
+            foreach (string menu_item in main_menu_items.OrderBy(f=>f.ToLower()).ToList())
             {
                 cmbReportType.Items.Add(new ComboBoxItem() { Content = menu_item });
             }
 
+            cmbReportType.SelectedIndex = 0;
         }
 
 
@@ -105,6 +116,11 @@ namespace petratracker.Controls
 
         private void btn_Query_Click(object sender, RoutedEventArgs e)
         {
+            loadReport();
+        }
+
+        private void loadReport()
+        {
             try
             {
                 switch(cmbReportType.Text)
@@ -130,7 +146,20 @@ namespace petratracker.Controls
                         break;
 
                     case "RM Company update":
-                        dgReport.ItemsSource = Models.TrackerReports.get_Trans_Ref_Match();
+                        if (cmbQuery.Text.Equals("RM Company Update"))
+                        { 
+                            dgReport.ItemsSource =  Models.TrackerReports.get_RM_Company_Update(); 
+                        } else {
+                          dgReport.ItemsSource = Models.TrackerReports.get_RM_Report();
+                        }
+                        break;
+
+                    case "Expected Payment":
+                        dgReport.ItemsSource = TrackerReports.get_ExpectedPayment();
+                        break;
+
+                    case "Deal Description Match":
+                        dgReport.ItemsSource = TrackerReports.get_DealDescriptionMatch();
                         break;
 
                     default:
@@ -141,14 +170,12 @@ namespace petratracker.Controls
             }
             catch (Exception err)
             {
-                MessageBox.Show(err.Message);
+                MessageBox.Show(err.GetBaseException().ToString());
             }
         }
 
         private void btn_Download_Payments_Click(object sender, RoutedEventArgs e)
-        {
-           
-
+        {        
             switch (cmbReportType.Text)
             {
                 case "Payment-Schedule Status":
@@ -174,6 +201,37 @@ namespace petratracker.Controls
                     Models.ExportToExcel<Models.Tracker_Report_Schedules_Pending> exportSchedulePending = new Models.ExportToExcel<Models.Tracker_Report_Schedules_Pending>();
                     exportSchedulePending.dataToPrint = dgReport.ItemsSource.Cast<Models.Tracker_Report_Schedules_Pending>().ToList();
                     exportSchedulePending.GenerateReport();
+                    break;
+
+                case "RM Company update":
+                    if (cmbQuery.Text.Equals("RM Company Update"))
+                    {
+                        Models.ExportToExcel<TrackerReport_CompanyUpdate> export0 = new Models.ExportToExcel<TrackerReport_CompanyUpdate>();
+                        export0.dataToPrint = dgReport.Items.Cast<TrackerReport_CompanyUpdate>().ToList();
+                        export0.GenerateReport();
+                    }
+                    else
+                    {
+                        Models.ExportToExcel<TrackerReport_RMReport> export1 = new Models.ExportToExcel<TrackerReport_RMReport>();
+                        export1.dataToPrint = dgReport.Items.Cast<TrackerReport_RMReport>().ToList();
+                        export1.GenerateReport();
+                    }
+                    break;
+
+                case "Expected Payment":
+                    
+                        Models.ExportToExcel<TrackerReport_ExpectedPayment> export2 = new Models.ExportToExcel<TrackerReport_ExpectedPayment>();
+                        export2.dataToPrint = dgReport.Items.Cast<TrackerReport_ExpectedPayment>().ToList();
+                        export2.GenerateReport();
+                    
+                    break;
+
+                case "Deal Description Match":
+                    
+                        Models.ExportToExcel<TrackerReport_DealDescriptionMatch> export3 = new Models.ExportToExcel<TrackerReport_DealDescriptionMatch>();
+                        export3.dataToPrint = dgReport.Items.Cast<TrackerReport_DealDescriptionMatch>().ToList();
+                        export3.GenerateReport();
+                    
                     break;
 
                 case "Summary data on clients":
