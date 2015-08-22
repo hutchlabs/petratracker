@@ -94,9 +94,9 @@
       <Association Name="User_Job" Member="Jobs" ThisKey="id" OtherKey="owner" Type="Job" />
       <Association Name="User_Notification" Member="Notifications" ThisKey="id" OtherKey="from_user_id" Type="Notification" />
       <Association Name="User_PDealDescription" Member="PDealDescriptions" ThisKey="id" OtherKey="owner" Type="PDealDescription" />
-      <Association Name="User_Schedule" Member="Schedules" ThisKey="id" OtherKey="modified_by" Type="Schedule" />
       <Association Name="User_PPayment" Member="PPayments" ThisKey="id" OtherKey="approved_by" Type="PPayment" />
       <Association Name="User_PPayment1" Member="PPayments1" ThisKey="id" OtherKey="owner" Type="PPayment" />
+      <Association Name="User_Schedule" Member="Schedules" ThisKey="id" OtherKey="modified_by" Type="Schedule" />
       <Association Name="Role_User" Member="Role" ThisKey="role_id" OtherKey="id" Type="Role" IsForeignKey="true" />
     </Type>
   </Table>
@@ -114,47 +114,6 @@
       <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Association Name="User_PDealDescription" Member="User" ThisKey="owner" OtherKey="id" Type="User" IsForeignKey="true" />
       <Association Name="PPayment_PDealDescription" Member="PPayment" ThisKey="payment_id" OtherKey="id" Type="PPayment" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Schedules" Member="Schedules">
-    <Type Name="Schedule">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="company_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="company" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="company_email" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="tier" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="amount" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
-      <Column Name="contributiontype" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="contributiontypeid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="month" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="year" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="validated" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="validation_status" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="validation_valuetime" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="resolution_reminder1_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="resolution_reminder2_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="resolution_type" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="resolution_info" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="resolution_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="payment_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="receipt_sent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="receipt_sent_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="file_downloaded" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="file_downloaded_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="file_uploaded" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="file_uploaded_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="email_last_sent" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="emails_sent" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="processing" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="workflow_status" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="workflow_summary" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="parent_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Column Name="ptas_fund_deal_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="User_Schedule" Member="User" ThisKey="modified_by" OtherKey="id" Type="User" IsForeignKey="true" />
-      <Association Name="PPayment_Schedule" Member="PPayment" ThisKey="payment_id" OtherKey="id" Type="PPayment" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.PPayments" Member="PPayments">
@@ -190,6 +149,53 @@
       <Association Name="PPayment_Schedule" Member="Schedules" ThisKey="id" OtherKey="payment_id" Type="Schedule" />
       <Association Name="User_PPayment" Member="User" ThisKey="approved_by" OtherKey="id" Type="User" IsForeignKey="true" />
       <Association Name="User_PPayment1" Member="User1" ThisKey="owner" OtherKey="id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Schedules" Member="Schedules">
+    <Type Name="Schedule">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="company_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="company" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="company_email" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="tier" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="amount" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="contributiontype" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="contributiontypeid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="month" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="year" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="validated" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="validation_status" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="validation_valuetime" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="validation_email_sent" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="validation_email_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="escalation_email_sent" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="escalation_email_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="resolution_reminder1_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="resolution_reminder2_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="resolution_type" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="resolution_info" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="resolution_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="internally_resolved" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="internally_resolved_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="payment_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="receipt_sent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="receipt_sent_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="file_downloaded" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="file_downloaded_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="file_uploaded" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="file_uploaded_date" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="email_last_sent" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="emails_sent" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="processing" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="workflow_status" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="workflow_summary" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="parent_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="modified_by" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="ptas_fund_deal_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="PPayment_Schedule" Member="PPayment" ThisKey="payment_id" OtherKey="id" Type="PPayment" IsForeignKey="true" />
+      <Association Name="User_Schedule" Member="User" ThisKey="modified_by" OtherKey="id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

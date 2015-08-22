@@ -21,14 +21,20 @@
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,5,0,0" Height="41" Background="{DynamicResource AccentColorBrush}">
-                <Grid Height="38">
-                    <ComboBox x:Name="cmbReportType" HorizontalAlignment="Left" Margin="88,7,0,0" VerticalAlignment="Top" Width="182" SelectionChanged="cmbReportType_SelectionChanged"/>
-                    <Label Content="Query for : " HorizontalAlignment="Left" Margin="275,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <ComboBox x:Name="cmbQuery" HorizontalAlignment="Left" Margin="354,7,0,0" VerticalAlignment="Top" Width="227"/>
-                    <Label Content="Report Type" HorizontalAlignment="Left" Margin="4,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <Label Content="Report Type" HorizontalAlignment="Left" Margin="0,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <ComboBox x:Name="cmbReportType" HorizontalAlignment="Left" Margin="0,7,0,0" VerticalAlignment="Top" Width="182" SelectionChanged="cmbReportType_SelectionChanged"/>
+                    
+                    <Label Content="Query for" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <ComboBox x:Name="cmbQuery" HorizontalAlignment="Left" Margin="0,7,0,0" VerticalAlignment="Top" Width="227"/>
 
+                    <Label Visibility="Collapsed" x:Name="lbl_company" Content="Company" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <ComboBox  Visibility="Collapsed" SelectionChanged="cbx_companies_SelectionChanged"
+			                x:Name="cbx_companies" IsEditable="True"  MaxDropDownHeight="125" Margin="0,4,0,7" 
+			                Style="{DynamicResource VirtualisedMetroComboBox}"
+			                Controls:TextBoxHelper.Watermark="Type or select company"
+			                ItemsSource="{Binding Companies}" DisplayMemberPath="_Value" SelectedValuePath="_Key" />
 
-                    <Button x:Name="btn_Query" Margin="590,0,257,-3" Width="40" Height="40" ToolTip="Query" Style="{DynamicResource MetroCircleButtonStyle}" Click="btn_Query_Click" >
+                    <Button x:Name="btn_Query" Margin="10,0,0,0" Width="40" Height="40" ToolTip="Query" Style="{DynamicResource MetroCircleButtonStyle}" Click="btn_Query_Click" >
                         <Rectangle Width="10" Height="10" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}" />
@@ -37,7 +43,7 @@
                     </Button>
                     
                     <Label x:Name="lblRecords" Content="0 records found" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" 
-                            Margin="640,7,10,0" Width="147"/>
+                            Margin="10,7,10,0" Width="147"/>
    
                     <Button x:Name="btn_Download_Payments" HorizontalAlignment="Right" Width="40" Height="40"  ToolTip="Download" Style="{DynamicResource MetroCircleButtonStyle}" Click="btn_Download_Payments_Click">
                         <Rectangle Width="10" Height="10" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
@@ -47,7 +53,6 @@
                         </Rectangle>
                     </Button>
          
-                </Grid>
             </StackPanel>
 
             <DataGrid x:Name="dgReport" 

@@ -51,12 +51,12 @@ namespace petratracker.Models
     partial void InsertPDealDescription(PDealDescription instance);
     partial void UpdatePDealDescription(PDealDescription instance);
     partial void DeletePDealDescription(PDealDescription instance);
-    partial void InsertSchedule(Schedule instance);
-    partial void UpdateSchedule(Schedule instance);
-    partial void DeleteSchedule(Schedule instance);
     partial void InsertPPayment(PPayment instance);
     partial void UpdatePPayment(PPayment instance);
     partial void DeletePPayment(PPayment instance);
+    partial void InsertSchedule(Schedule instance);
+    partial void UpdateSchedule(Schedule instance);
+    partial void DeleteSchedule(Schedule instance);
     #endregion
 		
 		public TrackerDataContext(string connection) : 
@@ -139,19 +139,19 @@ namespace petratracker.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<Schedule> Schedules
-		{
-			get
-			{
-				return this.GetTable<Schedule>();
-			}
-		}
-		
 		public System.Data.Linq.Table<PPayment> PPayments
 		{
 			get
 			{
 				return this.GetTable<PPayment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Schedule> Schedules
+		{
+			get
+			{
+				return this.GetTable<Schedule>();
 			}
 		}
 	}
@@ -1735,11 +1735,11 @@ namespace petratracker.Models
 		
 		private EntitySet<PDealDescription> _PDealDescriptions;
 		
-		private EntitySet<Schedule> _Schedules;
-		
 		private EntitySet<PPayment> _PPayments;
 		
 		private EntitySet<PPayment> _PPayments1;
+		
+		private EntitySet<Schedule> _Schedules;
 		
 		private EntityRef<Role> _Role;
 		
@@ -1788,9 +1788,9 @@ namespace petratracker.Models
 			this._Jobs = new EntitySet<Job>(new Action<Job>(this.attach_Jobs), new Action<Job>(this.detach_Jobs));
 			this._Notifications = new EntitySet<Notification>(new Action<Notification>(this.attach_Notifications), new Action<Notification>(this.detach_Notifications));
 			this._PDealDescriptions = new EntitySet<PDealDescription>(new Action<PDealDescription>(this.attach_PDealDescriptions), new Action<PDealDescription>(this.detach_PDealDescriptions));
-			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
 			this._PPayments = new EntitySet<PPayment>(new Action<PPayment>(this.attach_PPayments), new Action<PPayment>(this.detach_PPayments));
 			this._PPayments1 = new EntitySet<PPayment>(new Action<PPayment>(this.attach_PPayments1), new Action<PPayment>(this.detach_PPayments1));
+			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
 			this._Role = default(EntityRef<Role>);
 			OnCreated();
 		}
@@ -2184,19 +2184,6 @@ namespace petratracker.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_Schedules", ThisKey="id", OtherKey="modified_by")]
-		public EntitySet<Schedule> Schedules
-		{
-			get
-			{
-				return this._Schedules;
-			}
-			set
-			{
-				this._Schedules.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_PPayment", Storage="_PPayments", ThisKey="id", OtherKey="approved_by")]
 		public EntitySet<PPayment> PPayments
 		{
@@ -2220,6 +2207,19 @@ namespace petratracker.Models
 			set
 			{
 				this._PPayments1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_Schedules", ThisKey="id", OtherKey="modified_by")]
+		public EntitySet<Schedule> Schedules
+		{
+			get
+			{
+				return this._Schedules;
+			}
+			set
+			{
+				this._Schedules.Assign(value);
 			}
 		}
 		
@@ -2337,18 +2337,6 @@ namespace petratracker.Models
 			entity.User = null;
 		}
 		
-		private void attach_Schedules(Schedule entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_Schedules(Schedule entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
-		}
-		
 		private void attach_PPayments(PPayment entity)
 		{
 			this.SendPropertyChanging();
@@ -2371,6 +2359,18 @@ namespace petratracker.Models
 		{
 			this.SendPropertyChanging();
 			entity.User1 = null;
+		}
+		
+		private void attach_Schedules(Schedule entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Schedules(Schedule entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
 		}
 	}
 	
@@ -2707,966 +2707,6 @@ namespace petratracker.Models
 					else
 					{
 						this._payment_id = default(int);
-					}
-					this.SendPropertyChanged("PPayment");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Schedules")]
-	public partial class Schedule : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id;
-		
-		private string _company_id;
-		
-		private string _company;
-		
-		private string _company_email;
-		
-		private string _tier;
-		
-		private decimal _amount;
-		
-		private string _contributiontype;
-		
-		private int _contributiontypeid;
-		
-		private int _month;
-		
-		private int _year;
-		
-		private bool _validated;
-		
-		private string _validation_status;
-		
-		private System.Nullable<System.DateTime> _validation_valuetime;
-		
-		private System.Nullable<System.DateTime> _resolution_reminder1_date;
-		
-		private System.Nullable<System.DateTime> _resolution_reminder2_date;
-		
-		private string _resolution_type;
-		
-		private string _resolution_info;
-		
-		private System.Nullable<System.DateTime> _resolution_date;
-		
-		private System.Nullable<int> _payment_id;
-		
-		private bool _receipt_sent;
-		
-		private System.Nullable<System.DateTime> _receipt_sent_date;
-		
-		private bool _file_downloaded;
-		
-		private System.Nullable<System.DateTime> _file_downloaded_date;
-		
-		private bool _file_uploaded;
-		
-		private System.Nullable<System.DateTime> _file_uploaded_date;
-		
-		private System.Nullable<System.DateTime> _email_last_sent;
-		
-		private System.Nullable<int> _emails_sent;
-		
-		private bool _processing;
-		
-		private string _workflow_status;
-		
-		private string _workflow_summary;
-		
-		private System.Nullable<int> _parent_id;
-		
-		private int _modified_by;
-		
-		private System.DateTime _created_at;
-		
-		private System.DateTime _updated_at;
-		
-		private System.Nullable<int> _ptas_fund_deal_id;
-		
-		private EntityRef<User> _User;
-		
-		private EntityRef<PPayment> _PPayment;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void Oncompany_idChanging(string value);
-    partial void Oncompany_idChanged();
-    partial void OncompanyChanging(string value);
-    partial void OncompanyChanged();
-    partial void Oncompany_emailChanging(string value);
-    partial void Oncompany_emailChanged();
-    partial void OntierChanging(string value);
-    partial void OntierChanged();
-    partial void OnamountChanging(decimal value);
-    partial void OnamountChanged();
-    partial void OncontributiontypeChanging(string value);
-    partial void OncontributiontypeChanged();
-    partial void OncontributiontypeidChanging(int value);
-    partial void OncontributiontypeidChanged();
-    partial void OnmonthChanging(int value);
-    partial void OnmonthChanged();
-    partial void OnyearChanging(int value);
-    partial void OnyearChanged();
-    partial void OnvalidatedChanging(bool value);
-    partial void OnvalidatedChanged();
-    partial void Onvalidation_statusChanging(string value);
-    partial void Onvalidation_statusChanged();
-    partial void Onvalidation_valuetimeChanging(System.Nullable<System.DateTime> value);
-    partial void Onvalidation_valuetimeChanged();
-    partial void Onresolution_reminder1_dateChanging(System.Nullable<System.DateTime> value);
-    partial void Onresolution_reminder1_dateChanged();
-    partial void Onresolution_reminder2_dateChanging(System.Nullable<System.DateTime> value);
-    partial void Onresolution_reminder2_dateChanged();
-    partial void Onresolution_typeChanging(string value);
-    partial void Onresolution_typeChanged();
-    partial void Onresolution_infoChanging(string value);
-    partial void Onresolution_infoChanged();
-    partial void Onresolution_dateChanging(System.Nullable<System.DateTime> value);
-    partial void Onresolution_dateChanged();
-    partial void Onpayment_idChanging(System.Nullable<int> value);
-    partial void Onpayment_idChanged();
-    partial void Onreceipt_sentChanging(bool value);
-    partial void Onreceipt_sentChanged();
-    partial void Onreceipt_sent_dateChanging(System.Nullable<System.DateTime> value);
-    partial void Onreceipt_sent_dateChanged();
-    partial void Onfile_downloadedChanging(bool value);
-    partial void Onfile_downloadedChanged();
-    partial void Onfile_downloaded_dateChanging(System.Nullable<System.DateTime> value);
-    partial void Onfile_downloaded_dateChanged();
-    partial void Onfile_uploadedChanging(bool value);
-    partial void Onfile_uploadedChanged();
-    partial void Onfile_uploaded_dateChanging(System.Nullable<System.DateTime> value);
-    partial void Onfile_uploaded_dateChanged();
-    partial void Onemail_last_sentChanging(System.Nullable<System.DateTime> value);
-    partial void Onemail_last_sentChanged();
-    partial void Onemails_sentChanging(System.Nullable<int> value);
-    partial void Onemails_sentChanged();
-    partial void OnprocessingChanging(bool value);
-    partial void OnprocessingChanged();
-    partial void Onworkflow_statusChanging(string value);
-    partial void Onworkflow_statusChanged();
-    partial void Onworkflow_summaryChanging(string value);
-    partial void Onworkflow_summaryChanged();
-    partial void Onparent_idChanging(System.Nullable<int> value);
-    partial void Onparent_idChanged();
-    partial void Onmodified_byChanging(int value);
-    partial void Onmodified_byChanged();
-    partial void Oncreated_atChanging(System.DateTime value);
-    partial void Oncreated_atChanged();
-    partial void Onupdated_atChanging(System.DateTime value);
-    partial void Onupdated_atChanged();
-    partial void Onptas_fund_deal_idChanging(System.Nullable<int> value);
-    partial void Onptas_fund_deal_idChanged();
-    #endregion
-		
-		public Schedule()
-		{
-			this._User = default(EntityRef<User>);
-			this._PPayment = default(EntityRef<PPayment>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id
-		{
-			get
-			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this.OnidChanging(value);
-					this.SendPropertyChanging();
-					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company_id", DbType="NVarChar(50)")]
-		public string company_id
-		{
-			get
-			{
-				return this._company_id;
-			}
-			set
-			{
-				if ((this._company_id != value))
-				{
-					this.Oncompany_idChanging(value);
-					this.SendPropertyChanging();
-					this._company_id = value;
-					this.SendPropertyChanged("company_id");
-					this.Oncompany_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string company
-		{
-			get
-			{
-				return this._company;
-			}
-			set
-			{
-				if ((this._company != value))
-				{
-					this.OncompanyChanging(value);
-					this.SendPropertyChanging();
-					this._company = value;
-					this.SendPropertyChanged("company");
-					this.OncompanyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company_email", DbType="NVarChar(MAX)")]
-		public string company_email
-		{
-			get
-			{
-				return this._company_email;
-			}
-			set
-			{
-				if ((this._company_email != value))
-				{
-					this.Oncompany_emailChanging(value);
-					this.SendPropertyChanging();
-					this._company_email = value;
-					this.SendPropertyChanged("company_email");
-					this.Oncompany_emailChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_tier", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string tier
-		{
-			get
-			{
-				return this._tier;
-			}
-			set
-			{
-				if ((this._tier != value))
-				{
-					this.OntierChanging(value);
-					this.SendPropertyChanging();
-					this._tier = value;
-					this.SendPropertyChanged("tier");
-					this.OntierChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_amount", DbType="Money NOT NULL")]
-		public decimal amount
-		{
-			get
-			{
-				return this._amount;
-			}
-			set
-			{
-				if ((this._amount != value))
-				{
-					this.OnamountChanging(value);
-					this.SendPropertyChanging();
-					this._amount = value;
-					this.SendPropertyChanged("amount");
-					this.OnamountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contributiontype", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string contributiontype
-		{
-			get
-			{
-				return this._contributiontype;
-			}
-			set
-			{
-				if ((this._contributiontype != value))
-				{
-					this.OncontributiontypeChanging(value);
-					this.SendPropertyChanging();
-					this._contributiontype = value;
-					this.SendPropertyChanged("contributiontype");
-					this.OncontributiontypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contributiontypeid", DbType="Int NOT NULL")]
-		public int contributiontypeid
-		{
-			get
-			{
-				return this._contributiontypeid;
-			}
-			set
-			{
-				if ((this._contributiontypeid != value))
-				{
-					this.OncontributiontypeidChanging(value);
-					this.SendPropertyChanging();
-					this._contributiontypeid = value;
-					this.SendPropertyChanged("contributiontypeid");
-					this.OncontributiontypeidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_month", DbType="Int NOT NULL")]
-		public int month
-		{
-			get
-			{
-				return this._month;
-			}
-			set
-			{
-				if ((this._month != value))
-				{
-					this.OnmonthChanging(value);
-					this.SendPropertyChanging();
-					this._month = value;
-					this.SendPropertyChanged("month");
-					this.OnmonthChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_year", DbType="Int NOT NULL")]
-		public int year
-		{
-			get
-			{
-				return this._year;
-			}
-			set
-			{
-				if ((this._year != value))
-				{
-					this.OnyearChanging(value);
-					this.SendPropertyChanging();
-					this._year = value;
-					this.SendPropertyChanged("year");
-					this.OnyearChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validated", DbType="Bit NOT NULL")]
-		public bool validated
-		{
-			get
-			{
-				return this._validated;
-			}
-			set
-			{
-				if ((this._validated != value))
-				{
-					this.OnvalidatedChanging(value);
-					this.SendPropertyChanging();
-					this._validated = value;
-					this.SendPropertyChanged("validated");
-					this.OnvalidatedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validation_status", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string validation_status
-		{
-			get
-			{
-				return this._validation_status;
-			}
-			set
-			{
-				if ((this._validation_status != value))
-				{
-					this.Onvalidation_statusChanging(value);
-					this.SendPropertyChanging();
-					this._validation_status = value;
-					this.SendPropertyChanged("validation_status");
-					this.Onvalidation_statusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validation_valuetime", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> validation_valuetime
-		{
-			get
-			{
-				return this._validation_valuetime;
-			}
-			set
-			{
-				if ((this._validation_valuetime != value))
-				{
-					this.Onvalidation_valuetimeChanging(value);
-					this.SendPropertyChanging();
-					this._validation_valuetime = value;
-					this.SendPropertyChanged("validation_valuetime");
-					this.Onvalidation_valuetimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_reminder1_date", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> resolution_reminder1_date
-		{
-			get
-			{
-				return this._resolution_reminder1_date;
-			}
-			set
-			{
-				if ((this._resolution_reminder1_date != value))
-				{
-					this.Onresolution_reminder1_dateChanging(value);
-					this.SendPropertyChanging();
-					this._resolution_reminder1_date = value;
-					this.SendPropertyChanged("resolution_reminder1_date");
-					this.Onresolution_reminder1_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_reminder2_date", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> resolution_reminder2_date
-		{
-			get
-			{
-				return this._resolution_reminder2_date;
-			}
-			set
-			{
-				if ((this._resolution_reminder2_date != value))
-				{
-					this.Onresolution_reminder2_dateChanging(value);
-					this.SendPropertyChanging();
-					this._resolution_reminder2_date = value;
-					this.SendPropertyChanged("resolution_reminder2_date");
-					this.Onresolution_reminder2_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_type", DbType="NVarChar(50)")]
-		public string resolution_type
-		{
-			get
-			{
-				return this._resolution_type;
-			}
-			set
-			{
-				if ((this._resolution_type != value))
-				{
-					this.Onresolution_typeChanging(value);
-					this.SendPropertyChanging();
-					this._resolution_type = value;
-					this.SendPropertyChanged("resolution_type");
-					this.Onresolution_typeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_info", DbType="NVarChar(MAX)")]
-		public string resolution_info
-		{
-			get
-			{
-				return this._resolution_info;
-			}
-			set
-			{
-				if ((this._resolution_info != value))
-				{
-					this.Onresolution_infoChanging(value);
-					this.SendPropertyChanging();
-					this._resolution_info = value;
-					this.SendPropertyChanged("resolution_info");
-					this.Onresolution_infoChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_date", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> resolution_date
-		{
-			get
-			{
-				return this._resolution_date;
-			}
-			set
-			{
-				if ((this._resolution_date != value))
-				{
-					this.Onresolution_dateChanging(value);
-					this.SendPropertyChanging();
-					this._resolution_date = value;
-					this.SendPropertyChanged("resolution_date");
-					this.Onresolution_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_payment_id", DbType="Int")]
-		public System.Nullable<int> payment_id
-		{
-			get
-			{
-				return this._payment_id;
-			}
-			set
-			{
-				if ((this._payment_id != value))
-				{
-					if (this._PPayment.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onpayment_idChanging(value);
-					this.SendPropertyChanging();
-					this._payment_id = value;
-					this.SendPropertyChanged("payment_id");
-					this.Onpayment_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_receipt_sent", DbType="Bit NOT NULL")]
-		public bool receipt_sent
-		{
-			get
-			{
-				return this._receipt_sent;
-			}
-			set
-			{
-				if ((this._receipt_sent != value))
-				{
-					this.Onreceipt_sentChanging(value);
-					this.SendPropertyChanging();
-					this._receipt_sent = value;
-					this.SendPropertyChanged("receipt_sent");
-					this.Onreceipt_sentChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_receipt_sent_date", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> receipt_sent_date
-		{
-			get
-			{
-				return this._receipt_sent_date;
-			}
-			set
-			{
-				if ((this._receipt_sent_date != value))
-				{
-					this.Onreceipt_sent_dateChanging(value);
-					this.SendPropertyChanging();
-					this._receipt_sent_date = value;
-					this.SendPropertyChanged("receipt_sent_date");
-					this.Onreceipt_sent_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_downloaded", DbType="Bit NOT NULL")]
-		public bool file_downloaded
-		{
-			get
-			{
-				return this._file_downloaded;
-			}
-			set
-			{
-				if ((this._file_downloaded != value))
-				{
-					this.Onfile_downloadedChanging(value);
-					this.SendPropertyChanging();
-					this._file_downloaded = value;
-					this.SendPropertyChanged("file_downloaded");
-					this.Onfile_downloadedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_downloaded_date", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> file_downloaded_date
-		{
-			get
-			{
-				return this._file_downloaded_date;
-			}
-			set
-			{
-				if ((this._file_downloaded_date != value))
-				{
-					this.Onfile_downloaded_dateChanging(value);
-					this.SendPropertyChanging();
-					this._file_downloaded_date = value;
-					this.SendPropertyChanged("file_downloaded_date");
-					this.Onfile_downloaded_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_uploaded", DbType="Bit NOT NULL")]
-		public bool file_uploaded
-		{
-			get
-			{
-				return this._file_uploaded;
-			}
-			set
-			{
-				if ((this._file_uploaded != value))
-				{
-					this.Onfile_uploadedChanging(value);
-					this.SendPropertyChanging();
-					this._file_uploaded = value;
-					this.SendPropertyChanged("file_uploaded");
-					this.Onfile_uploadedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_uploaded_date", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> file_uploaded_date
-		{
-			get
-			{
-				return this._file_uploaded_date;
-			}
-			set
-			{
-				if ((this._file_uploaded_date != value))
-				{
-					this.Onfile_uploaded_dateChanging(value);
-					this.SendPropertyChanging();
-					this._file_uploaded_date = value;
-					this.SendPropertyChanged("file_uploaded_date");
-					this.Onfile_uploaded_dateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email_last_sent", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> email_last_sent
-		{
-			get
-			{
-				return this._email_last_sent;
-			}
-			set
-			{
-				if ((this._email_last_sent != value))
-				{
-					this.Onemail_last_sentChanging(value);
-					this.SendPropertyChanging();
-					this._email_last_sent = value;
-					this.SendPropertyChanged("email_last_sent");
-					this.Onemail_last_sentChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_emails_sent", DbType="Int")]
-		public System.Nullable<int> emails_sent
-		{
-			get
-			{
-				return this._emails_sent;
-			}
-			set
-			{
-				if ((this._emails_sent != value))
-				{
-					this.Onemails_sentChanging(value);
-					this.SendPropertyChanging();
-					this._emails_sent = value;
-					this.SendPropertyChanged("emails_sent");
-					this.Onemails_sentChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_processing", DbType="Bit NOT NULL")]
-		public bool processing
-		{
-			get
-			{
-				return this._processing;
-			}
-			set
-			{
-				if ((this._processing != value))
-				{
-					this.OnprocessingChanging(value);
-					this.SendPropertyChanging();
-					this._processing = value;
-					this.SendPropertyChanged("processing");
-					this.OnprocessingChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_workflow_status", DbType="NVarChar(MAX)")]
-		public string workflow_status
-		{
-			get
-			{
-				return this._workflow_status;
-			}
-			set
-			{
-				if ((this._workflow_status != value))
-				{
-					this.Onworkflow_statusChanging(value);
-					this.SendPropertyChanging();
-					this._workflow_status = value;
-					this.SendPropertyChanged("workflow_status");
-					this.Onworkflow_statusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_workflow_summary", DbType="NVarChar(MAX)")]
-		public string workflow_summary
-		{
-			get
-			{
-				return this._workflow_summary;
-			}
-			set
-			{
-				if ((this._workflow_summary != value))
-				{
-					this.Onworkflow_summaryChanging(value);
-					this.SendPropertyChanging();
-					this._workflow_summary = value;
-					this.SendPropertyChanged("workflow_summary");
-					this.Onworkflow_summaryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_parent_id", DbType="Int")]
-		public System.Nullable<int> parent_id
-		{
-			get
-			{
-				return this._parent_id;
-			}
-			set
-			{
-				if ((this._parent_id != value))
-				{
-					this.Onparent_idChanging(value);
-					this.SendPropertyChanging();
-					this._parent_id = value;
-					this.SendPropertyChanged("parent_id");
-					this.Onparent_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_modified_by", DbType="Int NOT NULL")]
-		public int modified_by
-		{
-			get
-			{
-				return this._modified_by;
-			}
-			set
-			{
-				if ((this._modified_by != value))
-				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onmodified_byChanging(value);
-					this.SendPropertyChanging();
-					this._modified_by = value;
-					this.SendPropertyChanged("modified_by");
-					this.Onmodified_byChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_at", DbType="DateTime2 NOT NULL")]
-		public System.DateTime created_at
-		{
-			get
-			{
-				return this._created_at;
-			}
-			set
-			{
-				if ((this._created_at != value))
-				{
-					this.Oncreated_atChanging(value);
-					this.SendPropertyChanging();
-					this._created_at = value;
-					this.SendPropertyChanged("created_at");
-					this.Oncreated_atChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_at", DbType="DateTime2 NOT NULL")]
-		public System.DateTime updated_at
-		{
-			get
-			{
-				return this._updated_at;
-			}
-			set
-			{
-				if ((this._updated_at != value))
-				{
-					this.Onupdated_atChanging(value);
-					this.SendPropertyChanging();
-					this._updated_at = value;
-					this.SendPropertyChanged("updated_at");
-					this.Onupdated_atChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ptas_fund_deal_id", DbType="Int")]
-		public System.Nullable<int> ptas_fund_deal_id
-		{
-			get
-			{
-				return this._ptas_fund_deal_id;
-			}
-			set
-			{
-				if ((this._ptas_fund_deal_id != value))
-				{
-					this.Onptas_fund_deal_idChanging(value);
-					this.SendPropertyChanging();
-					this._ptas_fund_deal_id = value;
-					this.SendPropertyChanged("ptas_fund_deal_id");
-					this.Onptas_fund_deal_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_User", ThisKey="modified_by", OtherKey="id", IsForeignKey=true)]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.Schedules.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.Schedules.Add(this);
-						this._modified_by = value.id;
-					}
-					else
-					{
-						this._modified_by = default(int);
-					}
-					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PPayment_Schedule", Storage="_PPayment", ThisKey="payment_id", OtherKey="id", IsForeignKey=true)]
-		public PPayment PPayment
-		{
-			get
-			{
-				return this._PPayment.Entity;
-			}
-			set
-			{
-				PPayment previousValue = this._PPayment.Entity;
-				if (((previousValue != value) 
-							|| (this._PPayment.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._PPayment.Entity = null;
-						previousValue.Schedules.Remove(this);
-					}
-					this._PPayment.Entity = value;
-					if ((value != null))
-					{
-						value.Schedules.Add(this);
-						this._payment_id = value.id;
-					}
-					else
-					{
-						this._payment_id = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("PPayment");
 				}
@@ -4515,6 +3555,1110 @@ namespace petratracker.Models
 		{
 			this.SendPropertyChanging();
 			entity.PPayment = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Schedules")]
+	public partial class Schedule : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id;
+		
+		private string _company_id;
+		
+		private string _company;
+		
+		private string _company_email;
+		
+		private string _tier;
+		
+		private decimal _amount;
+		
+		private string _contributiontype;
+		
+		private int _contributiontypeid;
+		
+		private int _month;
+		
+		private int _year;
+		
+		private bool _validated;
+		
+		private string _validation_status;
+		
+		private System.Nullable<System.DateTime> _validation_valuetime;
+		
+		private System.Nullable<bool> _validation_email_sent;
+		
+		private System.Nullable<System.DateTime> _validation_email_date;
+		
+		private System.Nullable<bool> _escalation_email_sent;
+		
+		private System.Nullable<System.DateTime> _escalation_email_date;
+		
+		private System.Nullable<System.DateTime> _resolution_reminder1_date;
+		
+		private System.Nullable<System.DateTime> _resolution_reminder2_date;
+		
+		private string _resolution_type;
+		
+		private string _resolution_info;
+		
+		private System.Nullable<System.DateTime> _resolution_date;
+		
+		private System.Nullable<bool> _internally_resolved;
+		
+		private System.Nullable<System.DateTime> _internally_resolved_date;
+		
+		private System.Nullable<int> _payment_id;
+		
+		private bool _receipt_sent;
+		
+		private System.Nullable<System.DateTime> _receipt_sent_date;
+		
+		private bool _file_downloaded;
+		
+		private System.Nullable<System.DateTime> _file_downloaded_date;
+		
+		private bool _file_uploaded;
+		
+		private System.Nullable<System.DateTime> _file_uploaded_date;
+		
+		private System.Nullable<System.DateTime> _email_last_sent;
+		
+		private System.Nullable<int> _emails_sent;
+		
+		private bool _processing;
+		
+		private string _workflow_status;
+		
+		private string _workflow_summary;
+		
+		private System.Nullable<int> _parent_id;
+		
+		private int _modified_by;
+		
+		private System.DateTime _created_at;
+		
+		private System.DateTime _updated_at;
+		
+		private System.Nullable<int> _ptas_fund_deal_id;
+		
+		private EntityRef<PPayment> _PPayment;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void Oncompany_idChanging(string value);
+    partial void Oncompany_idChanged();
+    partial void OncompanyChanging(string value);
+    partial void OncompanyChanged();
+    partial void Oncompany_emailChanging(string value);
+    partial void Oncompany_emailChanged();
+    partial void OntierChanging(string value);
+    partial void OntierChanged();
+    partial void OnamountChanging(decimal value);
+    partial void OnamountChanged();
+    partial void OncontributiontypeChanging(string value);
+    partial void OncontributiontypeChanged();
+    partial void OncontributiontypeidChanging(int value);
+    partial void OncontributiontypeidChanged();
+    partial void OnmonthChanging(int value);
+    partial void OnmonthChanged();
+    partial void OnyearChanging(int value);
+    partial void OnyearChanged();
+    partial void OnvalidatedChanging(bool value);
+    partial void OnvalidatedChanged();
+    partial void Onvalidation_statusChanging(string value);
+    partial void Onvalidation_statusChanged();
+    partial void Onvalidation_valuetimeChanging(System.Nullable<System.DateTime> value);
+    partial void Onvalidation_valuetimeChanged();
+    partial void Onvalidation_email_sentChanging(System.Nullable<bool> value);
+    partial void Onvalidation_email_sentChanged();
+    partial void Onvalidation_email_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onvalidation_email_dateChanged();
+    partial void Onescalation_email_sentChanging(System.Nullable<bool> value);
+    partial void Onescalation_email_sentChanged();
+    partial void Onescalation_email_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onescalation_email_dateChanged();
+    partial void Onresolution_reminder1_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onresolution_reminder1_dateChanged();
+    partial void Onresolution_reminder2_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onresolution_reminder2_dateChanged();
+    partial void Onresolution_typeChanging(string value);
+    partial void Onresolution_typeChanged();
+    partial void Onresolution_infoChanging(string value);
+    partial void Onresolution_infoChanged();
+    partial void Onresolution_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onresolution_dateChanged();
+    partial void Oninternally_resolvedChanging(System.Nullable<bool> value);
+    partial void Oninternally_resolvedChanged();
+    partial void Oninternally_resolved_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Oninternally_resolved_dateChanged();
+    partial void Onpayment_idChanging(System.Nullable<int> value);
+    partial void Onpayment_idChanged();
+    partial void Onreceipt_sentChanging(bool value);
+    partial void Onreceipt_sentChanged();
+    partial void Onreceipt_sent_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onreceipt_sent_dateChanged();
+    partial void Onfile_downloadedChanging(bool value);
+    partial void Onfile_downloadedChanged();
+    partial void Onfile_downloaded_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onfile_downloaded_dateChanged();
+    partial void Onfile_uploadedChanging(bool value);
+    partial void Onfile_uploadedChanged();
+    partial void Onfile_uploaded_dateChanging(System.Nullable<System.DateTime> value);
+    partial void Onfile_uploaded_dateChanged();
+    partial void Onemail_last_sentChanging(System.Nullable<System.DateTime> value);
+    partial void Onemail_last_sentChanged();
+    partial void Onemails_sentChanging(System.Nullable<int> value);
+    partial void Onemails_sentChanged();
+    partial void OnprocessingChanging(bool value);
+    partial void OnprocessingChanged();
+    partial void Onworkflow_statusChanging(string value);
+    partial void Onworkflow_statusChanged();
+    partial void Onworkflow_summaryChanging(string value);
+    partial void Onworkflow_summaryChanged();
+    partial void Onparent_idChanging(System.Nullable<int> value);
+    partial void Onparent_idChanged();
+    partial void Onmodified_byChanging(int value);
+    partial void Onmodified_byChanged();
+    partial void Oncreated_atChanging(System.DateTime value);
+    partial void Oncreated_atChanged();
+    partial void Onupdated_atChanging(System.DateTime value);
+    partial void Onupdated_atChanged();
+    partial void Onptas_fund_deal_idChanging(System.Nullable<int> value);
+    partial void Onptas_fund_deal_idChanged();
+    #endregion
+		
+		public Schedule()
+		{
+			this._PPayment = default(EntityRef<PPayment>);
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company_id", DbType="NVarChar(50)")]
+		public string company_id
+		{
+			get
+			{
+				return this._company_id;
+			}
+			set
+			{
+				if ((this._company_id != value))
+				{
+					this.Oncompany_idChanging(value);
+					this.SendPropertyChanging();
+					this._company_id = value;
+					this.SendPropertyChanged("company_id");
+					this.Oncompany_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string company
+		{
+			get
+			{
+				return this._company;
+			}
+			set
+			{
+				if ((this._company != value))
+				{
+					this.OncompanyChanging(value);
+					this.SendPropertyChanging();
+					this._company = value;
+					this.SendPropertyChanged("company");
+					this.OncompanyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_company_email", DbType="NVarChar(MAX)")]
+		public string company_email
+		{
+			get
+			{
+				return this._company_email;
+			}
+			set
+			{
+				if ((this._company_email != value))
+				{
+					this.Oncompany_emailChanging(value);
+					this.SendPropertyChanging();
+					this._company_email = value;
+					this.SendPropertyChanged("company_email");
+					this.Oncompany_emailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_tier", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string tier
+		{
+			get
+			{
+				return this._tier;
+			}
+			set
+			{
+				if ((this._tier != value))
+				{
+					this.OntierChanging(value);
+					this.SendPropertyChanging();
+					this._tier = value;
+					this.SendPropertyChanged("tier");
+					this.OntierChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_amount", DbType="Money NOT NULL")]
+		public decimal amount
+		{
+			get
+			{
+				return this._amount;
+			}
+			set
+			{
+				if ((this._amount != value))
+				{
+					this.OnamountChanging(value);
+					this.SendPropertyChanging();
+					this._amount = value;
+					this.SendPropertyChanged("amount");
+					this.OnamountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contributiontype", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string contributiontype
+		{
+			get
+			{
+				return this._contributiontype;
+			}
+			set
+			{
+				if ((this._contributiontype != value))
+				{
+					this.OncontributiontypeChanging(value);
+					this.SendPropertyChanging();
+					this._contributiontype = value;
+					this.SendPropertyChanged("contributiontype");
+					this.OncontributiontypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_contributiontypeid", DbType="Int NOT NULL")]
+		public int contributiontypeid
+		{
+			get
+			{
+				return this._contributiontypeid;
+			}
+			set
+			{
+				if ((this._contributiontypeid != value))
+				{
+					this.OncontributiontypeidChanging(value);
+					this.SendPropertyChanging();
+					this._contributiontypeid = value;
+					this.SendPropertyChanged("contributiontypeid");
+					this.OncontributiontypeidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_month", DbType="Int NOT NULL")]
+		public int month
+		{
+			get
+			{
+				return this._month;
+			}
+			set
+			{
+				if ((this._month != value))
+				{
+					this.OnmonthChanging(value);
+					this.SendPropertyChanging();
+					this._month = value;
+					this.SendPropertyChanged("month");
+					this.OnmonthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_year", DbType="Int NOT NULL")]
+		public int year
+		{
+			get
+			{
+				return this._year;
+			}
+			set
+			{
+				if ((this._year != value))
+				{
+					this.OnyearChanging(value);
+					this.SendPropertyChanging();
+					this._year = value;
+					this.SendPropertyChanged("year");
+					this.OnyearChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validated", DbType="Bit NOT NULL")]
+		public bool validated
+		{
+			get
+			{
+				return this._validated;
+			}
+			set
+			{
+				if ((this._validated != value))
+				{
+					this.OnvalidatedChanging(value);
+					this.SendPropertyChanging();
+					this._validated = value;
+					this.SendPropertyChanged("validated");
+					this.OnvalidatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validation_status", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string validation_status
+		{
+			get
+			{
+				return this._validation_status;
+			}
+			set
+			{
+				if ((this._validation_status != value))
+				{
+					this.Onvalidation_statusChanging(value);
+					this.SendPropertyChanging();
+					this._validation_status = value;
+					this.SendPropertyChanged("validation_status");
+					this.Onvalidation_statusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validation_valuetime", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> validation_valuetime
+		{
+			get
+			{
+				return this._validation_valuetime;
+			}
+			set
+			{
+				if ((this._validation_valuetime != value))
+				{
+					this.Onvalidation_valuetimeChanging(value);
+					this.SendPropertyChanging();
+					this._validation_valuetime = value;
+					this.SendPropertyChanged("validation_valuetime");
+					this.Onvalidation_valuetimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validation_email_sent", DbType="Bit")]
+		public System.Nullable<bool> validation_email_sent
+		{
+			get
+			{
+				return this._validation_email_sent;
+			}
+			set
+			{
+				if ((this._validation_email_sent != value))
+				{
+					this.Onvalidation_email_sentChanging(value);
+					this.SendPropertyChanging();
+					this._validation_email_sent = value;
+					this.SendPropertyChanged("validation_email_sent");
+					this.Onvalidation_email_sentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_validation_email_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> validation_email_date
+		{
+			get
+			{
+				return this._validation_email_date;
+			}
+			set
+			{
+				if ((this._validation_email_date != value))
+				{
+					this.Onvalidation_email_dateChanging(value);
+					this.SendPropertyChanging();
+					this._validation_email_date = value;
+					this.SendPropertyChanged("validation_email_date");
+					this.Onvalidation_email_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_escalation_email_sent", DbType="Bit")]
+		public System.Nullable<bool> escalation_email_sent
+		{
+			get
+			{
+				return this._escalation_email_sent;
+			}
+			set
+			{
+				if ((this._escalation_email_sent != value))
+				{
+					this.Onescalation_email_sentChanging(value);
+					this.SendPropertyChanging();
+					this._escalation_email_sent = value;
+					this.SendPropertyChanged("escalation_email_sent");
+					this.Onescalation_email_sentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_escalation_email_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> escalation_email_date
+		{
+			get
+			{
+				return this._escalation_email_date;
+			}
+			set
+			{
+				if ((this._escalation_email_date != value))
+				{
+					this.Onescalation_email_dateChanging(value);
+					this.SendPropertyChanging();
+					this._escalation_email_date = value;
+					this.SendPropertyChanged("escalation_email_date");
+					this.Onescalation_email_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_reminder1_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> resolution_reminder1_date
+		{
+			get
+			{
+				return this._resolution_reminder1_date;
+			}
+			set
+			{
+				if ((this._resolution_reminder1_date != value))
+				{
+					this.Onresolution_reminder1_dateChanging(value);
+					this.SendPropertyChanging();
+					this._resolution_reminder1_date = value;
+					this.SendPropertyChanged("resolution_reminder1_date");
+					this.Onresolution_reminder1_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_reminder2_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> resolution_reminder2_date
+		{
+			get
+			{
+				return this._resolution_reminder2_date;
+			}
+			set
+			{
+				if ((this._resolution_reminder2_date != value))
+				{
+					this.Onresolution_reminder2_dateChanging(value);
+					this.SendPropertyChanging();
+					this._resolution_reminder2_date = value;
+					this.SendPropertyChanged("resolution_reminder2_date");
+					this.Onresolution_reminder2_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_type", DbType="NVarChar(50)")]
+		public string resolution_type
+		{
+			get
+			{
+				return this._resolution_type;
+			}
+			set
+			{
+				if ((this._resolution_type != value))
+				{
+					this.Onresolution_typeChanging(value);
+					this.SendPropertyChanging();
+					this._resolution_type = value;
+					this.SendPropertyChanged("resolution_type");
+					this.Onresolution_typeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_info", DbType="NVarChar(MAX)")]
+		public string resolution_info
+		{
+			get
+			{
+				return this._resolution_info;
+			}
+			set
+			{
+				if ((this._resolution_info != value))
+				{
+					this.Onresolution_infoChanging(value);
+					this.SendPropertyChanging();
+					this._resolution_info = value;
+					this.SendPropertyChanged("resolution_info");
+					this.Onresolution_infoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resolution_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> resolution_date
+		{
+			get
+			{
+				return this._resolution_date;
+			}
+			set
+			{
+				if ((this._resolution_date != value))
+				{
+					this.Onresolution_dateChanging(value);
+					this.SendPropertyChanging();
+					this._resolution_date = value;
+					this.SendPropertyChanged("resolution_date");
+					this.Onresolution_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_internally_resolved", DbType="Bit")]
+		public System.Nullable<bool> internally_resolved
+		{
+			get
+			{
+				return this._internally_resolved;
+			}
+			set
+			{
+				if ((this._internally_resolved != value))
+				{
+					this.Oninternally_resolvedChanging(value);
+					this.SendPropertyChanging();
+					this._internally_resolved = value;
+					this.SendPropertyChanged("internally_resolved");
+					this.Oninternally_resolvedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_internally_resolved_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> internally_resolved_date
+		{
+			get
+			{
+				return this._internally_resolved_date;
+			}
+			set
+			{
+				if ((this._internally_resolved_date != value))
+				{
+					this.Oninternally_resolved_dateChanging(value);
+					this.SendPropertyChanging();
+					this._internally_resolved_date = value;
+					this.SendPropertyChanged("internally_resolved_date");
+					this.Oninternally_resolved_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_payment_id", DbType="Int")]
+		public System.Nullable<int> payment_id
+		{
+			get
+			{
+				return this._payment_id;
+			}
+			set
+			{
+				if ((this._payment_id != value))
+				{
+					if (this._PPayment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onpayment_idChanging(value);
+					this.SendPropertyChanging();
+					this._payment_id = value;
+					this.SendPropertyChanged("payment_id");
+					this.Onpayment_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_receipt_sent", DbType="Bit NOT NULL")]
+		public bool receipt_sent
+		{
+			get
+			{
+				return this._receipt_sent;
+			}
+			set
+			{
+				if ((this._receipt_sent != value))
+				{
+					this.Onreceipt_sentChanging(value);
+					this.SendPropertyChanging();
+					this._receipt_sent = value;
+					this.SendPropertyChanged("receipt_sent");
+					this.Onreceipt_sentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_receipt_sent_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> receipt_sent_date
+		{
+			get
+			{
+				return this._receipt_sent_date;
+			}
+			set
+			{
+				if ((this._receipt_sent_date != value))
+				{
+					this.Onreceipt_sent_dateChanging(value);
+					this.SendPropertyChanging();
+					this._receipt_sent_date = value;
+					this.SendPropertyChanged("receipt_sent_date");
+					this.Onreceipt_sent_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_downloaded", DbType="Bit NOT NULL")]
+		public bool file_downloaded
+		{
+			get
+			{
+				return this._file_downloaded;
+			}
+			set
+			{
+				if ((this._file_downloaded != value))
+				{
+					this.Onfile_downloadedChanging(value);
+					this.SendPropertyChanging();
+					this._file_downloaded = value;
+					this.SendPropertyChanged("file_downloaded");
+					this.Onfile_downloadedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_downloaded_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> file_downloaded_date
+		{
+			get
+			{
+				return this._file_downloaded_date;
+			}
+			set
+			{
+				if ((this._file_downloaded_date != value))
+				{
+					this.Onfile_downloaded_dateChanging(value);
+					this.SendPropertyChanging();
+					this._file_downloaded_date = value;
+					this.SendPropertyChanged("file_downloaded_date");
+					this.Onfile_downloaded_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_uploaded", DbType="Bit NOT NULL")]
+		public bool file_uploaded
+		{
+			get
+			{
+				return this._file_uploaded;
+			}
+			set
+			{
+				if ((this._file_uploaded != value))
+				{
+					this.Onfile_uploadedChanging(value);
+					this.SendPropertyChanging();
+					this._file_uploaded = value;
+					this.SendPropertyChanged("file_uploaded");
+					this.Onfile_uploadedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_file_uploaded_date", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> file_uploaded_date
+		{
+			get
+			{
+				return this._file_uploaded_date;
+			}
+			set
+			{
+				if ((this._file_uploaded_date != value))
+				{
+					this.Onfile_uploaded_dateChanging(value);
+					this.SendPropertyChanging();
+					this._file_uploaded_date = value;
+					this.SendPropertyChanged("file_uploaded_date");
+					this.Onfile_uploaded_dateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email_last_sent", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> email_last_sent
+		{
+			get
+			{
+				return this._email_last_sent;
+			}
+			set
+			{
+				if ((this._email_last_sent != value))
+				{
+					this.Onemail_last_sentChanging(value);
+					this.SendPropertyChanging();
+					this._email_last_sent = value;
+					this.SendPropertyChanged("email_last_sent");
+					this.Onemail_last_sentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_emails_sent", DbType="Int")]
+		public System.Nullable<int> emails_sent
+		{
+			get
+			{
+				return this._emails_sent;
+			}
+			set
+			{
+				if ((this._emails_sent != value))
+				{
+					this.Onemails_sentChanging(value);
+					this.SendPropertyChanging();
+					this._emails_sent = value;
+					this.SendPropertyChanged("emails_sent");
+					this.Onemails_sentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_processing", DbType="Bit NOT NULL")]
+		public bool processing
+		{
+			get
+			{
+				return this._processing;
+			}
+			set
+			{
+				if ((this._processing != value))
+				{
+					this.OnprocessingChanging(value);
+					this.SendPropertyChanging();
+					this._processing = value;
+					this.SendPropertyChanged("processing");
+					this.OnprocessingChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_workflow_status", DbType="NVarChar(MAX)")]
+		public string workflow_status
+		{
+			get
+			{
+				return this._workflow_status;
+			}
+			set
+			{
+				if ((this._workflow_status != value))
+				{
+					this.Onworkflow_statusChanging(value);
+					this.SendPropertyChanging();
+					this._workflow_status = value;
+					this.SendPropertyChanged("workflow_status");
+					this.Onworkflow_statusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_workflow_summary", DbType="NVarChar(MAX)")]
+		public string workflow_summary
+		{
+			get
+			{
+				return this._workflow_summary;
+			}
+			set
+			{
+				if ((this._workflow_summary != value))
+				{
+					this.Onworkflow_summaryChanging(value);
+					this.SendPropertyChanging();
+					this._workflow_summary = value;
+					this.SendPropertyChanged("workflow_summary");
+					this.Onworkflow_summaryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_parent_id", DbType="Int")]
+		public System.Nullable<int> parent_id
+		{
+			get
+			{
+				return this._parent_id;
+			}
+			set
+			{
+				if ((this._parent_id != value))
+				{
+					this.Onparent_idChanging(value);
+					this.SendPropertyChanging();
+					this._parent_id = value;
+					this.SendPropertyChanged("parent_id");
+					this.Onparent_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_modified_by", DbType="Int NOT NULL")]
+		public int modified_by
+		{
+			get
+			{
+				return this._modified_by;
+			}
+			set
+			{
+				if ((this._modified_by != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onmodified_byChanging(value);
+					this.SendPropertyChanging();
+					this._modified_by = value;
+					this.SendPropertyChanged("modified_by");
+					this.Onmodified_byChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_created_at", DbType="DateTime2 NOT NULL")]
+		public System.DateTime created_at
+		{
+			get
+			{
+				return this._created_at;
+			}
+			set
+			{
+				if ((this._created_at != value))
+				{
+					this.Oncreated_atChanging(value);
+					this.SendPropertyChanging();
+					this._created_at = value;
+					this.SendPropertyChanged("created_at");
+					this.Oncreated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_updated_at", DbType="DateTime2 NOT NULL")]
+		public System.DateTime updated_at
+		{
+			get
+			{
+				return this._updated_at;
+			}
+			set
+			{
+				if ((this._updated_at != value))
+				{
+					this.Onupdated_atChanging(value);
+					this.SendPropertyChanging();
+					this._updated_at = value;
+					this.SendPropertyChanged("updated_at");
+					this.Onupdated_atChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ptas_fund_deal_id", DbType="Int")]
+		public System.Nullable<int> ptas_fund_deal_id
+		{
+			get
+			{
+				return this._ptas_fund_deal_id;
+			}
+			set
+			{
+				if ((this._ptas_fund_deal_id != value))
+				{
+					this.Onptas_fund_deal_idChanging(value);
+					this.SendPropertyChanging();
+					this._ptas_fund_deal_id = value;
+					this.SendPropertyChanged("ptas_fund_deal_id");
+					this.Onptas_fund_deal_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PPayment_Schedule", Storage="_PPayment", ThisKey="payment_id", OtherKey="id", IsForeignKey=true)]
+		public PPayment PPayment
+		{
+			get
+			{
+				return this._PPayment.Entity;
+			}
+			set
+			{
+				PPayment previousValue = this._PPayment.Entity;
+				if (((previousValue != value) 
+							|| (this._PPayment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._PPayment.Entity = null;
+						previousValue.Schedules.Remove(this);
+					}
+					this._PPayment.Entity = value;
+					if ((value != null))
+					{
+						value.Schedules.Add(this);
+						this._payment_id = value.id;
+					}
+					else
+					{
+						this._payment_id = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("PPayment");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_User", ThisKey="modified_by", OtherKey="id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Schedules.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Schedules.Add(this);
+						this._modified_by = value.id;
+					}
+					else
+					{
+						this._modified_by = default(int);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

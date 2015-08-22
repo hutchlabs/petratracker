@@ -75,6 +75,7 @@ namespace petratracker.Utility
         // Workflow Status
         public const string WF_VALIDATION_NOTDONE = "Not Validated";
         public const string WF_VALIDATION_NOTDONE_REMINDER = "Not Validated. Reminders sent";
+        public const string WF_VALIDATION_NOTDONE_EMAILSENT = "Not Validated. Email sent to client";
         public const string WF_VALIDATION_ERROR_SSNIT = "SSNIT Number Error";
         public const string WF_VALIDATION_ERROR_NAME = "Name Error";  
         public const string WF_VALIDATION_ERROR_SSNIT_NAME = "SSNIT Number & Name Errors"; 

@@ -16,10 +16,6 @@ using System.Windows.Shapes;
 using MahApps.Metro.Controls;
 using petratracker.Models;
 
-
-
-
-
 using petratracker.Utility;
 
 namespace petratracker.Models
@@ -322,10 +318,12 @@ namespace petratracker.Models
             }
         }
 
-        public static IEnumerable<TrackerReport_CompanyUpdate> get_RM_Company_Update()
+        public static IEnumerable<TrackerReport_CompanyUpdate> get_RM_Company_Update(string company=null)
         {
             try
             {
+                string limit = (company == null) ? "" : "WHERE upd.CompanyName= '" + company + "'";
+
                 string rm_update_sql = @"SELECT upd.CompanyName as Company, upd.Tier
                                                 , upd.PaymentID, upd.Cont_Date as Contribution_Date, upd.Value_Date
                                                 , upd.Cont_Month Contribution_Month, upd.Validation_Status, ISNULL(cat.Description, 'Red') Client_Category
@@ -342,7 +340,7 @@ namespace petratracker.Models
                                         LEFT JOIN (SELECT er.EntityID, rt.Description 
                                                       FROM [Petra5].[dbo].[EntityRoles] er
                                                       JOIN [Petra5].[dbo].[RoleType] rt ON rt.RoleTypeID = er.RoleTypeID
-                                                     WHERE rt.RoleTypeID in (1019, 1020, 1021)) cat ON cat.EntityID = upd.CompanyID";
+                                                     WHERE rt.RoleTypeID in (1019, 1020, 1021)) cat ON cat.EntityID = upd.CompanyID "+limit;
 
                 return Database.Tracker.ExecuteQuery<TrackerReport_CompanyUpdate>(rm_update_sql);
             }
@@ -452,7 +450,10 @@ namespace petratracker.Models
             {
                 string ddm_sql = @"select tracker_descs.company_code CompanyCode, tracker_descs.company_id CompanyID, tracker_descs.tier Tier
                                    , tracker_descs.value_date ValueDate
-                                   , tracker_descs.dealdesc TrackerDealDesc
+                                   , (CASE WHEN LEN(left(tracker_descs.dealdesc, patindex('%[^0-9]%', tracker_descs.dealdesc+'.') - 1))=5 
+								          THEN CONCAT('0',tracker_descs.dealdesc)
+										  ELSE tracker_descs.dealdesc 
+										  END)  TrackerDealDesc
 	                               , mic_desc.DealDesc MiscDealDesc
                             from
                             (
@@ -503,7 +504,11 @@ namespace petratracker.Models
         public string CompanyId { get; set; }
         public string Tier { get; set; }
         public DateTime ValueDate { get; set; }
-        public string TrackerDealDesc { get; set; }
+        public string TrackerDealDesc 
+        { 
+            get; 
+            set; 
+        }
         public string MiscDealDesc {get; set; }
     }
     

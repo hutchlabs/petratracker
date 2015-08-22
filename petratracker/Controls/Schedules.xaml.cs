@@ -29,6 +29,7 @@ namespace petratracker.Controls
                                                              "All", 
                                                              Constants.WF_VALIDATION_NOTDONE,
                                                              Constants.WF_VALIDATION_NOTDONE_REMINDER,
+                                                             Constants.WF_VALIDATION_NOTDONE_EMAILSENT,
                                                              Constants.WF_STATUS_ERROR_SSNIT,
                                                              Constants.WF_STATUS_ERROR_NAME,
                                                              Constants.WF_STATUS_ERROR_SSNIT_NAME,

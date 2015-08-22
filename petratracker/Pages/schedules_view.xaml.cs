@@ -62,32 +62,21 @@ namespace petratracker.Pages
                 close_flyout();
         }
 
-        private void btn_MarkReceiptSent(object sender, RoutedEventArgs e)
+        private void ShowValidationEmailPanel(object sender, RoutedEventArgs e)
         {
-            _schedule = TrackerSchedule.MarkReceiptSent(_schedule);            
-            load_schedule();
+            CloseAllPanels();
+            this.panelValidationEmail.Visibility =  Visibility.Visible;
         }
 
-        private void btn_MarkFileDownloaded(object sender, RoutedEventArgs e)
+        private void ShowEscalationIssuePanel(object sender, RoutedEventArgs e)
         {
-            _schedule = TrackerSchedule.MarkFileDownloaded(_schedule);
-            load_schedule();
+            CloseAllPanels();
+            this.panelEscalationIssue.Visibility = Visibility.Visible;
         }
 
-        private void ShowResolveIssue(object sender, RoutedEventArgs e)
+        private void ShowReportReminderPanel(object sender, RoutedEventArgs e)
         {
-            this.panelReport.Visibility = Visibility.Collapsed;
-
-            UpdateButtonStatus(_schedule.workflow_status, _schedule.receipt_sent, _schedule.file_downloaded);
-
-            this.btn_resolveissue.Content = (this.panelResolution.Visibility == Visibility.Collapsed) ? "Resolve Issue" : "Resolving Issue";
-            this.btn_resolveissue.IsEnabled = false;
-            this.panelResolution.Visibility = (this.panelResolution.Visibility == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        private void ShowReportReminder(object sender, RoutedEventArgs e)
-        {
-            this.panelResolution.Visibility = Visibility.Collapsed;
+            CloseAllPanels();
 
             if (_schedule.resolution_reminder1_date != null)
             {
@@ -103,18 +92,36 @@ namespace petratracker.Pages
                 this.lbl_dofrv2.Content = _schedule.resolution_reminder2_date.ToString();
             }
 
-            if (_schedule.resolution_reminder1_date != null && _schedule.resolution_reminder2_date!=null)
+            if (_schedule.resolution_reminder1_date != null && _schedule.resolution_reminder2_date != null)
             {
                 this.lbl_reportdate.Visibility = Visibility.Collapsed;
                 this.dp_reportdate.Visibility = Visibility.Collapsed;
                 this.btn_report.IsEnabled = false;
             }
-         
-            UpdateButtonStatus(_schedule.workflow_status, _schedule.receipt_sent, _schedule.file_downloaded);
+
+            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded);
 
             this.btn_reportreminder.IsEnabled = false;
             this.btn_reportreminder.Content = (this.panelReport.Visibility == Visibility.Collapsed) ? "Report Reminder" : "Reporting Reminder";
             this.panelReport.Visibility = (this.panelReport.Visibility == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void ShowResolveIssuePanel(object sender, RoutedEventArgs e)
+        {
+            CloseAllPanels();
+
+            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded);
+
+
+            this.btn_resolveissue.Content = (this.panelResolution.Visibility == Visibility.Collapsed) ? "Resolve Issue" : "Resolving Issue";
+            this.btn_resolveissue.IsEnabled = false;
+            this.panelResolution.Visibility = (this.panelResolution.Visibility == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void ShowIntResolveIssuePanel(object sender, RoutedEventArgs e)
+        {
+            CloseAllPanels();
+            this.panelIntResolution.Visibility = Visibility.Visible;
         }
 
         private void cbx_resolutiontype_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -122,6 +129,38 @@ namespace petratracker.Pages
             ComboBoxItem item = (ComboBoxItem) cbx_resolutiontype.SelectedItem;
             lbl_tn.Visibility = (item.Content.ToString().Equals("Microgen")) ? Visibility.Visible : Visibility.Collapsed;
             tb_resolutioninfo.Visibility = (item.Content.ToString().Equals("Microgen")) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void btn_MarkValidationEmailSent(object sender, RoutedEventArgs e)
+        {
+            if (dp_validationemaildate.SelectedDate == null)
+            {
+                MessageBox.Show("Please select a date");
+                dp_validationemaildate.Focus();
+            }
+            else
+            {
+                _schedule = TrackerSchedule.MarkValidationEmailSent(_schedule, (DateTime) dp_validationemaildate.SelectedDate);
+                this.panelValidationEmail.Visibility = Visibility.Collapsed;
+                this.btn_validationemail.Content = "Validation Email Sent";
+                load_schedule();
+            }
+        }
+
+        private void btn_MarkEscalationIssueSent(object sender, RoutedEventArgs e)
+        {
+            if (dp_escalationdate.SelectedDate == null)
+            {
+                MessageBox.Show("Please select a date");
+                dp_escalationdate.Focus();
+            }
+            else
+            {
+                _schedule = TrackerSchedule.MarkIssueEscalation(_schedule, (DateTime)dp_escalationdate.SelectedDate);
+                this.panelEscalationIssue.Visibility = Visibility.Collapsed;
+                this.btn_escalationissue.Content = "Issue Escalated";
+                load_schedule();
+            }
         }
 
         private void btn_ReportReminder(object sender, RoutedEventArgs e)
@@ -181,6 +220,34 @@ namespace petratracker.Pages
             }
         }
 
+        private void btn_InternallyResolveIssue(object sender, RoutedEventArgs e)
+        {
+            if (dp_intresolvedate.SelectedDate == null)
+            {
+                MessageBox.Show("Please select a date");
+                dp_intresolvedate.Focus();
+            }
+            else
+            {
+                _schedule = TrackerSchedule.InternallyResolveScheduleIssue(_schedule, (DateTime)dp_intresolvedate.SelectedDate);
+                this.panelIntResolution.Visibility = Visibility.Collapsed;
+                this.btn_intresolveissue.Content = "Interally Resolved";
+                load_schedule();
+            }
+        }
+
+        private void btn_MarkReceiptSent(object sender, RoutedEventArgs e)
+        {
+            _schedule = TrackerSchedule.MarkReceiptSent(_schedule);
+            load_schedule();
+        }
+
+        private void btn_MarkFileDownloaded(object sender, RoutedEventArgs e)
+        {
+            _schedule = TrackerSchedule.MarkFileDownloaded(_schedule);
+            load_schedule();
+        }
+
         #endregion
 
         #region Private Helper Methods
@@ -195,17 +262,55 @@ namespace petratracker.Pages
             this.lbl_lastupdated.Content = string.Format("Last updated on {0}",_schedule.updated_at.ToString());
             this.status_summary.Text = _schedule.workflow_summary;
 
-            UpdateButtonStatus(_schedule.workflow_status, _schedule.receipt_sent, _schedule.file_downloaded);
+            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded);
         }
 
-        private void UpdateButtonStatus(string status, bool receipt_sent, bool file_downloaded)
+        private void CloseAllPanels()
         {
+            this.panelValidationEmail.Visibility = Visibility.Collapsed;
+            this.panelEscalationIssue.Visibility = Visibility.Collapsed;
+            this.panelReport.Visibility = Visibility.Collapsed;
+            this.panelResolution.Visibility = Visibility.Collapsed;
+            this.panelIntResolution.Visibility = Visibility.Collapsed;
+        }
+
+        private void UpdateButtonStatus(string status, bool? vemail_sent, bool? esemail_sent, bool? int_resolve, bool receipt_sent, bool file_downloaded)
+        {
+            string[] validValidationStates = { Constants.WF_VALIDATION_NOTDONE, Constants.WF_VALIDATION_NOTDONE_REMINDER };
             string[] validResolveIssueStates = { Constants.WF_STATUS_ERROR_SSNIT, Constants.WF_STATUS_ERROR_NAME,  Constants.WF_STATUS_ERROR_SSNIT_NAME,
                                                  Constants.WF_STATUS_ERROR_ALL, Constants.WF_STATUS_ERROR_ESCALATED};
 
             string[] validReceiptStates = { Constants.WF_STATUS_PAYMENTS_LINKED, Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD };
             
             string[] validFiledownloadStates = { Constants.WF_STATUS_PAYMENTS_LINKED, Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD };
+
+            if ( ((bool) vemail_sent))
+            {
+                btn_validationemail.IsEnabled =  false;
+                btn_validationemail.Content = "Validation Email Sent";
+            } else {
+                btn_validationemail.IsEnabled = (validValidationStates.Contains(status)) ? true : false;
+            }
+
+            if (((bool)esemail_sent))
+            {
+                btn_escalationissue.IsEnabled = false;
+                btn_escalationissue.Content = "Issue Escalated";
+            }
+            else
+            {
+                btn_escalationissue.IsEnabled = (validValidationStates.Contains(status) || validResolveIssueStates.Contains(status)) ? true : false;
+            }
+
+            if (((bool)int_resolve))
+            {
+                btn_intresolveissue.IsEnabled = false;
+                btn_intresolveissue.Content = "Resolved Internally";
+            }
+            else
+            {
+                btn_intresolveissue.IsEnabled = (validResolveIssueStates.Contains(status)) ? true : false; 
+            }
 
             if (validResolveIssueStates.Contains(status))
             {
@@ -214,6 +319,7 @@ namespace petratracker.Pages
                 this.btn_markfiledownload.IsEnabled = false;
                 this.btn_markreceiptsent.IsEnabled = false;
             }
+
             if (this.btn_resolveissue.IsEnabled==false)
             {
                 if (validReceiptStates.Contains(status))
