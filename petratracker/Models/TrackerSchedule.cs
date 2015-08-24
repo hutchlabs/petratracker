@@ -270,7 +270,7 @@ namespace petratracker.Models
         {
             s.validation_email_sent = true;
             s.validation_email_date = (DateTime)t;
-            s.validation_status = Constants.WF_VALIDATION_NOTDONE_EMAILSENT;
+            s.workflow_status = Constants.WF_VALIDATION_DONE_EMAILSENT;
             return TrackerSchedule.EvaluateReminderStatus(s);
         }
 
@@ -386,9 +386,8 @@ namespace petratracker.Models
                 {
                     // send reminders
                     int times_sent = UpdateNotificationStatus(s.id, Constants.NF_TYPE_SCHEDULE_VALIDATION_REQUEST, Constants.SETTINGS_TIME_INTERVAL_VALIDATION_REQUEST);
-                    s.workflow_status = ((bool)s.validation_email_sent) ? Constants.WF_VALIDATION_NOTDONE_EMAILSENT : Constants.WF_VALIDATION_NOTDONE_REMINDER;
-                    s.workflow_summary = ((bool)s.validation_email_sent) ? string.Format("Schedule is not validated. {0} notification request sent. Email sent to client on {1}.", times_sent, s.validation_email_date)
-                                            : string.Format("Schedule is not validated. {0} notification request sent.",times_sent);
+                    s.workflow_status = Constants.WF_VALIDATION_NOTDONE_REMINDER;
+                    s.workflow_summary = string.Format("Schedule is not validated. {0} notification request sent.",times_sent);
                     s.processing = false;
                     Save(s);
                 }
@@ -397,8 +396,9 @@ namespace petratracker.Models
 
         public static Schedule EvaluateReminderStatus(Schedule s)
         {
-            bool vsent = (bool)s.validation_email_sent;
-            bool escalated = (bool)s.escalation_email_sent;
+            bool vsent = (s.validation_email_sent ==null)? false: (bool)s.validation_email_sent;
+            bool escalated = (s.escalation_email_sent==null) ? false : (bool)s.escalation_email_sent;
+            string errmsg = string.Format("Schedule validated with errors: {0}.", s.validation_status);
 
             if (escalated)
             {
@@ -406,8 +406,8 @@ namespace petratracker.Models
 
                 TrackerNotification.ExpireByJob(Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
 
-                s.workflow_summary = (vsent) ? string.Format("Schedule is not validated. Issue escalated on {0}. Email sent to client on {1}.", s.escalation_email_date,s.validation_email_date)
-                                           : string.Format("Schedule is not validated. Issue escalated on {0}.",s.escalation_email_date);
+                s.workflow_summary = (vsent) ? string.Format("{0} Issue escalated on {1}. Email sent to client on {2}.", errmsg, s.escalation_email_date,s.validation_email_date)
+                                           : string.Format("{0} Issue escalated on {1}.",errmsg, s.escalation_email_date);
             }
             else
             {
@@ -416,10 +416,11 @@ namespace petratracker.Models
                                                            s.id);
                 DateTime now = DateTime.Now;
 
+
                 if (nf != null)
                 {
                     // Let's go through the escalation process 
-                    if (now.Subtract(nf.created_at).Hours > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_3_REMINDER_WINDOW)))
+                    if ((now.Subtract(nf.created_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_3_REMINDER_WINDOW)))
                     {
                         if (nf.times_sent == 2) // It's the 5th day, escalate
                         {
@@ -428,11 +429,11 @@ namespace petratracker.Models
                             nf.last_sent = DateTime.Now;
                             nf.status = Constants.NF_STATUS_EXPIRED;
                             TrackerNotification.Save(nf);
-                            s.workflow_summary = (vsent) ? string.Format("Schedule is not validated. 4th and final notification request sent. Email sent to client on {0}. Please escalate issue.", s.validation_email_date)
-                                                        : "Schedule is not validated. 4th and final notification request sent. Please escalate issue.";
+                            s.workflow_summary = (vsent) ? string.Format("{0}. 4th and final notification request sent. Email sent to client on {1}. Please escalate issue.", errmsg, s.validation_email_date)
+                                                        : string.Format("{0} 4th and final notification request sent. Please escalate issue.",errmsg);
                         }
                     }
-                    else if (now.Subtract(nf.created_at).Hours > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_2_REMINDER_WINDOW)))
+                    else if ((now.Subtract(nf.created_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_2_REMINDER_WINDOW)))
                     {
                         if (nf.times_sent == 1) // It's the 3rd day, send a remider
                         {
@@ -440,29 +441,29 @@ namespace petratracker.Models
                             nf.last_sent = DateTime.Now;
                             nf.status = Constants.NF_STATUS_NEW;
                             TrackerNotification.Save(nf);
-                            s.workflow_summary = (vsent) ? string.Format("Schedule is not validated. 3rd notification request sent. Email sent to client on {0}.", s.validation_email_date)
-                                                     : "Schedule is not validated. 3rd notification request sent.";
+                            s.workflow_summary = (vsent) ? string.Format("{0} 3rd notification request sent. Email sent to client on {1}.", errmsg, s.validation_email_date)
+                                                     :  string.Format("{0} 3rd notification request sent.",errmsg);
                         }
                     }
                     else
                     {
-                        s.workflow_summary = (vsent) ? string.Format("Schedule is not validated. 2nd notification request sent. Email sent to client on {0}.", s.validation_email_date)
-                                                     : "Schedule is not validated. 2nd notification request sent.";
+                        s.workflow_summary = (vsent) ? string.Format("{0} 2nd notification request sent. Email sent to client on {1}.", errmsg, s.validation_email_date)
+                                                     :  string.Format("{0} 2nd notification request sent.",errmsg);
                     }
                 }
                 else
                 {
                     // Notification has not been sent. It's the 2nd day, send a reminder
-                    if (now.Subtract(s.updated_at).Hours > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_1_REMINDER_WINDOW)))
+                    if ((now.Subtract(s.updated_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_1_REMINDER_WINDOW)))
                     {
                         TrackerNotification.Add(Constants.ROLES_OPS_USER_ID, Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
-                        s.workflow_summary = (vsent) ? string.Format("Schedule is not validated. 2nd notification request sent. Email sent to client on {0}.", s.validation_email_date)
-                                                     : "Schedule is not validated. 2nd notification request sent.";
+                        s.workflow_summary = (vsent) ? string.Format("{0} 2nd notification request sent. Email sent to client on {1}.", errmsg, s.validation_email_date)
+                                                     :  string.Format("{0} 2nd notification request sent.",errmsg);
                     }
                     else
                     {
-                        s.workflow_summary = (vsent) ? string.Format("Schedule is not validated. 1st notification requests sent. Email sent to client on {0}.", s.validation_email_date)
-                                      : "Schedule is not validated. 1st notification request sent yet.";
+                        s.workflow_summary = (vsent) ? string.Format("{0} 1st notification request sent. Email sent to client on {1}.", errmsg, s.validation_email_date)
+                                      :  string.Format("{0} 1st notification request sent yet.",errmsg);
                     }
                 }
             }
@@ -624,7 +625,7 @@ namespace petratracker.Models
         private static bool FileUploadWindowHasExpired(DateTime file_downloaded_date)
         {
             DateTime now = DateTime.Now;
-            return (now.Subtract(file_downloaded_date).Hours >= int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_FILE_UPLOAD_WINDOW)));
+            return ((now.Subtract(file_downloaded_date).Days * 24) >= int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_FILE_UPLOAD_WINDOW)));
         }
 
         private static int UpdateNotificationStatus(int sch_id, string job, string retry_interval)
@@ -660,7 +661,7 @@ namespace petratracker.Models
                 company_id = Database.GetCompanyCode(company_id);
                 string type = "None";
 
-                Console.WriteLine("\nFUND DEAL ID: "+ funddealid.ToString());
+                //Console.WriteLine("\nFUND DEAL ID: "+ funddealid.ToString());
 
                 PPayment pm = TrackerPayment.GetSubscription(company_id, tier, month, year, ct);
 

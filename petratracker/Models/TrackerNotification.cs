@@ -42,6 +42,21 @@ namespace petratracker.Models
             }
         }
 
+        public static Notification GetAllNotificationByJob(string notification_type, string job_type, int job_id)
+        {
+            try
+            {
+                return (from n in Database.Tracker.Notifications
+                        where (n.notification_type == notification_type) &&
+                              (n.job_id == job_id) && (n.job_type == job_type)
+                        select n).Single();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public static void ExpireByJob(string notification_type, string job_type, int job_id)
         {
             try

@@ -99,7 +99,7 @@ namespace petratracker.Pages
                 this.btn_report.IsEnabled = false;
             }
 
-            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded);
+            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded,_schedule.id);
 
             this.btn_reportreminder.IsEnabled = false;
             this.btn_reportreminder.Content = (this.panelReport.Visibility == Visibility.Collapsed) ? "Report Reminder" : "Reporting Reminder";
@@ -110,7 +110,7 @@ namespace petratracker.Pages
         {
             CloseAllPanels();
 
-            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded);
+            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded,_schedule.id);
 
 
             this.btn_resolveissue.Content = (this.panelResolution.Visibility == Visibility.Collapsed) ? "Resolve Issue" : "Resolving Issue";
@@ -262,7 +262,7 @@ namespace petratracker.Pages
             this.lbl_lastupdated.Content = string.Format("Last updated on {0}",_schedule.updated_at.ToString());
             this.status_summary.Text = _schedule.workflow_summary;
 
-            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded);
+            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded,_schedule.id);
         }
 
         private void CloseAllPanels()
@@ -274,38 +274,61 @@ namespace petratracker.Pages
             this.panelIntResolution.Visibility = Visibility.Collapsed;
         }
 
-        private void UpdateButtonStatus(string status, bool? vemail_sent, bool? esemail_sent, bool? int_resolve, bool receipt_sent, bool file_downloaded)
+        private void UpdateButtonStatus(string status, bool? vemail_sent, bool? esemail_sent, bool? int_resolve, bool receipt_sent, bool file_downloaded, int sid)
         {
             string[] validValidationStates = { Constants.WF_VALIDATION_NOTDONE, Constants.WF_VALIDATION_NOTDONE_REMINDER };
             string[] validResolveIssueStates = { Constants.WF_STATUS_ERROR_SSNIT, Constants.WF_STATUS_ERROR_NAME,  Constants.WF_STATUS_ERROR_SSNIT_NAME,
-                                                 Constants.WF_STATUS_ERROR_ALL, Constants.WF_STATUS_ERROR_ESCALATED};
+                                                 Constants.WF_STATUS_ERROR_ALL, Constants.WF_VALIDATION_DONE_EMAILSENT, Constants.WF_STATUS_ERROR_ESCALATED};
 
             string[] validReceiptStates = { Constants.WF_STATUS_PAYMENTS_LINKED, Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD, Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD };
             
             string[] validFiledownloadStates = { Constants.WF_STATUS_PAYMENTS_LINKED, Constants.WF_STATUS_PAYMENTS_RECEIVED, Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD };
 
-            if ( ((bool) vemail_sent))
+            if (vemail_sent != null)
             {
-                btn_validationemail.IsEnabled =  false;
-                btn_validationemail.Content = "Validation Email Sent";
-            } else {
-                btn_validationemail.IsEnabled = (validValidationStates.Contains(status)) ? true : false;
-            }
-
-            if (((bool)esemail_sent))
-            {
-                btn_escalationissue.IsEnabled = false;
-                btn_escalationissue.Content = "Issue Escalated";
+                if ((bool)vemail_sent)
+                {
+                    btn_validationemail.IsEnabled = false;
+                    btn_validationemail.Content = "Validation Email Sent";
+                }
             }
             else
             {
-                btn_escalationissue.IsEnabled = (validValidationStates.Contains(status) || validResolveIssueStates.Contains(status)) ? true : false;
+                btn_validationemail.IsEnabled = true;
             }
+            
 
-            if (((bool)int_resolve))
+            if (esemail_sent != null)
             {
-                btn_intresolveissue.IsEnabled = false;
-                btn_intresolveissue.Content = "Resolved Internally";
+                if ((bool)esemail_sent)
+                {
+                    btn_escalationissue.IsEnabled = false;
+                    btn_escalationissue.Content = "Issue Escalated";
+                }
+            }
+            else
+            {
+                bool escalationtime = false;
+                Notification nf = TrackerNotification.GetAllNotificationByJob(Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST,Constants.JOB_TYPE_SCHEDULE, sid);
+                DateTime now = DateTime.Now;
+                if (nf != null)
+                {
+                    if ((now.Subtract(nf.created_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_3_REMINDER_WINDOW)))
+                    {
+                        escalationtime = true;
+                    }
+                }
+                btn_escalationissue.IsEnabled = (escalationtime && (validValidationStates.Contains(status) || validResolveIssueStates.Contains(status))) ? true : false;
+            }
+            
+
+            if (int_resolve != null) 
+            {
+                if ((bool)int_resolve)     
+                {
+                    btn_intresolveissue.IsEnabled = false;
+                    btn_intresolveissue.Content = "Resolved Internally";
+                }
             }
             else
             {

@@ -22,10 +22,10 @@
         <Label Content="Username" HorizontalAlignment="Left" Margin="264,123,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Foreground="#FF918F8F"/>
         <Label Content="Password" HorizontalAlignment="Left" Margin="264,203,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Foreground="#FF918F8F"/>
         
-        <Button Content="Super Admin Login" HorizontalAlignment="Left" Margin="26,406,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin" RenderTransformOrigin="-0.312,0.617"/>
-        <Button Content="Super Ops User Login" HorizontalAlignment="Left" Margin="169,406,0,0" VerticalAlignment="Top" Width="130" Height="37" Click="autoLogin"/>
-        <Button Content="Ops User Login" HorizontalAlignment="Left" Margin="316,406,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin"/>
-        <Button Content="Reporter Login" HorizontalAlignment="Left" Margin="454,406,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin"/>
+        <Button Visibility="Hidden" Content="Super Admin Login" HorizontalAlignment="Left" Margin="26,406,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin" RenderTransformOrigin="-0.312,0.617"/>
+        <Button Visibility="Hidden" Content="Super Ops User Login" HorizontalAlignment="Left" Margin="169,406,0,0" VerticalAlignment="Top" Width="130" Height="37" Click="autoLogin"/>
+        <Button Visibility="Hidden" Content="Ops User Login" HorizontalAlignment="Left" Margin="316,406,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin"/>
+        <Button Visibility="Hidden" Content="Reporter Login" HorizontalAlignment="Left" Margin="454,406,0,0" VerticalAlignment="Top" Width="121" Height="37" Click="autoLogin"/>
 
 
     </Grid>
