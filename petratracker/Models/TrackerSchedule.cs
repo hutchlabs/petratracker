@@ -270,7 +270,7 @@ namespace petratracker.Models
         {
             s.validation_email_sent = true;
             s.validation_email_date = (DateTime)t;
-            s.workflow_status = Constants.WF_VALIDATION_DONE_EMAILSENT;
+            //s.workflow_status = Constants.WF_VALIDATION_DONE_EMAILSENT;
             return TrackerSchedule.EvaluateReminderStatus(s);
         }
 
@@ -398,7 +398,7 @@ namespace petratracker.Models
         {
             bool vsent = (s.validation_email_sent ==null)? false: (bool)s.validation_email_sent;
             bool escalated = (s.escalation_email_sent==null) ? false : (bool)s.escalation_email_sent;
-            string errmsg = string.Format("Schedule validated with errors: {0}.", s.validation_status);
+            string errmsg = ""; //string.Format("{0}", s.validation_status);
 
             if (escalated)
             {
@@ -815,12 +815,12 @@ namespace petratracker.Models
             try
             {
                 var fd = (from j in Database.PTAS.FundDeals
-                               where j.ContribType_ID == ct &&
-                                j.CompanyEntityId == companyid.Trim() &&
-                                j.Tier == tier.Replace(" ", "") &&
-                                j.TotalContribution != 0 &&
-                                ((DateTime)j.DealDate).Date == dealDate.Date
-                                select j).Single();
+                          where j.ContribType_ID == ct &&
+                           j.CompanyEntityId == companyid.Trim() &&
+                           j.Tier == tier.Replace(" ", "") &&
+                           j.TotalContribution != 0 &&
+                           ((DateTime)j.DealDate).Date == dealDate.Date
+                          select j).Single();
 
                 var fld = (from k in Database.PTAS.FundDealLines where k.FundDealID == fd.FundDealID select k);
 

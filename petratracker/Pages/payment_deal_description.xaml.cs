@@ -40,21 +40,21 @@ namespace petratracker.Pages
             get { return TrackerSchedule.GetContributionTypes(); }
         }
 
-        private string[] get_years(int start_year)
+        private string[] get_years(int start_year, int end_year)
         {
-            string[] ini_year = new string[3];
-            for (int ini = 0; ini < 3; ini++)
+            int diff = end_year - start_year;
+            string[] ini_year = new string[diff+1];
+            for (int ini = 0; ini <= diff; ini++)
             {
-                ini_year[ini] = (start_year - 1).ToString();
-                start_year++;
+                ini_year[ini] = (start_year + ini).ToString();
             }
             return ini_year;
         }
        
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            cmb_period_year.ItemsSource = get_years(DateTime.Now.Year);
-            cmb_period_year.SelectedIndex = 1;
+            cmb_period_year.ItemsSource = get_years(2008, DateTime.Now.Year + 5);
+            cmb_period_year.SelectedIndex = (DateTime.Now.Year - 2008);
             if (isUpdate) { load_deal_desc(); }
         }
 
