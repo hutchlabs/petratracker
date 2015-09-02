@@ -35,6 +35,7 @@ namespace petratracker.Controls
                                                              Constants.WF_STATUS_ERROR_SSNIT_NAME,
                                                              Constants.WF_STATUS_ERROR_ALL,
                                                              Constants.WF_STATUS_ERROR_ESCALATED,
+                                                             Constants.WF_STATUS_REVALIDATE,
                                                              Constants.WF_STATUS_EXPIRED,
                                                              Constants.WF_STATUS_PASSED_NEW_EMPLOYEE,
                                                              Constants.WF_STATUS_PAYMENTS_PENDING,

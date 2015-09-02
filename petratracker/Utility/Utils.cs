@@ -100,6 +100,7 @@ namespace petratracker.Utility
         public const string WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD = "No Receipt Sent. File Downloaded. File Uploaded";
         public const string WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD = "No Receipt Sent. File Downloaded. No Upload";
         public const string WF_STATUS_COMPLETED = "Completed";
+        public const string WF_STATUS_REVALIDATE = "Resolved and Revalidate";
         public const string WF_STATUS_EXPIRED = "Resolved and Expired";
 
         // Settings

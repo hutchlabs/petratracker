@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.Controls;
+using petratracker.Models;
 using petratracker.Pages;
 using petratracker.Utility;
 using System.Linq;
@@ -76,11 +77,13 @@ namespace petratracker.Controls
 
         private void viewUsers_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            User u = viewUsers.SelectedItem as User;
+
             Window parentWindow = Window.GetWindow(this);
             object obj = parentWindow.FindName("surrogateFlyout");
             Flyout flyout = (Flyout)obj;
             flyout.ClosingFinished += flyout_ClosingFinished;
-           // flyout.Content = new EditUser(true);
+            flyout.Content = new EditUser(u,true);
             flyout.IsOpen = !flyout.IsOpen;
         }
 

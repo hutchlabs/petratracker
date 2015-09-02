@@ -147,6 +147,9 @@
     <Compile Include="Pages\subscriptions_download_microgen_data.xaml.cs">
       <DependentUpon>subscriptions_download_microgen_data.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\users_edit.xaml.cs">
+      <DependentUpon>users_edit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\users_add.xaml.cs">
       <DependentUpon>users_add.xaml</DependentUpon>
     </Compile>
@@ -306,6 +309,10 @@
     <Page Include="Pages\subscriptions_download_microgen_data.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\users_edit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\users_add.xaml">
       <SubType>Designer</SubType>

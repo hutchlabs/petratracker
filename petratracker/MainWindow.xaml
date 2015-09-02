@@ -136,6 +136,8 @@
 
                     <Label Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" Content="Accent:" />
                     <ComboBox Grid.Row="2" Grid.Column="1" x:Name="AccentColors" Margin="0,5,5,5"  VerticalAlignment="Center" SelectedItem="{Binding SelectedAccent}" ItemsSource="{Binding AccentColorlist}" ItemContainerStyle="{DynamicResource AccentColorComboItemStyle}"/>
+
+                    <Button x:Name="cpass" Grid.Row="3" Grid.Column="0" Margin="5,30" VerticalAlignment="Center" Content="Change Password" Click="changePassword_Click"/>
                 </Grid>
             </Controls:Flyout>
         </Controls:FlyoutsControl>

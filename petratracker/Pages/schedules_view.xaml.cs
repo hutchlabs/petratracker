@@ -346,20 +346,6 @@ namespace petratracker.Pages
                     this.btn_markreceiptsent.IsEnabled = true;
                 }
 
-                if (int_resolve != null)
-                {
-                    if ((bool)int_resolve)
-                    {
-                        btn_intresolveissue.IsEnabled = false;
-                        btn_intresolveissue.Content = "Resolved Internally";
-                    }
-                }
-                else
-                {
-                    btn_intresolveissue.IsEnabled = (validResolveIssueStates.Contains(status)) ? true : false;
-                }
-
-
                 if (validFiledownloadStates.Contains(status))
                 {
                     this.btn_resolveissue.IsEnabled = false;
@@ -373,6 +359,22 @@ namespace petratracker.Pages
                 }
                 if (receipt_sent) { this.btn_markreceiptsent.IsEnabled = false; this.btn_markreceiptsent.Content = "Receipt Sent"; }
                 if (file_downloaded) { this.btn_markfiledownload.IsEnabled = false; this.btn_markfiledownload.Content = "File Downloaded"; }
+            }
+
+            if (s.resolution_date != null)
+            {
+                if (int_resolve != null)
+                {
+                    if ((bool)int_resolve)
+                    {
+                        btn_intresolveissue.IsEnabled = false;
+                        btn_intresolveissue.Content = "Resolved Internally";
+                    }
+                }
+                else
+                {
+                    btn_intresolveissue.IsEnabled = (validResolveIssueStates.Contains(status)) ? true : false;
+                }
             }
         }
 

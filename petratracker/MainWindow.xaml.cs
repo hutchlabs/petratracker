@@ -193,6 +193,11 @@ namespace petratracker
             }
         }
 
+        private void changePassword_Click(object sender, RoutedEventArgs e)
+        {
+            changePassword();
+        }
+
         private void Usersettings_Click(object sender, RoutedEventArgs e)
         {
             var flyout = this.settingsFlyout as Flyout;
@@ -309,6 +314,62 @@ namespace petratracker
             flyout.IsOpen = val;
         }
 
+        private async void changePassword()
+        {
+            string username = TrackerUser.GetCurrentUser().username;
+
+            LoginDialogData result = await this.ShowLoginAsync("Change Password"
+                                                               , "This is your first login. Please change your password"
+                                                               , new LoginDialogSettings
+                                                               {
+                                                                   ColorScheme = this.MetroDialogOptions.ColorScheme,
+                                                                   InitialUsername = username,
+                                                                   AffirmativeButtonText = "Change Password"
+                                                                   //, EnablePasswordPreview = true 
+                                                               });
+            if (result == null)
+            {
+                MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", "You need to change  your password");
+                changePassword();
+            }
+            else
+            {
+                if (result.Password.Length > 3)
+                {
+                    bool success = false;
+                    string err = "";
+                    try
+                    {
+                        TrackerUser.UpdateUserPassword(username, result.Password);
+                        success = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        err = ex.GetBaseException().ToString();
+                    }
+
+                    if (success)
+                    {
+                        MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", "Password Updated!");
+
+                        TrackerUser.SetCurrentUser(username, result.Password);
+                    }
+                    else
+                    {
+                        MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", err);
+                        this.changePassword();
+                    }
+                }
+                else
+                {
+                    MessageDialogResult messageResult = await this.ShowMessageAsync("Change Password", "Password is too short!");
+                    this.changePassword();
+                }
+            }
+        }
+        
         #endregion
+
+
 	}
 }

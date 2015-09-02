@@ -287,12 +287,29 @@ namespace petratracker.Models
             }
         }
 
+
+        public static User Save(User u)
+        {
+            try
+            {
+                u.updated_at = DateTime.Now;
+                Database.Tracker.SubmitChanges();
+                return u;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
         internal static void ResetPasswordRequest(string username)
         {
             try
             {
                 var user = Database.Tracker.Users.Single(u => u.username == username);
-                //SendEmail.sendResetPasswordMail(username);
+                SendEmail.sendResetPasswordMail(username);
             }
             catch (Exception)
             {

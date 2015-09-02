@@ -39,7 +39,7 @@ namespace petratracker.Models
                     orderby j.created_at descending select j);
         }
 
-        public static IEnumerable<ComboBoxPairs> GetCBSchedules(string company_id="", string tier="")
+        public static IEnumerable<ComboBoxPairs> GetCBSchedules(string company_id="", string tier="", string contribution_type="", int month=1, int year=2008)
         {
             try
             {
@@ -52,13 +52,19 @@ namespace petratracker.Models
                 }
                 else
                 {
-                    sc = (from j in Database.Tracker.Schedules where (j.company_id == company_id) && j.workflow_status != Constants.WF_STATUS_INACTIVE orderby j.created_at descending select j);
+                    sc = (from j in Database.Tracker.Schedules where (j.company_id == company_id) && 
+                                                                      j.contributiontype == contribution_type &&
+                                                                      j.tier == tier &&
+                                                                      j.month == month &&
+                                                                      j.year == year &&
+                                                                      j.workflow_status != Constants.WF_STATUS_INACTIVE 
+                                                                      orderby j.created_at descending select j);
                 }
                 
                 foreach (var s in sc)
                 {
-                    string month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.month);
-                    string desc = string.Format("{0} {1} - {2} - for {3}-{4}", s.company, s.tier, s.contributiontype, s.year, month);
+                    string m = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.month);
+                    string desc = string.Format("{0} {1} - {2} - for {3}-{4}", s.company, s.tier, s.contributiontype, s.year, m);
                     
                     if (tier != string.Empty)
                     {
@@ -94,7 +100,8 @@ namespace petratracker.Models
                           j.workflow_status != Constants.WF_STATUS_INACTIVE &&
                           j.workflow_status != Constants.WF_STATUS_COMPLETED && 
                           j.workflow_status != Constants.WF_STATUS_ERROR_ESCALATED  &&
-                          j.workflow_status != Constants.WF_STATUS_EXPIRED
+                          j.workflow_status != Constants.WF_STATUS_EXPIRED &&
+                          j.workflow_status != Constants.WF_STATUS_REVALIDATE
                     orderby j.updated_at ascending 
                     select j);
         }
@@ -133,13 +140,24 @@ namespace petratracker.Models
             Database.Tracker.SubmitChanges(); 
         }
 
-        public static void AddSchedule(string company, string companyid, string tier, string ct, int ctid, string month, string year, double amount, int parent_id)
+        public static void AddSchedule(string company, string companyid, string tier, string ct, int ctid, string month, string year, double amount, int parent_id, bool syscall=false)
         {
             try
             {
+                bool evaluate = true;
+
                 if (parent_id != 0)
                 {
                     DeactivateSchedule(parent_id);
+
+                    if (!syscall)
+                    {
+                        Schedule olds = GetSchedule(parent_id);
+                        if (TrackerSchedule.IsEqualValueTimes(olds, companyid, tier, ctid, int.Parse(month), int.Parse(year)))
+                        {
+                            evaluate = false;
+                        }                        
+                    }
                 }
 
                 Schedule s = new Schedule();
@@ -166,7 +184,11 @@ namespace petratracker.Models
                 s.updated_at = DateTime.Now;
                 Database.Tracker.Schedules.InsertOnSubmit(s);
                 Database.Tracker.SubmitChanges();
-                InitiateScheduleWorkFlow(s);
+                
+                if (evaluate)
+                {
+                    InitiateScheduleWorkFlow(s);
+                }
             }
             catch (Exception)
             {
@@ -284,31 +306,24 @@ namespace petratracker.Models
 
         public static Schedule InternallyResolveScheduleIssue(Schedule s, DateTime t)
         {
+            s.workflow_status = Constants.WF_STATUS_REVALIDATE;
+            s.workflow_summary = string.Format("Errors have been resolved on {0}. Schedule requires revalidation", t);
             s.internally_resolved = true;
             s.internally_resolved_date = (DateTime) t;
+            s = Save(s);
             return s;
         }
 
         public static Schedule ResolveScheduleIssue(Schedule s)
         {
-            DateTime newVT = CheckValidationTime(s.company_id, s.tier, s.contributiontypeid, s.month, s.year);
-
-            if (s.validation_valuetime != null)
+            if (TrackerSchedule.IsEqualValueTimes(s, s.company_id, s.tier, s.contributiontypeid, s.month, s.year)) 
             {
-                int oldyear = ((DateTime)s.validation_valuetime).Year;
-                int oldmonth = ((DateTime)s.validation_valuetime).Month;
-                int oldday = ((DateTime)s.validation_valuetime).Day;
-                int oldhour = ((DateTime)s.validation_valuetime).Hour;
-
-                if (oldyear == newVT.Year && oldmonth == newVT.Month && oldday == newVT.Day && oldhour == newVT.Hour) // Do data start revalidation;
-                {
-                    EvaluateScheduleWorkFlow(s);
-                    return s;
-                }
+                EvaluateScheduleWorkFlow(s);
+                return s;
             }
 
             // Add new schedule with similar details and retire the old one
-            AddSchedule(s.company, s.company_id, s.tier, s.contributiontype, s.contributiontypeid, s.month.ToString(), s.year.ToString(), Double.Parse(s.amount.ToString()), s.id);
+            AddSchedule(s.company, s.company_id, s.tier, s.contributiontype, s.contributiontypeid, s.month.ToString(), s.year.ToString(), Double.Parse(s.amount.ToString()), s.id, true);
             s.workflow_status = Constants.WF_STATUS_EXPIRED;
             s.workflow_summary = "Schedule issues resolved, but there was a new valuetime so a new schedule has been created.";
             Save(s);
@@ -861,6 +876,26 @@ namespace petratracker.Models
             {
                 return status;
             }
+        }
+
+        private static bool IsEqualValueTimes(Schedule olds, string company_id, string tier, int ctid, int month, int year)
+        {
+            DateTime newVT = CheckValidationTime(company_id, tier, ctid, month, year);
+
+            if (olds.validation_valuetime != null)
+            {
+                int oldyear = ((DateTime)olds.validation_valuetime).Year;
+                int oldmonth = ((DateTime)olds.validation_valuetime).Month;
+                int oldday = ((DateTime)olds.validation_valuetime).Day;
+                int oldhour = ((DateTime)olds.validation_valuetime).Hour;
+
+                if (oldyear == newVT.Year && oldmonth == newVT.Month && oldday == newVT.Day && oldhour == newVT.Hour) // Do data start revalidation;
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     
         #endregion

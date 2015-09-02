@@ -44,7 +44,7 @@ namespace petratracker
 
             if (tag.Equals("Super Admin Login"))
             {
-                tbx_password.Password = "dogdog";
+                tbx_password.Password = "redred";
                 tbx_username.Text = "admin@petratrust.com";
             }
             else if (user.Equals("Super Ops User Login"))

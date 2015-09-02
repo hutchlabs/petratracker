@@ -70,7 +70,10 @@ namespace petratracker.Pages
                 {
                     string company_id = ((ComboBoxPairs)cbx_companies.SelectedItem)._Key;
                     string tier = (cbx_tiers.SelectedIndex == -1) ? "" : cbx_tiers.SelectedValue.ToString();
-                    cbx_schedules.ItemsSource = TrackerSchedule.GetCBSchedules(company_id, tier);
+                    string ct = ((ComboBoxPairs)cbx_contributiontype.SelectedItem)._Value;
+                    int month = int.Parse(cbx_month.SelectedValue.ToString());
+                    int year = int.Parse( ((ComboBoxPairs)cbx_year.SelectedItem)._Value)  ;
+                    cbx_schedules.ItemsSource = TrackerSchedule.GetCBSchedules(company_id, tier, ct, month, year);
                 }
                 catch (Exception)
                 {
