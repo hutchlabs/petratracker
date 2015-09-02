@@ -99,7 +99,7 @@ namespace petratracker.Pages
                 this.btn_report.IsEnabled = false;
             }
 
-            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded,_schedule.id);
+            UpdateButtonStatus(_schedule);
 
             this.btn_reportreminder.IsEnabled = false;
             this.btn_reportreminder.Content = (this.panelReport.Visibility == Visibility.Collapsed) ? "Report Reminder" : "Reporting Reminder";
@@ -110,7 +110,7 @@ namespace petratracker.Pages
         {
             CloseAllPanels();
 
-            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded,_schedule.id);
+            UpdateButtonStatus(_schedule);
 
 
             this.btn_resolveissue.Content = (this.panelResolution.Visibility == Visibility.Collapsed) ? "Resolve Issue" : "Resolving Issue";
@@ -231,7 +231,7 @@ namespace petratracker.Pages
             {
                 _schedule = TrackerSchedule.InternallyResolveScheduleIssue(_schedule, (DateTime)dp_intresolvedate.SelectedDate);
                 this.panelIntResolution.Visibility = Visibility.Collapsed;
-                this.btn_intresolveissue.Content = "Interally Resolved";
+                this.btn_intresolveissue.Content = "Internally Resolved";
                 load_schedule();
             }
         }
@@ -262,7 +262,7 @@ namespace petratracker.Pages
             this.lbl_lastupdated.Content = string.Format("Last updated on {0}",_schedule.updated_at.ToString());
             this.status_summary.Text = _schedule.workflow_summary;
 
-            UpdateButtonStatus(_schedule.workflow_status, _schedule.validation_email_sent, _schedule.escalation_email_sent, _schedule.internally_resolved, _schedule.receipt_sent, _schedule.file_downloaded,_schedule.id);
+            UpdateButtonStatus(_schedule);
         }
 
         private void CloseAllPanels()
@@ -274,8 +274,16 @@ namespace petratracker.Pages
             this.panelIntResolution.Visibility = Visibility.Collapsed;
         }
 
-        private void UpdateButtonStatus(string status, bool? vemail_sent, bool? esemail_sent, bool? int_resolve, bool receipt_sent, bool file_downloaded, int sid)
+        private void UpdateButtonStatus(Schedule s)
         {
+            string status = s.workflow_status;
+            bool? vemail_sent = s.validation_email_sent;
+            bool? esemail_sent = s.escalation_email_sent;
+            bool? int_resolve = s.internally_resolved;
+            bool receipt_sent = s.receipt_sent;
+            bool file_downloaded = s.file_downloaded;
+            int sid = s.id;
+
             string[] validValidationStates = { Constants.WF_VALIDATION_NOTDONE, Constants.WF_VALIDATION_NOTDONE_REMINDER };
             string[] validResolveIssueStates = { Constants.WF_STATUS_ERROR_SSNIT, Constants.WF_STATUS_ERROR_NAME,  Constants.WF_STATUS_ERROR_SSNIT_NAME,
                                                  Constants.WF_STATUS_ERROR_ALL, Constants.WF_VALIDATION_DONE_EMAILSENT, Constants.WF_STATUS_ERROR_ESCALATED};
@@ -309,11 +317,10 @@ namespace petratracker.Pages
             else
             {
                 bool escalationtime = false;
-                Notification nf = TrackerNotification.GetAllNotificationByJob(Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST,Constants.JOB_TYPE_SCHEDULE, sid);
                 DateTime now = DateTime.Now;
-                if (nf != null)
+                if (s != null)
                 {
-                    if ((now.Subtract(nf.created_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_3_REMINDER_WINDOW)))
+                    if ((now.Subtract(s.created_at).Days * 24) >= int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_3_REMINDER_WINDOW)))
                     {
                         escalationtime = true;
                     }
@@ -321,19 +328,6 @@ namespace petratracker.Pages
                 btn_escalationissue.IsEnabled = (escalationtime && (validValidationStates.Contains(status) || validResolveIssueStates.Contains(status))) ? true : false;
             }
             
-
-            if (int_resolve != null) 
-            {
-                if ((bool)int_resolve)     
-                {
-                    btn_intresolveissue.IsEnabled = false;
-                    btn_intresolveissue.Content = "Resolved Internally";
-                }
-            }
-            else
-            {
-                btn_intresolveissue.IsEnabled = (validResolveIssueStates.Contains(status)) ? true : false; 
-            }
 
             if (validResolveIssueStates.Contains(status))
             {
@@ -351,6 +345,21 @@ namespace petratracker.Pages
                     this.btn_reportreminder.IsEnabled = false;
                     this.btn_markreceiptsent.IsEnabled = true;
                 }
+
+                if (int_resolve != null)
+                {
+                    if ((bool)int_resolve)
+                    {
+                        btn_intresolveissue.IsEnabled = false;
+                        btn_intresolveissue.Content = "Resolved Internally";
+                    }
+                }
+                else
+                {
+                    btn_intresolveissue.IsEnabled = (validResolveIssueStates.Contains(status)) ? true : false;
+                }
+
+
                 if (validFiledownloadStates.Contains(status))
                 {
                     this.btn_resolveissue.IsEnabled = false;

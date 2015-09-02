@@ -40,7 +40,9 @@ namespace petratracker
         private void autoLogin(object sender, RoutedEventArgs e)
         {
             string user = ((Button)sender).Content.ToString();
-            if (user.Equals("Super Admin Login"))
+            string tag = ((Button)sender).Tag.ToString();
+
+            if (tag.Equals("Super Admin Login"))
             {
                 tbx_password.Password = "dogdog";
                 tbx_username.Text = "admin@petratrust.com";

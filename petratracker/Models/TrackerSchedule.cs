@@ -420,7 +420,7 @@ namespace petratracker.Models
                 if (nf != null)
                 {
                     // Let's go through the escalation process 
-                    if ((now.Subtract(nf.created_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_3_REMINDER_WINDOW)))
+                    if ((now.Subtract(s.created_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_3_REMINDER_WINDOW)))
                     {
                         if (nf.times_sent == 2) // It's the 5th day, escalate
                         {
@@ -433,7 +433,7 @@ namespace petratracker.Models
                                                         : string.Format("{0} 4th and final notification request sent. Please escalate issue.",errmsg);
                         }
                     }
-                    else if ((now.Subtract(nf.created_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_2_REMINDER_WINDOW)))
+                    else if ((now.Subtract(s.created_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_2_REMINDER_WINDOW)))
                     {
                         if (nf.times_sent == 1) // It's the 3rd day, send a remider
                         {
@@ -454,7 +454,7 @@ namespace petratracker.Models
                 else
                 {
                     // Notification has not been sent. It's the 2nd day, send a reminder
-                    if ((now.Subtract(s.updated_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_1_REMINDER_WINDOW)))
+                    if ((now.Subtract(s.created_at).Days * 24) > int.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_ERRORFIX_1_REMINDER_WINDOW)))
                     {
                         TrackerNotification.Add(Constants.ROLES_OPS_USER_ID, Constants.NF_TYPE_SCHEDULE_ERRORFIX_REQUEST, Constants.JOB_TYPE_SCHEDULE, s.id);
                         s.workflow_summary = (vsent) ? string.Format("{0} 2nd notification request sent. Email sent to client on {1}.", errmsg, s.validation_email_date)
