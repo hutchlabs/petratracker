@@ -138,8 +138,8 @@
     <Compile Include="Models\Tracker_Report_Schedules_Pending.cs" />
     <Compile Include="Models\Tracker_Report_Schedule_Status.cs" />
     <Compile Include="Models\Tracker_Report_Slack_Days.cs" />
-    <Compile Include="Pages\payment_deal_description.xaml.cs">
-      <DependentUpon>payment_deal_description.xaml</DependentUpon>
+    <Compile Include="Pages\subscriptions_verify_deal_description.xaml.cs">
+      <DependentUpon>subscriptions_verify_deal_description.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\schedules_add.xaml.cs">
       <DependentUpon>schedules_add.xaml</DependentUpon>
@@ -298,7 +298,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Resource Include="Resources\Entypo.ttf" />
-    <Page Include="Pages\payment_deal_description.xaml">
+    <Page Include="Pages\subscriptions_verify_deal_description.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -579,7 +579,7 @@ namespace petratracker.Pages
 
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
-            payment_deal_description deal = new payment_deal_description(subID,false);
+            subscriptions_verify_deal_description deal = new subscriptions_verify_deal_description(subID, false);
             deal.ShowDialog();
             load_payment_deal_descriptions();
         }
@@ -594,7 +594,7 @@ namespace petratracker.Pages
             if (dgPaymentDealDescriptions.SelectedItem != null)
             {
                 TrackerPaymentDealDescriptions p = (TrackerPaymentDealDescriptions)dgPaymentDealDescriptions.SelectedItem;
-                payment_deal_description openEdit = new payment_deal_description((int)p.id, true);
+                subscriptions_verify_deal_description openEdit = new subscriptions_verify_deal_description((int)p.id, true);
                 openEdit.ShowDialog();
             }
         }
