@@ -156,9 +156,9 @@ namespace petratracker.Models
 
             try
             {
-                String tconStr = "Data Source=" + datasource + ";Initial Catalog=Petra_tracker;Integrated Security=True";
-                String pconStr = "Data Source=" + datasource + ";Initial Catalog=Petra5;Integrated Security=True";
-                String ptasStr = "Data Source=" + datasource + ";Initial Catalog=PTASDB;Integrated Security=True";
+                String tconStr = "Data Source=" + datasource + ";Initial Catalog=Petra_tracker;Integrated Security=True;MultipleActiveResultSets=True";
+                String pconStr = "Data Source=" + datasource + ";Initial Catalog=Petra5;MultipleActiveResultSets=True;Integrated Security=True";
+                String ptasStr = "Data Source=" + datasource + ";Initial Catalog=PTASDB;MultipleActiveResultSets=True;Integrated Security=True";
 
                 Tracker = new TrackerDataContext(tconStr);
                 Microgen = new MicrogenDataContext(pconStr);

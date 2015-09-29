@@ -78,7 +78,7 @@ namespace petratracker.Models
             }
         }
 
-        public static PPayment GetSubscription(string company_id, string tier, int month, int year, string ct)
+        public static PPayment GetSubscription(string company_id, string tier, int month, int year, int ctid)
         {
             try
             {
@@ -87,8 +87,8 @@ namespace petratracker.Models
                         where p.company_code == company_id &&
                               p.tier == tier &&
                               pd.year == year && pd.month == month &&
-                              pd.contribution_type == ct
-                        select p).Single();
+                              pd.contribution_type_id == ctid
+                        select p).First();
             } 
             catch(Exception)
             {
@@ -245,6 +245,7 @@ namespace petratracker.Models
                 objPayment.CompanyCode = subscription.company_code;
                 objPayment.CompanyName = get_company_name(subscription.company_code);
                 objPayment.PaymentID = 1;
+                objPayment.PaymentStatusID = 1;
                 objPayment.ActionUserID = 36; //Declare ActionUserID as constant
                 objPayment.Tier = subscription.tier.Replace(" ",string.Empty);
                 Database.PTAS.Payments.InsertOnSubmit(objPayment);            

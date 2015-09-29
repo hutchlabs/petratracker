@@ -28,7 +28,13 @@ namespace petratracker
         #region Public Members
         
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
+        public string StatusBarInfo
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Public Properties
@@ -267,7 +273,7 @@ namespace petratracker
 
         private void StartScheduleWorkflowService()
         {
-            TrackerSchedule.InitiateScheduleWorkFlow();
+            //TrackerSchedule.InitiateScheduleWorkFlow();
         }
 
         private async void StartNotificationService()
@@ -369,7 +375,5 @@ namespace petratracker
         }
         
         #endregion
-
-
 	}
 }

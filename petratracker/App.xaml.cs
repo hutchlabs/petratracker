@@ -11,10 +11,18 @@ namespace petratracker
         #region Private Members
 
         private bool _saveOnExit = false;
+        private string _sbi = "";
 
         #endregion
 
         #region Public Properties
+
+        public string StatusBarInfo
+        {
+            get { return _sbi; }
+            set { _sbi = value; }
+        }
+
 
         public bool SaveOnExit
         {

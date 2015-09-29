@@ -219,6 +219,8 @@
                 <StatusBarItem>Petra Trust Tracker</StatusBarItem>
                 <Separator Style="{StaticResource MetroStatusBarSeparator}" />
                 <StatusBarItem Content="{Binding ElementName=MainTabControl, Path=SelectedItem.Header, Mode=OneWay}" />
+                <Separator Style="{StaticResource MetroStatusBarSeparator}" />
+                <StatusBarItem Content="{Binding StatusBarInfo}" />
             </StatusBar>
         </Grid>
     </Controls:MetroContentControl>

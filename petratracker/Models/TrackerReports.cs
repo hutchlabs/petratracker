@@ -457,7 +457,7 @@ namespace petratracker.Models
 	                               , mic_desc.DealDesc MiscDealDesc
                             from
                             (
-                                select p.company_code, p.company_id, p.tier, p.value_date, 
+                                select p.company_code, CONVERT(nvarchar,p.company_id) company_id, p.tier, p.value_date, 
                                       (CONVERT(nvarchar,pd.month) + CONVERT(nvarchar,pd.year) + (case when pd.contribution_type not like '%backpay%' then 'B' else '' end)) dealdesc 
                                   from [Petra_tracker].[dbo].[PPayments] p
                                   join [Petra_tracker].[dbo].[PDealDescriptions] pd on p.id = pd.payment_id

@@ -8,6 +8,7 @@ using petratracker.Utility;
 using System.Data;
 using System.Threading;
 using System.Globalization;
+using System.ComponentModel;
 
 namespace petratracker.Models
 {
@@ -187,7 +188,7 @@ namespace petratracker.Models
                 
                 if (evaluate)
                 {
-                    InitiateScheduleWorkFlow(s);
+                    EvaluateScheduleWorkFlow(s);
                 }
             }
             catch (Exception)
@@ -261,33 +262,6 @@ namespace petratracker.Models
             return cbp.AsEnumerable();
         }
 
-        #endregion
-
-        #region Workflow Methods
-
-        public static async void InitiateScheduleWorkFlow(Schedule schedule = null)
-        {
-            if (schedule != null)
-            {
-                EvaluateScheduleWorkFlow(schedule);
-            }
-            var dueTime = TimeSpan.FromSeconds(60);
-            var interval = TimeSpan.FromMinutes(Double.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_INTERVAL_UPDATE_SCHEDULES)));
-            await Utils.DoPeriodicWorkAsync(new Func<bool>(UpdateScheduleWorkFlowStatus), dueTime, interval, CancellationToken.None);
-        }
-
-        public static bool UpdateScheduleWorkFlowStatus()
-        {
-            var schedules = GetSchedulesForProcessing();
-
-            foreach (var s in schedules)
-            {
-                EvaluateScheduleWorkFlow(s);
-            }
-
-            return true;
-        }
-
         public static Schedule MarkValidationEmailSent(Schedule s, DateTime t)
         {
             s.validation_email_sent = true;
@@ -309,16 +283,16 @@ namespace petratracker.Models
             s.workflow_status = Constants.WF_STATUS_REVALIDATE;
             s.workflow_summary = string.Format("Errors have been resolved on {0}. Schedule requires revalidation", t);
             s.internally_resolved = true;
-            s.internally_resolved_date = (DateTime) t;
+            s.internally_resolved_date = (DateTime)t;
             s = Save(s);
             return s;
         }
 
         public static Schedule ResolveScheduleIssue(Schedule s)
         {
-            if (TrackerSchedule.IsEqualValueTimes(s, s.company_id, s.tier, s.contributiontypeid, s.month, s.year)) 
+            if (TrackerSchedule.IsEqualValueTimes(s, s.company_id, s.tier, s.contributiontypeid, s.month, s.year))
             {
-                EvaluateScheduleWorkFlow(s);
+                s = EvaluateScheduleWorkFlow(s);
                 return s;
             }
 
@@ -350,8 +324,43 @@ namespace petratracker.Models
 
             return schedule;
         }
-      
-        private static void EvaluateScheduleWorkFlow(Schedule s)
+
+        #endregion
+
+        #region Workflow Methods
+
+        public static bool InitiateScheduleWorkFlow()
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += new DoWorkEventHandler(UpdateScheduleWorkFlowStatus);
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(UpdateScheduleWorkFlowStatusComplete);
+            worker.RunWorkerAsync();
+            worker.Dispose();
+            return true;
+        }
+
+        private static async void UpdateScheduleWorkFlowStatusComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
+            var dueTime = TimeSpan.FromSeconds(5);
+            var interval = TimeSpan.FromMinutes(Double.Parse(TrackerSettings.GetSetting(Constants.SETTINGS_TIME_INTERVAL_UPDATE_SCHEDULES)));
+            await Utils.DoPeriodicWorkAsync(new Func<bool>(InitiateScheduleWorkFlow), dueTime, interval, CancellationToken.None);
+        }
+
+        public static void UpdateScheduleWorkFlowStatus(object sender, DoWorkEventArgs e)
+        {
+            var schedules = GetSchedulesForProcessing();
+            
+            foreach (var s in schedules)
+            {
+                    if (s.ptas_fund_deal_id == 0 || s.ptas_fund_deal_id == null)
+                    {
+                        s.ptas_fund_deal_id = GetFundDealId(s.company_id, s.tier, s.contributiontypeid, s.month, s.year);
+                    }
+                    EvaluateScheduleWorkFlow(s);
+            }
+        }
+
+        private static Schedule EvaluateScheduleWorkFlow(Schedule s)
         {
             // Lock this schedule for now
             s.processing = true;
@@ -407,6 +416,8 @@ namespace petratracker.Models
                     Save(s);
                 }
             }
+
+            return s;
         }
 
         public static Schedule EvaluateReminderStatus(Schedule s)
@@ -507,6 +518,9 @@ namespace petratracker.Models
                     s = Save(s);
                     s.workflow_status = (status.Item2=="Linked") ?  Constants.WF_STATUS_PAYMENTS_LINKED : Constants.WF_STATUS_PAYMENTS_RECEIVED;
                     s.workflow_summary = "Schedule linked to Payments. Waiting for Receipt to be sent and File download & uploaded";
+
+                    Console.WriteLine("Payment found. Id is "+s.payment_id.ToString()+ " Work flow is "+s.workflow_status); ;
+
                     EvaluatePaymentReceivedSchedule(s);
                 }
             }
@@ -678,7 +692,7 @@ namespace petratracker.Models
 
                 //Console.WriteLine("\nFUND DEAL ID: "+ funddealid.ToString());
 
-                PPayment pm = TrackerPayment.GetSubscription(company_id, tier, month, year, ct);
+                PPayment pm = TrackerPayment.GetSubscription(company_id, tier, month, year, ctid);
 
                 if (pm != null)
                 {
@@ -761,21 +775,21 @@ namespace petratracker.Models
             try
             {
                 FundDeal fd = (from j in Database.PTAS.FundDeals
-                               where j.ContribType_ID == ctid &&
-                                     j.CompanyEntityId == companyid.Trim() &&
-                                     j.Tier == tier.Replace(" ", "") &&
-                                     j.TotalContribution != 0 &&
-                               ((DateTime)j.DealDate).Date == dealDate.Date
-                               select j).Single();
+                          where j.ContribType_ID == ctid &&
+                                j.CompanyEntityId == companyid.Trim() &&
+                                j.Tier == tier.Replace(" ", "") &&
+                                j.TotalContribution != 0 &&
+                                ((DateTime)j.DealDate).Date == dealDate.Date
+                          select j).DefaultIfEmpty<FundDeal>().FirstOrDefault();
 
-                return fd.FundDealID;
+                return (fd==null) ? 0 : fd.FundDealID;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message + " " + ex.GetBaseException().ToString());
                 return 0;
             }
         }
-
 
         private static bool CheckValidation(string companyid, string tier, int ctid, int month, int year)
         {

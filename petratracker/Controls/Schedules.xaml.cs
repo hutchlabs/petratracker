@@ -115,9 +115,9 @@ namespace petratracker.Controls
                 flyout.Content = new ScheduleView(j.id, true);
                 flyout.IsOpen = !flyout.IsOpen;
             }
-            catch
+            catch(Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -215,7 +215,7 @@ namespace petratracker.Controls
             string filter = (string)((SplitButton)ScheduleListFilter).SelectedItem;
 
             // Get items
-            if (filter == "All") { viewSchedules.ItemsSource = TrackerSchedule.GetSchedules(); }
+            if (filter == "All" || filter==null) { viewSchedules.ItemsSource = TrackerSchedule.GetSchedules(); }
             else { viewSchedules.ItemsSource = TrackerSchedule.GetScheduleByStatus(filter); }
                 
             lbl_scheduleCount.Content = string.Format("{0} Schedules", viewSchedules.Items.Count);
