@@ -192,19 +192,30 @@ namespace petratracker.Models
                 int ini_inc = 1;
                 foreach (DataRow dr in dt.Rows)
                 {
-                   
+
+                    DateTime valDate;
+                    //Cast value date 
+                    if (dr["Value Date"] is DateTime) 
+                    { valDate = (DateTime)dr["Value Date"]; }
+                    else 
+                    {
+                        string value_date_str = dr["Value Date"].ToString();
+                        char[] charSeparators = new char[] { '/','-' };
+                        string [] value_date_res = value_date_str.Split(charSeparators);
+                        valDate =  new DateTime(int.Parse(value_date_res[2]), int.Parse(value_date_res[1]), int.Parse(value_date_res[0]));
+                    }
 
                     // Insert new payment
                     PPayment objPayment = new PPayment();                 
                     objPayment.job_id = jobId;
                     objPayment.tier = tier;
                     objPayment.transaction_details = dr["Transaction Details"].ToString();
-                    objPayment.transaction_date =  (DateTime)dr["Transaction Date"];
-                    objPayment.value_date = (DateTime)dr["Value Date"];
-                    objPayment.subscription_value_date = (DateTime)dr["Transaction Date"];
+                    objPayment.transaction_date = valDate;
+                    objPayment.value_date = valDate;
+                    objPayment.subscription_value_date = valDate;
                     objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
                     objPayment.subscription_amount = decimal.Parse(dr["Transaction Amount"].ToString());
-                    objPayment.transaction_ref_no = get_trans_ref_code((DateTime)dr["Value Date"], tier);
+                    objPayment.transaction_ref_no = get_trans_ref_code(valDate, tier);
 
                     objPayment.status = (dr["Dr / Cr Indicator"].ToString() == "Credit") ? "Unidentified" : "Returned";
                     objPayment.owner = TrackerUser.GetCurrentUser().id;

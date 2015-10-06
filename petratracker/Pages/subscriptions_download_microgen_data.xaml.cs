@@ -59,7 +59,7 @@ namespace petratracker.Pages
             try
             {
                  var subscription = from p in Database.Tracker.PPayments
-                                   where p.value_date == dtValueDate.SelectedDate.Value && p.tier == cmb_tier.Text
+                                   where p.value_date == dtValueDate.SelectedDate.Value && p.tier == cmb_tier.Text && p.status != "Returned"
                                    select p;
 
 
