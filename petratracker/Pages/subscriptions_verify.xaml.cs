@@ -336,7 +336,8 @@ namespace petratracker.Pages
                     if (verifyType == "Identified")
                     {
                         p.company_code = txtCompanyCode.Text;
-                        p.company_name = cmbCompanies.Text;
+                        p.company_name = cmbCompanies.Text.Substring(cmbCompanies.Text.LastIndexOf('-')+1);
+                        p.company_id = TrackerPayment.get_company_id_by_code(txtCompanyCode.Text);
                         p.savings_booster = chkSavingsBooster.IsChecked;
                         p.savings_booster_client_code = txtClientCode.Text;
                         p.identified_by = TrackerUser.GetCurrentUser().id;
@@ -405,59 +406,72 @@ namespace petratracker.Pages
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (txtCompanyCode.Text != string.Empty)
+            if (chkReturned.IsChecked == true)
             {
-                if ((chkReturned.IsChecked == false))
+                if (MessageBox.Show("This subscription would be flagged as returned, please click Yes to proceed.", "Returened Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    if(btnSave.Content.ToString() == "Save")
+                    if (update_payment("Returned", false)) { MessageBox.Show("Payment has been flagged as returned.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
+                }
+            }
+            else
+            {
+                if (txtCompanyCode.Text != string.Empty)
+                {
+                    if ((chkReturned.IsChecked == false))
                     {
-                        String conf_str = "Transaction Details \n\n";
-                        conf_str += "Transaction Ref No. : "+txtTransRef.Text+"\n";
-                        conf_str += "Transaction Date : "+txtTransDate.Text+"\n";
-                        conf_str += "Subscription/Value Date : "+txtValueDate.Text+"\n";
-                        conf_str += "Amount : " + txtTranAmount.Text + "\n";
-                        conf_str += "Identified Company : " + cmbCompanies.Text + "\n";
-                        conf_str += "Savings Booster Customer : "+ cmbClient.Text +"\n\n";
-                        conf_str += "Please click Yes to commit changes to this transaction.";
-
-                        if (MessageBox.Show(conf_str, "Confirm Identification", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        if (btnSave.Content.ToString() == "Save")
                         {
-                            if (update_payment("Identified",false)){
-                                // resolve any pending rejected tickets
-                                TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED,
-                                                                 Constants.JOB_TYPE_SUBSCRIPTION, subID);
-                                TrackerNotification.Add(Constants.ROLES_SUPER_OPS_USER_ID,
-                                                        Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST,
-                                                        Constants.JOB_TYPE_SUBSCRIPTION, subID);
-                                MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); 
-                                this.Close(); 
+                            String conf_str = "Transaction Details \n\n";
+                            conf_str += "Transaction Ref No. : " + txtTransRef.Text + "\n";
+                            conf_str += "Transaction Date : " + txtTransDate.Text + "\n";
+                            conf_str += "Subscription/Value Date : " + txtValueDate.Text + "\n";
+                            conf_str += "Amount : " + txtTranAmount.Text + "\n";
+                            conf_str += "Identified Company : " + cmbCompanies.Text + "\n";
+                            conf_str += "Savings Booster Customer : " + cmbClient.Text + "\n\n";
+                            conf_str += "Please click Yes to commit changes to this transaction.";
+
+                            if (MessageBox.Show(conf_str, "Confirm Identification", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            {
+                                if (update_payment("Identified", false))
+                                {
+                                    // resolve any pending rejected tickets
+                                    TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED,
+                                                                     Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                                    TrackerNotification.Add(Constants.ROLES_SUPER_OPS_USER_ID,
+                                                            Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST,
+                                                            Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                                    MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    this.Close();
+                                }
+                            }
+                            else { MessageBox.Show("No changes have been committed to this transaction."); }
+                        }
+                        else if (btnSave.Content.ToString() == "Approve")
+                        {
+                            if (MessageBox.Show("This subscription would be flagged as identified and approved, please click Yes to proceed.", "Identified and Approved Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            {
+                                if (update_payment("Identified and Approved", true))
+                                {
+
+
+                                    TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                                    MessageBox.Show("Payment has been flagged as approved.", "Approved", MessageBoxButton.OK, MessageBoxImage.Information); this.Close();
+                                }
                             }
                         }
-                        else{ MessageBox.Show("No changes have been committed to this transaction."); }
                     }
-                    else if (btnSave.Content.ToString() == "Approve")
+                    else
                     {
-                        if (MessageBox.Show("This subscription would be flagged as identified and approved, please click Yes to proceed.", "Identified and Approved Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        if (MessageBox.Show("This subscription would be flagged as returned, please click Yes to proceed.", "Returened Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
-                            if (update_payment("Identified and Approved",true)) {
-                                
-                                
-                                TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
-                                MessageBox.Show("Payment has been flagged as approved.", "Approved", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
+                            if (update_payment("Returned", false)) { MessageBox.Show("Payment has been flagged as returned.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
                         }
                     }
                 }
                 else
                 {
-                    if (MessageBox.Show("This subscription would be flagged as returned, please click Yes to proceed.", "Returened Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        if (update_payment("Returned",false)){MessageBox.Show("Payment has been flagged as returned.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); this.Close();}
-                    }
+                    MessageBox.Show("Please specify a company.");
                 }
-            }
-            else
-            {
-                MessageBox.Show("Please specify a company.");
             }
         }
 

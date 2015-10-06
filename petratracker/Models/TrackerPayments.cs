@@ -245,6 +245,7 @@ namespace petratracker.Models
                                     select p).Single();
 
                 Payment objPayment = new Payment();
+                objPayment.PaymentStatusID = 1;
                 objPayment.InsertedDate = DateTime.Now;
                 objPayment.ContributionDate = subscription.subscription_value_date;
                 objPayment.ValueDate = subscription.value_date;
@@ -255,8 +256,8 @@ namespace petratracker.Models
                 objPayment.RETURNED = string.Empty;
                 objPayment.CompanyCode = subscription.company_code;
                 objPayment.CompanyName = get_company_name(subscription.company_code);
-                objPayment.PaymentID = 1;
-                objPayment.PaymentStatusID = 1;
+                //objPayment.PaymentID = 1;
+                
                 objPayment.ActionUserID = 36; //Declare ActionUserID as constant
                 objPayment.Tier = subscription.tier.Replace(" ",string.Empty);
                 Database.PTAS.Payments.InsertOnSubmit(objPayment);            
@@ -274,6 +275,23 @@ namespace petratracker.Models
         public static bool send_approval_email()
         {
             return true;
+        }
+
+
+        public static int get_company_id_by_code(string companyCode)
+        {
+            int company_id = 0;
+
+            var comp_id = from et in Database.Microgen.Entities
+                          where et.EntityKey == companyCode
+                          select new { et.EntityID };
+
+            foreach (var e in comp_id)
+            {
+                company_id = e.EntityID;
+            }
+
+            return company_id;
         }
 
         public static string [] get_microgen_data(string company_code, string tier)
@@ -331,7 +349,6 @@ namespace petratracker.Models
             payment.updated_at = DateTime.Now;
             Database.Tracker.SubmitChanges();
         }
-
 
         public static void Reject(PPayment payment)
         {

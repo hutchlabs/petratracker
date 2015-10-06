@@ -70,7 +70,9 @@
                       SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
                       IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
                       ItemsSource="{Binding}" PreviewMouseDoubleClick="viewJobs_PreviewMouseDoubleClick"
-                      SelectionChanged="viewJobs_SelectionChanged">
+                      SelectionChanged="viewJobs_SelectionChanged"  ScrollViewer.CanContentScroll="True" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
                         
                         <DataGridTextColumn Header="Description" Width="150" Binding="{Binding job_description}" />
