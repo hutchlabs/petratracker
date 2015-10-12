@@ -42,7 +42,7 @@ namespace petratracker.Models
             }
             catch (Exception)
             {
-                throw;
+                return -1;
             }
         }
 

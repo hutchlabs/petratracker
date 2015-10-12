@@ -238,5 +238,14 @@ namespace petratracker.Models
 
         
     }
+
+    public class MicroGenFundDealExportData
+    {
+        public string Transaction_Ref
+        {
+            get;
+            set;
+        }
+    }
 }
 

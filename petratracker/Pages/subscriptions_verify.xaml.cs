@@ -85,7 +85,8 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
-            grpTransDetails.IsEnabled = false;
+            txtSubscriptionAmount.Text = subscription.subscription_amount.ToString();
+            dtSubscriptionValueDate.SelectedDate = subscription.subscription_value_date;
             subID = subscription.id;
             get_deal_desc_period();           
         }
@@ -102,12 +103,13 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
+            txtSubscriptionAmount.Text = subscription.subscription_amount.ToString();
+            dtSubscriptionValueDate.SelectedDate = subscription.subscription_value_date;
             txtComments.Text = subscription.comments;
-            grpTransDetails.IsEnabled = false;
             subID = subscription.id;
 
             //Load Company Mapping
-            grpCompanyMapping.IsEnabled = false;
+         
             var companies = (from c in Database.Microgen.cclv_AllEntities
                              where c.EntityKey == subscription.company_code
                              select c);
@@ -147,8 +149,9 @@ namespace petratracker.Pages
             txtValueDate.Text = subscription.value_date.ToString("dd-MMM-yyyy");
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
+            txtSubscriptionAmount.Text = subscription.subscription_amount.ToString();
+            dtSubscriptionValueDate.SelectedDate = subscription.subscription_value_date;
             txtComments.Text = subscription.comments;
-            grpTransDetails.IsEnabled = false;
             subID = subscription.id;
 
             //Load Company Mapping
@@ -209,6 +212,19 @@ namespace petratracker.Pages
                                 where p.id == this.subID && p.status == "Identified and Approved"
                                 select p).Single();
 
+
+            //Enable reidentification of payment for Super Users
+            if (!TrackerUser.IsCurrentUserSuperAdmin())
+            {
+                grpTransDetails.IsEnabled = false;
+                grpCompanyMapping.IsEnabled = false;
+                btnSave.Visibility = System.Windows.Visibility.Hidden;
+            }
+            else
+            {
+                btnSave.Content = "Update";
+            }
+
             //Load Transaction Details
             txtTransRef.Text = subscription.transaction_ref_no.ToString();
             txtTransDate.Text = subscription.transaction_date.ToString("dd-MMM-yyyy");
@@ -216,9 +232,10 @@ namespace petratracker.Pages
             txtTranAmount.Text = subscription.transaction_amount.ToString();
             txtTransDetails.Text = subscription.transaction_details.ToString();
             txtComments.Text = subscription.comments;
-            grpTransDetails.IsEnabled = false;
+            txtSubscriptionAmount.Text = subscription.subscription_amount.ToString();
+            dtSubscriptionValueDate.SelectedDate = subscription.subscription_value_date;         
             subID = subscription.id;
-            grpCompanyMapping.IsEnabled = false;
+            
 
             //Load Company Mapping
             var companies = (from c in Database.Microgen.cclv_AllEntities
@@ -247,8 +264,7 @@ namespace petratracker.Pages
                 }
             }
 
-            //Hide Save button
-            btnSave.Visibility = System.Windows.Visibility.Hidden;
+            
 
         }
 
@@ -344,6 +360,8 @@ namespace petratracker.Pages
                         p.modified_by = TrackerUser.GetCurrentUser().id;
                         p.date_identified = DateTime.Today;
                         p.updated_at = DateTime.Today;
+                        p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
+                        p.subscription_value_date = dtSubscriptionValueDate.SelectedDate;
                         p.comments = txtComments.Text;
                         p.status = verifyType;
                     }
@@ -352,6 +370,8 @@ namespace petratracker.Pages
                         p.modified_by = TrackerUser.GetCurrentUser().id;
                         p.approved_by = TrackerUser.GetCurrentUser().id;
                         p.date_approved = DateTime.Today;
+                        p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
+                        p.subscription_value_date = dtSubscriptionValueDate.SelectedDate;
                         p.comments = txtComments.Text;
                         p.status = "Identified and Approved";
                     }
@@ -360,19 +380,40 @@ namespace petratracker.Pages
                         p.modified_by = TrackerUser.GetCurrentUser().id;
                         p.approved_by = TrackerUser.GetCurrentUser().id;
                         p.date_approved = DateTime.Today;
+                        p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
+                        p.subscription_value_date = dtSubscriptionValueDate.SelectedDate;
                         p.comments = txtComments.Text;
                         p.status = "Rejected";
+                    }
+                    if (verifyType == "Identified and Approved")
+                    {
+                        p.company_code = txtCompanyCode.Text;
+                        p.company_name = cmbCompanies.Text.Substring(cmbCompanies.Text.LastIndexOf('-') + 1);
+                        p.company_id = TrackerPayment.get_company_id_by_code(txtCompanyCode.Text);
+                        p.savings_booster = chkSavingsBooster.IsChecked;
+                        p.savings_booster_client_code = txtClientCode.Text;
+                        p.identified_by = TrackerUser.GetCurrentUser().id;
+                        p.approved_by = TrackerUser.GetCurrentUser().id;
+                        p.modified_by = TrackerUser.GetCurrentUser().id;
+                        p.date_approved = DateTime.Today;
+                        p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
+                        p.subscription_value_date = dtSubscriptionValueDate.SelectedDate;
+                        p.comments = txtComments.Text;
+                        p.status = "Identified and Approved";
                     }
             
                     else
                     {
+                        p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
+                        p.subscription_value_date = dtSubscriptionValueDate.SelectedDate;
                         p.status = verifyType;
                         p.updated_at = DateTime.Today;
                         p.modified_by = TrackerUser.GetCurrentUser().id;                      
                     }
 
                     //Save payment to PTas
-                    if (saveToPTas) { TrackerPayment.push_payment_to_PTAS(p.transaction_ref_no); }
+                    if (saveToPTas && btnSave.Content.ToString() == "Update") { TrackerPayment.update_PTAS_payment(p.transaction_ref_no); }
+                    else if (saveToPTas) { TrackerPayment.push_payment_to_PTAS(p.transaction_ref_no); }
                 }
 
                 Database.Tracker.SubmitChanges();
@@ -404,6 +445,12 @@ namespace petratracker.Pages
             return cont;
         }
 
+        private bool validate_subscription_amount_value()
+        {
+            try { decimal.Parse(txtSubscriptionAmount.Text); return true; }
+            catch (Exception) { MessageBox.Show("Please provide a subscription amount"); return false; }
+        }
+
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             if (chkReturned.IsChecked == true)
@@ -415,62 +462,82 @@ namespace petratracker.Pages
             }
             else
             {
-                if (txtCompanyCode.Text != string.Empty)
+              
+                try
                 {
-                    if ((chkReturned.IsChecked == false))
+                    if (txtCompanyCode.Text != string.Empty)
                     {
-                        if (btnSave.Content.ToString() == "Save")
+                        if ((chkReturned.IsChecked == false))
                         {
-                            String conf_str = "Transaction Details \n\n";
-                            conf_str += "Transaction Ref No. : " + txtTransRef.Text + "\n";
-                            conf_str += "Transaction Date : " + txtTransDate.Text + "\n";
-                            conf_str += "Subscription/Value Date : " + txtValueDate.Text + "\n";
-                            conf_str += "Amount : " + txtTranAmount.Text + "\n";
-                            conf_str += "Identified Company : " + cmbCompanies.Text + "\n";
-                            conf_str += "Savings Booster Customer : " + cmbClient.Text + "\n\n";
-                            conf_str += "Please click Yes to commit changes to this transaction.";
-
-                            if (MessageBox.Show(conf_str, "Confirm Identification", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            if (btnSave.Content.ToString() == "Save" && validate_subscription_amount_value())
                             {
-                                if (update_payment("Identified", false))
+
+                                String conf_str = "Transaction Details \n\n";
+                                conf_str += "Transaction Ref No. : " + txtTransRef.Text + "\n";
+                                conf_str += "Transaction Date : " + txtTransDate.Text + "\n";
+                                conf_str += "Subscription/Value Date : " + txtValueDate.Text + "\n";
+                                conf_str += "Amount : " + txtTranAmount.Text + "\n";
+                                conf_str += "Identified Company : " + cmbCompanies.Text + "\n";
+                                conf_str += "Savings Booster Customer : " + cmbClient.Text + "\n\n";
+                                conf_str += "Please click Yes to commit changes to this transaction.";
+
+                                if (MessageBox.Show(conf_str, "Confirm Identification", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                                 {
-                                    // resolve any pending rejected tickets
-                                    TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED,
-                                                                     Constants.JOB_TYPE_SUBSCRIPTION, subID);
-                                    TrackerNotification.Add(Constants.ROLES_SUPER_OPS_USER_ID,
-                                                            Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST,
-                                                            Constants.JOB_TYPE_SUBSCRIPTION, subID);
-                                    MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information);
-                                    this.Close();
+                                    if (update_payment("Identified", false))
+                                    {
+                                        // resolve any pending rejected tickets
+                                        TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REJECTED,
+                                                                         Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                                        TrackerNotification.Add(Constants.ROLES_SUPER_OPS_USER_ID,
+                                                                Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST,
+                                                                Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                                        MessageBox.Show("Payment has been flagged as identified.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information);
+                                        this.Close();
+                                    }
+                                }
+                                else { MessageBox.Show("No changes have been committed to this transaction."); }
+                            }
+                            else if (btnSave.Content.ToString() == "Approve")
+                            {
+                                if (MessageBox.Show("This subscription would be flagged as identified and approved, please click Yes to proceed.", "Identified and Approved Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                                {
+                                    if (update_payment("Identified and Approved", true))
+                                    {
+
+
+                                        TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                                        MessageBox.Show("Payment has been flagged as approved.", "Approved", MessageBoxButton.OK, MessageBoxImage.Information); this.Close();
+                                    }
                                 }
                             }
-                            else { MessageBox.Show("No changes have been committed to this transaction."); }
-                        }
-                        else if (btnSave.Content.ToString() == "Approve")
-                        {
-                            if (MessageBox.Show("This subscription would be flagged as identified and approved, please click Yes to proceed.", "Identified and Approved Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            else if (btnSave.Content.ToString() == "Update")
                             {
-                                if (update_payment("Identified and Approved", true))
+                                if (MessageBox.Show("This subscription has already been identified and approved, please click Yes to proceed with update.", "Update Identified and Approved Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                                 {
-
-
-                                    TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
-                                    MessageBox.Show("Payment has been flagged as approved.", "Approved", MessageBoxButton.OK, MessageBoxImage.Information); this.Close();
+                                    if (update_payment("Identified and Approved", true))
+                                    {
+                                        TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
+                                        MessageBox.Show("Payment has been updated.", "Update", MessageBoxButton.OK, MessageBoxImage.Information); this.Close();
+                                    }
                                 }
+                            }
+                        }
+                        else
+                        {
+                            if (MessageBox.Show("This subscription would be flagged as returned, please click Yes to proceed.", "Returened Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            {
+                                if (update_payment("Returned", false)) { MessageBox.Show("Payment has been flagged as returned.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
                             }
                         }
                     }
                     else
                     {
-                        if (MessageBox.Show("This subscription would be flagged as returned, please click Yes to proceed.", "Returened Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                        {
-                            if (update_payment("Returned", false)) { MessageBox.Show("Payment has been flagged as returned.", "Identified", MessageBoxButton.OK, MessageBoxImage.Information); this.Close(); }
-                        }
+                        MessageBox.Show("Please specify a company.");
                     }
                 }
-                else
+                catch(Exception)
                 {
-                    MessageBox.Show("Please specify a company.");
+                    MessageBox.Show("An invalid input value is preventing the operation.");
                 }
             }
         }
@@ -593,7 +660,7 @@ namespace petratracker.Pages
 
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
-            subscriptions_verify_deal_description deal = new subscriptions_verify_deal_description(subID, false);
+            subscriptions_verify_deal_description deal = new subscriptions_verify_deal_description(subID,  dtSubscriptionValueDate.SelectedDate.Value,false);
             deal.ShowDialog();
             load_payment_deal_descriptions();
         }
@@ -608,7 +675,7 @@ namespace petratracker.Pages
             if (dgPaymentDealDescriptions.SelectedItem != null)
             {
                 TrackerPaymentDealDescriptions p = (TrackerPaymentDealDescriptions)dgPaymentDealDescriptions.SelectedItem;
-                subscriptions_verify_deal_description openEdit = new subscriptions_verify_deal_description((int)p.id, true);
+                subscriptions_verify_deal_description openEdit = new subscriptions_verify_deal_description((int)p.id,  dtSubscriptionValueDate.SelectedDate.Value,true);
                 openEdit.ShowDialog();
             }
         }

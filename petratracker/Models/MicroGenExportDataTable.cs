@@ -61,4 +61,14 @@ namespace petratracker.Models
            
         }
     }
+
+    class MicroGenExportFundDealDataTable : DataTable
+    {
+        public MicroGenExportFundDealDataTable()
+        {
+
+            Columns.Add(new DataColumn("TransReference", typeof(string))); Columns["TransReference"].DefaultValue = string.Empty;
+          
+        }
+    }
 }

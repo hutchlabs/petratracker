@@ -39,7 +39,8 @@ namespace petratracker.Pages
         #region Private Members
 
         private bool _loadedInFlyout = false;
-        MicroGenExportDataTable rep = new MicroGenExportDataTable();  
+        MicroGenExportDataTable rep = new MicroGenExportDataTable();
+        MicroGenExportFundDealDataTable fdRep = new MicroGenExportFundDealDataTable();
         #endregion
 
 
@@ -59,8 +60,8 @@ namespace petratracker.Pages
             try
             {
                  var subscription = from p in Database.Tracker.PPayments
-                                   where p.value_date == dtValueDate.SelectedDate.Value && p.tier == cmb_tier.Text && p.status != "Returned"
-                                   select p;
+                                    where p.value_date == dtValueDate.SelectedDate.Value && p.tier == cmb_tier.Text && p.status != "Returned"
+                                    select p;
 
 
                
@@ -73,9 +74,11 @@ namespace petratracker.Pages
                  
                      string [] codes = TrackerPayment.get_microgen_data(p.company_code, p.tier);
                      DataRow newData = rep.NewRow();
+                     DataRow newFDdata = fdRep.NewRow();
                      newData["FundCode"] = codes[0];
                      newData["FundHolderCode"] = codes[1];
                      newData["TransReference"] = p.transaction_ref_no;
+                     newFDdata["TransReference"] = p.transaction_ref_no;
                      newData["TransUnitsGrp1"] = p.transaction_amount.ToString();
                      newData["DealCcyPayAmnt"] = p.transaction_amount.ToString();
                      newData["DealCcyDealAmnt"] = p.transaction_amount.ToString();
@@ -105,7 +108,7 @@ namespace petratracker.Pages
 
         private void btnDownload_Click(object sender, RoutedEventArgs e)
         {
-            if (viewSubs.Items.Count > 0) { ExportToText.doExport(rep); } else { MessageBox.Show("No records found in query.", "Download", MessageBoxButton.OK, MessageBoxImage.Error); }         
+            if (viewSubs.Items.Count > 0) { ExportToText.doExport(rep); ExportToText.doExport(fdRep); } else { MessageBox.Show("No records found in query.", "Download", MessageBoxButton.OK, MessageBoxImage.Error); }         
         }
 
         #endregion

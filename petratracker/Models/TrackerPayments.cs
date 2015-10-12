@@ -190,43 +190,58 @@ namespace petratracker.Models
 
                 int jobId = TrackerJobs.Add(job_type, deal_description, tier);
                 int ini_inc = 1;
-                foreach (DataRow dr in dt.Rows)
+                DateTime valDate,transDate;
+                if (jobId > 0)
                 {
-
-                    DateTime valDate;
-                    //Cast value date 
-                    if (dr["Value Date"] is DateTime) 
-                    { valDate = (DateTime)dr["Value Date"]; }
-                    else 
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        string value_date_str = dr["Value Date"].ToString();
-                        char[] charSeparators = new char[] { '/','-' };
-                        string [] value_date_res = value_date_str.Split(charSeparators);
-                        valDate =  new DateTime(int.Parse(value_date_res[2]), int.Parse(value_date_res[1]), int.Parse(value_date_res[0]));
+
+
+
+                        //Cast value date 
+                        if (dr["Value Date"] is DateTime) { valDate = (DateTime)dr["Value Date"]; }
+                        else
+                        {
+                            string value_date_str = dr["Value Date"].ToString();
+                            char[] charSeparators = new char[] { '/', '-' };
+                            string[] value_date_res = value_date_str.Split(charSeparators);
+                            valDate = new DateTime(int.Parse(value_date_res[2]), int.Parse(value_date_res[1]), int.Parse(value_date_res[0]));
+                        }
+
+                        //Cast transaction date 
+                        if (dr["Transaction Date"] is DateTime) { transDate = (DateTime)dr["Transaction Date"]; }
+                        else
+                        {
+                            string trans_date_str = dr["Transaction Date"].ToString();
+                            char[] charSeparators = new char[] { '/', '-' };
+                            string[] trans_date_res = trans_date_str.Split(charSeparators);
+                            transDate = new DateTime(int.Parse(trans_date_res[2]), int.Parse(trans_date_res[1]), int.Parse(trans_date_res[0]));
+                        }
+
+                        // Insert new payment
+                        PPayment objPayment = new PPayment();
+                        objPayment.job_id = jobId;
+                        objPayment.tier = tier;
+                        objPayment.transaction_details = dr["Transaction Details"].ToString();
+                        objPayment.transaction_date = transDate;
+                        objPayment.value_date = valDate;
+                        objPayment.subscription_value_date = valDate;
+                        objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
+                        objPayment.subscription_amount = decimal.Parse(dr["Transaction Amount"].ToString());
+                        objPayment.transaction_ref_no = get_trans_ref_code(valDate, tier);
+
+                        objPayment.status = (dr["Dr / Cr Indicator"].ToString() == "Credit") ? "Unidentified" : "Returned";
+                        objPayment.owner = TrackerUser.GetCurrentUser().id;
+                        objPayment.created_at = DateTime.Now;
+                        objPayment.updated_at = DateTime.Now;
+                        Database.Tracker.PPayments.InsertOnSubmit(objPayment);
+                        Database.Tracker.SubmitChanges();
+                        ini_inc++;
                     }
-
-                    // Insert new payment
-                    PPayment objPayment = new PPayment();                 
-                    objPayment.job_id = jobId;
-                    objPayment.tier = tier;
-                    objPayment.transaction_details = dr["Transaction Details"].ToString();
-                    objPayment.transaction_date = valDate;
-                    objPayment.value_date = valDate;
-                    objPayment.subscription_value_date = valDate;
-                    objPayment.transaction_amount = decimal.Parse(dr["Transaction Amount"].ToString());
-                    objPayment.subscription_amount = decimal.Parse(dr["Transaction Amount"].ToString());
-                    objPayment.transaction_ref_no = get_trans_ref_code(valDate, tier);
-
-                    objPayment.status = (dr["Dr / Cr Indicator"].ToString() == "Credit") ? "Unidentified" : "Returned";
-                    objPayment.owner = TrackerUser.GetCurrentUser().id;
-                    objPayment.created_at = DateTime.Now;
-                    objPayment.updated_at = DateTime.Now;
-                    Database.Tracker.PPayments.InsertOnSubmit(objPayment);
-                    Database.Tracker.SubmitChanges();
-                    ini_inc++;
+                    return true;
                 }
-
-                return true;
+                else { MessageBox.Show("Upload description already exists in jobs table."); return false; }
+               
             }
             catch (Exception uploadError)
             {
@@ -256,7 +271,6 @@ namespace petratracker.Models
                 objPayment.RETURNED = string.Empty;
                 objPayment.CompanyCode = subscription.company_code;
                 objPayment.CompanyName = get_company_name(subscription.company_code);
-                //objPayment.PaymentID = 1;
                 
                 objPayment.ActionUserID = 36; //Declare ActionUserID as constant
                 objPayment.Tier = subscription.tier.Replace(" ",string.Empty);
@@ -268,6 +282,39 @@ namespace petratracker.Models
             catch(Exception)
             {
                 MessageBox.Show("An error occured while pushing subscription into PTAS payments.\n");
+                return false;
+            }
+        }
+
+
+        public static bool update_PTAS_payment(string payment_ref_no)
+        {
+
+            try
+            {
+                var tracker_payment = (from p in Database.Tracker.PPayments
+                                    where p.transaction_ref_no == payment_ref_no
+                                    select p).Single();
+
+                var PTAS_payment = (from p in Database.PTAS.Payments
+                                    where p.TransactionReference == payment_ref_no
+                                    select p).Single();
+
+                    //Update PTAS Payment
+                    PTAS_payment.ContributionDate = tracker_payment.subscription_value_date;
+                    PTAS_payment.ValueDate = tracker_payment.value_date;
+                    PTAS_payment.TransactionAmount = tracker_payment.transaction_amount;
+                    PTAS_payment.TransactionDetail = tracker_payment.transaction_details;
+                    PTAS_payment.CompanyCode = tracker_payment.company_code;
+                    PTAS_payment.CompanyName = get_company_name(tracker_payment.company_code);
+
+                    Database.PTAS.SubmitChanges();
+                    return true;
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("An error occured while updating PTAS payment.\n");
                 return false;
             }
         }

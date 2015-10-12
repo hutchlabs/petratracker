@@ -25,12 +25,15 @@ namespace petratracker.Pages
     {
         private int subID = -1;
         private bool isUpdate = false;
+        private DateTime cont_period;
 
-        public subscriptions_verify_deal_description(int subID,bool isUpdate = false)
+
+        public subscriptions_verify_deal_description(int subID,DateTime valDate,bool isUpdate = false)
         {
             this.DataContext = this;
             this.isUpdate = isUpdate;
             this.subID = subID;
+            this.cont_period = valDate;
             InitializeComponent();
         }
 
@@ -55,7 +58,7 @@ namespace petratracker.Pages
         {
             cmb_period_year.ItemsSource = get_years(2008, DateTime.Now.Year + 5);
             cmb_period_year.SelectedIndex = (DateTime.Now.Year - 2008);
-            if (isUpdate) { load_deal_desc(); }
+            if (isUpdate) { load_deal_desc(); } else { cmb_period_month.SelectedIndex = (cont_period.AddMonths(-1).Month - 1); cmb_period_year.SelectedItem = cont_period.AddMonths(-1).Year; }
         }
 
         private bool insert_deal_desc(int subID)
