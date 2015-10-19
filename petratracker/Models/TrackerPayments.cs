@@ -10,6 +10,7 @@ using System.Globalization;
 
 using petratracker.Utility;
 using System.Data.Linq.SqlClient;
+using System.Collections;
 
 namespace petratracker.Models
 {
@@ -96,6 +97,64 @@ namespace petratracker.Models
             }
         }
 
+        public static IEnumerable<PPayment> GetSubscriptions(int job_id, string sub_status = "", bool showAll = false)
+        {
+            if (TrackerUser.IsCurrentUserOps())
+            {
+                return GetOpsUserSubscriptions(job_id, sub_status);
+            }
+            else
+            {
+                if (sub_status != string.Empty)
+                {
+                    return (from p in Database.Tracker.PPayments where p.job_id == job_id && p.status.Trim() == sub_status select p);
+                }
+                else
+                {
+                    return (from p in Database.Tracker.PPayments where p.job_id == job_id select p);
+                }
+            }
+        }
+
+        public static IEnumerable GetSubscriptionsBySearch(string term, string status)
+        {
+            term = "%" + term + "%";
+            if (status != null && status != "All")
+            {
+                return (from j in Database.Tracker.PPayments
+                        where j.status.Trim() == status &&
+                            (SqlMethods.Like(j.company_name, term) || SqlMethods.Like(j.tier, term) ||
+                             SqlMethods.Like(j.company_code, term) || SqlMethods.Like(j.transaction_ref_no, term) ||
+                             SqlMethods.Like(j.transaction_details, term) || SqlMethods.Like(j.User.first_name, term) ||
+                             SqlMethods.Like(j.User.last_name, term))
+                        orderby j.created_at descending
+                        select j);
+            }
+            else
+            {
+                return (from j in Database.Tracker.PPayments
+                        where
+                            (SqlMethods.Like(j.company_name, term) || SqlMethods.Like(j.status, term)  ||
+                            SqlMethods.Like(j.company_code, term) || SqlMethods.Like(j.transaction_ref_no, term) ||
+                             SqlMethods.Like(j.transaction_details, term) || SqlMethods.Like(j.User.first_name, term) ||
+                             SqlMethods.Like(j.User.last_name, term))
+                        orderby j.created_at descending
+                        select j);
+            }
+        }
+
+        public static IEnumerable GetSubscriptionsByCompany(string company, string status)
+        {
+            if (status != null && status != "All")
+            {
+                return (from j in Database.Tracker.PPayments where j.company_name == company && j.status.Trim() == status orderby j.created_at descending select j);
+            }
+            else
+            {
+                return (from j in Database.Tracker.PPayments where j.company_name == company orderby j.created_at descending select j);
+            }
+        }
+
         public static IEnumerable<PPayment> GetAllSubscriptions(string sub_status = "", bool showAll = false)
         {
             if (TrackerUser.IsCurrentUserOps())
@@ -127,25 +186,6 @@ namespace petratracker.Models
                 return null;
             }
 
-        }
-
-        public static IEnumerable<PPayment> GetSubscriptions(int job_id, string sub_status="",bool showAll=false)
-        {
-            if (TrackerUser.IsCurrentUserOps())
-            {
-                return GetOpsUserSubscriptions(job_id, sub_status);
-            }
-            else
-            {
-                if (sub_status != string.Empty)
-                {
-                    return (from p in Database.Tracker.PPayments where p.job_id == job_id && p.status.Trim() == sub_status select p);
-                }
-                else
-                {
-                    return (from p in Database.Tracker.PPayments where p.job_id == job_id select p);
-                }
-            }
         }
 
         public static IEnumerable<PPayment> GetAllOpsUserSubscriptions(string sub_status = "")
@@ -285,7 +325,6 @@ namespace petratracker.Models
                 return false;
             }
         }
-
 
         public static bool update_PTAS_payment(string payment_ref_no)
         {
@@ -469,6 +508,5 @@ namespace petratracker.Models
         }
 
         #endregion
-
     }
 }

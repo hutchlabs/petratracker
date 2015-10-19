@@ -2,6 +2,8 @@
 using petratracker.Models;
 using petratracker.Pages;
 using petratracker.Utility;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,6 +48,12 @@ namespace petratracker.Controls
                 return (TrackerUser.IsCurrentUserOps()) ? _opsUserOptions : _superUserOptions;
             }
             private set { ;  }
+        }
+
+        public IEnumerable<ComboBoxPairs> Companies
+        {
+            private set { ; }
+            get { return TrackerSchedule.GetCompanies(); }
         }
 
         #endregion
@@ -153,6 +161,55 @@ namespace petratracker.Controls
         private void SubsListFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateSubscriptions();
+        }
+
+        private void cbx_companies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (cbx_companies.SelectedIndex != -1)
+                {
+                    txtQuery.Text = "";
+                }
+
+                string v = ((ComboBoxPairs)cbx_companies.SelectedItem)._Value;
+                if (v != "")
+                {
+                    string filter = (string)((SplitButton)SubsListFilter).SelectedItem;
+                    viewSubs.ItemsSource = TrackerPayment.GetSubscriptionsByCompany(v, filter);
+                    UpdateSubscriptions(true, true);
+                }
+            }
+            catch (Exception) { }
+        }
+
+        private void txtQuery_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btn_Query_Click(sender, new RoutedEventArgs());
+            }
+        }
+
+        private void btn_Query_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                cbx_companies.SelectedIndex = -1;
+
+                string v = txtQuery.Text;
+                if (v != "")
+                {
+                    string filter = (string)((SplitButton)SubsListFilter).SelectedItem;
+                    viewSubs.ItemsSource = TrackerPayment.GetSubscriptionsBySearch(v, filter);
+                    UpdateSubscriptions(true, true);
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a search term", "Error Schedule search", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception) { }
         }
      
         private void viewSubs_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -287,7 +344,7 @@ namespace petratracker.Controls
             }
         }
 
-        private void UpdateSubscriptions(bool useActiveId=false)
+        private void UpdateSubscriptions(bool useActiveId=false, bool search=false)
         {
             if (_allJobsSelected)
             {
@@ -310,7 +367,12 @@ namespace petratracker.Controls
                     string filter = (string)((SplitButton)SubsListFilter).SelectedItem;
                     filter = (filter == null) ? "" : filter;
 
-                    if (filter == "All") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id); }
+                    string v;
+                    try {  v = ((ComboBoxPairs)cbx_companies.SelectedItem)._Value; } catch (Exception) { v = "";  }
+
+                    if (txtQuery.Text != "") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptionsBySearch(txtQuery.Text, filter); }
+                    else if (v != "") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptionsByCompany(v, filter); }
+                    else if (filter == "All") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id); }
                     else { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id, filter); }
 
                     lbl_subsCount.Content = string.Format("{0} Subscriptions for {1}", viewSubs.Items.Count, job.job_description);
@@ -364,7 +426,6 @@ namespace petratracker.Controls
             
             return activebuttons;
         }
-
 
       #endregion
 

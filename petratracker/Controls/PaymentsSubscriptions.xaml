@@ -66,15 +66,16 @@
 
                 <DataGrid x:Name="viewJobs" RenderOptions.ClearTypeHint="Enabled"
                       HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
-                      MinWidth="300" ColumnWidth="*" Margin="10,0,10,10" 
+                      MinWidth="300" ColumnWidth="*" Margin="10,0,10,10" Height="500"
                       SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
                       IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
                       ItemsSource="{Binding}" PreviewMouseDoubleClick="viewJobs_PreviewMouseDoubleClick"
-                      SelectionChanged="viewJobs_SelectionChanged"  ScrollViewer.CanContentScroll="True" 
+                      SelectionChanged="viewJobs_SelectionChanged"
+                      ScrollViewer.CanContentScroll="True" 
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
-                    <DataGrid.Columns>
-                        
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                          >
+                    <DataGrid.Columns>                      
                         <DataGridTextColumn Header="Description" Width="150" Binding="{Binding job_description}" />
                         <DataGridTextColumn Header="Tier" Width="80" Binding="{Binding tier}" />
                         <!--<DataGridTextColumn Header="Status" Width="80" Binding="{Binding status}" />-->
@@ -118,7 +119,26 @@
                     <Button x:Name="btn_approveSubs" Content="Approve" Visibility="Collapsed" Click="btn_approveSubs_Click" Width="Auto" Height="30"  ToolTip="Approve selected subscriptions" Margin="10,0,0,0"/>
                     <Button x:Name="btn_rejectSubs" Content="Reject" Visibility="Collapsed" Click="btn_rejectSubs_Click" Width="Auto" Height="30"  ToolTip="Reject selected subscriptions" Margin="10,0,0,0"/>
                 </StackPanel>
-                
+
+                <StackPanel x:Name="searchBar" Orientation="Horizontal" Margin="180,0,0,0" Visibility="Visible"  HorizontalAlignment="Right">
+                    <Label Visibility="Visible" x:Name="lbl_company" Content="Company" HorizontalAlignment="Left" Margin="5,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <ComboBox  Visibility="Visible" SelectionChanged="cbx_companies_SelectionChanged"
+			                x:Name="cbx_companies" IsEditable="True"  MaxDropDownHeight="125" Margin="0,4,0,7" 
+			                Style="{DynamicResource VirtualisedMetroComboBox}"
+			                Controls:TextBoxHelper.Watermark="Type or select company"
+			                ItemsSource="{Binding Companies}" DisplayMemberPath="_Value" SelectedValuePath="_Key" />
+
+                    <Label Content="or Search" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <TextBox x:Name="txtQuery" HorizontalAlignment="Left" Margin="0,7,0,0" VerticalAlignment="Top" Width="130" KeyUp="txtQuery_KeyUp"/>
+                    <Button x:Name="btn_Query" Margin="10,0,0,0" Width="40" Height="40" ToolTip="Query" Style="{DynamicResource MetroCircleButtonStyle}" Click="btn_Query_Click" >
+                        <Rectangle Width="10" Height="10" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                </StackPanel>
+
             </StackPanel>
 
             <DataGrid x:Name="viewSubs" RenderOptions.ClearTypeHint="Enabled"

@@ -9,6 +9,7 @@ using System.Data;
 using System.Threading;
 using System.Globalization;
 using System.ComponentModel;
+using System.Data.Linq.SqlClient;
 
 namespace petratracker.Models
 {
@@ -92,6 +93,43 @@ namespace petratracker.Models
         public static IEnumerable<Schedule> GetScheduleByStatus(string status)
         {
             return (from j in Database.Tracker.Schedules where j.workflow_status==status orderby j.created_at descending select j);
+        }
+
+        public static IEnumerable<Schedule> GetScheduleByCompany(string company, string status=null)
+        {
+            if (status != null && status != "All")
+            {
+                return (from j in Database.Tracker.Schedules where j.company == company && j.workflow_status==status orderby j.created_at descending select j);
+            } 
+            else 
+            {
+                return (from j in Database.Tracker.Schedules where j.company == company orderby j.created_at descending select j);
+            }
+        }
+
+        public static IEnumerable<Schedule> GetScheduleBySearch(string term, string status = null)
+        {
+            term = "%" + term + "%";
+            if (status != null && status != "All")
+            {
+                return (from j in Database.Tracker.Schedules where j.workflow_status == status &&
+                        (SqlMethods.Like(j.company, term) || SqlMethods.Like(j.tier, term) || 
+                         SqlMethods.Like(j.year.ToString(),term) || SqlMethods.Like(j.month.ToString(),term) ||
+                         SqlMethods.Like(j.contributiontype,term) || SqlMethods.Like(j.User.first_name,term) ||
+                         SqlMethods.Like(j.User.last_name, term))
+                        orderby j.created_at descending select j);
+            }
+            else
+            {
+                return (from j in Database.Tracker.Schedules
+                        where 
+                            (SqlMethods.Like(j.company, term) || SqlMethods.Like(j.tier, term) ||
+                            SqlMethods.Like(j.year.ToString(), term) || SqlMethods.Like(j.month.ToString(), term) ||
+                            SqlMethods.Like(j.workflow_status, term) || SqlMethods.Like(j.contributiontype, term) || 
+                            SqlMethods.Like(j.User.first_name, term) || SqlMethods.Like(j.User.last_name, term))
+                        orderby j.created_at descending
+                        select j);
+            }
         }
 
         public static IEnumerable<Schedule> GetSchedulesForProcessing()
@@ -913,5 +951,6 @@ namespace petratracker.Models
         }
     
         #endregion
+
     }
 }

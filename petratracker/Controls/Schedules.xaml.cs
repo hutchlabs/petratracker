@@ -58,6 +58,12 @@ namespace petratracker.Controls
             private set { ;  }
         }
 
+        public IEnumerable<ComboBoxPairs> Companies
+        {
+            private set { ; }
+            get { return TrackerSchedule.GetCompanies(); }
+        }
+
         #endregion
 
         #region Constructor
@@ -90,6 +96,54 @@ namespace petratracker.Controls
         private void ScheduleListFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateGrid();
+        }
+
+        private void cbx_companies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (cbx_companies.SelectedIndex != -1) { 
+                    txtQuery.Text = "";
+                }
+
+                string v = ((ComboBoxPairs)cbx_companies.SelectedItem)._Value;
+                if (v != "")
+                {
+                    string filter = (string)((SplitButton)ScheduleListFilter).SelectedItem;
+                    viewSchedules.ItemsSource = TrackerSchedule.GetScheduleByCompany(v, filter);
+                    UpdateGrid(true);
+                }
+            }
+            catch (Exception){}
+        }
+        
+        private void txtQuery_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btn_Query_Click(sender, new RoutedEventArgs());
+            }
+        }
+
+        private void btn_Query_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                cbx_companies.SelectedIndex = -1;
+
+                string v = txtQuery.Text;
+                if (v != "")
+                {
+                    string filter = (string)((SplitButton)ScheduleListFilter).SelectedItem;
+                    viewSchedules.ItemsSource = TrackerSchedule.GetScheduleBySearch(v, filter);
+                    UpdateGrid(true);
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a search term", "Error Schedule search", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception){}
         }
 
         private void viewSchedules_SelectionChanged(object sender, MouseButtonEventArgs e)
@@ -229,12 +283,25 @@ namespace petratracker.Controls
 
         private bool UpdateGrid()
         {
+            return UpdateGrid(false);
+        }
+
+        private bool UpdateGrid(bool search)
+        {
             string filter = (string)((SplitButton)ScheduleListFilter).SelectedItem;
 
-            // Get items
-            if (filter == "All" || filter==null) { viewSchedules.ItemsSource = TrackerSchedule.GetSchedules(); }
-            else { viewSchedules.ItemsSource = TrackerSchedule.GetScheduleByStatus(filter); }
-                
+            if (!search)
+            {
+                // Get items
+                string v;
+                try {  v = ((ComboBoxPairs)cbx_companies.SelectedItem)._Value; } catch (Exception) { v = "";  }
+
+                if (txtQuery.Text != "") { viewSchedules.ItemsSource = TrackerSchedule.GetScheduleBySearch(txtQuery.Text, filter); }
+                else if (v != "") { viewSchedules.ItemsSource = TrackerSchedule.GetScheduleByCompany(v, filter);  }
+                else if (filter == "All" || filter == null) { viewSchedules.ItemsSource = TrackerSchedule.GetSchedules(); }
+                else { viewSchedules.ItemsSource = TrackerSchedule.GetScheduleByStatus(filter); }
+            }
+
             lbl_scheduleCount.Content = string.Format("{0} Schedules", viewSchedules.Items.Count);
 
             // Highlight items if checked.
@@ -295,5 +362,7 @@ namespace petratracker.Controls
         }
    
         #endregion
+
+ 
     }
 }

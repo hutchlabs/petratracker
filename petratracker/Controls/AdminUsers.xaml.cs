@@ -2,6 +2,7 @@
 using petratracker.Models;
 using petratracker.Pages;
 using petratracker.Utility;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -55,14 +56,37 @@ namespace petratracker.Controls
             UpdateGrid();
         }
 
+        private void viewUsers_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (viewUsers.SelectedItem != null)
+            {
+                User u = viewUsers.SelectedItem as User;
+                ShowActionBarButtons((string)((SplitButton)UserListFilter).SelectedItem);
+            }
+        }
+
         private void btn_activateUser_Click(object sender, RoutedEventArgs e)
         {
-            UpdateGrid();
+            MessageBoxResult rs = MessageBox.Show("Are you want to activate the selected user?", "User Update", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (rs == MessageBoxResult.Yes)
+            {
+                User u = viewUsers.SelectedItem as User;
+                TrackerUser.ActivateUser(u);
+                UpdateGrid();
+            }
         }
 
         private void btn_deactivateUser_Click(object sender, RoutedEventArgs e)
         {
-            UpdateGrid();
+            MessageBoxResult rs = MessageBox.Show("Are you want to deactivate the selected user?", "User Update", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (rs == MessageBoxResult.Yes)
+            {
+                User u = viewUsers.SelectedItem as User;
+                TrackerUser.DeactivateUser(u);
+                UpdateGrid();
+            }
         }
 
         private void btn_deleteUser_Click(object sender, RoutedEventArgs e)
@@ -72,8 +96,15 @@ namespace petratracker.Controls
             if (rs == MessageBoxResult.Yes)
             {
                 User u = viewUsers.SelectedItem as User;
-                TrackerUser.DeleteUser(u);
-                UpdateGrid();
+                try
+                {
+                    TrackerUser.DeleteUser(u);
+                    UpdateGrid();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("User linked to existing records: Cannot delete user. Error: " + ex.Message,"Delete user error",MessageBoxButton.OK,MessageBoxImage.Error);
+                }
             }
         }
 
@@ -149,14 +180,55 @@ namespace petratracker.Controls
             // Highlight items if checked.
             if (this.chx_userfilter.IsChecked == true)
             {
-                actionBar.Visibility = Visibility.Visible;
+                ShowActionBarButtons(filter);
                 viewUsers.SelectAll();
             }
             else
             {
-                actionBar.Visibility = Visibility.Collapsed;
+                ShowActionBarButtons();
                 viewUsers.UnselectAll();
             }
+        }
+
+        private bool ShowActionBarButtons(string filter = "")
+        {
+            bool activebuttons = false;
+
+            btn_deleteUser.Visibility = Visibility.Collapsed;
+            btn_activateUser.Visibility = Visibility.Collapsed;
+            btn_deactivateUser.Visibility = Visibility.Collapsed;
+            
+                                                         
+            btn_deleteUser.Visibility = Visibility.Visible;
+
+            if (filter == Constants.STATUS_ALL || filter == Constants.USER_STATUS_ONLINE || filter == Constants.USER_STATUS_OFFLINE)
+            {
+                btn_activateUser.Visibility = Visibility.Visible;
+                btn_deactivateUser.Visibility = Visibility.Visible;
+                activebuttons = true;
+            }
+            else if (filter == Constants.USER_STATUS_ACTIVE)
+            {
+                btn_deactivateUser.Visibility = Visibility.Visible;
+                activebuttons = true;
+            }
+            else if (filter == Constants.USER_STATUS_NONACTIVE)
+            {
+                btn_activateUser.Visibility = Visibility.Visible;
+                activebuttons = true;
+            }
+     
+
+            if (activebuttons)
+            {
+                actionBar.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                actionBar.Visibility = Visibility.Collapsed;
+            }
+
+            return activebuttons;
         }
 
         #endregion

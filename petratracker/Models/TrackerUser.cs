@@ -300,8 +300,15 @@ namespace petratracker.Models
         }
         public static void DeleteUser(User u)
         {
-            Database.Tracker.Users.DeleteOnSubmit(u);
-            Database.Tracker.SubmitChanges();
+            try
+            {
+                Database.Tracker.Users.DeleteOnSubmit(u);
+                Database.Tracker.SubmitChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         } 
 
         public static User Save(User u)

@@ -47,8 +47,7 @@
                         </Rectangle>
                     </Button>
                     
-                    
-
+           
                     <Button x:Name="btn_deactivateUser" Click="btn_deactivateUser_Click" Width="40" Height="40"  ToolTip="De-Activate Selected Users" Margin="10,0,0,0" Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                             <Rectangle.OpacityMask>
@@ -60,7 +59,7 @@
                     <Button x:Name="btn_deleteUser" Click="btn_deleteUser_Click" Width="40" Height="40"  ToolTip="Delete Selected Users" Margin="10,0,0,0" Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                             <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_minus}" />
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
@@ -82,6 +81,7 @@
                       SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
                       AutoGeneratingColumn="viewUsers_AutoGeneratingColumn" IsReadOnly="True"
                       ItemsSource="{Binding}" CanUserAddRows="False" CanUserDeleteRows="False"
+                      MouseLeftButtonUp="viewUsers_MouseLeftButtonUp"
                       PreviewMouseDoubleClick="viewUsers_PreviewMouseDoubleClick"/>
         </DockPanel>
     </Grid>
