@@ -65,6 +65,18 @@ namespace petratracker.Controls
             UpdateGrid();
         }
 
+        private void btn_deleteUser_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult rs = MessageBox.Show("Are you want to delete the selected user?", "User Update", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (rs == MessageBoxResult.Yes)
+            {
+                User u = viewUsers.SelectedItem as User;
+                TrackerUser.DeleteUser(u);
+                UpdateGrid();
+            }
+        }
+
         private void btn_showAddUser_Click(object sender, RoutedEventArgs e)
         {
             Window parentWindow = Window.GetWindow(this);

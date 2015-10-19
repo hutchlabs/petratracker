@@ -56,6 +56,7 @@
                     -->
                     <Button x:Name="btn_groupDelete" Content="Delete" Visibility="Collapsed" Click="btn_groupDelete_Click"  Width="Auto" Height="30"  ToolTip="Delete selected schedules" Margin="10,0,0,0"/>
                     <Button x:Name="btn_groupMarkReceiptSent" Content="Mark all as Receipt Sent" Visibility="Collapsed" Click="btn_groupMarkReceiptSent_Click" Width="Auto" Height="30"  ToolTip="Mark Receipt as sent for selected schedules" Margin="10,0,0,0"/>
+                    <Button x:Name="btn_groupMarkValidationEmailSent" Content="Mark all as Validation Email Sent" Visibility="Collapsed" Click="btn_groupMarkValidationEmailSent_Click" Width="Auto" Height="30"  ToolTip="Mark Validation Email as sent for selected schedules" Margin="5,0,0,0"/>
                     <Button x:Name="btn_groupMarkFileDownload" Content="Mark all as File Downloaded" Visibility="Collapsed" Click="btn_groupMarkFileDownload_Click" Width="Auto" Height="30"  ToolTip="Mark File as downloaded for selected schedules" Margin="5,0,0,0" />
 
                 </StackPanel>

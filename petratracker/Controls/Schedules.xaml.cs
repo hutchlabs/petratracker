@@ -143,6 +143,23 @@ namespace petratracker.Controls
             }
         }
 
+        private void btn_groupMarkValidationEmailSent_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime now = DateTime.Now;
+
+             MessageBoxResult rs = MessageBox.Show("Are you want to mark all of these as Validation Email sent?", "Schedules Update", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+             if (rs == MessageBoxResult.Yes)
+             {
+                 foreach (var item in viewSchedules.SelectedItems)
+                 {
+                     TrackerSchedule.MarkValidationEmailSent(((Schedule)item), now);
+                 }
+                 UpdateGrid();
+             }
+            
+        }
+
         private void btn_groupMarkFileDownload_Click(object sender, RoutedEventArgs e)
         {
             string[] validFiledownloadStates = { Constants.WF_STATUS_PAYMENTS_RECEIVED,
@@ -239,6 +256,7 @@ namespace petratracker.Controls
             bool activebuttons = false;
 
             btn_groupDelete.Visibility = Visibility.Collapsed;
+            btn_groupMarkValidationEmailSent.Visibility = Visibility.Collapsed;
             btn_groupMarkReceiptSent.Visibility = Visibility.Collapsed;
             btn_groupMarkFileDownload.Visibility = Visibility.Collapsed;
 
@@ -252,12 +270,15 @@ namespace petratracker.Controls
             {
                 btn_groupMarkReceiptSent.Visibility = Visibility.Visible;
                 btn_groupMarkFileDownload.Visibility = Visibility.Visible;
+                btn_groupMarkValidationEmailSent.Visibility = Visibility.Visible;
                 activebuttons = true;
             } else if (filter==Constants.WF_STATUS_RF_SENT_NODOWNLOAD_NOUPLOAD){
                 btn_groupMarkFileDownload.Visibility = Visibility.Visible;
+                btn_groupMarkValidationEmailSent.Visibility = Visibility.Visible;
                 activebuttons = true;
             } else if ((filter==Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_NOUPLOAD) || filter==Constants.WF_STATUS_RF_NOSENT_DOWNLOAD_UPLOAD) {
                 btn_groupMarkReceiptSent.Visibility = Visibility.Visible;
+                btn_groupMarkValidationEmailSent.Visibility = Visibility.Visible;
                 activebuttons = true;
             }
 

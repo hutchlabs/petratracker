@@ -71,7 +71,7 @@
                       IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
                       ItemsSource="{Binding}" PreviewMouseDoubleClick="viewJobs_PreviewMouseDoubleClick"
                       SelectionChanged="viewJobs_SelectionChanged"  ScrollViewer.CanContentScroll="True" 
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
                       ScrollViewer.HorizontalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
                         

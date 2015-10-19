@@ -287,6 +287,22 @@ namespace petratracker.Models
             }
         }
 
+        public static void ActivateUser(User u)
+        {
+            u.status = true;
+            Save(u);
+        }
+
+        public static void DeactivateUser(User u)
+        {
+            u.status = false;
+            Save(u);
+        }
+        public static void DeleteUser(User u)
+        {
+            Database.Tracker.Users.DeleteOnSubmit(u);
+            Database.Tracker.SubmitChanges();
+        } 
 
         public static User Save(User u)
         {

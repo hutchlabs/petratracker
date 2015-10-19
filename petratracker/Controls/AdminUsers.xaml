@@ -46,11 +46,21 @@
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
+                    
+                    
 
                     <Button x:Name="btn_deactivateUser" Click="btn_deactivateUser_Click" Width="40" Height="40"  ToolTip="De-Activate Selected Users" Margin="10,0,0,0" Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_camera_flash_off}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <Button x:Name="btn_deleteUser" Click="btn_deleteUser_Click" Width="40" Height="40"  ToolTip="Delete Selected Users" Margin="10,0,0,0" Style="{DynamicResource MetroCircleButtonStyle}">
+                        <Rectangle Width="10" Height="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_minus}" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
