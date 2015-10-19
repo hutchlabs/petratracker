@@ -363,7 +363,6 @@ namespace petratracker.Models
             return true;
         }
 
-
         public static int get_company_id_by_code(string companyCode)
         {
             int company_id = 0;
