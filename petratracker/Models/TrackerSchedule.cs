@@ -369,11 +369,13 @@ namespace petratracker.Models
 
         public static bool InitiateScheduleWorkFlow()
         {
+            /*
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += new DoWorkEventHandler(UpdateScheduleWorkFlowStatus);
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(UpdateScheduleWorkFlowStatusComplete);
             worker.RunWorkerAsync();
             worker.Dispose();
+             */
             return true;
         }
 
