@@ -196,6 +196,7 @@
       <Association Name="Entity_EntityContact" Member="EntityContacts" ThisKey="EntityID" OtherKey="EntityID" Type="EntityContact" />
       <Association Name="Entity_Entity" Member="Entities" ThisKey="EntityID" OtherKey="ManagingEntityID" Type="Entity" />
       <Association Name="Entity_EntityClient" Member="EntityClient" ThisKey="EntityID" OtherKey="EntityID" Type="EntityClient" Cardinality="One" />
+      <Association Name="Entity_EntityRole" Member="EntityRoles" ThisKey="EntityID" OtherKey="EntityID" Type="EntityRole" />
       <Association Name="Entity_Entity" Member="Entity1" ThisKey="ManagingEntityID" OtherKey="EntityID" Type="Entity" IsForeignKey="true" />
     </Type>
   </Table>
@@ -263,6 +264,14 @@
       <Column Name="StatusFlag" Type="System.Char" DbType="Char(1) NOT NULL" CanBeNull="false" />
       <Column Name="TS" Type="System.Data.Linq.Binary" DbType="rowversion" CanBeNull="true" IsVersion="true" />
       <Association Name="Purpose_EntityClient" Member="EntityClients" ThisKey="PurposeID" OtherKey="PurposeID" Type="EntityClient" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EntityRoles" Member="EntityRoles">
+    <Type Name="EntityRole">
+      <Column Name="EntityRolesID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="EntityID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RoleTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Entity_EntityRole" Member="Entity" ThisKey="EntityID" OtherKey="EntityID" Type="Entity" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

@@ -107,5 +107,18 @@
         <classShapeMoniker Id="a5bf4ced-1235-4cac-8123-f163bd6cc81e" />
       </nodes>
     </associationConnector>
+    <classShape Id="37039c1e-9b97-4a49-9210-694823cabb43" absoluteBounds="7.625, 3.5, 2, 1.3862939453125">
+      <DataClassMoniker Name="/MicrogenDataContext/EntityRole" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ee4cb894-1237-4a9d-9c15-d6aa6dd7f333" absoluteBounds="7.6400000000000006, 3.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(4.875 : 8.96231201171875); (5.1875 : 8.96231201171875); (5.1875 : 0.4375); (7.5625 : 0.4375); (7.5625 : 4.9800439453125); (8.625 : 4.9800439453125); (8.625 : 4.8862939453125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/MicrogenDataContext/Entity/Entity_EntityRole" />
+      <nodes>
+        <classShapeMoniker Id="2d97a4f0-7e5e-4a6c-bd71-00d9f5f9dc71" />
+        <classShapeMoniker Id="37039c1e-9b97-4a49-9210-694823cabb43" />
+      </nodes>
+    </associationConnector>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

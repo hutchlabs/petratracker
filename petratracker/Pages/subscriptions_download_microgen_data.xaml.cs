@@ -68,6 +68,7 @@ namespace petratracker.Pages
 
 
                  rep.Clear();
+                 fdRep.Clear();
 
                  foreach (PPayment p in subscription)
                  {
@@ -79,16 +80,17 @@ namespace petratracker.Pages
                      newData["FundHolderCode"] = codes[1];
                      newData["TransReference"] = p.transaction_ref_no;
                      newFDdata["TransReference"] = p.transaction_ref_no;
-                     newData["TransUnitsGrp1"] = p.transaction_amount.ToString();
-                     newData["DealCcyPayAmnt"] = p.transaction_amount.ToString();
-                     newData["DealCcyDealAmnt"] = p.transaction_amount.ToString();
-                     newData["PayCcyPayAmnt"] = p.transaction_amount.ToString();
-                     newData["PayCcyDealAmnt"] = p.transaction_amount.ToString();
-                     newData["DealDate"] = (string)p.transaction_date.ToString("yyyy-MM-dd");
-                     newData["ValueDate"] = (string)p.value_date.ToString("yyyy-MM-dd");
-                     newData["BookDate"] = (string)p.value_date.ToString("yyyy-MM-dd");
-                     newData["PriceDate"] = (string)p.value_date.ToString("yyyy-MM-dd");
+                     newData["TransUnitsGrp1"] = p.subscription_amount.ToString();
+                     newData["DealCcyPayAmnt"] = p.subscription_amount.ToString();
+                     newData["DealCcyDealAmnt"] = p.subscription_amount.ToString();
+                     newData["PayCcyPayAmnt"] = p.subscription_amount.ToString();
+                     newData["PayCcyDealAmnt"] = p.subscription_amount.ToString();
+                     newData["DealDate"] = (string)p.subscription_value_date.ToString("yyyy-MM-dd");
+                     newData["ValueDate"] = (string)p.subscription_value_date.ToString("yyyy-MM-dd");
+                     newData["BookDate"] = (string)p.subscription_value_date.ToString("yyyy-MM-dd");
+                     newData["PriceDate"] = (string)p.subscription_value_date.ToString("yyyy-MM-dd");
                      rep.Rows.Add(newData);
+                     fdRep.Rows.Add(newFDdata);
 
                  }
                  viewSubs.ItemsSource = rep.DefaultView;

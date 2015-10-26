@@ -66,14 +66,14 @@
         <classShapeMoniker Id="8b41b4dc-a70a-4825-a1c5-5bc7afc86acc" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(0.968748 : 6.625); (0.968748 : 6.0881982421875); (1.41666666666667 : 6.0881982421875 : JumpStart); (1.58333333333333 : 6.0881982421875 : JumpEnd); (2.54166666666667 : 6.0881982421875 : JumpStart); (2.70833333333333 : 6.0881982421875 : JumpEnd); (2.75 : 6.0881982421875); (2.75 : 4.125); (2.97916666666667 : 4.125 : JumpStart); (3.14583333333333 : 4.125 : JumpEnd); (3.2163720703125 : 4.125 : JumpStart); (3.38303873697917 : 4.125 : JumpEnd); (5.875 : 4.125); (5.875 : 2.55850341796875); (6.25 : 2.55850341796875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(0.968748 : 6.625); (0.968748 : 6.0881982421875); (1.41666666666667 : 6.0881982421875 : JumpStart); (1.58333333333333 : 6.0881982421875 : JumpEnd); (1.90051282051282 : 6.0881982421875 : JumpStart); (2.06717948717949 : 6.0881982421875 : JumpEnd); (2.75 : 6.0881982421875); (2.75 : 4.125); (2.97916666666667 : 4.125 : JumpStart); (3.14583333333333 : 4.125 : JumpEnd); (3.2163720703125 : 4.125 : JumpStart); (3.38303873697917 : 4.125 : JumpEnd); (5.875 : 4.125); (5.875 : 2.55850341796875); (6.25 : 2.55850341796875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/TrackerDataContext/User/User_Notification" />
       <nodes>
         <classShapeMoniker Id="2acd5fbf-90e3-463f-a183-a380ff0a5e29" />
         <classShapeMoniker Id="1f4ed061-6d4c-4cd4-b112-e75710ead565" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.625 : 5.35659912109375); (5.5 : 5.35659912109375); (5.5 : 5.125); (3.14583333333333 : 5.125 : JumpStart); (2.97916666666667 : 5.125 : JumpEnd); (2.95833333333333 : 5.125 : JumpStart); (2.66666666666667 : 5.125 : JumpEnd); (2.625 : 5.125); (2.625 : 6.3381982421875); (1.98384615384615 : 6.3381982421875); (1.98384615384615 : 6.625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.625 : 5.35659912109375); (5.3125 : 5.35659912109375); (5.3125 : 5.0625); (3.14583333333333 : 5.0625 : JumpStart); (2.97916666666667 : 5.0625 : JumpEnd); (2.95833333333333 : 5.0625 : JumpStart); (2.66666666666667 : 5.0625 : JumpEnd); (2.5625 : 5.0625); (2.5625 : 5.9006982421875); (1.98384615384615 : 5.9006982421875); (1.98384615384615 : 6.625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/TrackerDataContext/Role/Role_User" />
       <nodes>
         <classShapeMoniker Id="cc0c0ee6-4918-4ce4-a786-cc1220aef802" />
@@ -93,51 +93,51 @@
         <classShapeMoniker Id="70d13d6c-f091-436a-b5c2-fa6b648d348f" />
       </nodes>
     </associationConnector>
-    <classShape Id="c5091ac2-5107-41d9-b572-064c24a28f44" absoluteBounds="3.25, 5.375, 2, 6.0015283203125">
-      <DataClassMoniker Name="/TrackerDataContext/PPayment" />
-      <nestedChildShapes>
-        <elementListCompartment Id="378b4f96-6fde-4782-beee-80b591540fb5" absoluteBounds="3.2649999999999997, 5.8350000000000009, 1.9700000000000002, 5.4415283203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <associationConnector edgePoints="[(5.25 : 11.3765283203125); (5.625 : 11.7515283203125); (5.625 : 12.7732156458333); (5 : 12.7732156458333)]" fixedFrom="NotFixed" fixedTo="Algorithm">
-      <AssociationMoniker Name="/TrackerDataContext/PPayment/PPayment_PDealDescription" />
-      <nodes>
-        <classShapeMoniker Id="c5091ac2-5107-41d9-b572-064c24a28f44" />
-        <classShapeMoniker Id="70d13d6c-f091-436a-b5c2-fa6b648d348f" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(2.5 : 8.64781982101362); (3.25 : 8.64781982101362)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/TrackerDataContext/User/User_PPayment" />
-      <nodes>
-        <classShapeMoniker Id="2acd5fbf-90e3-463f-a183-a380ff0a5e29" />
-        <classShapeMoniker Id="c5091ac2-5107-41d9-b572-064c24a28f44" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(2.5 : 7.65362344896835); (3.25 : 7.65362344896835)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/TrackerDataContext/User/User_PPayment1" />
-      <nodes>
-        <classShapeMoniker Id="2acd5fbf-90e3-463f-a183-a380ff0a5e29" />
-        <classShapeMoniker Id="c5091ac2-5107-41d9-b572-064c24a28f44" />
-      </nodes>
-    </associationConnector>
     <classShape Id="3d0746b0-7a9a-404e-bb36-4b51534c390a" absoluteBounds="6.125, 7.25, 2, 8.6937483723958326">
       <DataClassMoniker Name="/TrackerDataContext/Schedule" />
       <nestedChildShapes>
         <elementListCompartment Id="3ff570bd-0c76-4153-b90a-48499f86c578" absoluteBounds="6.14, 7.71, 1.9700000000000002, 8.1337483723958321" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5.25 : 9.28201166015625); (6.125 : 9.28201166015625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/TrackerDataContext/PPayment/PPayment_Schedule" />
-      <nodes>
-        <classShapeMoniker Id="c5091ac2-5107-41d9-b572-064c24a28f44" />
-        <classShapeMoniker Id="3d0746b0-7a9a-404e-bb36-4b51534c390a" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(2.0312525 : 10.5112125651042); (2.0312525 : 15.056826171875); (6.125 : 15.056826171875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.0312525 : 10.5112125651042); (2.0312525 : 15.056826171875); (6.125 : 15.056826171875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/TrackerDataContext/User/User_Schedule" />
       <nodes>
         <classShapeMoniker Id="2acd5fbf-90e3-463f-a183-a380ff0a5e29" />
         <classShapeMoniker Id="3d0746b0-7a9a-404e-bb36-4b51534c390a" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="4a8a8d97-9e72-4fd9-b2b7-d2fcec7bf826" absoluteBounds="3.25, 5.125, 2, 6.0015283203125">
+      <DataClassMoniker Name="/TrackerDataContext/PPayment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ee40414f-64ae-4d23-8df9-dcbfc15694cb" absoluteBounds="3.265, 5.585, 1.9700000000000002, 5.4415283203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(4.125 : 11.1265283203125); (4.125 : 11.375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TrackerDataContext/PPayment/PPayment_PDealDescription" />
+      <nodes>
+        <classShapeMoniker Id="4a8a8d97-9e72-4fd9-b2b7-d2fcec7bf826" />
+        <classShapeMoniker Id="70d13d6c-f091-436a-b5c2-fa6b648d348f" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.25 : 9.18826416015625); (6.125 : 9.18826416015625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TrackerDataContext/PPayment/PPayment_Schedule" />
+      <nodes>
+        <classShapeMoniker Id="4a8a8d97-9e72-4fd9-b2b7-d2fcec7bf826" />
+        <classShapeMoniker Id="3d0746b0-7a9a-404e-bb36-4b51534c390a" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.5 : 8.64781982101362); (3.25 : 8.64781982101362)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TrackerDataContext/User/User_PPayment" />
+      <nodes>
+        <classShapeMoniker Id="2acd5fbf-90e3-463f-a183-a380ff0a5e29" />
+        <classShapeMoniker Id="4a8a8d97-9e72-4fd9-b2b7-d2fcec7bf826" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.5 : 7.65362344896835); (3.25 : 7.65362344896835)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TrackerDataContext/User/User_PPayment1" />
+      <nodes>
+        <classShapeMoniker Id="2acd5fbf-90e3-463f-a183-a380ff0a5e29" />
+        <classShapeMoniker Id="4a8a8d97-9e72-4fd9-b2b7-d2fcec7bf826" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

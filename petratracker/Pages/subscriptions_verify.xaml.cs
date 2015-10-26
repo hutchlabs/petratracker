@@ -213,17 +213,18 @@ namespace petratracker.Pages
                                 select p).Single();
 
 
-            //Enable reidentification of payment for Super Users
-            if (!TrackerUser.IsCurrentUserSuperAdmin())
+            //Enable reidentification of payment for Super Users and Super Ops User
+            if (TrackerUser.IsCurrentUserSuperAdmin() || TrackerUser.IsCurrentUserSuperOps())
+            {
+               btnSave.Content = "Update";
+            }
+            else
             {
                 grpTransDetails.IsEnabled = false;
                 grpCompanyMapping.IsEnabled = false;
                 btnSave.Visibility = System.Windows.Visibility.Hidden;
             }
-            else
-            {
-                btnSave.Content = "Update";
-            }
+            
 
             //Load Transaction Details
             txtTransRef.Text = subscription.transaction_ref_no.ToString();
@@ -299,8 +300,8 @@ namespace petratracker.Pages
                 cmbClient.Items.Clear();
 
                 var clients = (from c in Database.Microgen.cclv_AllEntities
-
-                               where c.FullName.Contains(txtSearchClients.Text) && c.EntityKey.Contains("HI")
+                               join er in Database.Microgen.EntityRoles on c.EntityID equals er.EntityID
+                               where c.FullName.Contains(txtSearchClients.Text) && ( er.RoleTypeID == 1001 || er.RoleTypeID == 3 )
 
                                select new { c.EntityKey, c.FullName });
 
@@ -361,7 +362,7 @@ namespace petratracker.Pages
                         p.date_identified = DateTime.Today;
                         p.updated_at = DateTime.Today;
                         p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
-                        p.subscription_value_date = dtSubscriptionValueDate.SelectedDate;
+                        p.subscription_value_date = (DateTime)dtSubscriptionValueDate.SelectedDate;
                         p.comments = txtComments.Text;
                         p.status = verifyType;
                     }
@@ -371,7 +372,7 @@ namespace petratracker.Pages
                         p.approved_by = TrackerUser.GetCurrentUser().id;
                         p.date_approved = DateTime.Today;
                         p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
-                        p.subscription_value_date = dtSubscriptionValueDate.SelectedDate;
+                        p.subscription_value_date = (DateTime)dtSubscriptionValueDate.SelectedDate;
                         p.comments = txtComments.Text;
                         p.status = "Identified and Approved";
                     }
@@ -381,7 +382,7 @@ namespace petratracker.Pages
                         p.approved_by = TrackerUser.GetCurrentUser().id;
                         p.date_approved = DateTime.Today;
                         p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
-                        p.subscription_value_date = dtSubscriptionValueDate.SelectedDate;
+                        p.subscription_value_date = (DateTime)dtSubscriptionValueDate.SelectedDate;
                         p.comments = txtComments.Text;
                         p.status = "Rejected";
                     }
@@ -397,15 +398,18 @@ namespace petratracker.Pages
                         p.modified_by = TrackerUser.GetCurrentUser().id;
                         p.date_approved = DateTime.Today;
                         p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
-                        p.subscription_value_date = dtSubscriptionValueDate.SelectedDate;
+                        p.subscription_value_date = (DateTime)dtSubscriptionValueDate.SelectedDate;
                         p.comments = txtComments.Text;
                         p.status = "Identified and Approved";
                     }
             
                     else
                     {
+                        p.company_code = txtCompanyCode.Text;
+                        p.company_name = cmbCompanies.Text.Substring(cmbCompanies.Text.LastIndexOf('-') + 1);
+                        p.company_id = TrackerPayment.get_company_id_by_code(txtCompanyCode.Text);
                         p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
-                        p.subscription_value_date = dtSubscriptionValueDate.SelectedDate;
+                        p.subscription_value_date = (DateTime)dtSubscriptionValueDate.SelectedDate;
                         p.status = verifyType;
                         p.updated_at = DateTime.Today;
                         p.modified_by = TrackerUser.GetCurrentUser().id;                      
@@ -514,7 +518,7 @@ namespace petratracker.Pages
                             {
                                 if (MessageBox.Show("This subscription has already been identified and approved, please click Yes to proceed with update.", "Update Identified and Approved Subscription", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                                 {
-                                    if (update_payment("Identified and Approved", true))
+                                    if (update_payment("Identified", true))
                                     {
                                         TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
                                         MessageBox.Show("Payment has been updated.", "Update", MessageBoxButton.OK, MessageBoxImage.Information); this.Close();
