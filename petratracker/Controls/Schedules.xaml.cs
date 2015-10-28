@@ -320,10 +320,10 @@ namespace petratracker.Controls
 
         private bool ShowActionBarButtons(string filter="")
         {
-            bool activebuttons = false;
+            bool activebuttons = true;
 
             btn_groupDelete.Visibility = Visibility.Collapsed;
-            btn_groupMarkValidationEmailSent.Visibility = Visibility.Collapsed;
+            btn_groupMarkValidationEmailSent.Visibility = Visibility.Visible;
             btn_groupMarkReceiptSent.Visibility = Visibility.Collapsed;
             btn_groupMarkFileDownload.Visibility = Visibility.Collapsed;
 
