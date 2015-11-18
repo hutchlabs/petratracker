@@ -247,5 +247,69 @@ namespace petratracker.Models
             set;
         }
     }
+
+
+    public class PaymentsView
+    {
+        public string Transaction_Ref
+        {
+            get;
+            set;
+        }
+
+        public string Status
+        {
+            get;
+            set;
+        }
+
+        public string Trans_Details
+        {
+            get;
+            set;
+        }
+
+        public string Subscription_Value_Date
+        {
+            get;
+            set;
+        }
+
+        public string Subscription_Amount
+        {
+            get;
+            set;
+        }
+
+        public string Company_Name
+        {
+            get;
+            set;
+        }
+
+        public string Company_Code
+        {
+            get;
+            set;
+        }
+
+        public string Tier
+        {
+            get;
+            set;
+        }
+
+        public string Deal_Description
+        {
+            get;
+            set;
+        }
+
+        public string Approved_By
+        {
+            get;
+            set;
+        }
+    }
 }
 

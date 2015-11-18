@@ -165,7 +165,14 @@ namespace petratracker.Models
             {
                 if (sub_status != string.Empty)
                 {
+                        //    var rows =  (from p in Database.Tracker.PPayments
+                        //                join dd in Database.Tracker.PDealDescriptions on p.id equals dd.payment_id
+                        //                join u in Database.Tracker.Users on p.approved_by equals u.id
+                        //                where p.status.Trim() == sub_status && dd.payment_id == p.id && u.id == p.approved_by
+                        //                select new { p.transaction_ref_no, p.status, p.transaction_details, p.subscription_value_date, p.subscription_amount, p.company_name, p.company_code, p.tier,u});
+
                     return (from p in Database.Tracker.PPayments where p.status.Trim() == sub_status select p);
+                        
                 }
                 else
                 {
