@@ -240,7 +240,8 @@ namespace petratracker
                 Flyout mflyout = (Flyout)obj;
                 mflyout.ClosingFinished += notificationflyout_ClosingFinished;
 
-                if (schStates.Contains(item.notification_type.Trim()))
+                //if (schStates.Contains(item.notification_type.Trim()))
+                if (item.job_type==Constants.JOB_TYPE_SCHEDULE)
                 {
                     mflyout.Content = new ScheduleView(item.job_id, true);
                     ShowHideNotificationFlyout(false);

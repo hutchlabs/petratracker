@@ -310,7 +310,7 @@ namespace petratracker.Models
                 return (from c in Microgen.cclv_AllEntities
                         where c.EntityTypeDesc == "Company" && c.FullName.ToLower() != "available" && c.FullName != "Available Company"
                         orderby c.FullName
-                        select c).Take(10);
+                        select c);
             }
             catch (Exception)
             {
