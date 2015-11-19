@@ -17,6 +17,8 @@ using petratracker.Utility;
 using petratracker.Pages;
 using MahApps.Metro.Controls;
 using System.Threading;
+using System.Collections;
+using System.ComponentModel;
 
 namespace petratracker.Controls
 {

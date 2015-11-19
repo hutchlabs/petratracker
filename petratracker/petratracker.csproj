@@ -126,6 +126,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>trackerDB.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\trackerDB_extra.cs" />
     <Compile Include="Models\TrackerPaymentDealDescriptions.cs" />
     <Compile Include="Models\TrackerReports.cs" />
     <Compile Include="Models\TrackerReportTransRefType.cs" />
