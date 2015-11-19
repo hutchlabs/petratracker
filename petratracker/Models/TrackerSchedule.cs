@@ -304,7 +304,7 @@ namespace petratracker.Models
         {
             s.validation_email_sent = true;
             s.validation_email_date = (DateTime)t;
-            //s.workflow_status = Constants.WF_VALIDATION_DONE_EMAILSENT;
+            s.workflow_status = Constants.WF_VALIDATION_DONE_EMAILSENT;
             return TrackerSchedule.EvaluateReminderStatus(s);
         }
 
