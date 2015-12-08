@@ -214,16 +214,16 @@ namespace petratracker.Controls
      
         private void viewSubs_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            PPayment p = (PPayment) viewSubs.SelectedItem;
+            SubscriptionsView p = (SubscriptionsView)viewSubs.SelectedItem;
 
-            _activeJobId = (int) p.job_id;
+            _activeJobId = (int)p.Job_Id;
 
             Window parentWindow = Window.GetWindow(this);
             object obj = parentWindow.FindName("surrogateFlyout");
             Flyout flyout = (Flyout)obj;
 
             flyout.ClosingFinished += subsflyout_ClosingFinished;
-            flyout.Content = new verifySubscription(p.status.Trim(), p.id, true);
+            flyout.Content = new verifySubscription(p.Status.Trim(), p.Id, true);
             flyout.IsOpen = !flyout.IsOpen;
         }
 

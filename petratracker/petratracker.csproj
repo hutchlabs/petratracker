@@ -32,7 +32,7 @@
     <PublisherName>Hutchlabs Atelier</PublisherName>
     <SuiteName>PetraERP</SuiteName>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>12</ApplicationRevision>
+    <ApplicationRevision>13</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

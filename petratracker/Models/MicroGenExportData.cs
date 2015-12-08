@@ -249,9 +249,26 @@ namespace petratracker.Models
     }
 
 
-    public class PaymentsView
+    public class SubscriptionsView
     {
+        public int Id
+        {
+            get;
+            set;
+        }
         public string Transaction_Ref
+        {
+            get;
+            set;
+        }
+
+        public int Job_Id
+        {
+            get;
+            set;
+        }
+
+        public DateTime Value_Date
         {
             get;
             set;
@@ -269,13 +286,13 @@ namespace petratracker.Models
             set;
         }
 
-        public string Subscription_Value_Date
+        public DateTime Subscription_Value_Date
         {
             get;
             set;
         }
 
-        public string Subscription_Amount
+        public decimal Subscription_Amount
         {
             get;
             set;
@@ -311,5 +328,7 @@ namespace petratracker.Models
             set;
         }
     }
+
+    
 }
 

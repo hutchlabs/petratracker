@@ -97,7 +97,7 @@ namespace petratracker.Models
             }
         }
 
-        public static IEnumerable<PPayment> GetSubscriptions(int job_id, string sub_status = "", bool showAll = false)
+        public static IEnumerable<SubscriptionsView> GetSubscriptions(int job_id, string sub_status = "", bool showAll = false)
         {
             if (TrackerUser.IsCurrentUserOps())
             {
@@ -107,11 +107,45 @@ namespace petratracker.Models
             {
                 if (sub_status != string.Empty)
                 {
-                    return (from p in Database.Tracker.PPayments where p.job_id == job_id && p.status.Trim() == sub_status select p);
+                    return (from p in Database.Tracker.PPayments
+                            where p.job_id == job_id && p.status.Trim() == sub_status    
+                            select new SubscriptionsView
+                            {
+                                Id = p.id,
+                                Job_Id = p.job_id ?? 0,
+                                Transaction_Ref = p.transaction_ref_no,
+                                Value_Date = p.value_date,
+                                Trans_Details = p.transaction_details,
+                                Subscription_Value_Date = p.subscription_value_date,
+                                Subscription_Amount = p.subscription_amount ?? 0,
+                                Company_Code = p.company_code,
+                                Company_Name = p.company_name,
+                                Tier = p.tier,
+                                Status = p.status,
+                                Deal_Description = GetPaymentDealDesc(p.id)
+                            });
+
                 }
                 else
                 {
-                    return (from p in Database.Tracker.PPayments where p.job_id == job_id select p);
+                    return (from p in Database.Tracker.PPayments
+                            where p.job_id == job_id
+                            select new SubscriptionsView
+                            {
+                                Id = p.id,
+                                Job_Id = p.job_id ?? 0,
+                                Transaction_Ref = p.transaction_ref_no,
+                                Value_Date = p.value_date,
+                                Trans_Details = p.transaction_details,
+                                Subscription_Value_Date = p.subscription_value_date,
+                                Subscription_Amount = p.subscription_amount ?? 0,
+                                Company_Code = p.company_code,
+                                Company_Name = p.company_name,
+                                Tier = p.tier,
+                                Status = p.status,
+                                Deal_Description = GetPaymentDealDesc(p.id)
+                            });
+
                 }
             }
         }
@@ -135,7 +169,7 @@ namespace petratracker.Models
                 return (from j in Database.Tracker.PPayments
                         where
                             (SqlMethods.Like(j.company_name, term) || SqlMethods.Like(j.status, term)  ||
-                            SqlMethods.Like(j.company_code, term) || SqlMethods.Like(j.transaction_ref_no, term) ||
+                             SqlMethods.Like(j.company_code, term) || SqlMethods.Like(j.transaction_ref_no, term) ||
                              SqlMethods.Like(j.transaction_details, term) || SqlMethods.Like(j.User.first_name, term) ||
                              SqlMethods.Like(j.User.last_name, term))
                         orderby j.created_at descending
@@ -155,7 +189,7 @@ namespace petratracker.Models
             }
         }
 
-        public static IEnumerable<PPayment> GetAllSubscriptions(string sub_status = "", bool showAll = false)
+        public static IEnumerable<SubscriptionsView> GetAllSubscriptions(string sub_status = "", bool showAll = false)
         {
             if (TrackerUser.IsCurrentUserOps())
             {
@@ -165,15 +199,49 @@ namespace petratracker.Models
             {
                 if (sub_status != string.Empty)
                 {
-                    return (from p in Database.Tracker.PPayments 
+                    return (from p in Database.Tracker.PPayments
+                            join d in Database.Tracker.PDealDescriptions on p.id equals d.payment_id
                             where p.status.Trim() == sub_status && 
                             !Database.Tracker.Schedules.Any(y=>y.payment_id==p.id)
-                            select p);
+                            select new SubscriptionsView
+                            {
+                                Id = p.id,
+                                Job_Id = p.job_id ?? 0,
+                                Transaction_Ref = p.transaction_ref_no,
+                                Value_Date = p.value_date,
+                                Trans_Details = p.transaction_details,
+                                Subscription_Value_Date = p.subscription_value_date,
+                                Subscription_Amount = p.subscription_amount ?? 0,
+                                Company_Code = p.company_code,
+                                Company_Name = p.company_name,
+                                Tier = p.tier,
+                                Status = p.status,
+                                Deal_Description = GetPaymentDealDesc(p.id)
+                            });
+
                         
                 }
                 else
                 {
-                    return (from p in Database.Tracker.PPayments where ! Database.Tracker.Schedules.Any(y => y.payment_id == p.id) select p);
+                    return (from p in Database.Tracker.PPayments
+                            join d in Database.Tracker.PDealDescriptions on p.id equals d.payment_id
+                            where ! Database.Tracker.Schedules.Any(y => y.payment_id == p.id)
+                            select new SubscriptionsView
+                            {
+                                Id = p.id,
+                                Job_Id = p.job_id ?? 0,
+                                Transaction_Ref = p.transaction_ref_no,
+                                Value_Date = p.value_date,
+                                Trans_Details = p.transaction_details,
+                                Subscription_Value_Date = p.subscription_value_date,
+                                Subscription_Amount = p.subscription_amount ?? 0,
+                                Company_Code = p.company_code,
+                                Company_Name = p.company_name,
+                                Tier = p.tier,
+                                Status = p.status,
+                                Deal_Description = GetPaymentDealDesc(p.id)
+                            });
+
                 }
             }
         }
@@ -192,39 +260,128 @@ namespace petratracker.Models
 
         }
 
-        public static IEnumerable<PPayment> GetAllOpsUserSubscriptions(string sub_status = "")
+        public static string GetPaymentDealDesc(int payment_id)
+        {
+            string desc = string.Empty;
+
+            if (payment_id > 0)
+            {
+               var deals = (from pdd in Database.Tracker.PDealDescriptions
+                        where pdd.payment_id == payment_id
+                        select new TrackerPaymentDealDescriptions() 
+                        { id = pdd.id, month = GetMonth(pdd.month), year = pdd.year.ToString(), contribution_type = pdd.contribution_type });
+
+              foreach(TrackerPaymentDealDescriptions vals in deals)
+              {
+                  desc += string.Concat(vals.month," ",vals.year,",");
+                  
+              }
+              if (desc.Length > 0) { return desc.Substring(0, desc.Length - 1); }
+              else { return desc; }
+               
+            }
+            else
+            {
+                return desc;
+            }
+
+        }
+
+        public static IEnumerable<SubscriptionsView> GetAllOpsUserSubscriptions(string sub_status = "")
         {
             if (sub_status != string.Empty)
             {
                 return (from p in Database.Tracker.PPayments
+                        join d in Database.Tracker.PDealDescriptions on p.id equals d.payment_id
                         where p.status.Trim() == sub_status && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
                         && !Database.Tracker.Schedules.Any(y => y.payment_id == p.id)
-                        select p);
+                        select new SubscriptionsView
+                        {
+                            Id = p.id,
+                            Job_Id = p.job_id ?? 0,
+                            Transaction_Ref = p.transaction_ref_no,
+                            Value_Date = p.value_date,
+                            Trans_Details = p.transaction_details,
+                            Subscription_Value_Date = p.subscription_value_date,
+                            Subscription_Amount = p.subscription_amount ?? 0,
+                            Company_Code = p.company_code,
+                            Company_Name = p.company_name,
+                            Tier = p.tier,
+                            Status = p.status,
+                            Deal_Description = GetPaymentDealDesc(p.id)
+                        });
+
             }
             else
             {
                 return (from p in Database.Tracker.PPayments
+                        join d in Database.Tracker.PDealDescriptions on p.id equals d.payment_id
                         where p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED &&
                         !Database.Tracker.Schedules.Any(y => y.payment_id == p.id)
-                        select p);
+                        select new SubscriptionsView
+                        {
+                            Id = p.id,
+                            Job_Id = p.job_id ?? 0,
+                            Transaction_Ref = p.transaction_ref_no,
+                            Value_Date = p.value_date,
+                            Trans_Details = p.transaction_details,
+                            Subscription_Value_Date = p.subscription_value_date,
+                            Subscription_Amount = p.subscription_amount ?? 0,
+                            Company_Code = p.company_code,
+                            Company_Name = p.company_name,
+                            Tier = p.tier,
+                            Status = p.status,
+                            Deal_Description = GetPaymentDealDesc(p.id)
+                        });
+
             }
         }
 
-        public static IEnumerable<PPayment> GetOpsUserSubscriptions(int job_id, string sub_status = "")
+        public static IEnumerable<SubscriptionsView> GetOpsUserSubscriptions(int job_id, string sub_status = "")
         {
             if (sub_status != string.Empty)
             {
                 return (from p in Database.Tracker.PPayments 
+                        join d in Database.Tracker.PDealDescriptions on p.id equals d.payment_id
                         where p.job_id == job_id && p.status.Trim() == sub_status && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
                         && !Database.Tracker.Schedules.Any(y => y.payment_id == p.id)
-                        select p);
+                        select new SubscriptionsView
+                        {
+                                                        Id = p.id,
+                                                        Job_Id = p.job_id ?? 0,
+                                                        Transaction_Ref = p.transaction_ref_no,
+                                                        Value_Date = p.value_date,
+                                                        Trans_Details = p.transaction_details,
+                                                        Subscription_Value_Date = p.subscription_value_date,
+                                                        Subscription_Amount = p.subscription_amount??0,
+                                                        Company_Code = p.company_code,
+                                                        Company_Name = p.company_name,
+                                                        Tier = p.tier,
+                                                        Status = p.status,
+                                                        Deal_Description = GetPaymentDealDesc(p.id)
+                        });
             }
             else
             {
                 return (from p in Database.Tracker.PPayments
+                        join d in Database.Tracker.PDealDescriptions on p.id equals d.payment_id
                         where p.job_id == job_id && p.status.Trim() != Constants.PAYMENT_STATUS_IDENTIFIED
                         && !Database.Tracker.Schedules.Any(y => y.payment_id == p.id)
-                        select p);
+                        select new SubscriptionsView
+                        {
+                            Id = p.id,
+                            Job_Id = p.job_id??0,
+                            Transaction_Ref = p.transaction_ref_no,
+                            Value_Date = p.value_date,
+                            Trans_Details = p.transaction_details,
+                            Subscription_Value_Date = p.subscription_value_date,
+                            Subscription_Amount = p.subscription_amount ?? 0,
+                            Company_Code = p.company_code,
+                            Company_Name = p.company_name,
+                            Tier = p.tier,
+                            Status = p.status,
+                            Deal_Description = GetPaymentDealDesc(p.id)
+                        });
             }
         }
 

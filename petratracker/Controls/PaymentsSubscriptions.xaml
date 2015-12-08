@@ -148,17 +148,17 @@
                       IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
                       ItemsSource="{Binding}" PreviewMouseDoubleClick="viewSubs_PreviewMouseDoubleClick" SelectionChanged="viewSubs_SelectionChanged">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Status" Width="75" Binding="{Binding status}" />
-                    <DataGridTextColumn Header="Value Date" Width="75"  Binding="{Binding value_date, StringFormat=\{0:dd-MMM-yyyy\}}" />
-                    <DataGridTextColumn Header="Trans Ref. no" Width="100" Binding="{Binding transaction_ref_no}" />
-                    <DataGridTextColumn Header="Tran. Details" Width="200" Binding="{Binding transaction_details}" />
-                    <DataGridTextColumn Header="Company Code" Width="Auto" Binding="{Binding company_code}" />
-                    <DataGridTextColumn Header="Company Name" Width="Auto" Binding="{Binding company_name}" />
-                    <DataGridTextColumn Header="Subscribtion Value Date" Width="Auto" Binding="{Binding subscription_value_date, StringFormat=\{0:dd-MMM-yyyy\}}" />
-                    <DataGridTextColumn Header="Subscribtion Amount" Width="Auto" Binding="{Binding subscription_amount}" />
-                    <DataGridTextColumn Header="Tier" Width="Auto" Binding="{Binding tier}" />
-                    <DataGridTextColumn Header="Deal Description" Width="Auto" Binding="{Binding deal_description}" />
-                    <DataGridTextColumn Header="Approved By" Width="Auto" Binding="{Binding approved_by}" />
+                    <DataGridTextColumn Header="Status" Width="75" Binding="{Binding Status}" />
+                    <DataGridTextColumn Header="Value Date" Width="75"  Binding="{Binding Value_Date, StringFormat=\{0:dd-MMM-yyyy\}}" />
+                    <DataGridTextColumn Header="Trans Ref. no" Width="100" Binding="{Binding Transaction_Ref}" />
+                    <DataGridTextColumn Header="Tran. Details" Width="200" Binding="{Binding Trans_Details}" />
+                    <DataGridTextColumn Header="Company Code" Width="Auto" Binding="{Binding Company_Code}" />
+                    <DataGridTextColumn Header="Company Name" Width="Auto" Binding="{Binding Company_Name}" />
+                    <DataGridTextColumn Header="Subscribtion Value Date" Width="Auto" Binding="{Binding Subscription_Value_Date, StringFormat=\{0:dd-MMM-yyyy\}}" />
+                    <DataGridTextColumn Header="Subscribtion Amount" Width="Auto" Binding="{Binding Subscription_Amount}" />
+                    <DataGridTextColumn Header="Tier" Width="Auto" Binding="{Binding Tier}" />
+                    <DataGridTextColumn Header="Deal Description" Width="Auto" Binding="{Binding Deal_Description}" />
+                   
             </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
