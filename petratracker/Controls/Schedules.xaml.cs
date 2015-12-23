@@ -27,6 +27,9 @@ namespace petratracker.Controls
         #region Private Members
 
         private CancellationTokenSource _stopGridUpgrade = new CancellationTokenSource();
+
+        private readonly string[] _tiers = { "Tier 2", "Tier 3", "Tier 4" };
+
         private readonly string[] _scheduleFilterOptions = { 
                                                              "All", 
                                                              Constants.WF_VALIDATION_NOTDONE,
@@ -66,6 +69,24 @@ namespace petratracker.Controls
             get { return TrackerSchedule.GetCompanies(); }
         }
 
+        public string[] Tiers
+        {
+            private set { ; }
+            get { return _tiers; }
+        }
+
+        public IEnumerable<ComboBoxPairs> ContributionTypes
+        {
+            private set { ; }
+            get { return TrackerSchedule.GetContributionTypes(); }
+        }
+
+        public IEnumerable<ComboBoxPairs> Years
+        {
+            private set { ; }
+            get { return TrackerSchedule.GetYears(); }
+        }
+
         #endregion
 
         #region Constructor
@@ -100,21 +121,29 @@ namespace petratracker.Controls
             UpdateGrid();
         }
 
-        private void cbx_companies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cbx_searchfilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                if (cbx_companies.SelectedIndex != -1) { 
+                if (cbx_companies.SelectedIndex != -1 || 
+                    cbx_tiers.SelectedIndex != -1     ||
+                    cbx_months.SelectedIndex != -1    ||
+                    cbx_years.SelectedIndex != -1     ||
+                    cbx_contributiontypes.SelectedIndex != -1) 
+                { 
                     txtQuery.Text = "";
+                
                 }
 
-                string v = ((ComboBoxPairs)cbx_companies.SelectedItem)._Value;
-                if (v != "")
-                {
-                    string filter = (string)((SplitButton)ScheduleListFilter).SelectedItem;
-                    viewSchedules.ItemsSource = TrackerSchedule.GetScheduleByCompany(v, filter);
-                    UpdateGrid(true);
-                }
+                string c = (cbx_companies.SelectedIndex == -1) ? null  : ((ComboBoxPairs)cbx_companies.SelectedItem)._Value;
+                string ct = (cbx_contributiontypes.SelectedIndex == -1) ? null : ((ComboBoxPairs)cbx_contributiontypes.SelectedItem)._Value;
+                string t = (cbx_tiers.SelectedIndex == -1) ? null : cbx_tiers.SelectedValue.ToString();
+                string y = (cbx_years.SelectedIndex == -1) ? null  : ((ComboBoxPairs)cbx_years.SelectedItem)._Value;
+                string m = (cbx_months.SelectedIndex == -1) ? null  : cbx_months.SelectedValue.ToString();
+
+                string filter = (string)((SplitButton)ScheduleListFilter).SelectedItem;
+                viewSchedules.ItemsSource = TrackerSchedule.GetScheduleBySearch(c, t, ct, m, y, filter);
+                UpdateGrid(true);
             }
             catch (Exception){}
         }
@@ -132,6 +161,10 @@ namespace petratracker.Controls
             try
             {
                 cbx_companies.SelectedIndex = -1;
+                cbx_years.SelectedIndex = -1;
+                cbx_months.SelectedIndex = -1;
+                cbx_contributiontypes.SelectedIndex = -1;
+                cbx_tiers.SelectedIndex = -1;
 
                 string v = txtQuery.Text;
                 if (v != "")

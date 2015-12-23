@@ -132,6 +132,34 @@ namespace petratracker.Models
             }
         }
 
+        public static IEnumerable<Schedule> GetScheduleBySearch(string com, string t, string ct, string m, string y, string status = null)
+        {
+            string sql = "SELECT * FROM Schedules WHERE 1=1 ";
+
+            if (status != null && status != "All")   { sql += " AND workflow_status = '" + status + "'"; }
+
+            if (com != null) { sql += " AND company LIKE '%" + com.Trim() + "%'";     }
+            if (t != null)   { sql += " AND tier= '" + t.Trim() + "'"; }
+            if (ct != null)  { sql += " AND  contributiontype= '" + ct + "'"; }
+            if (m != null)   { sql += " AND month= '" + m.Trim() + "'"; }
+            if (y != null)   { sql += " AND year= '" + y.Trim() + "'"; }
+
+            sql += " ORDER BY updated_at DESC";
+
+            IEnumerable<Schedule> x = null;
+
+            try
+            {
+                x = Database.Tracker.ExecuteQuery<Schedule>(sql);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return x;
+        }
+
         public static IEnumerable<Schedule> GetSchedulesForProcessing()
         {
             return (from j in Database.Tracker.Schedules

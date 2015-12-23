@@ -21,7 +21,7 @@ namespace petratracker.Models
         {
             return (from n in Database.Tracker.Notifications
                     where (n.status != Constants.NF_STATUS_EXPIRED && n.status != Constants.NF_STATUS_RESOLVED) && 
-                          (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
+                          (n.to_role_id == TrackerUser.GetCurrentUser().role_id) && (n.status != Constants.NF_STATUS_SEEN)
                     orderby n.times_sent descending, n.updated_at descending, n.status descending 
                     select n);
         }
@@ -96,7 +96,8 @@ namespace petratracker.Models
         {
             var total_notifications = (from n in Database.Tracker.Notifications
                                        where (n.status != Constants.NF_STATUS_EXPIRED) && 
-                                             (n.status != Constants.NF_STATUS_RESOLVED) && 
+                                             (n.status != Constants.NF_STATUS_RESOLVED) &&
+                                             (n.status != Constants.NF_STATUS_SEEN) &&
                                              (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                                        select n).Count();
             var new_notifications = (from n in Database.Tracker.Notifications
@@ -122,7 +123,8 @@ namespace petratracker.Models
         {
             var total_notifications = (from n in Database.Tracker.Notifications
                                        where (n.status != Constants.NF_STATUS_EXPIRED) &&
-                                             (n.status != Constants.NF_STATUS_RESOLVED) && 
+                                             (n.status != Constants.NF_STATUS_RESOLVED) &&
+                                             (n.status != Constants.NF_STATUS_SEEN) &&
                                              (n.to_role_id == TrackerUser.GetCurrentUser().role_id)
                                        select n).Count();
             var new_notifications = (from n in Database.Tracker.Notifications
