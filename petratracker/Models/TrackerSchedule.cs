@@ -400,7 +400,7 @@ namespace petratracker.Models
             }
         }
 
-        private static Schedule EvaluateScheduleWorkFlow(Schedule s)
+        public static Schedule EvaluateScheduleWorkFlow(Schedule s)
         {
             // Lock this schedule for now
             s.processing = true;

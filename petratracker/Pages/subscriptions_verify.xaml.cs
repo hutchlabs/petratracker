@@ -507,8 +507,6 @@ namespace petratracker.Pages
                                 {
                                     if (update_payment("Identified and Approved", true))
                                     {
-
-
                                         TrackerNotification.ResolveByJob(Constants.NF_TYPE_SUBSCRIPTION_APPROVAL_REQUEST, Constants.JOB_TYPE_SUBSCRIPTION, subID);
                                         MessageBox.Show("Payment has been flagged as approved.", "Approved", MessageBoxButton.OK, MessageBoxImage.Information); this.Close();
                                     }

@@ -106,7 +106,8 @@ namespace petratracker.Models
         {
             try
             {
-                return CurrentUser.Role.role1.Equals(Constants.ROLES_SUPER_OPS_USER);
+                return (CurrentUser.Role.role1.Equals(Constants.ROLES_SUPER_USER) &&   
+                        CurrentUser.Role.role1.Equals(Constants.ROLES_SUPER_OPS_USER));
             }
             catch (Exception)
             {

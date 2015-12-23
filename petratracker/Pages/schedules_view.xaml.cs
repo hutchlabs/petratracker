@@ -62,6 +62,13 @@ namespace petratracker.Pages
                 close_flyout();
         }
 
+
+        private void btn_validate_Click(object sender, RoutedEventArgs e)
+        {
+            _schedule = TrackerSchedule.EvaluateScheduleWorkFlow(_schedule);
+            load_schedule();
+        }
+
         private void ShowValidationEmailPanel(object sender, RoutedEventArgs e)
         {
             CloseAllPanels();
@@ -388,6 +395,7 @@ namespace petratracker.Pages
         }
 
         #endregion
+
 
     }
 }
