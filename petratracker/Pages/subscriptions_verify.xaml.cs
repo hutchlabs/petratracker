@@ -353,7 +353,7 @@ namespace petratracker.Pages
                     if (verifyType == "Identified")
                     {
                         p.company_code = txtCompanyCode.Text;
-                        p.company_name = cmbCompanies.Text.Substring(cmbCompanies.Text.LastIndexOf('-')+1);
+                        p.company_name = txtSearchCompany.Text; //cmbCompanies.Text.Substring(cmbCompanies.Text.LastIndexOf('-')+1);
                         p.company_id = TrackerPayment.get_company_id_by_code(txtCompanyCode.Text);
                         p.savings_booster = chkSavingsBooster.IsChecked;
                         p.savings_booster_client_code = txtClientCode.Text;
@@ -389,7 +389,7 @@ namespace petratracker.Pages
                     if (verifyType == "Identified and Approved")
                     {
                         p.company_code = txtCompanyCode.Text;
-                        p.company_name = cmbCompanies.Text.Substring(cmbCompanies.Text.LastIndexOf('-') + 1);
+                        p.company_name = txtSearchCompany.Text; // cmbCompanies.Text.Substring(cmbCompanies.Text.LastIndexOf('-') + 1);
                         p.company_id = TrackerPayment.get_company_id_by_code(txtCompanyCode.Text);
                         p.savings_booster = chkSavingsBooster.IsChecked;
                         p.savings_booster_client_code = txtClientCode.Text;
@@ -401,12 +401,11 @@ namespace petratracker.Pages
                         p.subscription_value_date = (DateTime)dtSubscriptionValueDate.SelectedDate;
                         p.comments = txtComments.Text;
                         p.status = "Identified and Approved";
-                    }
-            
+                    }     
                     else
                     {
                         p.company_code = txtCompanyCode.Text;
-                        p.company_name = cmbCompanies.Text.Substring(cmbCompanies.Text.LastIndexOf('-') + 1);
+                        p.company_name = txtSearchCompany.Text; //cmbCompanies.Text.Substring(cmbCompanies.Text.LastIndexOf('-') + 1);
                         p.company_id = TrackerPayment.get_company_id_by_code(txtCompanyCode.Text);
                         p.subscription_amount = decimal.Parse(txtSubscriptionAmount.Text);
                         p.subscription_value_date = (DateTime)dtSubscriptionValueDate.SelectedDate;
@@ -581,6 +580,7 @@ namespace petratracker.Pages
             try
             {
                 txtCompanyCode.Text = cmbCompanies.SelectedValue.ToString();
+                txtSearchCompany.Text = cmbCompanies.SelectedValue.ToString();
             }
             catch(Exception compError)
             {

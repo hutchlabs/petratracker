@@ -79,6 +79,11 @@ namespace petratracker.Models
             }
         }
 
+        public static PPayment GetSubscription(int id)
+        {
+            return (from p in Database.Tracker.PPayments where p.id == id select p).First();
+        }
+
         public static PPayment GetSubscription(string company_id, string tier, int month, int year, int ctid)
         {
             try
@@ -155,32 +160,60 @@ namespace petratracker.Models
             term = "%" + term + "%";
             if (status != null && status != "All")
             {
-                return (from j in Database.Tracker.PPayments
-                        where j.status.Trim() == status &&
-                            (SqlMethods.Like(j.company_name, term) || SqlMethods.Like(j.tier, term) ||
-                             SqlMethods.Like(j.company_code, term) || SqlMethods.Like(j.transaction_ref_no, term) ||
-                             SqlMethods.Like(j.transaction_details, term) || SqlMethods.Like(j.User.first_name, term) ||
-                             SqlMethods.Like(j.User.last_name, term))
-                        orderby j.created_at descending
-                        select j);
+                return (from p in Database.Tracker.PPayments
+                        where p.status.Trim() == status &&
+                            (SqlMethods.Like(p.company_name, term) || SqlMethods.Like(p.tier, term) ||
+                             SqlMethods.Like(p.company_code, term) || SqlMethods.Like(p.transaction_ref_no, term) ||
+                             SqlMethods.Like(p.transaction_details, term) || SqlMethods.Like(p.User.first_name, term) ||
+                             SqlMethods.Like(p.User.last_name, term))
+                        orderby p.created_at descending
+                        select new SubscriptionsView
+                            {
+                                Id = p.id,
+                                Job_Id = p.job_id ?? 0,
+                                Transaction_Ref = p.transaction_ref_no,
+                                Value_Date = p.value_date,
+                                Trans_Details = p.transaction_details,
+                                Subscription_Value_Date = p.subscription_value_date,
+                                Subscription_Amount = p.subscription_amount ?? 0,
+                                Company_Code = p.company_code,
+                                Company_Name = p.company_name,
+                                Tier = p.tier,
+                                Status = p.status,
+                                Deal_Description = GetPaymentDealDesc(p.id)
+                            });
             }
             else
             {
-                return (from j in Database.Tracker.PPayments
+                return (from p in Database.Tracker.PPayments
                         where
-                            (SqlMethods.Like(j.company_name, term) || SqlMethods.Like(j.status, term)  ||
-                             SqlMethods.Like(j.company_code, term) || SqlMethods.Like(j.transaction_ref_no, term) ||
-                             SqlMethods.Like(j.transaction_details, term) || SqlMethods.Like(j.User.first_name, term) ||
-                             SqlMethods.Like(j.User.last_name, term))
-                        orderby j.created_at descending
-                        select j);
+                            (SqlMethods.Like(p.company_name, term) || SqlMethods.Like(p.status, term)  ||
+                             SqlMethods.Like(p.company_code, term) || SqlMethods.Like(p.transaction_ref_no, term) ||
+                             SqlMethods.Like(p.transaction_details, term) || SqlMethods.Like(p.User.first_name, term) ||
+                             SqlMethods.Like(p.User.last_name, term))
+                        orderby p.created_at descending
+                        select new SubscriptionsView
+                        {
+                            Id = p.id,
+                            Job_Id = p.job_id ?? 0,
+                            Transaction_Ref = p.transaction_ref_no,
+                            Value_Date = p.value_date,
+                            Trans_Details = p.transaction_details,
+                            Subscription_Value_Date = p.subscription_value_date,
+                            Subscription_Amount = p.subscription_amount ?? 0,
+                            Company_Code = p.company_code,
+                            Company_Name = p.company_name,
+                            Tier = p.tier,
+                            Status = p.status,
+                            Deal_Description = GetPaymentDealDesc(p.id)
+                        });
             }
         }
 
         public static IEnumerable GetSubscriptionsBySearch(string com, string t, string ct, string vd, string m, string y, int jid, string status = null)
         {
             #region Build sql
-            string sql = "SELECT p.* FROM PPayments p {0} WHERE job_id = " + jid.ToString();
+            string sql = (jid == -1) ? "SELECT p.* FROM PPayments p {0} WHERE 1=1 " : "SELECT p.* FROM PPayments p {0} WHERE job_id = " + jid.ToString();
             string join = "";
 
             if (status != null && status != "All") { sql += " AND status='" + status + "'"; }
