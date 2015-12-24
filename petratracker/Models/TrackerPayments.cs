@@ -238,7 +238,7 @@ namespace petratracker.Models
 
             sql = string.Format(sql, join);
 
-            Console.WriteLine(sql);
+            //Console.WriteLine(sql);
             #endregion
 
             try
