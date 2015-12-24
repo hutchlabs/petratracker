@@ -580,7 +580,7 @@ namespace petratracker.Pages
             try
             {
                 txtCompanyCode.Text = cmbCompanies.SelectedValue.ToString();
-                txtSearchCompany.Text = cmbCompanies.SelectedValue.ToString();
+                txtSearchCompany.Text = cmbCompanies.Text; 
             }
             catch(Exception compError)
             {
