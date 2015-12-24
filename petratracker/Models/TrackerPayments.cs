@@ -177,6 +177,70 @@ namespace petratracker.Models
             }
         }
 
+        public static IEnumerable GetSubscriptionsBySearch(string com, string t, string ct, string vd, string m, string y, int jid, string status = null)
+        {
+            #region Build sql
+            string sql = "SELECT p.* FROM PPayments p {0} WHERE job_id = " + jid.ToString();
+            string join = "";
+
+            if (status != null && status != "All") { sql += " AND status='" + status + "'"; }
+
+            if (com != null) { sql += " AND p.company_name LIKE '%" + com.Trim() + "%'"; }
+            if (t != null) { sql += " AND p.tier='" + t.Trim() + "'"; }
+            if (vd != null) {
+                string[] s = vd.Split('/');
+                vd = s[2].Substring(0,4) + '-' + s[0] + '-' + s[1];
+                sql += " AND p.value_date='" + vd + "'"; 
+            }
+
+            if (ct != null || m != null || y != null)
+            {
+                join = " JOIN PDealDescriptions dd ON p.id = dd.payment_id ";
+                if (ct != null) { join += " AND dd.contribution_type = '" + ct + "'"; }
+                if (m != null) { join += " AND dd.month= '" + m.Trim() + "'"; }
+                if (y != null) { join += " AND dd.year= '" + y.Trim() + "'"; }
+            }
+
+            sql += " ORDER BY p.created_at DESC";
+
+            sql = string.Format(sql, join);
+
+            Console.WriteLine(sql);
+            #endregion
+
+            try
+            {
+                // hack to return right type of object
+                List<SubscriptionsView> ids = new List<SubscriptionsView>();
+                IEnumerable x = Database.Tracker.ExecuteQuery<PPayment>(sql);
+                foreach (PPayment p in x)
+                {
+                    ids.Add(new SubscriptionsView
+                            {
+                                Id = p.id,
+                                Job_Id = p.job_id ?? 0,
+                                Transaction_Ref = p.transaction_ref_no,
+                                Value_Date = p.value_date,
+                                Trans_Details = p.transaction_details,
+                                Subscription_Value_Date = p.subscription_value_date,
+                                Subscription_Amount = p.subscription_amount ?? 0,
+                                Company_Code = p.company_code,
+                                Company_Name = p.company_name,
+                                Tier = p.tier,
+                                Status = p.status,
+                                Deal_Description = GetPaymentDealDesc(p.id)
+                            });
+                }
+                return ids.AsEnumerable();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return null;
+        }
+
         public static IEnumerable GetSubscriptionsByCompany(string company, string status)
         {
             if (status != null && status != "All")
@@ -606,8 +670,6 @@ namespace petratracker.Models
             payment.updated_at = DateTime.Now;
             Database.Tracker.SubmitChanges();
         }
-
-
 
         #endregion
 

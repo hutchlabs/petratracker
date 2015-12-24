@@ -17,6 +17,8 @@ namespace petratracker.Controls
 
         private int _activeJobId;
         private bool _allJobsSelected = false;
+        private readonly string[] _tiers = { "Tier 2", "Tier 3", "Tier 4" };
+
 
         private readonly string[] _jobsOptions = { "All" }; 
         //private readonly string[] _jobsOptions = { "All", Constants.PAYMENT_STATUS_APPROVED, Constants.PAYMENT_STATUS_INPROGRESS }; 
@@ -54,6 +56,24 @@ namespace petratracker.Controls
         {
             private set { ; }
             get { return TrackerSchedule.GetCompanies(); }
+        }
+
+        public string[] Tiers
+        {
+            private set { ; }
+            get { return _tiers; }
+        }
+
+        public IEnumerable<ComboBoxPairs> ContributionTypes
+        {
+            private set { ; }
+            get { return TrackerSchedule.GetContributionTypes(); }
+        }
+
+        public IEnumerable<ComboBoxPairs> Years
+        {
+            private set { ; }
+            get { return TrackerSchedule.GetYears(); }
         }
 
         #endregion
@@ -163,24 +183,41 @@ namespace petratracker.Controls
             UpdateSubscriptions();
         }
 
-        private void cbx_companies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cbx_searchfilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                if (cbx_companies.SelectedIndex != -1)
+                if (cbx_companies.SelectedIndex != -1 ||
+                    cbx_tiers.SelectedIndex != -1 ||
+                    cbx_months.SelectedIndex != -1 ||
+                    cbx_years.SelectedIndex != -1 ||
+                    dp_valuedate.SelectedDate != null ||
+                    cbx_contributiontypes.SelectedIndex != -1)
                 {
                     txtQuery.Text = "";
-                }
 
-                string v = ((ComboBoxPairs)cbx_companies.SelectedItem)._Value;
-                if (v != "")
-                {
+
+                    string c = (cbx_companies.SelectedIndex == -1) ? null : ((ComboBoxPairs)cbx_companies.SelectedItem)._Value;
+                    string ct = (cbx_contributiontypes.SelectedIndex == -1) ? null : ((ComboBoxPairs)cbx_contributiontypes.SelectedItem)._Value;
+                    string vd = null;
+                    if (dp_valuedate.SelectedDate != null) { vd = ((DateTime)dp_valuedate.SelectedDate).ToString(); }
+                    string t = (cbx_tiers.SelectedIndex == -1) ? null : cbx_tiers.SelectedValue.ToString();
+                    string y = (cbx_years.SelectedIndex == -1) ? null : ((ComboBoxPairs)cbx_years.SelectedItem)._Value;
+                    string m = (cbx_months.SelectedIndex == -1) ? null : cbx_months.SelectedValue.ToString();
+
                     string filter = (string)((SplitButton)SubsListFilter).SelectedItem;
-                    viewSubs.ItemsSource = TrackerPayment.GetSubscriptionsByCompany(v, filter);
-                    UpdateSubscriptions(true, true);
+                    Job job = (Job)viewJobs.SelectedItem;
+
+                    viewSubs.ItemsSource = TrackerPayment.GetSubscriptionsBySearch(c, t, ct, vd, m, y, job.id, filter);
+
+                    lbl_subsCount.Content = string.Format("{0} Subscriptions for {1}", viewSubs.Items.Count, job.job_description);
+                }
+                else
+                {
+                    UpdateSubscriptions(true, false);
                 }
             }
-            catch (Exception) { }
+            catch (Exception ex) { Console.WriteLine(ex.Message);  }     
         }
 
         private void txtQuery_KeyUp(object sender, KeyEventArgs e)
@@ -346,46 +383,50 @@ namespace petratracker.Controls
 
         private void UpdateSubscriptions(bool useActiveId=false, bool search=false)
         {
-            if (_allJobsSelected)
+            if (!search)
             {
-                LoadAllSubs();
-            }
-            else
-            {
-                Job job;
-                if (useActiveId)
+                if (_allJobsSelected)
                 {
-                    job = TrackerJobs.GetJob(_activeJobId);
+                    LoadAllSubs();
                 }
                 else
                 {
-                    job = (Job)viewJobs.SelectedItem;
-                }
-
-                if (job != null)
-                {
-                    string filter = (string)((SplitButton)SubsListFilter).SelectedItem;
-                    filter = (filter == null) ? "" : filter;
-
-                    string v;
-                    try {  v = ((ComboBoxPairs)cbx_companies.SelectedItem)._Value; } catch (Exception) { v = "";  }
-
-                    if (txtQuery.Text != "") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptionsBySearch(txtQuery.Text, filter); }
-                    else if (v != "") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptionsByCompany(v, filter); }
-                    else if (filter == "All") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id); }
-                    else { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id, filter); }
-
-                    lbl_subsCount.Content = string.Format("{0} Subscriptions for {1}", viewSubs.Items.Count, job.job_description);
-
-                    if (this.chx_subsfilter.IsChecked == true)
+                    Job job;
+                    if (useActiveId)
                     {
-                        ShowSubsActionBarButtons(filter);
-                        viewSubs.SelectAll();
+                        job = TrackerJobs.GetJob(_activeJobId);
                     }
                     else
                     {
-                        ShowSubsActionBarButtons();
-                        viewSubs.UnselectAll();
+                        job = (Job)viewJobs.SelectedItem;
+                    }
+
+                    if (job != null)
+                    {
+                        string filter = (string)((SplitButton)SubsListFilter).SelectedItem;
+                        filter = (filter == null) ? "" : filter;
+
+                        string v;
+                        try { v = ((ComboBoxPairs)cbx_companies.SelectedItem)._Value; }
+                        catch (Exception) { v = ""; }
+
+                        if (txtQuery.Text != "") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptionsBySearch(txtQuery.Text, filter); }
+                        else if (v != "") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptionsByCompany(v, filter); }
+                        else if (filter == "All") { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id); }
+                        else { viewSubs.ItemsSource = TrackerPayment.GetSubscriptions(job.id, filter); }
+
+                        lbl_subsCount.Content = string.Format("{0} Subscriptions for {1}", viewSubs.Items.Count, job.job_description);
+
+                        if (this.chx_subsfilter.IsChecked == true)
+                        {
+                            ShowSubsActionBarButtons(filter);
+                            viewSubs.SelectAll();
+                        }
+                        else
+                        {
+                            ShowSubsActionBarButtons();
+                            viewSubs.UnselectAll();
+                        }
                     }
                 }
             }

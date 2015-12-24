@@ -120,30 +120,75 @@
                     <Button x:Name="btn_rejectSubs" Content="Reject" Visibility="Collapsed" Click="btn_rejectSubs_Click" Width="Auto" Height="30"  ToolTip="Reject selected subscriptions" Margin="10,0,0,0"/>
                 </StackPanel>
 
-                <StackPanel x:Name="searchBar" Orientation="Horizontal" Margin="180,0,0,0" Visibility="Visible"  HorizontalAlignment="Right">
-                    <Label Visibility="Visible" x:Name="lbl_company" Content="Company" HorizontalAlignment="Left" Margin="5,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <ComboBox  Visibility="Visible" SelectionChanged="cbx_companies_SelectionChanged"
-			                x:Name="cbx_companies" IsEditable="True"  MaxDropDownHeight="125" Margin="0,4,0,7" 
+            </StackPanel>
+
+            <!-- Filter bar -->
+            <StackPanel DockPanel.Dock="Top" x:Name="searchBar" Orientation="Horizontal" Margin="10,10,0,0" Background="{DynamicResource AccentColorBrush}"  Visibility="Visible" >
+                
+                <!--
+                <Label Visibility="Visible" x:Name="lbl_company" Content="Filter" FontFamily="Segoe WP Light" FontSize="14" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                -->
+                
+                <ComboBox  Visibility="Visible" SelectionChanged="cbx_searchfilter_SelectionChanged"
+			                x:Name="cbx_companies" IsEditable="True"  MaxDropDownHeight="125" Margin="10,4,0,7" 
 			                Style="{DynamicResource VirtualisedMetroComboBox}"
-			                Controls:TextBoxHelper.Watermark="Type or select company"
+			                Controls:TextBoxHelper.Watermark="Company"
 			                ItemsSource="{Binding Companies}" DisplayMemberPath="_Value" SelectedValuePath="_Key" />
 
-                    <Label Content="or Search" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBox x:Name="txtQuery" HorizontalAlignment="Left" Margin="0,7,0,0" VerticalAlignment="Top" Width="130" KeyUp="txtQuery_KeyUp"/>
-                    <Button x:Name="btn_Query" Margin="10,0,0,0" Width="40" Height="40" ToolTip="Query" Style="{DynamicResource MetroCircleButtonStyle}" Click="btn_Query_Click" >
-                        <Rectangle Width="10" Height="10" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}" />
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
-                </StackPanel>
+                <ComboBox  Visibility="Visible" SelectionChanged="cbx_searchfilter_SelectionChanged"
+			                x:Name="cbx_tiers" Margin="20,4,0,7" IsEditable="True"
+			                Controls:TextBoxHelper.Watermark="Tier"
+			                ItemsSource="{Binding Tiers}"  />
 
+                <!--
+                <Label Visibility="Visible" x:Name="lbl_vd" Content="Value Date" FontFamily="Segoe WP Light" FontSize="14" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                -->
+                <DatePicker x:Name="dp_valuedate" Controls:TextBoxHelper.Watermark="Value Date" Height="20" SelectedDateFormat="Short"  SelectedDateChanged="cbx_searchfilter_SelectionChanged" Margin="15,0,0,0"/>
+
+                <ComboBox  Visibility="Visible" SelectionChanged="cbx_searchfilter_SelectionChanged"
+			                x:Name="cbx_contributiontypes" IsEditable="True"  MaxDropDownHeight="125" Margin="20,4,0,7" 
+			                Style="{DynamicResource VirtualisedMetroComboBox}"
+			                Controls:TextBoxHelper.Watermark="Contribution type"
+			                ItemsSource="{Binding ContributionTypes}" DisplayMemberPath="_Value" SelectedValuePath="_Key" />
+
+                <ComboBox Visibility="Visible" x:Name="cbx_months" HorizontalAlignment="Left"  Margin="20,4,0,7" 
+                              VerticalAlignment="Center" Width="Auto" SelectedValuePath="Tag" IsEditable="True"
+                              Style="{DynamicResource VirtualisedMetroComboBox}" SelectionChanged="cbx_searchfilter_SelectionChanged"
+			                  Controls:TextBoxHelper.Watermark="Month">
+                    <ComboBoxItem Content="January" Tag="1" />
+                    <ComboBoxItem Content="February" Tag="2" />
+                    <ComboBoxItem Content="March" Tag="3" />
+                    <ComboBoxItem Content="April" Tag="4" />
+                    <ComboBoxItem Content="May" Tag="5" />
+                    <ComboBoxItem Content="June" Tag="6" />
+                    <ComboBoxItem Content="July" Tag="7" />
+                    <ComboBoxItem Content="August" Tag="8" />
+                    <ComboBoxItem Content="September" Tag="9" />
+                    <ComboBoxItem Content="October" Tag="10" />
+                    <ComboBoxItem Content="November" Tag="11" />
+                    <ComboBoxItem Content="December" Tag="12" />
+                </ComboBox>
+
+                <ComboBox  Visibility="Visible" SelectionChanged="cbx_searchfilter_SelectionChanged"
+			                x:Name="cbx_years" IsEditable="True"  MaxDropDownHeight="125" Margin="20,4,0,7" 
+			                Style="{DynamicResource VirtualisedMetroComboBox}"
+			                Controls:TextBoxHelper.Watermark="Year"
+			                ItemsSource="{Binding Years}" DisplayMemberPath="_Value" SelectedValuePath="_Key" />
+
+                <Label Content="or Search" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Segoe WP Light" FontSize="14"/>
+                <TextBox x:Name="txtQuery" HorizontalAlignment="Left" Margin="0,7,0,0" VerticalAlignment="Top" Width="130" KeyUp="txtQuery_KeyUp"/>
+                <Button x:Name="btn_Query" Margin="10,0,0,0" Width="40" Height="40" ToolTip="Query" Style="{DynamicResource MetroCircleButtonStyle}" Click="btn_Query_Click" >
+                    <Rectangle Width="10" Height="10" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </Button>
             </StackPanel>
 
             <DataGrid x:Name="viewSubs" RenderOptions.ClearTypeHint="Enabled"
                       HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
-                      MinWidth="600" ColumnWidth="*" Margin="10,30,0,10" 
+                      MinWidth="600" ColumnWidth="*" Margin="10,10,0,10" 
                       SelectionUnit="FullRow" GridLinesVisibility="All" HeadersVisibility="All"
                       IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
                       ItemsSource="{Binding}" PreviewMouseDoubleClick="viewSubs_PreviewMouseDoubleClick" SelectionChanged="viewSubs_SelectionChanged">
